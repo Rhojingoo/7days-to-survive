@@ -31,6 +31,8 @@ public:
 	//class percpe
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float _DeltaTime) override;
+
 
 	UFUNCTION()
 	void OnSightUpdated(const TArray<AActor*> &_UpdateActors);
@@ -49,4 +51,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
 	float AIHearingRange = 1000.f;
+
 };
+
