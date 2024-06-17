@@ -2,6 +2,8 @@
 
 
 #include "Player/Global/C_GlobalPlayer.h"
+#include "STS/C_STSInstance.h"
+
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
@@ -15,7 +17,8 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 }
 
 // Called every frame

@@ -3,18 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "C_GlobalPlayer.generated.h"
+#include "Player/Global/C_GlobalPlayer.h"
+#include "C_NickMainPlayer.generated.h"
 
-class UC_STSInstance;
+/**
+ * 
+ */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_GlobalPlayer : public ACharacter
+class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_GlobalPlayer
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this character's properties
-	AC_GlobalPlayer();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,9 +22,4 @@ protected:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:
-	UC_STSInstance* STSInstance = nullptr;
-
-
 };
