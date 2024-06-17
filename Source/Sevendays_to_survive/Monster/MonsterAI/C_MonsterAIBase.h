@@ -25,9 +25,28 @@ public:
 
 	UPROPERTY(Transient)
 	class UBlackboardComponent* BBC;		// 어떤 값에 기반하여 컨트롤 해야 하지? (값 저장)
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UAIPerceptionComponent* APC;
+	//class percpe
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnSightUpdated(const TArray<AActor*> &_UpdateActors);
+
+	UFUNCTION()
+	void OnHearingUpdated(const TArray<AActor*>& _UpdateActors);
 
 	uint16 EnemyKeyId;			//Key값 map이라고 생각해도 됨
 
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
+	float AISightRadius = 1000.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
+	float AISightDegree = 90.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
+	float AIHearingRange = 1000.f;
 };
