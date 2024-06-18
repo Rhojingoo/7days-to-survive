@@ -40,6 +40,12 @@ private:
 	bool IsLineTraceHit = false;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool CanBuild = false;
+
+	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool BuildMode = false;
+
+	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AActor* HitActor = nullptr;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -68,9 +74,8 @@ private:
 	UFUNCTION(BluePrintCallable)
 	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
-protected:
-	UFUNCTION(BlueprintImplementableEvent)
-	void EventDetectSockets();
+	UFUNCTION(BluePrintCallable)
+	void PlaceBuildPart();
 
 private:
 	// Non BP

@@ -21,4 +21,10 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerArr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* BuildPartTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* BuildPartPreviewTable;
 };

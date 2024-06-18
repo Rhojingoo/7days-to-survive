@@ -58,6 +58,14 @@ void UC_BuildComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitAc
 	}
 }
 
+void UC_BuildComponent::PlaceBuildPart()
+{
+	if (!BuildMode || !CanBuild)
+	{
+		return;
+	}
+}
+
 void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
 {
 	BuildTransform.SetLocation(_ImpactPoint);
@@ -86,6 +94,8 @@ void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& 
 
 	PreviewSMComponent->SetMaterial(0, GreenMaterial);
 	PreviewSMComponent->SetWorldTransform(BuildTransform);
+
+	CanBuild = true;
 }
 
 void UC_BuildComponent::SetPreviewTransform_NoHit(FVector& _TraceEnd)
@@ -93,4 +103,6 @@ void UC_BuildComponent::SetPreviewTransform_NoHit(FVector& _TraceEnd)
 	BuildTransform.SetLocation(_TraceEnd);
 	PreviewSMComponent->SetMaterial(0, RedMaterial);
 	PreviewSMComponent->SetWorldTransform(BuildTransform);
+
+	CanBuild = false;
 }
