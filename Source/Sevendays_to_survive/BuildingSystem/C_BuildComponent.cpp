@@ -2,6 +2,7 @@
 
 
 #include "BuildingSystem/C_BuildComponent.h"
+#include "BuildingSystem/BuildingPart.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
@@ -63,10 +64,24 @@ void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& 
 	HitActor = _HitActor;
 	HitComponent = _HitComponent;
 
-	EventDetectSockets();
+	bool FoundSocket = false;
+	if (true == HitActor->Implements<UBuildingPart>())
+	{
+		TArray<UBoxComponent*> Sockets = IBuildingPart::Execute_GetSockets(HitActor);
+
+		for (UBoxComponent* Socket : Sockets)
+		{
+			if (Socket == HitComponent)
+			{
+				FoundSocket = true;
+				break;
+			}
+		}
+	}
+
 	if (true == FoundSocket)
 	{
-		BuildTransform = SocketTransform;
+		BuildTransform = HitComponent->GetComponentTransform();
 	}
 
 	PreviewSMComponent->SetMaterial(0, GreenMaterial);

@@ -45,12 +45,6 @@ private:
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UPrimitiveComponent* HitComponent = nullptr;
 
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool FoundSocket = false;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FTransform SocketTransform;
-
 private:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float StartPointOffset = 300.0f;
