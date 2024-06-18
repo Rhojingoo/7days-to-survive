@@ -3,6 +3,8 @@
 
 #include "BuildingSystem/C_BuildComponent.h"
 #include "BuildingSystem/BuildingPart.h"
+#include "BuildingSystem/C_BuildPartTableRow.h"
+#include "STS/C_STSInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
@@ -21,6 +23,8 @@ void UC_BuildComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+	Inst->GetBuildPartData();
 }
 
 

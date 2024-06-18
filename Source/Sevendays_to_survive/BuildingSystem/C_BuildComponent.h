@@ -64,6 +64,8 @@ private:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UMaterial* RedMaterial = nullptr;
 
+	TArray<struct FC_BuildPartTableRow*> BuildPartData;
+
 private:
 	UFUNCTION(BluePrintCallable)
 	FVector GetLineTraceStartPoint();
