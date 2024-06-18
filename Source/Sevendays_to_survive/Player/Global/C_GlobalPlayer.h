@@ -11,6 +11,8 @@ class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
+
+class UC_GlobalAnimInstance;
 struct FInputActionValue; // 
 
 UCLASS()
@@ -27,6 +29,11 @@ public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return SpringArm; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return Camera; }
+
+	UC_GlobalAnimInstance* GetGlobalAnimInstance()
+	{
+		return GlobalAnim;
+	}
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
@@ -37,12 +44,16 @@ protected:
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
+	virtual void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
+	virtual void Look(const FInputActionValue& Value);
+
+	
+
 private:
 	UC_STSInstance* STSInstance = nullptr;
+	UC_GlobalAnimInstance* GlobalAnim=nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;

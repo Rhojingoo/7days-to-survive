@@ -11,13 +11,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Player/Global/C_GlobalAnimInstance.h"
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -60,7 +60,7 @@ void AC_GlobalPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-
+	GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{

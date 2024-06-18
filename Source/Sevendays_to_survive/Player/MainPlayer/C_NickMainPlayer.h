@@ -22,4 +22,8 @@ protected:
 
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void Move(const FInputActionValue& Value) override;
+
+	void Look(const FInputActionValue & Value) override;
 };
