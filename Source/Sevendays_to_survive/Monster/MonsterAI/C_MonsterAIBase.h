@@ -30,6 +30,9 @@ public:
 	class UAIPerceptionComponent* APC;
 	//class percpe
 
+	class UAISenseConfig_Sight* SightConfig = nullptr;
+	class UAISenseConfig_Hearing* HearingConfig = nullptr;
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float _DeltaTime) override;
 

@@ -43,7 +43,7 @@ void AC_MonsterAIBase::BeginPlay()
 
 	if (IsValid(APC)) {
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay Its Testing Message in USM"));
-		UAISenseConfig_Sight* SightConfig = NewObject<UAISenseConfig_Sight>();
+		SightConfig = NewObject<UAISenseConfig_Sight>();
 		SightConfig->SightRadius = AISightRadius; // 시야 반경 설정
 		SightConfig->PeripheralVisionAngleDegrees = AISightDegree; // 시야 각도 설정
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
@@ -56,7 +56,7 @@ void AC_MonsterAIBase::BeginPlay()
 		// 시각 감지에 대한 처리기 함수 설정
 		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnSightUpdated);
 
-		UAISenseConfig_Hearing* HearingConfig = NewObject<UAISenseConfig_Hearing>();
+		HearingConfig = NewObject<UAISenseConfig_Hearing>();
 		HearingConfig->HearingRange = AIHearingRange; // 감지 범위 설정
 		HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 		HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
@@ -79,25 +79,42 @@ void AC_MonsterAIBase::Tick(float _DeltaTime)
 
 void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
-
 	for (AActor* Actor : _UpdateActors)
 	{
-		if (Actor && APC)
-		{
-			// 발견된 엑터의 위치 가져오기
-			FVector ActorLocation = Actor->GetActorLocation();
+		BBC->SetValueAsVector(TEXT("TargetActorLocation"), Actor->GetActorLocation());
+		FActorPerceptionBlueprintInfo Info;
+		APC->GetActorsPerception(Actor, Info);
 
-			// Blackboard에 위치 저장
-			if (BBC && EnemyKeyId != -1)
-			{
-				BBC->SetValueAsVector(BBC->GetKeyName(EnemyKeyId), ActorLocation);
+		for (const FAIStimulus& Stimulus : Info.LastSensedStimuli) {
+			if (Stimulus.Type == SightConfig->GetSenseID()) {
+				UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 			}
 		}
 	}
+	//	// 발견된 엑터의 위치 가져오기
+	//	FVector ActorLocation = Actor->GetActorLocation();
+
+	//	// Blackboard에 위치 저장
+	//	if (BBC && EnemyKeyId != -1)
+	//	{
+	//		BBC->SetValueAsVector(BBC->GetKeyName(EnemyKeyId), ActorLocation);
+	//	}
+	//}
 }
 
 void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnHearing"));
+
+	for (AActor* Actor : _UpdateActors)
+	{
+		FActorPerceptionBlueprintInfo Info;
+		APC->GetActorsPerception(Actor, Info);
+
+		for (const FAIStimulus& Stimulus : Info.LastSensedStimuli) {
+			if (Stimulus.Type == HearingConfig->GetSenseID()) {
+				UE_LOG(LogTemp, Warning, TEXT("OnHearing"));
+			}
+		}
+	}
+
 }
