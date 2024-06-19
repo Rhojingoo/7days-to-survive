@@ -6,6 +6,7 @@
 #include "Player/Global/C_GlobalPlayer.h"
 #include "C_NickMainPlayer.generated.h"
 
+class UC_GlobalAnimInstance;
 /**
  * 
  */
@@ -25,5 +26,14 @@ protected:
 
 	void Move(const FInputActionValue& Value) override;
 
+	
 	void Look(const FInputActionValue & Value) override;
+
+	void IdleStart() override;
+	void MoveStart() override;
+	void JumpStart() override;
+private:
+	UC_GlobalAnimInstance* GlobalAnim = nullptr;
+
+	
 };
