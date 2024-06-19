@@ -38,16 +38,17 @@ protected:
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/** Called for movement input */
+	// 행동
 	virtual void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	virtual void Look(const FInputActionValue& Value);
 
+	// 애니메이션 스타트 가상 함수
 	virtual void IdleStart();
 	virtual void MoveStart();
 	virtual void JumpStart();
 
+
+	// 액션 키 정리
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction = nullptr;
@@ -60,8 +61,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction = nullptr;
 
+	// 애님 인스턴스 관리
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
+	// 게임 인스턴스 관리
 	UC_STSInstance* STSInstance = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
