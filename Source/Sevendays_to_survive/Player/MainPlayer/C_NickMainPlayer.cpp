@@ -6,11 +6,14 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+
+
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	Ani = EPlayerState::Idle;
 	GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
-	GlobalAnim->ChangeAnimation(TEXT("Nick_Idle"));
+	GlobalAnim->ChangeAnimation(Ani);
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
@@ -56,13 +59,15 @@ void AC_NickMainPlayer::Look(const FInputActionValue& Value)
 void AC_NickMainPlayer::IdleStart()
 {
 	Super::IdleStart();
-	GlobalAnim->ChangeAnimation(TEXT("Nick_Idle"));
+	Ani = EPlayerState::Idle;
+	GlobalAnim->ChangeAnimation(Ani);
 }
 
 void AC_NickMainPlayer::MoveStart()
 {
 	Super::MoveStart();
-	GlobalAnim->ChangeAnimation(TEXT("Nick_Walk"));
+	Ani = EPlayerState::Walk;
+	GlobalAnim->ChangeAnimation(Ani);
 }
 
 void AC_NickMainPlayer::JumpStart()
