@@ -5,7 +5,9 @@
 #include "BuildingSystem/BuildingPart.h"
 #include "BuildingSystem/C_BuildPartTableRow.h"
 #include "STS/C_STSInstance.h"
-#include "Kismet/KismetSystemLibrary.h"
+//#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/Character.h"
 
 // Sets default values for this component's properties
 UC_BuildComponent::UC_BuildComponent()
@@ -24,7 +26,7 @@ void UC_BuildComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-	Inst->GetBuildPartData();
+	BuildPartData = Inst->GetBuildPartData();
 }
 
 
@@ -50,6 +52,22 @@ FVector UC_BuildComponent::GetLineTraceEndPoint()
 	return Point + EndPointOffset * Forward;
 }
 
+void UC_BuildComponent::FirstPreviewTick()
+{
+	if (false == IsFirstPreviewTick)
+	{
+		return;
+	}
+	IsFirstPreviewTick = false;
+
+	PreviewSMComponent = Cast<UStaticMeshComponent>(GetOwner()->AddComponentByClass(UStaticMeshComponent::StaticClass(), true, BuildTransform, false));
+	PreviewSMComponent->AttachToComponent(GetOwner()->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	PreviewSMComponent->bHiddenInGame = false;
+
+	PreviewSMComponent->SetStaticMesh(BuildPartData[BuildPartIndex].Mesh);
+	PreviewSMComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 void UC_BuildComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
 {
 	if (true == IsLineTraceHit)
@@ -68,6 +86,27 @@ void UC_BuildComponent::PlaceBuildPart()
 	{
 		return;
 	}
+
+	TSubclassOf<AActor> ActorClass = BuildPartData[BuildPartIndex].Actor;
+	
+	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(ActorClass, BuildTransform);
+	BuildPartActor->SetActorEnableCollision(true);
+}
+
+void UC_BuildComponent::IncBuildPartIndex()
+{
+	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex + 1, 0, BuildPartData.Num() - 1);
+
+	PreviewSMComponent->SetStaticMesh(nullptr);
+	IsFirstPreviewTick = true;
+}
+
+void UC_BuildComponent::DecBuildPartIndex()
+{
+	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex - 1, 0, BuildPartData.Num() - 1);
+
+	PreviewSMComponent->SetStaticMesh(nullptr);
+	IsFirstPreviewTick = true;
 }
 
 void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)

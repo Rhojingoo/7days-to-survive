@@ -51,7 +51,13 @@ private:
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UPrimitiveComponent* HitComponent = nullptr;
 
-private:
+	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int BuildPartIndex = 0;
+
+	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsFirstPreviewTick = true;
+
+protected:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float StartPointOffset = 300.0f;
 
@@ -59,25 +65,38 @@ private:
 	float EndPointOffset = 1500.0f;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class ACharacter* PlayerCharacter = nullptr;
+
+	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UMaterial* GreenMaterial = nullptr;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UMaterial* RedMaterial = nullptr;
 
-	TArray<struct FC_BuildPartTableRow*> BuildPartData;
+	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<struct FC_BuildPartTableRow> BuildPartData;
 
 private:
-	UFUNCTION(BluePrintCallable)
+	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceStartPoint();
 
-	UFUNCTION(BluePrintCallable)
+	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceEndPoint();
 
-	UFUNCTION(BluePrintCallable)
+	UFUNCTION(BlueprintCallable)
+	void FirstPreviewTick();
+
+	UFUNCTION(BlueprintCallable)
 	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
-	UFUNCTION(BluePrintCallable)
+	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
+
+	UFUNCTION(BlueprintCallable)
+	void IncBuildPartIndex();
+
+	UFUNCTION(BlueprintCallable)
+	void DecBuildPartIndex();
 
 private:
 	// Non BP
