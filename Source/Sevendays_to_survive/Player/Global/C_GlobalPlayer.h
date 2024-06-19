@@ -12,7 +12,6 @@ class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
 
-class UC_GlobalAnimInstance;
 struct FInputActionValue; // 
 
 UCLASS()
@@ -30,10 +29,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return Camera; }
 
-	UC_GlobalAnimInstance* GetGlobalAnimInstance()
-	{
-		return GlobalAnim;
-	}
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
@@ -49,21 +44,9 @@ protected:
 	/** Called for looking input */
 	virtual void Look(const FInputActionValue& Value);
 
-	
-
-private:
-	UC_STSInstance* STSInstance = nullptr;
-	UC_GlobalAnimInstance* GlobalAnim=nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera = nullptr;
-
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext = nullptr;
+	virtual void IdleStart();
+	virtual void MoveStart();
+	virtual void JumpStart();
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -76,4 +59,18 @@ private:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction = nullptr;
+
+private:
+	UC_STSInstance* STSInstance = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Camera = nullptr;
+
+	/** MappingContext */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* DefaultMappingContext = nullptr;
+
 };

@@ -3,11 +3,14 @@
 
 #include "Player/MainPlayer/C_NickMainPlayer.h"
 #include "Player/Global/C_GlobalAnimInstance.h"
-
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	GetGlobalAnimInstance()->ChangeAnimation(TEXT("Nick_Idle"));
+	GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
+	GlobalAnim->ChangeAnimation(TEXT("Nick_Idle"));
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
@@ -18,15 +21,51 @@ void AC_NickMainPlayer::Tick(float DeltaTime)
 void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+
+		// Jumping
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::MoveStart);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::IdleStart);
+
+		// Looking
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Look);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
 }
 
 void AC_NickMainPlayer::Move(const FInputActionValue& Value)
 {
 	Super::Move(Value);
-	GetGlobalAnimInstance()->ChangeAnimation(TEXT("Nick_Walk"));
 }
+
 
 void AC_NickMainPlayer::Look(const FInputActionValue& Value)
 {
 	Super::Look(Value);
+}
+
+void AC_NickMainPlayer::IdleStart()
+{
+	Super::IdleStart();
+	GlobalAnim->ChangeAnimation(TEXT("Nick_Idle"));
+}
+
+void AC_NickMainPlayer::MoveStart()
+{
+	Super::MoveStart();
+	GlobalAnim->ChangeAnimation(TEXT("Nick_Walk"));
+}
+
+void AC_NickMainPlayer::JumpStart()
+{
+	Super::JumpStart();
 }
