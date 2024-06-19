@@ -30,9 +30,12 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	if (nullptr != Monster && nullptr != Monster->AITree) {
 		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
 
-		EnemyKeyId = BBC->GetKeyID("TargetActorLcation");
+		EnemyKeyId = BBC->GetKeyID("TargetActor");
 
 		BTC->StartTree(*Monster->AITree);
+
+
+		RunBehaviorTree(Monster->AITree);
 
 	}
 }
@@ -79,18 +82,18 @@ void AC_MonsterAIBase::Tick(float _DeltaTime)
 
 void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 {
-	for (AActor* Actor : _UpdateActors)
+	/*for (AActor* Actor : _UpdateActors)
 	{
-		BBC->SetValueAsVector(TEXT("TargetActorLocation"), Actor->GetActorLocation());
+		BBC->SetValueAsObject(TEXT("TargetActor"), Actor);
 		FActorPerceptionBlueprintInfo Info;
 		APC->GetActorsPerception(Actor, Info);
 
 		for (const FAIStimulus& Stimulus : Info.LastSensedStimuli) {
 			if (Stimulus.Type == SightConfig->GetSenseID()) {
-				UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 			}
 		}
-	}
+	}*/
+	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 	//	// 발견된 엑터의 위치 가져오기
 	//	FVector ActorLocation = Actor->GetActorLocation();
 

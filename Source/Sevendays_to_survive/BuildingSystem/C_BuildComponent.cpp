@@ -15,8 +15,6 @@ UC_BuildComponent::UC_BuildComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -34,8 +32,6 @@ void UC_BuildComponent::BeginPlay()
 void UC_BuildComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 FVector UC_BuildComponent::GetLineTraceStartPoint()
@@ -80,6 +76,19 @@ void UC_BuildComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitAc
 	}
 }
 
+void UC_BuildComponent::ToggleBuildMode()
+{
+	BuildMode = !BuildMode;
+
+	if (false == BuildMode)
+	{
+		CanBuild = false;
+
+		PreviewSMComponent->SetStaticMesh(nullptr);
+		IsFirstPreviewTick = true;
+	}
+}
+
 void UC_BuildComponent::PlaceBuildPart()
 {
 	if (!BuildMode || !CanBuild)
@@ -91,6 +100,12 @@ void UC_BuildComponent::PlaceBuildPart()
 	
 	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(ActorClass, BuildTransform);
 	BuildPartActor->SetActorEnableCollision(true);
+}
+
+void UC_BuildComponent::RotatePreview()
+{
+	FRotator NewRotator = UKismetMathLibrary::ComposeRotators(BuildTransform.Rotator(), FRotator(0.0, 5.0, 0.0));
+	BuildTransform.SetRotation(UKismetMathLibrary::Conv_RotatorToQuaternion(NewRotator));
 }
 
 void UC_BuildComponent::IncBuildPartIndex()
