@@ -17,9 +17,6 @@ struct SEVENDAYS_TO_SURVIVE_API FC_BuildPartTableRow : public FTableRowBase
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
