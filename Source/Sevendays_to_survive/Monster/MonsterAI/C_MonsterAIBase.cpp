@@ -6,7 +6,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Monster/C_MonsterBase.h"
+#include "Monster/C_ZombieBase.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
@@ -25,7 +25,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 	UE_LOG(LogTemp, Warning, TEXT("OnPossess Its Testing Message in USM"));
 
-	AC_MonsterBase* Monster = Cast<AC_MonsterBase>(InPawn);
+	AC_ZombieBase* Monster = Cast<AC_ZombieBase>(InPawn);
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
 		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
@@ -45,6 +45,8 @@ void AC_MonsterAIBase::BeginPlay()
 	Super::BeginPlay();
 
 	if (IsValid(APC)) {
+		SetPerceptionComponent(*APC);
+
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay Its Testing Message in USM"));
 		SightConfig = NewObject<UAISenseConfig_Sight>();
 		SightConfig->SightRadius = AISightRadius; // 시야 반경 설정
@@ -69,8 +71,6 @@ void AC_MonsterAIBase::BeginPlay()
 		APC->SetDominantSense(HearingConfig->GetSenseImplementation());
 
 		// 청각 감지에 대한 처리기 함수 설정
-		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnHearingUpdated);
-
 	}
 }
 
@@ -78,6 +78,7 @@ void AC_MonsterAIBase::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	//UE_LOG(LogTemp, Warning, TEXT("OnTick Testing log"));
+	//APC->GetSenseConfig(HearingConfig->GetSenseID());
 }
 
 void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)

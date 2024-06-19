@@ -30,7 +30,9 @@ public:
 	class UAIPerceptionComponent* APC;
 	//class percpe
 
+	UPROPERTY()
 	class UAISenseConfig_Sight* SightConfig = nullptr;
+	UPROPERTY()
 	class UAISenseConfig_Hearing* HearingConfig = nullptr;
 
 	virtual void BeginPlay() override;
