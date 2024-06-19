@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Player/MainController/C_MainPlayerController.h"
+#include "Player/Global/C_PlayerEnum.h"
 
 
 // Sets default values
@@ -21,7 +22,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
+	//PlayerDT = STSInstance->GetPlayerDataTable();
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -33,6 +34,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
+	
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
@@ -59,8 +61,9 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+	PlayerDT = STSInstance->GetPlayerDataTable();
+	//STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	//Add Input Mapping Context
 	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))
 	{

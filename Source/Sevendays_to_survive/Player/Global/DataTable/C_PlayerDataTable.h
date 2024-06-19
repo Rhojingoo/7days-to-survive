@@ -18,5 +18,5 @@ struct FC_PlayerDataTable : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float JumpZVelocity;
+	float JumpZVelocity=500.f;
 };
