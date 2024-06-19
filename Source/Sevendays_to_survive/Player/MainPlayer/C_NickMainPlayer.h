@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Player/Global/C_GlobalPlayer.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_NickMainPlayer.generated.h"
 
 //class UC_GlobalAnimInstance;
@@ -21,19 +22,21 @@ protected:
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
+	// 입력 콜백 처리
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// 행동
 	void Move(const FInputActionValue& Value) override;
-
-	
 	void Look(const FInputActionValue & Value) override;
 
+	// 애니메이션
 	void IdleStart() override;
 	void MoveStart() override;
 	void JumpStart() override;
 private:
 	//UC_GlobalAnimInstance* GlobalAnim = nullptr;
 
+	EPlayerState  Ani = EPlayerState::None;
 	
 };
