@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "Components/BoxComponent.h"
-#include "BuildingPart.generated.h"
+#include "C_BuildingPartInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, BlueprintType)
-class UBuildingPart : public UInterface
+class UC_BuildingPartInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UBuildingPart : public UInterface
 /**
  * 
  */
-class SEVENDAYS_TO_SURVIVE_API IBuildingPart
+class SEVENDAYS_TO_SURVIVE_API IC_BuildingPartInterface
 {
 	GENERATED_BODY()
 

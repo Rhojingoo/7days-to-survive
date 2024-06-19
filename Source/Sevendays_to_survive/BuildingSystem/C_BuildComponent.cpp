@@ -2,7 +2,7 @@
 
 
 #include "BuildingSystem/C_BuildComponent.h"
-#include "BuildingSystem/BuildingPart.h"
+#include "BuildingSystem/C_BuildingPartInterface.h"
 #include "BuildingSystem/C_BuildPartTableRow.h"
 #include "STS/C_STSInstance.h"
 //#include "Kismet/KismetSystemLibrary.h"
@@ -98,7 +98,12 @@ void UC_BuildComponent::PlaceBuildPart()
 
 	TSubclassOf<AActor> ActorClass = BuildPartData[BuildPartIndex].Actor;
 	
-	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(ActorClass, BuildTransform);
+	SpawnBuildPart(ActorClass, BuildTransform);
+}
+
+void UC_BuildComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
+{
+	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(_ActorClass, _SpawnTransform);
 	BuildPartActor->SetActorEnableCollision(true);
 }
 
@@ -131,9 +136,9 @@ void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& 
 	HitComponent = _HitComponent;
 
 	bool FoundSocket = false;
-	if (true == HitActor->Implements<UBuildingPart>())
+	if (true == HitActor->Implements<UC_BuildingPartInterface>())
 	{
-		TArray<UBoxComponent*> Sockets = IBuildingPart::Execute_GetSockets(HitActor);
+		TArray<UBoxComponent*> Sockets = IC_BuildingPartInterface::Execute_GetSockets(HitActor);
 
 		for (UBoxComponent* Socket : Sockets)
 		{

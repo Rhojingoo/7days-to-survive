@@ -95,6 +95,11 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
 
+	UFUNCTION(Server, Reliable)
+	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+
+	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+
 	UFUNCTION(BlueprintCallable)
 	void IncBuildPartIndex();
 

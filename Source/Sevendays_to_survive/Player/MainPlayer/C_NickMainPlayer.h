@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Player/Global/C_GlobalPlayer.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_NickMainPlayer.generated.h"
 
 //class UC_GlobalAnimInstance;
@@ -36,5 +37,6 @@ protected:
 private:
 	//UC_GlobalAnimInstance* GlobalAnim = nullptr;
 
+	EPlayerState  Ani = EPlayerState::None;
 	
 };
