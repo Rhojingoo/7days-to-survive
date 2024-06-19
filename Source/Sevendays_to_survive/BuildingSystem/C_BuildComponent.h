@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Delegates/Delegate.h"
 #include "C_BuildComponent.generated.h"
-
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SEVENDAYS_TO_SURVIVE_API UC_BuildComponent : public UActorComponent
@@ -90,6 +90,9 @@ private:
 	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
+	void ToggleBuildMode();
+
+	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
 
 	UFUNCTION(BlueprintCallable)
@@ -104,4 +107,7 @@ private:
 	void SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
 
 	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
+
+	UFUNCTION(BlueprintCallable)
+	void RotatePreview();
 };
