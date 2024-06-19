@@ -11,6 +11,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Player/MainController/C_MainPlayerController.h"
 
 
 // Sets default values
@@ -61,7 +62,7 @@ void AC_GlobalPlayer::BeginPlay()
 
 	STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	//Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -80,7 +81,7 @@ void AC_GlobalPlayer::Tick(float DeltaTime)
 // Called to bind functionality to input
 void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
