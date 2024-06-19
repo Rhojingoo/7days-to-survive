@@ -6,7 +6,7 @@
 #include "Player/Global/C_GlobalPlayer.h"
 #include "C_NickMainPlayer.generated.h"
 
-class UC_GlobalAnimInstance;
+//class UC_GlobalAnimInstance;
 /**
  * 
  */
@@ -33,7 +33,7 @@ protected:
 	void MoveStart() override;
 	void JumpStart() override;
 private:
-	UC_GlobalAnimInstance* GlobalAnim = nullptr;
+	//UC_GlobalAnimInstance* GlobalAnim = nullptr;
 
 	
 };

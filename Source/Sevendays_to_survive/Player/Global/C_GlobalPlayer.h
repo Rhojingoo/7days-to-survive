@@ -11,7 +11,7 @@ class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
-
+class UC_GlobalAnimInstance;
 struct FInputActionValue; // 
 
 UCLASS()
@@ -60,6 +60,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction = nullptr;
 
+	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
 	UC_STSInstance* STSInstance = nullptr;
 
