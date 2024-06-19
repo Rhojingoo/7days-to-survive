@@ -98,7 +98,12 @@ void UC_BuildComponent::PlaceBuildPart()
 
 	TSubclassOf<AActor> ActorClass = BuildPartData[BuildPartIndex].Actor;
 	
-	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(ActorClass, BuildTransform);
+	SpawnBuildPart(ActorClass, BuildTransform);
+}
+
+void UC_BuildComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
+{
+	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(_ActorClass, _SpawnTransform);
 	BuildPartActor->SetActorEnableCollision(true);
 }
 
