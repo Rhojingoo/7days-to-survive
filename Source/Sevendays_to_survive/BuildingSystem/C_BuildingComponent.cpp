@@ -49,16 +49,44 @@ FVector UC_BuildingComponent::GetLineTraceEndPoint()
 	return Point + EndPointOffset * Forward;
 }
 
-void UC_BuildingComponent::SetPreviewTransform(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
+void UC_BuildingComponent::RefreshPreview(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
 {
-	if (true == IsLineTraceHit)
+	if (false == IsLineTraceHit)
 	{
-		SetPreviewTransform_Hit(_ImpactPoint, _Normal, _HitActor, _HitComponent);
+		// Ray가 충돌하지 않은 경우
+
+		BuildTransform.SetLocation(_TraceEnd);
+		SetCanBuild(false);
+	}
+	else if (false == IsSocketHit(_HitActor, _HitComponent))
+	{
+		// Ray가 소켓이 아닌 액터 표면에 충돌한 경우
+		if (false == CheckBuildAngle(_Normal))
+		{
+			// 충돌면의 경사가 급한 경우
+			BuildTransform.SetLocation(_ImpactPoint);
+			SetCanBuild(false);
+		}
+		else
+		{
+			// 충돌면의 경사가 완만한 경우
+
+			// TODO: 액터와 충돌 체크
+			FVector Location = GetLocationOnTerrain(_ImpactPoint, _Normal);
+			BuildTransform.SetLocation(Location);
+			SetCanBuild(true);
+		}
 	}
 	else
 	{
-		SetPreviewTransform_NoHit(_TraceEnd);
+		// Ray가 소켓에 충돌한 경우
+
+		// TODO: 액터와 충돌 체크
+		BuildTransform = _HitComponent->GetComponentTransform();
+		SetCanBuild(true);
 	}
+
+	RefreshPreviewTransform();
 }
 
 void UC_BuildingComponent::ToggleBuildMode()
@@ -110,65 +138,41 @@ void UC_BuildingComponent::DecBuildPartIndex()
 	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
-void UC_BuildingComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, FVector& _Normal, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
+void UC_BuildingComponent::SetCanBuild(bool _CanBuild)
 {
-	BuildTransform.SetLocation(_ImpactPoint);
-	HitActor = _HitActor;
-	HitComponent = _HitComponent;
+	CanBuild = _CanBuild;
 
-	bool FoundSocket = false;
-	if (true == HitActor->Implements<UC_BuildingPartInterface>())
+	if (true == CanBuild)
 	{
-		TArray<UBoxComponent*> Sockets = IC_BuildingPartInterface::Execute_GetSockets(HitActor);
-
-		for (UBoxComponent* Socket : Sockets)
-		{
-			if (Socket == HitComponent)
-			{
-				FoundSocket = true;
-				break;
-			}
-		}
-	}
-
-	if (true == FoundSocket)
-	{
-		BuildTransform = HitComponent->GetComponentTransform();
+		PreviewActor->GetStaticMeshComponent()->SetMaterial(0, GreenMaterial);
 	}
 	else
 	{
-		FVector Location = BuildTransform.GetLocation();
-
-		UStaticMesh* CurMesh = PreviewActor->GetStaticMeshComponent()->GetStaticMesh();
-		FBoxSphereBounds Bounds = CurMesh->GetBounds();
-		
-		TArray<float> Coeffs;
-		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.X / _Normal.X));
-		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Y / _Normal.Y));
-		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Z / _Normal.Z));
-
-		int32 IndexOfMinValue = 0.0f;
-		float MinValue = 0.0f;
-		UKismetMathLibrary::MinOfFloatArray(Coeffs, IndexOfMinValue, MinValue);
-
-		Location += _Normal * MinValue;
-		BuildTransform.SetLocation(Location);
+		PreviewActor->GetStaticMeshComponent()->SetMaterial(0, RedMaterial);
 	}
-
-	PreviewActor->GetStaticMeshComponent()->SetMaterial(0, GreenMaterial);
-	PreviewActor->SetActorTransform(BuildTransform, true);
-
-	CanBuild = true;
 }
 
-void UC_BuildingComponent::SetPreviewTransform_NoHit(FVector& _TraceEnd)
+void UC_BuildingComponent::RefreshPreviewTransform()
 {
-	BuildTransform.SetLocation(_TraceEnd);
-
-	PreviewActor->GetStaticMeshComponent()->SetMaterial(0, RedMaterial);
 	PreviewActor->SetActorTransform(BuildTransform);
+}
 
-	CanBuild = false;
+FVector UC_BuildingComponent::GetLocationOnTerrain(FVector& _Location, FVector& _Normal)
+{
+	UStaticMesh* CurMesh = PreviewActor->GetStaticMeshComponent()->GetStaticMesh();
+	FBoxSphereBounds Bounds = CurMesh->GetBounds();
+
+	TArray<float> Coeffs;
+	Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.X / _Normal.X));
+	Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Y / _Normal.Y));
+	Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Z / _Normal.Z));
+
+	int32 IndexOfMinValue = 0.0f;
+	float MinValue = 0.0f;
+	UKismetMathLibrary::MinOfFloatArray(Coeffs, IndexOfMinValue, MinValue);
+
+	FVector NewLocation = _Location + _Normal * MinValue;
+	return NewLocation;
 }
 
 void UC_BuildingComponent::SetPreviewMesh(UStaticMesh* _Mesh)
@@ -185,4 +189,31 @@ void UC_BuildingComponent::SetPreviewMesh(UStaticMesh* _Mesh)
 		}
 		UE_LOG(LogTemp, Fatal, TEXT("프리뷰 메시 세팅에 실패했습니다. 메시: %s"), *MeshName);
 	}
+}
+
+bool UC_BuildingComponent::IsSocketHit(AActor* _HitActor, UPrimitiveComponent* _HitComponent)
+{
+	bool SocketFound = false;
+	if (true == _HitActor->Implements<UC_BuildingPartInterface>())
+	{
+		TArray<UBoxComponent*> Sockets = IC_BuildingPartInterface::Execute_GetSockets(_HitActor);
+
+		for (UBoxComponent* Socket : Sockets)
+		{
+			if (Socket == _HitComponent)
+			{
+				SocketFound = true;
+				break;
+			}
+		}
+	}
+	return SocketFound;
+}
+
+bool UC_BuildingComponent::CheckBuildAngle(FVector& _Normal)
+{
+	float Z = _Normal.Z;
+	float Tangent = Z / UKismetMathLibrary::Sqrt(1.0f - Z * Z);
+	float NormalAngle = UKismetMathLibrary::DegAtan(Tangent);
+	return 90.0f - MaxBuildableAngle <= NormalAngle && NormalAngle <= 90.0f;
 }
