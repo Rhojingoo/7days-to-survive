@@ -14,15 +14,12 @@ class SEVENDAYS_TO_SURVIVE_API UC_BuildingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UC_BuildingComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
@@ -87,9 +84,6 @@ private:
 	FVector GetLineTraceEndPoint();
 
 	UFUNCTION(BlueprintCallable)
-	void FirstPreviewTick();
-
-	UFUNCTION(BlueprintCallable)
 	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
@@ -97,11 +91,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
-
-	UFUNCTION(Server, Reliable)
-	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
-
-	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
 
 	UFUNCTION(BlueprintCallable)
 	void IncBuildPartIndex();
@@ -113,11 +102,19 @@ private:
 	void RotatePreview();
 
 private:
-	// Non BP
+	// Non BP Functions
 
 	void SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
 
 	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
 
 	void SetPreviewMesh(UStaticMesh* _Mesh);
+
+private:
+	// RPC
+
+	UFUNCTION(Server, Reliable)
+	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+
+	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
 };

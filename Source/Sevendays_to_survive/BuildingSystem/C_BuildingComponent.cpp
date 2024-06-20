@@ -12,7 +12,6 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
 
-// Sets default values for this component's properties
 UC_BuildingComponent::UC_BuildingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -20,8 +19,6 @@ UC_BuildingComponent::UC_BuildingComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
-// Called when the game starts
 void UC_BuildingComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -33,8 +30,6 @@ void UC_BuildingComponent::BeginPlay()
 	SetPreviewMesh(nullptr);
 }
 
-
-// Called every frame
 void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -42,32 +37,16 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 FVector UC_BuildingComponent::GetLineTraceStartPoint()
 {
-	FVector Point = CameraComponent->K2_GetComponentLocation();
+	FVector Point = CameraComponent->GetComponentLocation();
 	FVector Forward = CameraComponent->GetForwardVector();
 	return Point + StartPointOffset * Forward;
 }
 
 FVector UC_BuildingComponent::GetLineTraceEndPoint()
 {
-	FVector Point = CameraComponent->K2_GetComponentLocation();
+	FVector Point = CameraComponent->GetComponentLocation();
 	FVector Forward = CameraComponent->GetForwardVector();
 	return Point + EndPointOffset * Forward;
-}
-
-void UC_BuildingComponent::FirstPreviewTick()
-{
-	/*if (false == IsFirstPreviewTick)
-	{
-		return;
-	}
-	IsFirstPreviewTick = false;
-
-	PreviewSMComponent = Cast<UStaticMeshComponent>(GetOwner()->AddComponentByClass(UStaticMeshComponent::StaticClass(), true, BuildTransform, false));
-	PreviewSMComponent->AttachToComponent(GetOwner()->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	PreviewSMComponent->bHiddenInGame = false;
-
-	PreviewSMComponent->SetStaticMesh(BuildPartData[BuildPartIndex].Mesh);
-	PreviewSMComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
 }
 
 void UC_BuildingComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
