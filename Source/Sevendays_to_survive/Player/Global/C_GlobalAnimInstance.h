@@ -23,4 +23,6 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<EPlayerState, UAnimMontage*> AnimMontages;
+
+	//
 };
