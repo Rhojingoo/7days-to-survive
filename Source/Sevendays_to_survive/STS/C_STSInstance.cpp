@@ -2,7 +2,9 @@
 
 
 #include "STS/C_STSInstance.h"
+#include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "BuildingSystem/C_BuildingPartTableRow.h"
+
 
 //const FC_PlayerLocationData* UC_STSInstance::GetPlayerArr()
 //{
@@ -26,4 +28,22 @@ TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
         Ret.Add(*Row);
     }
     return Ret;
+}
+
+FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
+{
+    if (nullptr == PlayerDataTable)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerDataTable)"), __FUNCTION__, __LINE__);
+    }
+
+    FC_PlayerDataTable* Data = PlayerDataTable->FindRow<FC_PlayerDataTable>(TEXT("Player"), nullptr);
+
+    if (nullptr == Data)
+    {
+        UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+        return nullptr;
+    }
+
+    return Data;
 }

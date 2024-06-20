@@ -30,8 +30,10 @@ public:
 	class UAIPerceptionComponent* APC;
 	//class percpe
 
-	class UAISenseConfig_Sight* SightConfig = nullptr;
-	class UAISenseConfig_Hearing* HearingConfig = nullptr;
+	UPROPERTY()
+	class UAISenseConfig_Sight* SightConfig;
+	UPROPERTY()
+	class UAISenseConfig_Hearing* HearingConfig;
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float _DeltaTime) override;
@@ -41,7 +43,13 @@ public:
 	void OnSightUpdated(const TArray<AActor*> &_UpdateActors);
 
 	UFUNCTION()
+	void OffSightUpdated(AActor* _ForgotActor);
+
+	UFUNCTION()
 	void OnHearingUpdated(const TArray<AActor*>& _UpdateActors);
+
+	UFUNCTION()
+	void OffHearingUpdated(AActor* _ForgotActor);
 
 	uint16 EnemyKeyId;			//Key값 map이라고 생각해도 됨
 
@@ -50,7 +58,7 @@ private:
 	float AISightRadius = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
-	float AISightDegree = 90.f;
+	float AISightDegree = 150.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "AI")
 	float AIHearingRange = 1000.f;

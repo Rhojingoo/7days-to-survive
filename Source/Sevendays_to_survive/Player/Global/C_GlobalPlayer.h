@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "C_GlobalPlayer.generated.h"
 
-class UC_STSInstance; // 인스턴스
+struct FC_PlayerDataTable; // 인스턴스
 class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
@@ -65,7 +65,7 @@ protected:
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
 	// 게임 인스턴스 관리
-	UC_STSInstance* STSInstance = nullptr;
+	FC_PlayerDataTable* PlayerDT = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;

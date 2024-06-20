@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "C_STSInstance.generated.h"
 
+struct FC_PlayerDataTable;
 /**
  * 
  */
@@ -21,6 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
 
+	FC_PlayerDataTable* GetPlayerDataTable();
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerArr;
@@ -30,4 +32,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BuildPartPreviewTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* PlayerDataTable;
 };

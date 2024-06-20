@@ -3,20 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "C_MonsterBase.generated.h"
+#include "GameFramework/Character.h"
+#include "C_TestChar_Coach.generated.h"
 
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_MonsterBase : public APawn
+class SEVENDAYS_TO_SURVIVE_API AC_TestChar_Coach : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	AC_MonsterBase();
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")		// Ai 행동 관리자
-	class UBehaviorTree* AITree;													// 컨트롤러와 행동 관리자는 다른거임
+	// Sets default values for this character's properties
+	AC_TestChar_Coach();
 
 protected:
 	// Called when the game starts or when spawned
