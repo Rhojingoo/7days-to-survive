@@ -129,12 +129,14 @@ void UC_BuildingComponent::RotatePreview()
 void UC_BuildingComponent::IncBuildPartIndex()
 {
 	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex + 1, 0, BuildPartData.Num() - 1);
+
 	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
 void UC_BuildingComponent::DecBuildPartIndex()
 {
 	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex - 1, 0, BuildPartData.Num() - 1);
+
 	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
