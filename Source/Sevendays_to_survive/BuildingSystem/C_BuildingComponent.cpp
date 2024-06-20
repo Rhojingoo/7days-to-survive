@@ -49,11 +49,11 @@ FVector UC_BuildingComponent::GetLineTraceEndPoint()
 	return Point + EndPointOffset * Forward;
 }
 
-void UC_BuildingComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
+void UC_BuildingComponent::SetPreviewTransform(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
 {
 	if (true == IsLineTraceHit)
 	{
-		SetPreviewTransform_Hit(_ImpactPoint, _HitActor, _HitComponent);
+		SetPreviewTransform_Hit(_ImpactPoint, _Normal, _HitActor, _HitComponent);
 	}
 	else
 	{
@@ -110,7 +110,7 @@ void UC_BuildingComponent::DecBuildPartIndex()
 	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
-void UC_BuildingComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
+void UC_BuildingComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, FVector& _Normal, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
 {
 	BuildTransform.SetLocation(_ImpactPoint);
 	HitActor = _HitActor;
@@ -135,9 +135,28 @@ void UC_BuildingComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor
 	{
 		BuildTransform = HitComponent->GetComponentTransform();
 	}
+	else
+	{
+		FVector Location = BuildTransform.GetLocation();
+
+		UStaticMesh* CurMesh = PreviewActor->GetStaticMeshComponent()->GetStaticMesh();
+		FBoxSphereBounds Bounds = CurMesh->GetBounds();
+		
+		TArray<float> Coeffs;
+		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.X / _Normal.X));
+		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Y / _Normal.Y));
+		Coeffs.Add(UKismetMathLibrary::Abs(Bounds.BoxExtent.Z / _Normal.Z));
+
+		int32 IndexOfMinValue = 0.0f;
+		float MinValue = 0.0f;
+		UKismetMathLibrary::MinOfFloatArray(Coeffs, IndexOfMinValue, MinValue);
+
+		Location += _Normal * MinValue;
+		BuildTransform.SetLocation(Location);
+	}
 
 	PreviewActor->GetStaticMeshComponent()->SetMaterial(0, GreenMaterial);
-	PreviewActor->SetActorTransform(BuildTransform);
+	PreviewActor->SetActorTransform(BuildTransform, true);
 
 	CanBuild = true;
 }

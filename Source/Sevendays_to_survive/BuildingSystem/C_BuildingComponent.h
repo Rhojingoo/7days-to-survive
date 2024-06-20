@@ -84,7 +84,7 @@ private:
 	FVector GetLineTraceEndPoint();
 
 	UFUNCTION(BlueprintCallable)
-	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
+	void SetPreviewTransform(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleBuildMode();
@@ -104,7 +104,7 @@ private:
 private:
 	// Non BP Functions
 
-	void SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
+	void SetPreviewTransform_Hit(FVector& _ImpactPoint, FVector& _Normal, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
 
 	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
 
