@@ -6,16 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Delegates/Delegate.h"
-#include "C_BuildComponent.generated.h"
+#include "C_BuildingComponent.generated.h"
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SEVENDAYS_TO_SURVIVE_API UC_BuildComponent : public UActorComponent
+class SEVENDAYS_TO_SURVIVE_API UC_BuildingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UC_BuildComponent();
+	UC_BuildingComponent();
 
 protected:
 	// Called when the game starts
@@ -29,8 +29,11 @@ private:
 	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent = nullptr;
 
-	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* PreviewSMComponent = nullptr;
+	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AC_BuildingPreview> PreviewActorClass;
+
+	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AC_BuildingPreview* PreviewActor = nullptr;
 
 private:
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -74,7 +77,7 @@ protected:
 	UMaterial* RedMaterial = nullptr;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<struct FC_BuildPartTableRow> BuildPartData;
+	TArray<struct FC_BuildingPartTableRow> BuildPartData;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -106,6 +109,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void DecBuildPartIndex();
 
+	UFUNCTION(BlueprintCallable)
+	void RotatePreview();
+
 private:
 	// Non BP
 
@@ -113,6 +119,5 @@ private:
 
 	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
 
-	UFUNCTION(BlueprintCallable)
-	void RotatePreview();
+	void SetPreviewMesh(UStaticMesh* _Mesh);
 };

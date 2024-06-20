@@ -19,7 +19,7 @@ public:
 	const struct FC_PlayerLocationData* GetPlayerArr();*/
 
 	UFUNCTION(BlueprintCallable)
-	TArray<struct FC_BuildPartTableRow> GetBuildPartData();
+	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))

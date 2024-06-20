@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/DataTable.h"
-#include "C_BuildPartTableRow.generated.h"
+#include "C_BuildingPartTableRow.generated.h"
 
 /**
  * 
  */
 USTRUCT(BlueprintType)
-struct SEVENDAYS_TO_SURVIVE_API FC_BuildPartTableRow : public FTableRowBase
+struct SEVENDAYS_TO_SURVIVE_API FC_BuildingPartTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 	

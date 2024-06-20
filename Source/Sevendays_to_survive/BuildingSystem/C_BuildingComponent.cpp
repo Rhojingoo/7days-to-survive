@@ -1,16 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BuildingSystem/C_BuildComponent.h"
+#include "BuildingSystem/C_BuildingComponent.h"
+#include "BuildingSystem/C_BuildingPreview.h"
+#include "BuildingSystem/C_BuildingPart.h"
 #include "BuildingSystem/C_BuildingPartInterface.h"
-#include "BuildingSystem/C_BuildPartTableRow.h"
+#include "BuildingSystem/C_BuildingPartTableRow.h"
+#include "BuildingSystem/C_BuildingPart.h"
 #include "STS/C_STSInstance.h"
-//#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/StaticMeshActor.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
 
 // Sets default values for this component's properties
-UC_BuildComponent::UC_BuildComponent()
+UC_BuildingComponent::UC_BuildingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -19,38 +22,41 @@ UC_BuildComponent::UC_BuildComponent()
 
 
 // Called when the game starts
-void UC_BuildComponent::BeginPlay()
+void UC_BuildingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	BuildPartData = Inst->GetBuildPartData();
+
+	PreviewActor = GetWorld()->SpawnActor<AC_BuildingPreview>(PreviewActorClass);
+	SetPreviewMesh(nullptr);
 }
 
 
 // Called every frame
-void UC_BuildComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-FVector UC_BuildComponent::GetLineTraceStartPoint()
+FVector UC_BuildingComponent::GetLineTraceStartPoint()
 {
 	FVector Point = CameraComponent->K2_GetComponentLocation();
 	FVector Forward = CameraComponent->GetForwardVector();
 	return Point + StartPointOffset * Forward;
 }
 
-FVector UC_BuildComponent::GetLineTraceEndPoint()
+FVector UC_BuildingComponent::GetLineTraceEndPoint()
 {
 	FVector Point = CameraComponent->K2_GetComponentLocation();
 	FVector Forward = CameraComponent->GetForwardVector();
 	return Point + EndPointOffset * Forward;
 }
 
-void UC_BuildComponent::FirstPreviewTick()
+void UC_BuildingComponent::FirstPreviewTick()
 {
-	if (false == IsFirstPreviewTick)
+	/*if (false == IsFirstPreviewTick)
 	{
 		return;
 	}
@@ -61,10 +67,10 @@ void UC_BuildComponent::FirstPreviewTick()
 	PreviewSMComponent->bHiddenInGame = false;
 
 	PreviewSMComponent->SetStaticMesh(BuildPartData[BuildPartIndex].Mesh);
-	PreviewSMComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PreviewSMComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
 }
 
-void UC_BuildComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
+void UC_BuildingComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
 {
 	if (true == IsLineTraceHit)
 	{
@@ -76,60 +82,56 @@ void UC_BuildComponent::SetPreviewTransform(FVector _ImpactPoint, AActor* _HitAc
 	}
 }
 
-void UC_BuildComponent::ToggleBuildMode()
+void UC_BuildingComponent::ToggleBuildMode()
 {
 	BuildMode = !BuildMode;
 
-	if (false == BuildMode)
+	if (true == BuildMode)
+	{
+		SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
+	}
+	else
 	{
 		CanBuild = false;
-
-		PreviewSMComponent->SetStaticMesh(nullptr);
-		IsFirstPreviewTick = true;
+		SetPreviewMesh(nullptr);
 	}
 }
 
-void UC_BuildComponent::PlaceBuildPart()
+void UC_BuildingComponent::PlaceBuildPart()
 {
 	if (!BuildMode || !CanBuild)
 	{
 		return;
 	}
 
-	TSubclassOf<AActor> ActorClass = BuildPartData[BuildPartIndex].Actor;
-	
-	SpawnBuildPart(ActorClass, BuildTransform);
+	SpawnBuildPart(BuildPartData[BuildPartIndex].Actor, BuildTransform);
 }
 
-void UC_BuildComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
+void UC_BuildingComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
 {
 	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(_ActorClass, _SpawnTransform);
 	BuildPartActor->SetActorEnableCollision(true);
 }
 
-void UC_BuildComponent::RotatePreview()
+void UC_BuildingComponent::RotatePreview()
 {
 	FRotator NewRotator = UKismetMathLibrary::ComposeRotators(BuildTransform.Rotator(), FRotator(0.0, 5.0, 0.0));
 	BuildTransform.SetRotation(UKismetMathLibrary::Conv_RotatorToQuaternion(NewRotator));
 }
 
-void UC_BuildComponent::IncBuildPartIndex()
+void UC_BuildingComponent::IncBuildPartIndex()
 {
 	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex + 1, 0, BuildPartData.Num() - 1);
-
-	PreviewSMComponent->SetStaticMesh(nullptr);
-	IsFirstPreviewTick = true;
+	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
-void UC_BuildComponent::DecBuildPartIndex()
+void UC_BuildingComponent::DecBuildPartIndex()
 {
 	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex - 1, 0, BuildPartData.Num() - 1);
-
-	PreviewSMComponent->SetStaticMesh(nullptr);
-	IsFirstPreviewTick = true;
+	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
-void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
+void UC_BuildingComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent)
 {
 	BuildTransform.SetLocation(_ImpactPoint);
 	HitActor = _HitActor;
@@ -155,17 +157,34 @@ void UC_BuildComponent::SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& 
 		BuildTransform = HitComponent->GetComponentTransform();
 	}
 
-	PreviewSMComponent->SetMaterial(0, GreenMaterial);
-	PreviewSMComponent->SetWorldTransform(BuildTransform);
+	PreviewActor->GetStaticMeshComponent()->SetMaterial(0, GreenMaterial);
+	PreviewActor->SetActorTransform(BuildTransform);
 
 	CanBuild = true;
 }
 
-void UC_BuildComponent::SetPreviewTransform_NoHit(FVector& _TraceEnd)
+void UC_BuildingComponent::SetPreviewTransform_NoHit(FVector& _TraceEnd)
 {
 	BuildTransform.SetLocation(_TraceEnd);
-	PreviewSMComponent->SetMaterial(0, RedMaterial);
-	PreviewSMComponent->SetWorldTransform(BuildTransform);
+
+	PreviewActor->GetStaticMeshComponent()->SetMaterial(0, RedMaterial);
+	PreviewActor->SetActorTransform(BuildTransform);
 
 	CanBuild = false;
+}
+
+void UC_BuildingComponent::SetPreviewMesh(UStaticMesh* _Mesh)
+{
+	PreviewActor->GetStaticMeshComponent()->SetStaticMesh(_Mesh);
+	UStaticMesh* MeshAfterSet = PreviewActor->GetStaticMeshComponent()->GetStaticMesh();
+
+	if (_Mesh != MeshAfterSet)
+	{
+		FString MeshName = "nullptr";
+		if (nullptr != _Mesh)
+		{
+			MeshName = _Mesh->GetName();
+		}
+		UE_LOG(LogTemp, Fatal, TEXT("프리뷰 메시 세팅에 실패했습니다. 메시: %s"), *MeshName);
+	}
 }
