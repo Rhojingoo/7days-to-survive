@@ -46,16 +46,7 @@ private:
 	bool BuildMode = false;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	AActor* HitActor = nullptr;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UPrimitiveComponent* HitComponent = nullptr;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int BuildPartIndex = 0;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool IsFirstPreviewTick = true;
 
 protected:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -63,9 +54,6 @@ protected:
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float EndPointOffset = 1500.0f;
-
-	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class ACharacter* PlayerCharacter = nullptr;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UMaterial* GreenMaterial = nullptr;
@@ -76,6 +64,9 @@ protected:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<struct FC_BuildingPartTableRow> BuildPartData;
 
+	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float MaxBuildableAngle = 30.0f;
+
 private:
 	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceStartPoint();
@@ -84,7 +75,7 @@ private:
 	FVector GetLineTraceEndPoint();
 
 	UFUNCTION(BlueprintCallable)
-	void SetPreviewTransform(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
+	void RefreshPreview(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleBuildMode();
@@ -103,13 +94,17 @@ private:
 
 private:
 	// Non BP Functions
+	void SetCanBuild(bool _CanBuild);
 
-	void SetPreviewTransform_Hit(FVector& _ImpactPoint, FVector& _Normal, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
+	void RefreshPreviewTransform();
 
-	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
+	FVector GetLocationOnTerrain(FVector& _Location, FVector& _Normal);
 
 	void SetPreviewMesh(UStaticMesh* _Mesh);
 
+	bool IsSocketHit(AActor* _HitActor, UPrimitiveComponent* _HitComponent);
+
+	bool CheckBuildAngle(FVector& _Normal);
 private:
 	// RPC
 
