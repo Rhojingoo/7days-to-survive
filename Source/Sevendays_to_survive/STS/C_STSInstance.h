@@ -21,7 +21,7 @@ public:
 	const struct FC_PlayerLocationData* GetPlayerArr();*/
 
 	UFUNCTION(BlueprintCallable)
-	TArray<struct FC_BuildPartTableRow> GetBuildPartData();
+	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
 
 	const FC_PlayerDataTable* GetPlayerDataTable();
 
@@ -33,6 +33,7 @@ public:
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
 	
+	FC_PlayerDataTable* GetPlayerDataTable();
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerArr;

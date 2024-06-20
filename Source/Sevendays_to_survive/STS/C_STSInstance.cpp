@@ -2,8 +2,8 @@
 
 
 #include "STS/C_STSInstance.h"
-#include "BuildingSystem/C_BuildPartTableRow.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
+#include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "UI/C_UITableRow.h"
 
 
@@ -13,25 +13,25 @@
 //	return PlayerArr;
 //}
 
-TArray<FC_BuildPartTableRow> UC_STSInstance::GetBuildPartData()
+TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
 {
     if (nullptr == BuildPartTable)
     {
         UE_LOG(LogTemp, Fatal, TEXT("게임 인스턴스의 BuildPartTable이 nullptr입니다."));
     }
 
-    TArray<FC_BuildPartTableRow*> Data;
+    TArray<FC_BuildingPartTableRow*> Data;
     BuildPartTable->GetAllRows(TEXT("GetAllRows"), Data);
 
-    TArray<FC_BuildPartTableRow> Ret;
-    for (FC_BuildPartTableRow* Row : Data)
+    TArray<FC_BuildingPartTableRow> Ret;
+    for (FC_BuildingPartTableRow* Row : Data)
     {
         Ret.Add(*Row);
     }
     return Ret;
 }
 
-const FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
+FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
 {
     if (nullptr == PlayerDataTable)
     {
