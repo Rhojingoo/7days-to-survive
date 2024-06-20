@@ -7,6 +7,7 @@
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
+struct FC_UITableRow;
 /**
  * 
  */
@@ -23,6 +24,15 @@ public:
 	TArray<struct FC_BuildPartTableRow> GetBuildPartData();
 
 	const FC_PlayerDataTable* GetPlayerDataTable();
+
+
+	UFUNCTION(BlueprintCallable)
+	TArray<struct FC_UITableRow> GetPlayerInfoData();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerInfo(FString _Name, FString _UserIP);
+
+	
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerArr;
@@ -35,4 +45,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"));
+	UDataTable* DT_UIData;
 };
