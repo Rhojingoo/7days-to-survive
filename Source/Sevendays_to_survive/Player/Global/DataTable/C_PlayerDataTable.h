@@ -19,4 +19,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float JumpZVelocity=500.f;
+
+
+	//
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	FVector Velocity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	bool ShouldMove = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	bool IsFalling = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float GroundSpeed = 0.f;
 };

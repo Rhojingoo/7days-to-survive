@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FC_BuildPartTableRow> GetBuildPartData();
 
-	const FC_PlayerDataTable* GetPlayerDataTable();
+	FC_PlayerDataTable* GetPlayerDataTable();
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerArr;

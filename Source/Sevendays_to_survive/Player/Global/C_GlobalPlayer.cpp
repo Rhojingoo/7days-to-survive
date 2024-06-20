@@ -13,6 +13,8 @@
 #include "InputActionValue.h"
 #include "Player/MainController/C_MainPlayerController.h"
 #include "Player/Global/C_PlayerEnum.h"
+#include "Player/Global/DataTable/C_PlayerDataTable.h"
+
 
 
 // Sets default values
@@ -63,6 +65,11 @@ void AC_GlobalPlayer::BeginPlay()
 	Super::BeginPlay();
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	PlayerDT = STSInstance->GetPlayerDataTable();
+
+	if (nullptr != PlayerDT)
+	{
+		GetCharacterMovement()->JumpZVelocity = PlayerDT->JumpZVelocity;
+	}
 	//STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	//Add Input Mapping Context
 	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))

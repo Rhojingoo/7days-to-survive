@@ -65,7 +65,7 @@ protected:
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
 	// 게임 인스턴스 관리
-	const FC_PlayerDataTable* PlayerDT = nullptr;
+	FC_PlayerDataTable* PlayerDT = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;

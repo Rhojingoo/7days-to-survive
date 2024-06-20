@@ -30,7 +30,7 @@ TArray<FC_BuildPartTableRow> UC_STSInstance::GetBuildPartData()
     return Ret;
 }
 
-const FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
+FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
 {
     if (nullptr == PlayerDataTable)
     {
