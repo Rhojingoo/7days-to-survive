@@ -6,31 +6,31 @@
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Delegates/Delegate.h"
-#include "C_BuildComponent.generated.h"
+#include "C_BuildingComponent.generated.h"
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SEVENDAYS_TO_SURVIVE_API UC_BuildComponent : public UActorComponent
+class SEVENDAYS_TO_SURVIVE_API UC_BuildingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UC_BuildComponent();
+	UC_BuildingComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent = nullptr;
 
-	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* PreviewSMComponent = nullptr;
+	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AC_BuildingPreview> PreviewActorClass;
+
+	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AC_BuildingPreview* PreviewActor = nullptr;
 
 private:
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -74,7 +74,7 @@ protected:
 	UMaterial* RedMaterial = nullptr;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<struct FC_BuildPartTableRow> BuildPartData;
+	TArray<struct FC_BuildingPartTableRow> BuildPartData;
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -84,10 +84,7 @@ private:
 	FVector GetLineTraceEndPoint();
 
 	UFUNCTION(BlueprintCallable)
-	void FirstPreviewTick();
-
-	UFUNCTION(BlueprintCallable)
-	void SetPreviewTransform(FVector _ImpactPoint, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
+	void SetPreviewTransform(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleBuildMode();
@@ -95,24 +92,29 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
 
-	UFUNCTION(Server, Reliable)
-	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
-
-	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
-
 	UFUNCTION(BlueprintCallable)
 	void IncBuildPartIndex();
 
 	UFUNCTION(BlueprintCallable)
 	void DecBuildPartIndex();
 
-private:
-	// Non BP
+	UFUNCTION(BlueprintCallable)
+	void RotatePreview();
 
-	void SetPreviewTransform_Hit(FVector& _ImpactPoint, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
+private:
+	// Non BP Functions
+
+	void SetPreviewTransform_Hit(FVector& _ImpactPoint, FVector& _Normal, AActor*& _HitActor, UPrimitiveComponent*& _HitComponent);
 
 	void SetPreviewTransform_NoHit(FVector& _TraceEnd);
 
-	UFUNCTION(BlueprintCallable)
-	void RotatePreview();
+	void SetPreviewMesh(UStaticMesh* _Mesh);
+
+private:
+	// RPC
+
+	UFUNCTION(Server, Reliable)
+	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+
+	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
 };

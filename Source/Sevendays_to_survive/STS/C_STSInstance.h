@@ -20,7 +20,7 @@ public:
 	const struct FC_PlayerLocationData* GetPlayerArr();*/
 
 	UFUNCTION(BlueprintCallable)
-	TArray<struct FC_BuildPartTableRow> GetBuildPartData();
+	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
 
 	FC_PlayerDataTable* GetPlayerDataTable();
 private:
