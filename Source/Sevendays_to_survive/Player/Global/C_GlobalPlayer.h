@@ -39,6 +39,13 @@ public:
 	/** Getter for the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
+
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Camera = nullptr;
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
@@ -83,12 +90,6 @@ private:
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera = nullptr;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

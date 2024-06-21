@@ -11,6 +11,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 
 UC_BuildingComponent::UC_BuildingComponent()
 {
@@ -28,6 +29,11 @@ void UC_BuildingComponent::BeginPlay()
 
 	PreviewActor = GetWorld()->SpawnActor<AC_BuildingPreview>(PreviewActorClass);
 	SetPreviewMesh(nullptr);
+
+	AC_NickMainPlayer* PC = GetOwner<AC_NickMainPlayer>();
+	CameraComponent = PC->GetComponentByClass<UCameraComponent>();
+
+	int a = 0;
 }
 
 void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
