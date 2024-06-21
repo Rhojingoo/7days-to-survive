@@ -19,4 +19,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float JumpZVelocity=500.f;
+
 };

@@ -29,6 +29,23 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return Camera; }
 
+	/** Returns Mesh1P subobject **/
+	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	/** Returns FirstPersonCameraComponent subobject **/
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	void SetHasRifle(bool bNewHasRifle);
+
+	/** Getter for the bool */
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	bool GetHasRifle();
+
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Camera = nullptr;
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
@@ -47,6 +64,9 @@ protected:
 	virtual void MoveStart();
 	virtual void JumpStart();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
+	bool bHasRifle;
+	/** Setter to set the bool */
 
 	// 액션 키 정리
 	/** Jump Input Action */
@@ -65,16 +85,16 @@ protected:
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
 	// 게임 인스턴스 관리
-	const FC_PlayerDataTable* PlayerDT = nullptr;
+	FC_PlayerDataTable* PlayerDT = nullptr;
 
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera = nullptr;
+	/** Pawn mesh: 1st person view (arms; seen only by self) */
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	USkeletalMeshComponent* Mesh1P;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float CameraRotSpeed = 100.0f;
 };
