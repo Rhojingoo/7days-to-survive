@@ -6,13 +6,6 @@
 #include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "UI/C_UITableRow.h"
 
-
-//const FC_PlayerLocationData* UC_STSInstance::GetPlayerArr()
-//{
-//
-//	return PlayerArr;
-//}
-
 TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
 {
     if (nullptr == BuildPartTable)
@@ -21,7 +14,8 @@ TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
     }
 
     TArray<FC_BuildingPartTableRow*> Data;
-    BuildPartTable->GetAllRows(TEXT("GetAllRows"), Data);
+    FString ContextString;
+    BuildPartTable->GetAllRows(ContextString, Data);
 
     TArray<FC_BuildingPartTableRow> Ret;
     for (FC_BuildingPartTableRow* Row : Data)
