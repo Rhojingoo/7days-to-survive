@@ -14,5 +14,6 @@ void UC_PlayerAIStimuliComponent::BeginPlay()
     RegisterForSense(TSubclassOf<UAISense>(UAISense_Hearing::StaticClass()));
     RegisterForSense(TSubclassOf<UAISense_Sight>());
 
+
     RegisterWithPerceptionSystem();
 }

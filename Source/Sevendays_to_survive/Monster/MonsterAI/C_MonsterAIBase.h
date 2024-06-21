@@ -22,24 +22,15 @@ public:
 
 
 	//class percpe
-
-
-
-	virtual void BeginPlay() override final;
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+	virtual void BeginPlay() override;
 	virtual void Tick(float _DeltaTime) override;
-
 
 	UFUNCTION()
 	void OnSightUpdated(const TArray<AActor*> &_UpdateActors);
 
 	UFUNCTION()
 	void OffSightUpdated(AActor* _ForgotActor);
-
-	//UFUNCTION()
-	//void OnHearingUpdated(const TArray<AActor*>& _UpdateActors);
-
-	//UFUNCTION()
-	//void OffHearingUpdated(AActor* _ForgotActor);
 
 	uint16 EnemyKeyId;			//Key값 map이라고 생각해도 됨
 
@@ -50,21 +41,21 @@ private:
 	UPROPERTY()
 	float AISightDegree = 150.f;
 
-	/*UPROPERTY()
-	float AIHearingRange = 1000.f;*/
-
 	UPROPERTY()
 	class UAISenseConfig_Sight* SightConfig;
 	/*UPROPERTY()
 	class UAISenseConfig_Hearing* HearingConfig;*/
-	UPROPERTY(Transient)
+	UPROPERTY()
 	class UBehaviorTreeComponent* BTC;		// 어떻게 컨트롤 되어야 하지?	(로직 저장)
 
-	UPROPERTY(Transient)
+	UPROPERTY()
 	class UBlackboardComponent* BBC;		// 어떤 값에 기반하여 컨트롤 해야 하지? (값 저장)
 
-	UPROPERTY(Transient)
+	UPROPERTY()
 	class UAIPerceptionComponent* APC;
+
+	UPROPERTY()
+	bool IsFind = false;
 
 };
 
