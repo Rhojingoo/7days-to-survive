@@ -36,7 +36,6 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 		SightConfig->SetStartsEnabled(true);
 	}
 
-	EnemyKeyId = 0;
 }
 
 void AC_MonsterAIBase::OnPossess(APawn* InPawn)
@@ -62,7 +61,6 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
 
-		EnemyKeyId = BBC->GetKeyID("TargetActor");
 		//BTC->StartTree(*Monster->AITree);  // 원래 존재하거나 이미 실행중이던 behavior tree를 시작 혹은 재시작하는데 쓰임
 		RunBehaviorTree(Monster->AITree);  // 어떠한 behavior tree를 실행하는데 사용되는 함수이며, 이미 실행하던 tree와 다른 behavior tree를 실행하게 바꿀 수도 있음
 	}
@@ -87,7 +85,6 @@ void AC_MonsterAIBase::BeginPlay()
 
 	if (APC && SightConfig/* && HearingConfig*/) {
 		UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, SightConfig->GetSenseImplementation(), GetPawn());
-
 		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnSightUpdated);
 		APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffSightUpdated);
 		APC->Activate();
@@ -120,7 +117,9 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 	for (AActor* Actor : _UpdateActors)
 	{
 		DrawDebugSphere(GetWorld(), Actor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 5.0f);
-
+		BBC->SetValueAsObject(EnemyKeyId, Actor);
+		IsFind = true;
+		APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);
 	}
 	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 }
