@@ -2,6 +2,7 @@
 
 using System.IO;
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class Sevendays_to_survive : ModuleRules
 {
@@ -9,7 +10,7 @@ public class Sevendays_to_survive : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -7,10 +7,12 @@
 
 
 
-bool UC_PlayerAIStimuliComponent::Init()
+void UC_PlayerAIStimuliComponent::BeginPlay()
 {
+    Super::BeginPlay();
     RegisterForSense(TSubclassOf<UAISense>(UAISense_Sight::StaticClass()));
     RegisterForSense(TSubclassOf<UAISense>(UAISense_Hearing::StaticClass()));
+    RegisterForSense(TSubclassOf<UAISense_Sight>());
+
     RegisterWithPerceptionSystem();
-    return false;
 }
