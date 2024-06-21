@@ -12,8 +12,8 @@ void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	Ani = EPlayerState::Idle;
-	GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
-	GlobalAnim->ChangeAnimation(Ani);
+	//GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
+	//GlobalAnim->ChangeAnimation(Ani);
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
@@ -32,9 +32,9 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::MoveStart);
+		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::MoveStart);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Move);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::IdleStart);
+		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::IdleStart);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Look);
