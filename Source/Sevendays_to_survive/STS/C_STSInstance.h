@@ -17,9 +17,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
-	/*UFUNCTION(BlueprintCallable)
-	const struct FC_PlayerLocationData* GetPlayerArr();*/
-
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
 

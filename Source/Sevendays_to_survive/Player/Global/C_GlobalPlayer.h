@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "C_GlobalPlayer.generated.h"
 
-struct FC_PlayerDataTable; // 인스턴스
+//struct FC_PlayerValue; // 플레이어 데이터
+//struct FC_CameraValue; // 카메라 데이터 
 class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
@@ -40,12 +42,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
 
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera = nullptr;
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
@@ -85,8 +81,13 @@ protected:
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 private:
 	// 게임 인스턴스 관리
-	FC_PlayerDataTable* PlayerDT = nullptr;
+	FC_PlayerValue PlayerDT;
+	FC_CameraValue CameraDT;
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Camera = nullptr;
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;

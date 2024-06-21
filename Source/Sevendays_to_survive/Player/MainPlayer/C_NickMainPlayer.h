@@ -37,6 +37,7 @@ protected:
 private:
 	//UC_GlobalAnimInstance* GlobalAnim = nullptr;
 
+	//UPROPERTY(Replicated, Server)
 	EPlayerState  Ani = EPlayerState::None;
 	
 };
