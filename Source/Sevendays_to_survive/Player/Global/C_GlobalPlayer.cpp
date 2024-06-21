@@ -14,6 +14,7 @@
 #include "Player/MainController/C_MainPlayerController.h"
 #include "Player/Global/C_PlayerEnum.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -128,7 +129,7 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
 	if (Controller != nullptr)
 	{
