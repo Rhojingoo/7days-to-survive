@@ -32,7 +32,12 @@ public:
 	UFUNCTION()
 	void OffSightUpdated(AActor* _ForgotActor);
 
-	uint16 EnemyKeyId;			//Key값 map이라고 생각해도 됨
+	UFUNCTION()
+	bool GetIsFind() {
+		return IsFind;
+	}
+
+	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
 private:
 	UPROPERTY()

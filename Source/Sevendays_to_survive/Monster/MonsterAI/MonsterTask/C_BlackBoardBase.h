@@ -22,6 +22,15 @@ protected:
 
     virtual void OnGameplayTaskDeactivated(UGameplayTask& Task) override;
 
+    UFUNCTION()
+    void InitTask(UBehaviorTreeComponent* OwnerComp);
+
+    UPROPERTY()
+    AActor* TargetActor = nullptr;
+
+    UPROPERTY()
+    uint16 EnemyKeyId;
+
 private:
 
 };
