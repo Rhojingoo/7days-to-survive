@@ -77,19 +77,38 @@ void UC_BuildingComponent::RefreshPreview(FVector _ImpactPoint, FVector _Normal,
 		{
 			// 충돌면의 경사가 완만한 경우
 
-			// TODO: 액터와 충돌 체크
-			FVector Location = GetLocationOnTerrain(_ImpactPoint, _Normal);
-			BuildTransform.SetLocation(Location);
-			SetCanBuild(true);
+			if (true == HasPreviewCollision())
+			{
+				// 충돌이 있는 경우
+				BuildTransform.SetLocation(_ImpactPoint);
+				SetCanBuild(false);
+			}
+			else
+			{
+				// 충돌이 없는 경우
+				FVector Location = GetLocationOnTerrain(_ImpactPoint, _Normal);
+				BuildTransform.SetLocation(Location);
+				SetCanBuild(true);
+			}
 		}
 	}
 	else
 	{
 		// Ray가 소켓에 충돌한 경우
 
-		// TODO: 액터와 충돌 체크
 		BuildTransform = _HitComponent->GetComponentTransform();
-		SetCanBuild(true);
+		RefreshPreviewTransform();
+
+		if (true == HasPreviewCollision())
+		{
+			// 충돌이 있는 경우
+			SetCanBuild(false);
+		}
+		else
+		{
+			// 충돌이 없는 경우
+			SetCanBuild(true);
+		}
 	}
 
 	RefreshPreviewTransform();
@@ -224,4 +243,11 @@ bool UC_BuildingComponent::CheckBuildAngle(FVector& _Normal)
 	float Tangent = Z / UKismetMathLibrary::Sqrt(1.0f - Z * Z);
 	float NormalAngle = UKismetMathLibrary::DegAtan(Tangent);
 	return 90.0f - MaxBuildableAngle <= NormalAngle && NormalAngle <= 90.0f;
+}
+
+bool UC_BuildingComponent::HasPreviewCollision()
+{
+	TArray<AActor*> OverlappingActors;
+	PreviewActor->GetStaticMeshComponent()->GetOverlappingActors(OverlappingActors);
+	return !OverlappingActors.IsEmpty();
 }

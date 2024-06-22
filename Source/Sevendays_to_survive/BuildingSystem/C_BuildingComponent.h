@@ -105,6 +105,8 @@ private:
 	bool IsSocketHit(AActor* _HitActor, UPrimitiveComponent* _HitComponent);
 
 	bool CheckBuildAngle(FVector& _Normal);
+
+	bool HasPreviewCollision();
 private:
 	// RPC
 
