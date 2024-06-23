@@ -37,9 +37,6 @@ private:
 	FTransform BuildTransform;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool IsLineTraceHit = false;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool CanBuild = false;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -75,9 +72,6 @@ private:
 	FVector GetLineTraceEndPoint();
 
 	UFUNCTION(BlueprintCallable)
-	void RefreshPreview(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
-
-	UFUNCTION(BlueprintCallable)
 	void ToggleBuildMode();
 
 	UFUNCTION(BlueprintCallable)
@@ -105,6 +99,8 @@ private:
 	bool IsSocketHit(AActor* _HitActor, UPrimitiveComponent* _HitComponent);
 
 	bool CheckBuildAngle(FVector& _Normal);
+
+	bool HasPreviewCollision();
 private:
 	// RPC
 

@@ -13,5 +13,4 @@ UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_BuildingPreview : public AStaticMeshActor
 {
 	GENERATED_BODY()
-	
 };

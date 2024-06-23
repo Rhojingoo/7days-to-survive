@@ -15,6 +15,5 @@ class SEVENDAYS_TO_SURVIVE_API UC_PlayerAIStimuliComponent : public UAIPerceptio
 	GENERATED_BODY()
 
 public:
-
-	bool Init();
+	virtual void BeginPlay() override;
 };

@@ -13,7 +13,7 @@
 #include "InputActionValue.h"
 #include "Player/MainController/C_MainPlayerController.h"
 #include "Player/Global/C_PlayerEnum.h"
-#include "Player/Global/DataTable/C_PlayerDataTable.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -37,7 +37,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
 	
-	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
@@ -47,7 +46,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera"));
 	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	//SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
 	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -67,17 +66,33 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
+}
+
 // Called when the game starts or when spawned
 void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-	PlayerDT = STSInstance->GetPlayerDataTable();
-
-	if (nullptr != PlayerDT)
+	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
+	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
+	
+	// 카메라 데이터 테이블 값 가져오기
 	{
-		GetCharacterMovement()->JumpZVelocity = PlayerDT->JumpZVelocity;
+		SpringArm->TargetArmLength = CameraDT.TargetArmLength;
+		CameraRotSpeed = CameraDT.CameraRotSpeed;
 	}
+
+	
+	// 플레이어 데이터 테이블 값 가져오기
+	{
+		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
+	}
+	
 	//STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	//Add Input Mapping Context
 	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))
@@ -128,7 +143,7 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
 	if (Controller != nullptr)
 	{
@@ -138,16 +153,16 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::IdleStart()
+void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	IsRunCpp = true;
 }
 
-void AC_GlobalPlayer::MoveStart()
+void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
-}
-
-void AC_GlobalPlayer::JumpStart()
-{
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	IsRunCpp = false;
 }
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
