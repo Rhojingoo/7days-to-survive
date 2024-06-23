@@ -7,9 +7,11 @@
 #include "BuildingSystem/C_BuildingPartInterface.h"
 #include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "BuildingSystem/C_BuildingPart.h"
+#include "Landscape.h"
 #include "STS/C_STSInstance.h"
 #include "Engine/StaticMeshActor.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "Player/MainPlayer/C_NickMainPlayer.h"
 
@@ -28,6 +30,7 @@ void UC_BuildingComponent::BeginPlay()
 	BuildPartData = Inst->GetBuildPartData();
 
 	PreviewActor = GetWorld()->SpawnActor<AC_BuildingPreview>(PreviewActorClass);
+	PreviewActor->SetOwner(GetOwner());
 	SetPreviewMesh(nullptr);
 
 	AC_NickMainPlayer* PC = GetOwner<AC_NickMainPlayer>();
@@ -39,6 +42,109 @@ void UC_BuildingComponent::BeginPlay()
 void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (false == BuildMode)
+	{
+		return;
+	}
+
+	TArray<AActor*> ActorsToIgnore;
+	TArray<FHitResult> OutHits;
+
+	FVector TraceStart = GetLineTraceStartPoint();
+	FVector TraceEnd = GetLineTraceEndPoint();
+
+	bool IsLineTraceHit = UKismetSystemLibrary::LineTraceMulti(
+		GetWorld(),
+		TraceStart,
+		TraceEnd,
+		BuildPartData[BuildPartIndex].TraceType,
+		false,
+		ActorsToIgnore,
+		EDrawDebugTrace::None,
+		OutHits,
+		true
+	);
+
+	// 레이가 적중하지 않은 경우
+	if (false == IsLineTraceHit)
+	{
+		BuildTransform.SetLocation(TraceEnd);
+		SetCanBuild(false);
+		RefreshPreviewTransform();
+		return;
+	}
+
+	// 레이가 소켓에 적중한 경우에 대한 처리
+	for (FHitResult& OutHit : OutHits)
+	{
+		AActor* HitActor = OutHit.GetActor();
+
+		if (false == HitActor->Implements<UC_BuildingPartInterface>())
+		{
+			continue;
+		}
+
+		BuildTransform = OutHit.GetComponent()->GetComponentTransform();
+		RefreshPreviewTransform();
+
+		if (true == HasPreviewCollision())
+		{
+			// 충돌이 있는 경우
+			SetCanBuild(false);
+		}
+		else
+		{
+			// 충돌이 없는 경우
+			SetCanBuild(true);
+		}
+
+		return;
+	}
+	
+	// 레이가 적중한 경우에 대한 처리
+	bool IsLandscapeHit = false;
+	FHitResult* OutHit = nullptr;
+	for (FHitResult& Hit : OutHits)
+	{
+		if (true == Hit.GetActor()->IsA<ALandscape>())
+		{
+			IsLandscapeHit = true;
+			OutHit = &Hit;
+			break;
+		}
+	}
+
+	if (true == IsLandscapeHit)
+	{
+		// 그라운드 업 처리
+		FVector Location = GetLocationOnTerrain(OutHit->ImpactPoint, OutHit->Normal);
+		BuildTransform.SetLocation(Location);
+		RefreshPreviewTransform();
+
+		// 충돌면의 경사가 급하면 설치할 수 없다.
+		if (false == CheckBuildAngle(OutHit->Normal))
+		{
+			SetCanBuild(false);
+			return;
+		}
+	}
+	else
+	{
+		OutHit = &OutHits[0];
+		BuildTransform.SetLocation(OutHit->ImpactPoint);
+	}
+
+	// 랜드스케이프를 제외한 액터와 충돌이 있는 경우
+	if (true == HasPreviewCollision())
+	{
+		SetCanBuild(false);
+	}
+	// 랜드스케이프를 제외한 액터와 충돌이 없는 경우
+	else
+	{
+		SetCanBuild(true);
+	}
 }
 
 FVector UC_BuildingComponent::GetLineTraceStartPoint()
@@ -53,65 +159,6 @@ FVector UC_BuildingComponent::GetLineTraceEndPoint()
 	FVector Point = CameraComponent->GetComponentLocation();
 	FVector Forward = CameraComponent->GetForwardVector();
 	return Point + EndPointOffset * Forward;
-}
-
-void UC_BuildingComponent::RefreshPreview(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd)
-{
-	if (false == IsLineTraceHit)
-	{
-		// Ray가 충돌하지 않은 경우
-
-		BuildTransform.SetLocation(_TraceEnd);
-		SetCanBuild(false);
-	}
-	else if (false == IsSocketHit(_HitActor, _HitComponent))
-	{
-		// Ray가 소켓이 아닌 액터 표면에 충돌한 경우
-		if (false == CheckBuildAngle(_Normal))
-		{
-			// 충돌면의 경사가 급한 경우
-			BuildTransform.SetLocation(_ImpactPoint);
-			SetCanBuild(false);
-		}
-		else
-		{
-			// 충돌면의 경사가 완만한 경우
-
-			if (true == HasPreviewCollision())
-			{
-				// 충돌이 있는 경우
-				BuildTransform.SetLocation(_ImpactPoint);
-				SetCanBuild(false);
-			}
-			else
-			{
-				// 충돌이 없는 경우
-				FVector Location = GetLocationOnTerrain(_ImpactPoint, _Normal);
-				BuildTransform.SetLocation(Location);
-				SetCanBuild(true);
-			}
-		}
-	}
-	else
-	{
-		// Ray가 소켓에 충돌한 경우
-
-		BuildTransform = _HitComponent->GetComponentTransform();
-		RefreshPreviewTransform();
-
-		if (true == HasPreviewCollision())
-		{
-			// 충돌이 있는 경우
-			SetCanBuild(false);
-		}
-		else
-		{
-			// 충돌이 없는 경우
-			SetCanBuild(true);
-		}
-	}
-
-	RefreshPreviewTransform();
 }
 
 void UC_BuildingComponent::ToggleBuildMode()
@@ -247,7 +294,26 @@ bool UC_BuildingComponent::CheckBuildAngle(FVector& _Normal)
 
 bool UC_BuildingComponent::HasPreviewCollision()
 {
-	TArray<AActor*> OverlappingActors;
-	PreviewActor->GetStaticMeshComponent()->GetOverlappingActors(OverlappingActors);
-	return !OverlappingActors.IsEmpty();
+	TArray<UPrimitiveComponent*> OverlappingComponents;
+	PreviewActor->GetStaticMeshComponent()->GetOverlappingComponents(OverlappingComponents);
+
+	for (UPrimitiveComponent* OverlappingComponent : OverlappingComponents)
+	{
+		AActor* OverlappingActor = OverlappingComponent->GetOwner();
+			
+		if (true == OverlappingActor->IsA<ALandscape>())
+		{
+			continue;
+		}
+
+		if (true == OverlappingActor->IsA<AC_BuildingPart>() 
+			&& !OverlappingComponent->ComponentHasTag(TEXT("Body")))
+		{
+			continue;
+		}
+
+		return true;
+	}
+
+	return false;
 }

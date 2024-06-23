@@ -27,4 +27,10 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UHierarchicalInstancedStaticMeshComponent* HISM = nullptr;
+
+public:
+	UFUNCTION(NetMulticast, Reliable)
+	void DestroyInstance(int _Index);
+
+	void DestroyInstance_Implementation(int _Index);
 };

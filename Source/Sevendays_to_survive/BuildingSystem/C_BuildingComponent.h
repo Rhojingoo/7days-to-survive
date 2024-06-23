@@ -37,9 +37,6 @@ private:
 	FTransform BuildTransform;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool IsLineTraceHit = false;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool CanBuild = false;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -73,9 +70,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceEndPoint();
-
-	UFUNCTION(BlueprintCallable)
-	void RefreshPreview(FVector _ImpactPoint, FVector _Normal, AActor* _HitActor, UPrimitiveComponent* _HitComponent, FVector _TraceEnd);
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleBuildMode();
