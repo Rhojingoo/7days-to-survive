@@ -26,7 +26,7 @@ public:
 	void ServerOpen();
 
 	UFUNCTION(BlueprintCallable)
-	void ServerConnect(FString _Ip);
+	void ServerConnect(FString _Ip , FString _Port);
 
 	UFUNCTION(BlueprintCallable)
 	void SelectChange(FString _Text);

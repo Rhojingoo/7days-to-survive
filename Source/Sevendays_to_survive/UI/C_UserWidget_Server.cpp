@@ -24,7 +24,7 @@ void UC_UserWidget_Server::ServerOpen()
 		}
 
 		Inst->TitleToGameInfo.ServerOpenCheck = true;
-		Inst->TitleToGameInfo.UserIp = "172.29.115.246";
+		Inst->TitleToGameInfo.UserIp = "121.160.175.10";
 		Inst->TitleToGameInfo.ServerPort = "30001"; //포트 값을 가져와야한다.
 		//일단 30001고정으로 사용하겠습니다.
 
@@ -37,10 +37,17 @@ void UC_UserWidget_Server::ServerOpen()
 }
 
 
-void UC_UserWidget_Server::ServerConnect(FString _Ip)
+void UC_UserWidget_Server::ServerConnect(FString _Ip , FString _Port)
 {
 	UC_STSInstance* Inst = GetGameInstance<UC_STSInstance>();
-	FString CheckIP = Inst->TitleToGameInfo.UserIp;
+
+
+	Inst->TitleToGameInfo.UserIp = _Ip;
+	Inst->TitleToGameInfo.ServerPort = _Port;
+
+	FString ConnectLevel = FString::Printf(TEXT("%s:%s"), *_Ip, *_Port);
+	UGameplayStatics::OpenLevel(GetWorld(), *ConnectLevel);
+
 
 }
 
