@@ -17,12 +17,8 @@ class SEVENDAYS_TO_SURVIVE_API UC_GlobalAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
-	void ChangeAnimation(const EPlayerState _EData);
+
 protected:
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TMap<EPlayerState, UAnimMontage*> AnimMontages;
-
-	//
 };

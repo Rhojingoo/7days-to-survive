@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Player/Global/DataTable/C_PlayerDataTable.h"
+#include "Player/Global/DataTable/C_PlayerDataTable.h" // 데이터 테이블
+#include "Net/UnrealNetwork.h" // 서버 네트워크
 #include "C_GlobalPlayer.generated.h"
 
-//struct FC_PlayerValue; // 플레이어 데이터
-//struct FC_CameraValue; // 카메라 데이터 
 class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
-class UC_GlobalAnimInstance;
-struct FInputActionValue; // 
+class UC_GlobalAnimInstance; // 애님 인스턴스
+struct FInputActionValue; // 입력 값
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_GlobalPlayer : public ACharacter
@@ -27,38 +26,44 @@ public:
 
 	
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return SpringArm; }
+	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE UCameraComponent* GetFollowCamera() const { return Camera; }
+	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 
 	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; } // 총 저장 용 매쉬
 	/** Returns FirstPersonCameraComponent subobject **/
 
+	// 총 관련 bool 함수
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void SetHasRifle(bool bNewHasRifle);
 
 	/** Getter for the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
+	//------------------------------------------------
 
+	// 네트워크 동기화 용 함수
+	// (1) 달리기 함수
+	UFUNCTION(Reliable, Server)
+	void RunStart(const FInputActionValue& Value); //
+	void RunStart_Implementation(const FInputActionValue& Value);
+	UFUNCTION(Reliable, Server)
+	void RunEnd(const FInputActionValue& Value);
+	void RunEnd_Implementation(const FInputActionValue& Value);
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
 
-	// 행동
-	virtual void Move(const FInputActionValue& Value);
-	virtual void Look(const FInputActionValue& Value);
-
-	// 애니메이션 스타트 가상 함수
-	virtual void IdleStart();
-	virtual void MoveStart();
-	virtual void JumpStart();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
 	bool bHasRifle;
@@ -76,6 +81,9 @@ protected:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* RunAction = nullptr;
 
 	// 애님 인스턴스 관리
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
@@ -98,4 +106,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsRunCpp = false;
 };

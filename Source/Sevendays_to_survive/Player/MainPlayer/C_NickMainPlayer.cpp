@@ -11,9 +11,6 @@
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	Ani = EPlayerState::Idle;
-	//GlobalAnim = Cast<UC_GlobalAnimInstance>(GetMesh()->GetAnimInstance());
-	//GlobalAnim->ChangeAnimation(Ani);
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
@@ -31,13 +28,17 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
+
 		// Moving
 		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::MoveStart);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
 		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::IdleStart);
 
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
+
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_NickMainPlayer::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
 	}
 	else
 	{
@@ -45,32 +46,3 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	}
 }
 
-void AC_NickMainPlayer::Move(const FInputActionValue& Value)
-{
-	Super::Move(Value);
-}
-
-
-void AC_NickMainPlayer::Look(const FInputActionValue& Value)
-{
-	Super::Look(Value);
-}
-
-void AC_NickMainPlayer::IdleStart()
-{
-	Super::IdleStart();
-	Ani = EPlayerState::Idle;
-	GlobalAnim->ChangeAnimation(Ani);
-}
-
-void AC_NickMainPlayer::MoveStart()
-{
-	Super::MoveStart();
-	Ani = EPlayerState::Walk;
-	GlobalAnim->ChangeAnimation(Ani);
-}
-
-void AC_NickMainPlayer::JumpStart()
-{
-	Super::JumpStart();
-}
