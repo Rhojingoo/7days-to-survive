@@ -103,19 +103,19 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 	
 	// 레이가 적중한 경우에 대한 처리
-	bool IsLandscapeHit = false;
+	bool IsLandHit = false;
 	FHitResult* OutHit = nullptr;
 	for (FHitResult& Hit : OutHits)
 	{
-		if (true == Hit.GetActor()->IsA<ALandscape>())
+		if (true == Hit.GetActor()->ActorHasTag(TEXT("Ground")))
 		{
-			IsLandscapeHit = true;
+			IsLandHit = true;
 			OutHit = &Hit;
 			break;
 		}
 	}
 
-	if (true == IsLandscapeHit)
+	if (true == IsLandHit)
 	{
 		// 그라운드 업 처리
 		FVector Location = GetLocationOnTerrain(OutHit->ImpactPoint, OutHit->Normal);
@@ -135,12 +135,12 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		BuildTransform.SetLocation(OutHit->ImpactPoint);
 	}
 
-	// 랜드스케이프를 제외한 액터와 충돌이 있는 경우
+	// 땅을 제외한 액터와 충돌이 있는 경우
 	if (true == HasPreviewCollision())
 	{
 		SetCanBuild(false);
 	}
-	// 랜드스케이프를 제외한 액터와 충돌이 없는 경우
+	// 땅을 제외한 액터와 충돌이 없는 경우
 	else
 	{
 		SetCanBuild(true);
@@ -301,7 +301,7 @@ bool UC_BuildingComponent::HasPreviewCollision()
 	{
 		AActor* OverlappingActor = OverlappingComponent->GetOwner();
 			
-		if (true == OverlappingActor->IsA<ALandscape>())
+		if (true == OverlappingActor->ActorHasTag(TEXT("Ground")))
 		{
 			continue;
 		}
