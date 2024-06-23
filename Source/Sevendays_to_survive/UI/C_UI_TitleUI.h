@@ -23,11 +23,15 @@ public:
 	//
 	
 	UFUNCTION(BlueprintCallable)
-	void ServerStart(); //서버 열기 
+	void SelectChange(FString _Text); //서버 접속 
 
 	//UFUNCTION(BlueprintCallable)
 	//void SelectChange(FString _Text);
 	//
 
 	virtual bool Initialize() override;
+
+	FString IPAddress = "None";
+private:
+
 };

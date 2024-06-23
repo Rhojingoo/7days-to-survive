@@ -19,6 +19,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StringTODataTable(FString _Name,FString _UserIP);
 
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString Port;
+	
+	UFUNCTION(BlueprintCallable)
+	void ServerOpen();
+
+	UFUNCTION(BlueprintCallable)
+	void ServerConnect(FString _Ip);
+
+	UFUNCTION(BlueprintCallable)
+	void SelectChange(FString _Text);
+
+	FString IPAddress = "None";
 private:
 	
 };

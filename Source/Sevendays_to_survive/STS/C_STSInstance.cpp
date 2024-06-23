@@ -68,13 +68,44 @@ TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()
 
 }
 
+//UI
 void UC_STSInstance::SetPlayerInfo(FString _Name, FString _UserIP)
 {
     FC_UITableRow Row;
     Row.UserName = _Name;
-    Row.UserIp = _UserIP;
+    Row.UserIp = "10101100";
     DT_UIData->AddRow(*_Name, Row);
-    //캐릭터 이름
-    //캐릭터 ip이렇게 하려고했어요!!
+    int a = 0;
+    TArray<FString> UIData;
+
+    TArray<FC_UITableRow*> Rows;
+    FString Context;
+    DT_UIData->GetAllRows(TEXT("GetAllRows"), Rows);
+
+    Context;
+
+
+    for (FC_UITableRow* Table : Rows) {
+        UE_LOG(LogTemp, Warning, TEXT("%s"), *Table->UserIp);
+        UE_LOG(LogTemp, Warning, TEXT("%s"), *Table->UserName);
+    }
+   
 }
+
+/*
+
+FC_UITableRow* UC_STSInstance::GetUIDataTable()
+{
+    //첫번째 유저의 아이피를 가져와서 일치하면 접속을 Listen이 가능하게 변경 
+    TArray<FC_UITableRow*> arr;
+    DT_UIData->GetAllRows<FC_UITableRow>(TEXT("GetAllRows"), arr);
+    
+    FC_UITableRow* Data = arr[0];
+     // 0번째 인덱스랑 일치하면 서버에 접속이 가능하게 하려고 했음 
+
+    return Data;
+}
+
+*/
+
 

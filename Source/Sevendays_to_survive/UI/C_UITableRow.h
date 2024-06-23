@@ -22,8 +22,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString UserIp = TEXT("None");;
 
+
 	
 
+	FString ServerPort = "None";
+
+	bool ServerOpenCheck = false;
+
+	
 };
 
 
