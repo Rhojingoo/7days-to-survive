@@ -37,7 +37,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
 	
-	//GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
@@ -65,6 +64,13 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
 }
 
 // Called when the game starts or when spawned
@@ -147,16 +153,16 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::IdleStart()
+void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	IsRunCpp = true;
 }
 
-void AC_GlobalPlayer::MoveStart()
+void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
-}
-
-void AC_GlobalPlayer::JumpStart()
-{
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	IsRunCpp = false;
 }
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
