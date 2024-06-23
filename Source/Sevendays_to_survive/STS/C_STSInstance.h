@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "UI/C_UITableRow.h"
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
@@ -26,8 +27,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
-	
+	//UFUNCTION(BlueprintCallable)
+	//FC_UITableRow* GetUIDataTable();
+
 	FC_PlayerDataTable* GetPlayerDataTable();
+
+
+	FC_UITableRow TitleToGameInfo;
+
+
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BuildPartTable;
@@ -37,4 +46,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"));
 	UDataTable* DT_UIData;
+
+	
 };
