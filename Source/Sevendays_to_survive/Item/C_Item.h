@@ -6,19 +6,30 @@
 #include "UObject/NoExportTypes.h"
 #include "C_Item.generated.h"
 
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	NONE,
+	Wood,
+	Stone,
+	Iron,
+	MAX,
+};
+
 /**
  * 
  */
-UCLASS(BlueprintType)
-class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
+USTRUCT(BlueprintType)
+struct SEVENDAYS_TO_SURVIVE_API FC_Item : public FTableRowBase
 {
 	GENERATED_BODY()
 	
-public:
-	UFUNCTION(BlueprintCallable)
-	FName GetName() const;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EItemType Type;
 
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool Countable;
 };

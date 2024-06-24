@@ -20,17 +20,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void Damage(int _Index, int _Damage);
+
+	virtual void Damage_Implementation(int _Index, int _Damage);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UHierarchicalInstancedStaticMeshComponent* HISM = nullptr;
+	UHierarchicalInstancedStaticMeshComponent* HISMComponent = nullptr;
 
 public:
 	UFUNCTION(NetMulticast, Reliable)
 	void DestroyInstance(int _Index);
 
 	void DestroyInstance_Implementation(int _Index);
+
+	TMap<int, int> HpMap;
 };

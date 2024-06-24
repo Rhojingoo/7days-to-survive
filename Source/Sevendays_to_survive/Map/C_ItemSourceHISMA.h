@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetData(FC_ItemSourceTableRow& _Data);
 
+protected:
+	virtual void Damage_Implementation(int _Index, int _Damage) override;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data", meta=(AllowPrivateAccess = "true"))
 	FC_ItemSourceTableRow Data;

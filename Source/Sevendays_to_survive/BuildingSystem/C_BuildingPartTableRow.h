@@ -14,8 +14,7 @@ USTRUCT(BlueprintType)
 struct SEVENDAYS_TO_SURVIVE_API FC_BuildingPartTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
-	
-public:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* Mesh = nullptr;
 
