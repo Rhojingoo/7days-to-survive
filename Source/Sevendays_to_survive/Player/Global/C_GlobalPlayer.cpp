@@ -95,6 +95,28 @@ void AC_GlobalPlayer::BeginPlay()
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
 	
+	{
+		FString& Port = STSInstance->TitleToGameInfo.ServerPort;
+		//if (STSInstance->TitleToGameInfo.ServerOpenCheck == true)
+		//{
+		//	return;
+		//}
+		int PortNumber = FCString::Atoi(*Port);
+		if (PortNumber == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("%S(%u)> if (PortNumber == 0)"), __FUNCTION__, __LINE__);
+			PortNumber = 30002;
+			// UE_LOG(GIMATLog, Fatal, TEXT("%S(%u)> if (PortNumber == 0)"), __FUNCTION__, __LINE__);
+		}
+
+		// FString:: Inst->SideScrollGameInfo.PORT;
+		if (GetLocalRole() == ENetRole::ROLE_Authority)
+		{
+			STSInstance->EnableListenServer(true, PortNumber);
+		}
+	}
+
+
 	// 카메라 데이터 테이블 값 가져오기
 	{
 		SpringArm->TargetArmLength = CameraDT.TargetArmLength;

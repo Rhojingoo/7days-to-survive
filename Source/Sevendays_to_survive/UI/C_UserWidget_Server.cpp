@@ -67,7 +67,7 @@ bool UC_UserWidget_Server::Initialize()
 {
 	bool ReturnValue = Super::Initialize();
 
-	IPAddress = TEXT("192.168.0.173");
+	IPAddress = TEXT("127.0.0.1");
 
 	return ReturnValue;
 }
@@ -84,8 +84,12 @@ void UC_UserWidget_Server::ServerConnect(FString _Ip )
 
 	FString IpAddress = _Ip;
 	
-	FString ConnectLevel = FString::Printf(TEXT("%s:%s"), *IpAddress, *Port);
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("testPlayLevel"));
+	//FString ConnectLevel = FString::Printf(TEXT("%s:%s"), *IpAddress, *Port);
+	TMap<FString, FStringFormatArg> Args;
+	Args.Emplace(TEXT("0"), IpAddress); 
+	Args.Emplace(TEXT("1"), Port);
+	FString ConnectLevel = FString::Format(TEXT("{0}:{1}"), Args);
+	//UGameplayStatics::OpenLevel(GetWorld(), TEXT("testPlayLevel"));
 	UGameplayStatics::OpenLevel(GetWorld(), *ConnectLevel);
 
 
