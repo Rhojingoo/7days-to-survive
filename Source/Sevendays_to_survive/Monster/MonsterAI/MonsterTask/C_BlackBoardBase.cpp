@@ -8,40 +8,23 @@
 
 UC_BlackBoardBase::UC_BlackBoardBase()
 {
-	NodeName = "BaseTask";
 }
 
 EBTNodeResult::Type UC_BlackBoardBase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
-	AC_MonsterAIBase* MonsterController = Cast<AC_MonsterAIBase>(OwnerComp.GetOwner());
-
-	if (!IsValid(MonsterController)) {
-		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
-	}
-	if (MonsterController->GetIsFind()) {
+	if (IsInit == false) {
+		IsInit = true;
 		InitTask(&OwnerComp);
-		MonsterController->MoveToLocation(TargetActor->GetActorLocation());
 	}
-
-	else {
-
-	}
-	return EBTNodeResult::Succeeded;
-}
-
-
-void UC_BlackBoardBase::OnGameplayTaskActivated(UGameplayTask& Task)
-{
-}
-
-void UC_BlackBoardBase::OnGameplayTaskDeactivated(UGameplayTask& Task)
-{
+	return EBTNodeResult::Type();
 }
 
 void UC_BlackBoardBase::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
-	if (nullptr == TargetActor) {
-	TargetActor = Cast<AActor>(OwnerComp->GetBlackboardComponent()->GetValueAsObject("TargetActor"));
-	}
+	BoolName = "IsActEnd";
+	WaitTimeName = "WaitTime";
+	TargetActorName = "TargetActor";
+	TaskController = Cast<AC_MonsterAIBase>(OwnerComp->GetOwner());
+	BlackboardComp = OwnerComp->GetBlackboardComponent();
 }

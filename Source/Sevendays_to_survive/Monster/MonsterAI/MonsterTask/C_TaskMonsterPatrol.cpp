@@ -13,12 +13,11 @@ UC_TaskMonsterPatrol::UC_TaskMonsterPatrol()
 {
 	NodeName = "MonsterPatrol";
 	bNotifyTick = true;
-	BoolName = "IsActEnd";
 }
 
-void UC_TaskMonsterPatrol::InitTask(UBehaviorTreeComponent& OwnerComp)
+void UC_TaskMonsterPatrol::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
-	TaskController = Cast<AC_MonsterAIBase>(OwnerComp.GetOwner());
+	Super::InitTask(OwnerComp);
 }
 
 EBTNodeResult::Type UC_TaskMonsterPatrol::PatrolMove(AC_MonsterAIBase* _MonsterController)
@@ -40,10 +39,6 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	if (nullptr == TaskController) {
-		InitTask(OwnerComp);
-	}
-
 	if (TaskController->GetIsFind() == true) {
 		return EBTNodeResult::Succeeded;
 	}
@@ -54,7 +49,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 	}
 
 	else {
-		TaskController->GetBlackboardComponent()->SetValueAsBool(*BoolName, false);
+		BlackboardComp->SetValueAsBool(*BoolName, false);
 		return PatrolMove(TaskController);
 	}
 	//return EBTNodeResult::Failed;

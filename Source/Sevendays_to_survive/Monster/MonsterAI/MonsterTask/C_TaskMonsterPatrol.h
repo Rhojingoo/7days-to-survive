@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "C_BlackBoardBase.h"
 #include "C_TaskMonsterPatrol.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UC_TaskMonsterPatrol : public UBTTask_BlackboardBase
+class SEVENDAYS_TO_SURVIVE_API UC_TaskMonsterPatrol : public UC_BlackBoardBase
 {
 	GENERATED_BODY()
 	
@@ -27,12 +28,7 @@ protected:
 	UPROPERTY()
 	FVector RandomVector = FVector::ZeroVector;
 
-	UPROPERTY()
-	AC_MonsterAIBase* TaskController = nullptr;
-
-	UPROPERTY()
-	FString BoolName;
-	void InitTask(UBehaviorTreeComponent& OwnerComp);
+	void InitTask(UBehaviorTreeComponent* OwnerComp) override;
 };
 
 

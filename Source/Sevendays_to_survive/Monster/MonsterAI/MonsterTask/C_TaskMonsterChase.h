@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "C_BlackBoardBase.h"
 #include "C_TaskMonsterChase.generated.h"
 
 /**
  *
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UC_TaskMonsterChase : public UBTTask_BlackboardBase
+class SEVENDAYS_TO_SURVIVE_API UC_TaskMonsterChase : public UC_BlackBoardBase
 {
     GENERATED_BODY()
 public:
@@ -18,14 +19,9 @@ public:
 protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-    UFUNCTION()
-    void InitTask(UBehaviorTreeComponent* OwnerComp);
+    void InitTask(UBehaviorTreeComponent* OwnerComp) override;
 
-    UPROPERTY()
-    AActor* TargetActor = nullptr;
 
-    UPROPERTY()
-    uint16 EnemyKeyId;
 
 private:
 
