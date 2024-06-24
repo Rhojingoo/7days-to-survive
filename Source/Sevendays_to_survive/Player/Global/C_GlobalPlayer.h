@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h" // 데이터 테이블
 #include "Net/UnrealNetwork.h" // 서버 네트워크
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_GlobalPlayer.generated.h"
 
 class USpringArmComponent; // 스프링 암
@@ -13,6 +14,7 @@ class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
 class UC_GlobalAnimInstance; // 애님 인스턴스
+class UStaticMeshComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -34,6 +36,9 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; } // 총 저장 용 매쉬
 	/** Returns FirstPersonCameraComponent subobject **/
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh);
+
 	// 총 관련 bool 함수
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void SetHasRifle(bool bNewHasRifle);
@@ -52,8 +57,10 @@ public:
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
 
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -85,8 +92,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* RunAction = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttAction = nullptr;
+
 	// 애님 인스턴스 관리
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsAttCpp = false;
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int ComboCounterCpp = 0;
 private:
 	// 게임 인스턴스 관리
 	FC_PlayerValue PlayerDT;
@@ -104,9 +119,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<UStaticMeshComponent*> ItemMeshs;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
+	
 };

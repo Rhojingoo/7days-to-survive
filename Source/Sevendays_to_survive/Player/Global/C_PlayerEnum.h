@@ -14,6 +14,15 @@ enum class EPlayerState : uint8
 	Idle,
 	Walk
 };
+
+UENUM(BlueprintType)
+enum class EPlayerItemSlot : uint8
+{
+	None,
+	LWeapon,
+	RWeapon,
+	SlotMax
+};
 /**
  * 
  */
