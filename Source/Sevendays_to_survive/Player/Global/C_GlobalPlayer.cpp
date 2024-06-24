@@ -14,6 +14,8 @@
 #include "Player/MainController/C_MainPlayerController.h"
 #include "Player/Global/C_PlayerEnum.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/StaticMeshComponent.h"
+#include "Animation/AnimMontage.h"
 
 
 
@@ -64,13 +66,25 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	UEnum* Enum = StaticEnum<EPlayerItemSlot>();
+
+	for (size_t i = 1; i < static_cast<size_t>(EPlayerItemSlot::SlotMax); i++)
+	{
+		FString Name = Enum->GetNameStringByValue(i);
+		UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
+		NewSlotMesh->SetupAttachment(GetMesh(), *Name);
+
+		ItemMeshs.Push(NewSlotMesh);
+	}
 }
 
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
 	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, IsAttCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, ComboCounterCpp);
 }
 
 // Called when the game starts or when spawned
@@ -93,7 +107,6 @@ void AC_GlobalPlayer::BeginPlay()
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
 	}
 	
-	//STSInstance=GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	//Add Input Mapping Context
 	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))
 	{
@@ -116,6 +129,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
@@ -163,6 +177,18 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	IsRunCpp = false;
+}
+
+void AC_GlobalPlayer::ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh)
+{
+	uint8 SlotIndex = static_cast<uint8>(_Slot);
+	if (ItemMeshs.Num() <= SlotIndex)
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
+		return;
+	}
+
+	ItemMeshs[SlotIndex]->SetStaticMesh(_Mesh);
 }
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)

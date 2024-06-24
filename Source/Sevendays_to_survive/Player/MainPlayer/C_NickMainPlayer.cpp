@@ -8,6 +8,23 @@
 #include "InputActionValue.h"
 
 
+void AC_NickMainPlayer::PunchAtt_Implementation(const FInputActionValue& Value)
+{
+	
+	IsAttCpp = true;
+}
+
+void AC_NickMainPlayer::PunchAttEnd_Implementation(const FInputActionValue& Value)
+{
+	IsAttCpp = false;
+}
+
+void AC_NickMainPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	//DOREPLIFETIME(AC_NickMainPlayer, MontageToPlay);
+}
+
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
@@ -39,6 +56,10 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
+
+		// Looking
+		EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
+		EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
 	}
 	else
 	{
