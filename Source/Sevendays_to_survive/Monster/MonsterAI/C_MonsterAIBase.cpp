@@ -52,7 +52,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 		if (IsValid(SightConfig)) {
 			APC->ConfigureSense(*SightConfig);
 			APC->SetDominantSense(SightConfig->GetSenseImplementation());
-			APC->UpdatePerceptionWhitelist(SightConfig->GetSenseID(), true);
+			APC->UpdatePerceptionAllowList(SightConfig->GetSenseID(), true);
 		}
 		else {
 			UE_LOG(LogTemp, Warning, TEXT("Sightconfig Is Not Vaild"));

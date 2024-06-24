@@ -57,7 +57,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 		TaskController->GetBlackboardComponent()->SetValueAsBool(*BoolName, false);
 		return PatrolMove(TaskController);
 	}
-	return EBTNodeResult::Failed;
+	//return EBTNodeResult::Failed;
 }
 
 void UC_TaskMonsterPatrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
