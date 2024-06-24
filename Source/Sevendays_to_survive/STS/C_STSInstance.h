@@ -27,8 +27,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
-	//UFUNCTION(BlueprintCallable)
-	//FC_UITableRow* GetUIDataTable();
+	UFUNCTION(BlueprintCallable)
+	TMap<int64, struct FC_ItemSourceTableRow> GetItemSourceDataMap();
 
 	FC_PlayerDataTable* GetPlayerDataTable();
 
@@ -43,8 +43,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"));
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* ItemSourceTable;
 };
