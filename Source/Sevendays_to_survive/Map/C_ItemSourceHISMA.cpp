@@ -3,3 +3,7 @@
 
 #include "Map/C_ItemSourceHISMA.h"
 
+void AC_ItemSourceHISMA::SetData(FC_ItemSourceTableRow& _Data)
+{
+	Data = _Data;
+}

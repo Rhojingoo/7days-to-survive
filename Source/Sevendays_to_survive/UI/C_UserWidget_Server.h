@@ -20,18 +20,25 @@ public:
 	void StringTODataTable(FString _Name,FString _UserIP);
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FString Port;
+	FString Port = "30002";
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString IPAddress = "None";
 	
 	UFUNCTION(BlueprintCallable)
 	void ServerOpen();
 
 	UFUNCTION(BlueprintCallable)
-	void ServerConnect(FString _Ip , FString _Port);
+	void ServerConnect(FString _Ip);
 
 	UFUNCTION(BlueprintCallable)
 	void SelectChange(FString _Text);
 
-	FString IPAddress = "None";
-private:
 	
+
+	UFUNCTION(BlueprintCallable)
+	void LoginDataInit(UDataTable* _LoginData);
+
+	virtual bool Initialize() override;
+
 };

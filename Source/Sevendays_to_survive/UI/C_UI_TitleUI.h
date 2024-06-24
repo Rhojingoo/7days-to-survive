@@ -22,14 +22,14 @@ public:
 	//FString Port = TEXT("30002"); //포트 설정 
 	//
 	
-	UFUNCTION(BlueprintCallable)
-	void SelectChange(FString _Text); //서버 접속 
+	//UFUNCTION(BlueprintCallable)
+	//void SelectChange(FString _Text); //서버 접속 
 
 	//UFUNCTION(BlueprintCallable)
 	//void SelectChange(FString _Text);
 	//
 
-	virtual bool Initialize() override;
+	
 
 	FString IPAddress = "None";
 private:
