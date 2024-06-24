@@ -24,8 +24,8 @@ void UC_UserWidget_Server::ServerOpen()
 		}
 
 		Inst->TitleToGameInfo.ServerOpenCheck = true;
-		Inst->TitleToGameInfo.UserIp = "121.160.175.10";
-		Inst->TitleToGameInfo.ServerPort = "30001"; //포트 값을 가져와야한다.
+		Inst->TitleToGameInfo.UserIp = "127.0.0.1"; //값을 계속 수동으로 변경해줘야합니다. 아직은
+		Inst->TitleToGameInfo.ServerPort = "30002"; //포트 값을 가져와야한다.
 		//일단 30001고정으로 사용하겠습니다.
 
 		UGameplayStatics::OpenLevel(GetWorld(), TEXT("testPlayLevel")); //임시로 열어둠 
@@ -36,17 +36,58 @@ void UC_UserWidget_Server::ServerOpen()
 
 }
 
+void UC_UserWidget_Server::LoginDataInit(UDataTable* _LoginData)
+{
+	// std::vector
+	TArray<FC_UITableRow*> arr;
+	_LoginData->GetAllRows<FC_UITableRow>(TEXT("GetAllRows"), arr);
 
-void UC_UserWidget_Server::ServerConnect(FString _Ip , FString _Port)
+	if (true == arr.IsEmpty())
+	{
+		return;
+	}
+
+	// std::vector::size
+	// TArray::Num
+	for (size_t i = 0; i < arr.Num(); i++)
+	{
+		FC_UITableRow* Data = arr[i];
+		Data->UserName;
+		Data->UserIp;
+		FString Option = FString::Printf(TEXT("[%s][%s]"), *Data->UserName, *Data->UserIp);
+		
+	}
+
+}
+
+
+
+
+bool UC_UserWidget_Server::Initialize()
+{
+	bool ReturnValue = Super::Initialize();
+
+	IPAddress = TEXT("192.168.0.173");
+
+	return ReturnValue;
+}
+
+
+
+void UC_UserWidget_Server::ServerConnect(FString _Ip )
 {
 	UC_STSInstance* Inst = GetGameInstance<UC_STSInstance>();
 
 
 	Inst->TitleToGameInfo.UserIp = _Ip;
-	Inst->TitleToGameInfo.ServerPort = _Port;
+	Inst->TitleToGameInfo.ServerPort = Port;
 
-	FString ConnectLevel = FString::Printf(TEXT("%s:%s"), *_Ip, *_Port);
+	FString IpAddress = _Ip;
+	
+	FString ConnectLevel = FString::Printf(TEXT("%s:%s"), *IpAddress, *Port);
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("testPlayLevel"));
 	UGameplayStatics::OpenLevel(GetWorld(), *ConnectLevel);
+
 
 
 }
