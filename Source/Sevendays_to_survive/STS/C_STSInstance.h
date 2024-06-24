@@ -36,7 +36,6 @@ public:
 	FC_UITableRow TitleToGameInfo;
 
 
-
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BuildPartTable;
