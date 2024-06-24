@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
 {
 	GENERATED_BODY()

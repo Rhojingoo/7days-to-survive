@@ -5,6 +5,7 @@
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "UI/C_UITableRow.h"
+#include "Map/C_ItemSourceTableRow.h"
 
 TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
 {
@@ -84,6 +85,23 @@ void UC_STSInstance::SetPlayerInfo(FString _Name, FString _UserIP)
         UE_LOG(LogTemp, Warning, TEXT("%s"), *Table->UserName);
     }
    
+}
+
+TMap<int64, FC_ItemSourceTableRow> UC_STSInstance::GetItemSourceDataMap()
+{
+    TArray<FC_ItemSourceTableRow*> AllRows;
+    FString ContextString;
+    ItemSourceTable->GetAllRows<FC_ItemSourceTableRow>(ContextString, AllRows);
+
+    TMap<int64, FC_ItemSourceTableRow> DataMap;
+
+    for (FC_ItemSourceTableRow* Row : AllRows)
+    {
+        int64 Key = reinterpret_cast<int64>(Row->Mesh);
+        DataMap.Emplace(Key, *Row);
+    }
+
+    return DataMap;
 }
 
 /*

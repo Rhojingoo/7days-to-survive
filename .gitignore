@@ -74,3 +74,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 Content/Level/Main_Level/CityPark/Maps/7Days_Map.umap
+/Content/Level/TestLevel/MapTestLevel/MapTestLevel.umap

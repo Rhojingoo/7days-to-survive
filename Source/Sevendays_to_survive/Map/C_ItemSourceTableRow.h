@@ -4,24 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Engine/DataTable.h"
-#include "C_BuildingPartTableRow.generated.h"
+#include "C_ItemSourceTableRow.generated.h"
 
 /**
  * 
  */
 USTRUCT(BlueprintType)
-struct SEVENDAYS_TO_SURVIVE_API FC_BuildingPartTableRow : public FTableRowBase
+struct SEVENDAYS_TO_SURVIVE_API FC_ItemSourceTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
-	
-public:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> Actor;
+	int Hp = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TEnumAsByte<ETraceTypeQuery> TraceType = ETraceTypeQuery::TraceTypeQuery1;
+	class UC_Item* DropItem = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int DropCount = 10;
 };
