@@ -27,7 +27,7 @@ EBTNodeResult::Type UC_BlackBoardBase::ExecuteTask(UBehaviorTreeComponent& Owner
 	else {
 
 	}
-	return EBTNodeResult::Failed;
+	return EBTNodeResult::Succeeded;
 }
 
 
