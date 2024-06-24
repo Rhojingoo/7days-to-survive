@@ -47,7 +47,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	AC_ZombieBase* Monster = Cast<AC_ZombieBase>(InPawn);
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
-
+		
 
 		if (IsValid(SightConfig)) {
 			APC->ConfigureSense(*SightConfig);
@@ -60,6 +60,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 
 		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
+		APC->InitializeComponent();
 
 		//BTC->StartTree(*Monster->AITree);  // 원래 존재하거나 이미 실행중이던 behavior tree를 시작 혹은 재시작하는데 쓰임
 		RunBehaviorTree(Monster->AITree);  // 어떠한 behavior tree를 실행하는데 사용되는 함수이며, 이미 실행하던 tree와 다른 behavior tree를 실행하게 바꿀 수도 있음
@@ -76,7 +77,7 @@ ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other
 	if (nullptr != Player) {
 		return ETeamAttitude::Hostile;
 	}
-	return ETeamAttitude::Friendly;
+	return ETeamAttitude::Friendly;			//이거 만들긴 했는데, 안쓸 것 같은데...
 }
 
 void AC_MonsterAIBase::BeginPlay()
