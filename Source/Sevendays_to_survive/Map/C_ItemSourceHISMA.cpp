@@ -23,9 +23,6 @@ void AC_ItemSourceHISMA::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FString Message = FString::Printf(TEXT("%s's BeginPlay called."), *Id.ToString());
-	UKismetSystemLibrary::PrintString(GetWorld(), *Message);
-
 	if (true == Id.IsNone())
 	{
 		return;

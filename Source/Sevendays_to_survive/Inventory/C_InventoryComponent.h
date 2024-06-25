@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const UC_Item* _Item, int _Count);
 
+	UFUNCTION(BlueprintCallable)
+	int GetItemCount() const;
+
 private:
 	
 

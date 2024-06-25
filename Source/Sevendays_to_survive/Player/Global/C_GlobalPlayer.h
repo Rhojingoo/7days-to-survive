@@ -17,6 +17,7 @@ class UC_GlobalAnimInstance; // 애님 인스턴스
 class UStaticMeshComponent;
 class UChildActorComponent;
 class UC_InventoryComponent;
+class UC_BuildingComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -139,6 +140,9 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UC_InventoryComponent* InventoryComponent = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_BuildingComponent* BuildingComponent = nullptr;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
