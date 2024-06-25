@@ -17,17 +17,29 @@ class SEVENDAYS_TO_SURVIVE_API UC_HealthBar : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	float DecreasewithObject(UObject* _Collision, float _CurHealth); //오브젝트와 충돌했을경우
+	float DecreaseBar(float _Damage);
 
 	UFUNCTION(BlueprintCallable)
-	float DecreasewithActor(AActor* _ACollision, float _CurHealth);
+	float HealBar(float _HealNum);
 
 	UFUNCTION(BlueprintCallable)
 	void SetCurHealth(float _Num);
 
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHealth(float _Num);
+
+	UFUNCTION(BlueprintCallable)
+	void VisiableHpText();
 	
 
+
 private:
+ 
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float CurHealth = 0.0f;
+
+
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float MaxHealth = 100.0f;
 
 };
