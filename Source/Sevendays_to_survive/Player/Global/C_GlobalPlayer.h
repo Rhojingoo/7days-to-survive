@@ -15,6 +15,7 @@ class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
 class UC_GlobalAnimInstance; // 애님 인스턴스
 class UStaticMeshComponent;
+class UChildActorComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -111,6 +112,18 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* TPSZoomSpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* TPSZoomCamera = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* FPSSpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* FPSCamera = nullptr;
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
