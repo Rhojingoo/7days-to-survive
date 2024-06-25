@@ -56,24 +56,20 @@ void AC_ItemSourceHISMA::Damage_Implementation(APlayerController* _CallingContro
 
 	HpMap[_Index] -= _Damage;
 
-	FString Message0 = FString::Printf(TEXT("[%s:%d] damaged by %d."), *GetName(), _Index, _Damage);
-	FString Message1 = FString::Printf(TEXT("[%s:%d] HP: %d/%d"), *GetName(), _Index, HpMap[_Index], MaxHpMap[_Index]);
+	UPlayer* DamagePlayer = _CallingController->GetNetOwningPlayer();
+	FString PlayerName = DamagePlayer->GetName();
+
+	FString Message0 = FString::Printf(TEXT("[%s:%d] %s dealt %d damage."), *Id.ToString(), _Index, *PlayerName, _Damage);
+	FString Message1 = FString::Printf(TEXT("[%s:%d] HP: %d/%d"), *Id.ToString(), _Index, HpMap[_Index], MaxHpMap[_Index]);
 	UKismetSystemLibrary::PrintString(GetWorld(), Message0);
 	UKismetSystemLibrary::PrintString(GetWorld(), Message1);
 
 	if (HpMap[_Index] <= 0)
 	{
-		bool Result = HISMComponent->RemoveInstance(_Index);
+		RemoveInstance_Internal(_Index);
+		RemoveInstanceMulticast(_Index);
 
-		FString Message;
-		if (false == Result)
-		{
-			Message = FString::Printf(TEXT("[%s:%d] destroy failed."), *GetName(), _Index);
-		}
-		else
-		{
-			Message = FString::Printf(TEXT("[%s:%d] destroy success."), *GetName(), _Index);
-		}
+		FString	Message = FString::Printf(TEXT("[%s:%d] destroyed successfully."), *GetName(), _Index);
 		UKismetSystemLibrary::PrintString(GetWorld(), Message);
 	}
 
@@ -93,8 +89,23 @@ void AC_ItemSourceHISMA::Damage_Implementation(APlayerController* _CallingContro
 	for (FC_ItemAndCount& DropItem : DropItems)
 	{
 		FString ItemName = DropItem.Item->Name;
-		FString Message = FString::Printf(TEXT("you've got %d %ss."), DropItem.Count, *ItemName);
+		FString Message = FString::Printf(TEXT("[%s:%d] %s got %d %s."), *Id.ToString(), _Index, *PlayerName, DropItem.Count, *ItemName);
 		InventoryComponent->AddItem(DropItem.Item, DropItem.Count);
 		UKismetSystemLibrary::PrintString(GetWorld(), Message);
+	}
+}
+
+void AC_ItemSourceHISMA::RemoveInstanceMulticast_Implementation(int _Index)
+{
+	RemoveInstance_Internal(_Index);
+}
+
+void AC_ItemSourceHISMA::RemoveInstance_Internal(int _Index)
+{
+	bool Result = HISMComponent->RemoveInstance(_Index);
+	if (false == Result)
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("[%s:%d] remove instance failed."), *GetName(), _Index);
+		return;
 	}
 }
