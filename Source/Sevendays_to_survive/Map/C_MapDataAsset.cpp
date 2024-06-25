@@ -26,22 +26,23 @@ TArray<FC_BuildingPartTableRow> UC_MapDataAsset::GetBuildPartData()
     return Ret;
 }
 
-
-TMap<int64, FC_ItemSourceTableRow> UC_MapDataAsset::GetItemSourceDataMap()
+int UC_MapDataAsset::GetItemSourceMaxHp(FName _Id)
 {
-    TArray<FC_ItemSourceTableRow*> AllRows;
-    FString ContextString;
-    ItemSourceTable->GetAllRows<FC_ItemSourceTableRow>(ContextString, AllRows);
+    return FindItemSourceRow(_Id)->Hp;
+}
 
-    TMap<int64, FC_ItemSourceTableRow> DataMap;
-
-    for (FC_ItemSourceTableRow* Row : AllRows)
+TArray<TPair<const UC_Item*, int>> UC_MapDataAsset::GetItemSourceDropItems(FName _Id)
+{
+    TArray<TPair<const UC_Item*, int>> DropItems;
+    
+    for (TPair<FName, int>& DropItem : FindItemSourceRow(_Id)->DropItems)
     {
-        int64 Key = reinterpret_cast<int64>(Row->Mesh);
-        DataMap.Emplace(Key, *Row);
+        const UC_Item* Item = FindItem(DropItem.Key);
+        int Count = DropItem.Value;
+        DropItems.Add({Item, Count});
     }
 
-    return DataMap;
+    return DropItems;
 }
 
 const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
@@ -52,7 +53,7 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
     }
 
     FString ContextString;
-    struct FC_ItemRow* ItemRow = ItemTable->FindRow<FC_ItemRow>(_Name, ContextString);
+    FC_ItemRow* ItemRow = ItemTable->FindRow<FC_ItemRow>(_Name, ContextString);
 
     if (nullptr == ItemRow)
     {
@@ -90,5 +91,18 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
         break;
     }
 
+    Items.Emplace(_Name, FoundItem);
+
     return FoundItem;
+}
+
+FC_ItemSourceTableRow* UC_MapDataAsset::FindItemSourceRow(FName _Id)
+{
+    FString ContextString;
+    FC_ItemSourceTableRow* Row = ItemSourceTable->FindRow<FC_ItemSourceTableRow>(_Id, ContextString);
+    if (nullptr == Row)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%s is not a id for ItemSource Table."), *_Id.ToString());
+    }
+    return Row;
 }

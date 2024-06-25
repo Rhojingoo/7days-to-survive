@@ -14,10 +14,5 @@ UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_PlayGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-protected:
-	virtual void BeginPlay() override;
 
-private:
-	TMap<int64, FC_ItemSourceTableRow> ItemSourceDataMap;
 };
