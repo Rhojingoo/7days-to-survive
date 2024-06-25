@@ -16,9 +16,6 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ItemSourceTableRow : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMesh* Mesh = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Hp = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

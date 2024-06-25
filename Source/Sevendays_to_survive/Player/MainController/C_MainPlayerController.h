@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GenericTeamAgentInterface.h"
 #include "C_MainPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -11,9 +12,12 @@ class UInputMappingContext;
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_MainPlayerController : public APlayerController
+class SEVENDAYS_TO_SURVIVE_API AC_MainPlayerController : public APlayerController , public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
+
+	virtual FGenericTeamId GetGenericTeamId() const override;
+	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override;
 protected:
 
 	/** Input Mapping Context to be used for player input */
@@ -26,4 +30,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	// End Actor interface
+	UPROPERTY()
+	FGenericTeamId PlayerTeamId;
 };

@@ -6,9 +6,10 @@
 #include "Engine/DataAsset.h"
 #include "C_MapDataAsset.generated.h"
 
-/**
- * 
- */
+struct FC_BuildingPartTableRow;
+struct FC_ItemSourceTableRow;
+class UC_Item;
+
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 {
@@ -16,13 +17,20 @@ class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 
 public:
 	UFUNCTION(BlueprintCallable)
-	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
+	TArray<FC_BuildingPartTableRow> GetBuildPartData();
 
 	UFUNCTION(BlueprintCallable)
-	TMap<int64, struct FC_ItemSourceTableRow> GetItemSourceDataMap();
+	int GetItemSourceMaxHp(FName _Id);
 
 	UFUNCTION(BlueprintCallable)
-	const class UC_Item* FindItem(FName _Name);
+	const UC_Item* FindItem(FName _Name);
+
+public:
+	UFUNCTION(BlueprintCallable)
+	TArray<FC_ItemAndCount> GetItemSourceDropItems(FName _Id);
+
+private:
+	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))

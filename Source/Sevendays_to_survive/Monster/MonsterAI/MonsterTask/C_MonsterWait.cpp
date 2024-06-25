@@ -24,7 +24,6 @@ EBTNodeResult::Type UC_MonsterWait::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Succeeded;
 	}
 
-	Waiting = 0.f;
 	return EBTNodeResult::InProgress;
 }
 
@@ -39,10 +38,12 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	if (true == TaskController->GetIsFind()) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
-	if (Waiting < BlackboardComp->GetValueAsFloat(*WaitTimeName)) {
-		Waiting += DeltaSeconds;
+	float Time = BlackboardComp->GetValueAsFloat(*WaitTimeName);
+	if (Waiting > Time) {
+		BlackboardComp->SetValueAsFloat(*WaitTimeName, Time + DeltaSeconds);
 	}
 	else {
+		BlackboardComp->SetValueAsFloat(*WaitTimeName, 0.f);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

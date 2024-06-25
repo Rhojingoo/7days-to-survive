@@ -4,10 +4,20 @@
 #include "Player/MainController/C_MainPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 
+FGenericTeamId AC_MainPlayerController::GetGenericTeamId() const
+{
+	return PlayerTeamId;
+}
+
+void AC_MainPlayerController::SetGenericTeamId(const FGenericTeamId& TeamID)
+{
+	PlayerTeamId = TeamID;
+}
+
 void AC_MainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetGenericTeamId(0);
 	// get the enhanced input subsystem
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
