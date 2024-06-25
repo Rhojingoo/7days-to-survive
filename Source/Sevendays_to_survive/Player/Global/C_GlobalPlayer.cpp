@@ -214,6 +214,18 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
+void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
+{
+	if (true==GetCharacterMovement()->bWantsToCrouch)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Crouch();
+	}
+}
+
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
