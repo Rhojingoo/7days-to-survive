@@ -25,8 +25,7 @@ protected:
 
 	void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-	UPROPERTY()
-	float Waiting;
+	const float Waiting = 5.0f;
 private:
 
 };

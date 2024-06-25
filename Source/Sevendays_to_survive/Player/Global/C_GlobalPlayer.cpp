@@ -15,6 +15,7 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ChildActorComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Inventory/C_InventoryComponent.h"
 
@@ -56,6 +57,26 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	TPSZoomSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSZoomSpringArm"));
+	TPSZoomSpringArm->SetupAttachment(RootComponent);
+	TPSZoomSpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	TPSZoomSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
+	// Create a follow camera
+	TPSZoomCamera = CreateDefaultSubobject<UChildActorComponent>(TEXT("TPSZoomCamera"));
+	TPSZoomCamera->SetupAttachment(TPSZoomSpringArm); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	FPSSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("FPSSpringArm"));
+	FPSSpringArm->SetupAttachment(RootComponent);
+	FPSSpringArm->TargetArmLength = 200.0f; // The camera follows at this distance behind the character	
+	FPSSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
+	// Create a follow camera
+	FPSCamera = CreateDefaultSubobject<UChildActorComponent>(TEXT("FPSCamera"));
+	FPSCamera->SetupAttachment(FPSSpringArm);
+
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -64,6 +85,8 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+
+	// Create a camera boom (pulls in towards the player if there is a collision)
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
