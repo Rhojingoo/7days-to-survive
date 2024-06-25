@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Item/C_Item.h"
+#include "Map/C_Items.h"
 #include "C_ItemSourceTableRow.generated.h"
 
 /**
@@ -22,5 +22,5 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ItemSourceTableRow : public FTableRowBase
 	int Hp = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EItemType, int> DropItems;
+	TMap<FName, int> DropItems;
 };

@@ -15,9 +15,7 @@ void AC_ItemSourceHISMA::Damage_Implementation(int _Index, int _Damage)
 
 	for (auto& DropItem : Data.DropItems)
 	{
-		UEnum* Enum = StaticEnum<EItemType>();
-		FString EnumName = Enum->GetNameStringByValue(static_cast<int>(DropItem.Key));
-		FString Message = FString::Printf(TEXT("you've got %d %ss."), DropItem.Value, *EnumName);
+		FString Message = FString::Printf(TEXT("you've got %d %ss."), DropItem.Value, *DropItem.Key.ToString());
 		UKismetSystemLibrary::PrintString(GetWorld(), Message);
 	}
 	
