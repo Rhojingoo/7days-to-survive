@@ -25,11 +25,11 @@ struct SEVENDAYS_TO_SURVIVE_API FC_Item : public FTableRowBase
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	EItemType Type;
+	EItemType Type = EItemType::Wood;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	FName Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool Countable;
+	bool Countable = false;
 };

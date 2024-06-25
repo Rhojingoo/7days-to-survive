@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BuildingSystem/C_BuildingComponent.h"
+
+#include "Engine/StaticMeshActor.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "GameFramework/Character.h"
 #include "BuildingSystem/C_BuildingPreview.h"
 #include "BuildingSystem/C_BuildingPart.h"
 #include "BuildingSystem/C_BuildingPartInterface.h"
@@ -9,10 +13,7 @@
 #include "BuildingSystem/C_BuildingPart.h"
 #include "Landscape.h"
 #include "STS/C_STSInstance.h"
-#include "Engine/StaticMeshActor.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "GameFramework/Character.h"
+#include "Map/C_MapDataAsset.h"
 #include "Player/MainPlayer/C_NickMainPlayer.h"
 
 UC_BuildingComponent::UC_BuildingComponent()
@@ -27,7 +28,8 @@ void UC_BuildingComponent::BeginPlay()
 	Super::BeginPlay();
 
 	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-	BuildPartData = Inst->GetBuildPartData();
+	UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
+	BuildPartData = MapDataAsset->GetBuildPartData();
 
 	PreviewActor = GetWorld()->SpawnActor<AC_BuildingPreview>(PreviewActorClass);
 	PreviewActor->SetOwner(GetOwner());

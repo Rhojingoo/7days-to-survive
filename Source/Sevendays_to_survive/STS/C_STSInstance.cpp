@@ -3,27 +3,11 @@
 
 #include "STS/C_STSInstance.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
-#include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "UI/C_UITableRow.h"
-#include "Map/C_ItemSourceTableRow.h"
 
-TArray<FC_BuildingPartTableRow> UC_STSInstance::GetBuildPartData()
+UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
 {
-    if (nullptr == BuildPartTable)
-    {
-        UE_LOG(LogTemp, Fatal, TEXT("게임 인스턴스의 BuildPartTable이 nullptr입니다."));
-    }
-
-    TArray<FC_BuildingPartTableRow*> Data;
-    FString ContextString;
-    BuildPartTable->GetAllRows(ContextString, Data);
-
-    TArray<FC_BuildingPartTableRow> Ret;
-    for (FC_BuildingPartTableRow* Row : Data)
-    {
-        Ret.Add(*Row);
-    }
-    return Ret;
+    return MapDataAsset;
 }
 
 FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
@@ -86,38 +70,3 @@ void UC_STSInstance::SetPlayerInfo(FString _Name, FString _UserIP)
     }
    
 }
-
-TMap<int64, FC_ItemSourceTableRow> UC_STSInstance::GetItemSourceDataMap()
-{
-    TArray<FC_ItemSourceTableRow*> AllRows;
-    FString ContextString;
-    ItemSourceTable->GetAllRows<FC_ItemSourceTableRow>(ContextString, AllRows);
-
-    TMap<int64, FC_ItemSourceTableRow> DataMap;
-
-    for (FC_ItemSourceTableRow* Row : AllRows)
-    {
-        int64 Key = reinterpret_cast<int64>(Row->Mesh);
-        DataMap.Emplace(Key, *Row);
-    }
-
-    return DataMap;
-}
-
-/*
-
-FC_UITableRow* UC_STSInstance::GetUIDataTable()
-{
-    //첫번째 유저의 아이피를 가져와서 일치하면 접속을 Listen이 가능하게 변경 
-    TArray<FC_UITableRow*> arr;
-    DT_UIData->GetAllRows<FC_UITableRow>(TEXT("GetAllRows"), arr);
-    
-    FC_UITableRow* Data = arr[0];
-     // 0번째 인덱스랑 일치하면 서버에 접속이 가능하게 하려고 했음 
-
-    return Data;
-}
-
-*/
-
-
