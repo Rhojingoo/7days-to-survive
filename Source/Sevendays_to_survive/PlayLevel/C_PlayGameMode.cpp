@@ -2,7 +2,9 @@
 
 
 #include "PlayLevel/C_PlayGameMode.h"
+
 #include "STS/C_STSInstance.h"
+#include "Map/C_MapDataAsset.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Kismet/GameplayStatics.h"
@@ -13,7 +15,8 @@ void AC_PlayGameMode::BeginPlay()
 
 	// ¸Ê ¼¼ÆÃ
 	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-	ItemSourceDataMap = Inst->GetItemSourceDataMap();
+	UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
+	ItemSourceDataMap = MapDataAsset->GetItemSourceDataMap();
 
 	TArray<AActor*> AllItemSources;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_ItemSourceHISMA::StaticClass(), AllItemSources);
@@ -32,7 +35,5 @@ void AC_PlayGameMode::BeginPlay()
 		}
 
 		ItemSource->SetData(ItemSourceDataMap[Key]);
-
-		int a = 0;
 	}
 }

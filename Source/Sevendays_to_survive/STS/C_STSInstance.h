@@ -19,7 +19,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSInstance : public UGameInstance
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	TArray<struct FC_BuildingPartTableRow> GetBuildPartData();
+	class UC_MapDataAsset* GetMapDataAsset();
 
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FC_UITableRow> GetPlayerInfoData();
@@ -27,25 +27,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
-	UFUNCTION(BlueprintCallable)
-	TMap<int64, struct FC_ItemSourceTableRow> GetItemSourceDataMap();
-
 	FC_PlayerDataTable* GetPlayerDataTable();
 
 
 	FC_UITableRow TitleToGameInfo;
 
-
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* BuildPartTable;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* ItemSourceTable;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
+	UC_MapDataAsset* MapDataAsset = nullptr;
 };
