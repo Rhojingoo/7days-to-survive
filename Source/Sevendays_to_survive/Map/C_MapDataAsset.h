@@ -21,10 +21,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TMap<int64, struct FC_ItemSourceTableRow> GetItemSourceDataMap();
 
+	UFUNCTION(BlueprintCallable)
+	const class UC_Item* FindItem(FName _Name);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BuildPartTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ItemSourceTable = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	UDataTable* ItemTable = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	UDataTable* MaterialTable = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WeaponTable = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TMap<FName, UC_Item*> Items;
 };
