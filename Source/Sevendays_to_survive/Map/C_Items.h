@@ -15,9 +15,6 @@ enum class EItemType : uint8
 	MAX,
 };
 
-/**
- * 
- */
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
 {

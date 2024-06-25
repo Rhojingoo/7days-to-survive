@@ -31,11 +31,11 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 		SightConfig->SetMaxAge(1.0f);
 		SightConfig->AutoSuccessRangeFromLastSeenLocation = 900.0f;
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+		SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
+		SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
 		SightConfig->SetStartsEnabled(true);
 	}
-
+	SetGenericTeamId(FGenericTeamId(1));
 }
 
 void AC_MonsterAIBase::OnPossess(APawn* InPawn)
@@ -47,7 +47,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	AC_ZombieBase* Monster = Cast<AC_ZombieBase>(InPawn);
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
-		
+
 
 		if (IsValid(SightConfig)) {
 			APC->ConfigureSense(*SightConfig);
@@ -73,13 +73,24 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	Super::GetTeamAttitudeTowards(Other);
-	const AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(&Other);
-	if (nullptr != Player) {
-		return ETeamAttitude::Hostile;
+	if (const APawn* OtherPawn = Cast<APawn>(&Other)) {	// Actor는 controller를 반환할 수 없음
+		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController())) { //controller가 Igenericteamagentinterface를 갖고있어야함
+			FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();		// id받아와서
+			if (GetGenericTeamId() == OtherTeamID) {	 // 같으면 팀
+				UE_LOG(LogTemp, Warning, TEXT("Friend Found"));
+				return ETeamAttitude::Neutral;
+			}		
+			else {										//아니면 적
+				UE_LOG(LogTemp, Warning, TEXT("Enemy Found"));
+				return ETeamAttitude::Hostile;
+			}
+		}
+		else {				//캐스팅 안되면 nullptr이라는 것인데 펑
+			UE_LOG(LogTemp, Fatal, TEXT("Boom"));
+		}
 	}
-	return ETeamAttitude::Friendly;			//이거 만들긴 했는데, 안쓸 것 같은데...
+	return ETeamAttitude::Neutral;
 }
-
 void AC_MonsterAIBase::BeginPlay()
 {
 	Super::BeginPlay();
