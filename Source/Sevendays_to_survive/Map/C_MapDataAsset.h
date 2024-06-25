@@ -26,7 +26,8 @@ public:
 	const UC_Item* FindItem(FName _Name);
 
 public:
-	TArray<TPair<const UC_Item*, int>> GetItemSourceDropItems(FName _Id);
+	UFUNCTION(BlueprintCallable)
+	TArray<FC_ItemAndCount> GetItemSourceDropItems(FName _Id);
 
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);

@@ -8,6 +8,8 @@
 #include "Map/C_MapDataAsset.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Map/C_Items.h"
+#include "Player/Global/C_GlobalPlayer.h"
+#include "Inventory/C_InventoryComponent.h"
 
 AC_ItemSourceHISMA::AC_ItemSourceHISMA()
 {
@@ -43,7 +45,7 @@ void AC_ItemSourceHISMA::BeginPlay()
 	}
 }
 
-void AC_ItemSourceHISMA::Damage_Implementation(int _Index, int _Damage)
+void AC_ItemSourceHISMA::Damage_Implementation(APlayerController* _CallingController, int _Index, int _Damage)
 {
 	if (true == Id.IsNone())
 	{
@@ -75,10 +77,24 @@ void AC_ItemSourceHISMA::Damage_Implementation(int _Index, int _Damage)
 		UKismetSystemLibrary::PrintString(GetWorld(), Message);
 	}
 
-	for (TPair<const UC_Item*, int>& DropItem : DropItems)
+	// 플레이어 캐릭터의 인벤토리 컴포넌트에 아이템 추가
+	AC_GlobalPlayer* PlayerCharacter = Cast<AC_GlobalPlayer>(_CallingController->GetPawn());
+	if (nullptr == PlayerCharacter)
 	{
-		FString ItemName = DropItem.Key->Name;
-		FString Message = FString::Printf(TEXT("you've got %d %ss."), DropItem.Value, *ItemName);
+		UE_LOG(LogTemp, Fatal, TEXT("[%s] Can't find PlayerCharacter."), __FUNCTION__);
+	}
+
+	UC_InventoryComponent* InventoryComponent = PlayerCharacter->GetComponentByClass<UC_InventoryComponent>();
+	if (nullptr == InventoryComponent)
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("[%s] Can't find InventoryComponent."), __FUNCTION__);
+	}
+
+	for (FC_ItemAndCount& DropItem : DropItems)
+	{
+		FString ItemName = DropItem.Item->Name;
+		FString Message = FString::Printf(TEXT("you've got %d %ss."), DropItem.Count, *ItemName);
+		InventoryComponent->AddItem(DropItem.Item, DropItem.Count);
 		UKismetSystemLibrary::PrintString(GetWorld(), Message);
 	}
 }

@@ -31,15 +31,19 @@ int UC_MapDataAsset::GetItemSourceMaxHp(FName _Id)
     return FindItemSourceRow(_Id)->Hp;
 }
 
-TArray<TPair<const UC_Item*, int>> UC_MapDataAsset::GetItemSourceDropItems(FName _Id)
+TArray<FC_ItemAndCount> UC_MapDataAsset::GetItemSourceDropItems(FName _Id)
 {
-    TArray<TPair<const UC_Item*, int>> DropItems;
+    TArray<FC_ItemAndCount> DropItems;
     
     for (TPair<FName, int>& DropItem : FindItemSourceRow(_Id)->DropItems)
     {
         const UC_Item* Item = FindItem(DropItem.Key);
         int Count = DropItem.Value;
-        DropItems.Add({Item, Count});
+
+        FC_ItemAndCount ItemAndCount;
+        ItemAndCount.Item = Item;
+        ItemAndCount.Count = Count;
+        DropItems.Add(ItemAndCount);
     }
 
     return DropItems;

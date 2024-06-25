@@ -10,7 +10,7 @@
 #include "C_ItemSourceHISMA.generated.h"
 
 class UC_Item;
-class UC_ItemAndCount;
+struct FC_ItemAndCount;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_ItemSourceHISMA : public AActor
@@ -24,9 +24,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void Damage(int _Index, int _Damage);
+	virtual void Damage(APlayerController* _CallingController, int _Index, int _Damage);
 
-	virtual void Damage_Implementation(int _Index, int _Damage) ;
+	virtual void Damage_Implementation(APlayerController* _CallingController, int _Index, int _Damage);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -39,7 +39,7 @@ private:
 	TMap<int, int> HpMap;
 
 	// Drop items.
-	TArray<TPair<const UC_Item*, int>> DropItems;
+	TArray<FC_ItemAndCount> DropItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Id", meta = (AllowPrivateAccess = "true"))
 	FName Id;

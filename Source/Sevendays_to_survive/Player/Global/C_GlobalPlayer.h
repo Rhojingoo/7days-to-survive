@@ -15,6 +15,7 @@ class UInputMappingContext; // 입력 매핑
 class UInputAction; // 입력 액션
 class UC_GlobalAnimInstance; // 애님 인스턴스
 class UStaticMeshComponent;
+class UC_InventoryComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -114,6 +115,10 @@ private:
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
+
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_InventoryComponent* InventoryComponent = nullptr;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

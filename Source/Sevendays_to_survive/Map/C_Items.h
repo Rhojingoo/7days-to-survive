@@ -15,7 +15,17 @@ enum class EItemType : uint8
 	MAX,
 };
 
-UCLASS()
+USTRUCT(BlueprintType)
+struct SEVENDAYS_TO_SURVIVE_API FC_ItemAndCount
+{
+	GENERATED_BODY()
+
+public:
+	const class UC_Item* Item = nullptr;
+	int Count = 0;
+};
+
+UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
 {
 	GENERATED_BODY()
@@ -39,7 +49,7 @@ protected:
 	void InitItem(FTableRowBase* _ItemRow);
 };
 
-UCLASS()
+UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Material : public UC_Item
 {
 	GENERATED_BODY()
@@ -51,7 +61,7 @@ public:
 	int MaxCount = 0;
 };
 
-UCLASS()
+UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Weapon : public UC_Item
 {
 	GENERATED_BODY()

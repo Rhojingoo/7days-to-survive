@@ -16,7 +16,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Animation/AnimMontage.h"
-
+#include "Inventory/C_InventoryComponent.h"
 
 
 // Sets default values
@@ -66,6 +66,8 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	InventoryComponent = CreateDefaultSubobject<UC_InventoryComponent>(TEXT("InventoryComponent"));
 
 	UEnum* Enum = StaticEnum<EPlayerItemSlot>();
 
