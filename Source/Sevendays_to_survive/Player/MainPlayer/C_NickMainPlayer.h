@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Player/Global/C_GlobalPlayer.h"
+#include "Player/Global/C_MapPlayer.h"
 #include "C_NickMainPlayer.generated.h"
 
 class UAnimMontage;
@@ -12,7 +12,7 @@ class UAnimMontage;
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_GlobalPlayer
+class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_MapPlayer
 {
 	GENERATED_BODY()
 

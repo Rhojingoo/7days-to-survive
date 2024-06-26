@@ -17,7 +17,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "Animation/AnimMontage.h"
-#include "Inventory/C_InventoryComponent.h"
 
 
 // Sets default values
@@ -174,7 +173,6 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
