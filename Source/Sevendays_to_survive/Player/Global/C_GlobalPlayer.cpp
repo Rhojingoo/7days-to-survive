@@ -17,6 +17,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "Animation/AnimMontage.h"
+#include "Player/Input/C_InputActionDatas.h"
 
 
 // Sets default values
@@ -40,7 +41,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// instead of recompiling to adjust them
 	
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -99,6 +99,20 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 		ItemMeshs.Push(NewSlotMesh);
 	}
+
+	{
+		FString RefPathString = TEXT("/Script/Sevendays_to_survive.C_InputActionDatas'/Game/Level/TestLevel/CharTest/Player/Input/DA_Input.DA_Input'");
+
+		ConstructorHelpers::FObjectFinder<UC_InputActionDatas> ResPath(*RefPathString);
+
+		// 유효한 리소스냐를 판단할수 있습니다.
+		if (false == ResPath.Succeeded())
+		{
+			return;
+		}
+
+		InputData = ResPath.Object;
+	}
 }
 
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -148,7 +162,10 @@ void AC_GlobalPlayer::BeginPlay()
 	
 	// 플레이어 데이터 테이블 값 가져오기
 	{
+		GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
+		stamina = PlayerDT.stamina;
+		Hp = PlayerDT.Hp;
 	}
 	
 	//Add Input Mapping Context
@@ -172,6 +189,33 @@ void AC_GlobalPlayer::Tick(float DeltaTime)
 void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+
+		// Jumping
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+
+		// Moving
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Move], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
+
+		// Run
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
+
+		// Looking
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
+
+		//Crouch
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
+		// Att 
+		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
+		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
 }
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
@@ -224,13 +268,13 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.RunSpeed;
 	IsRunCpp = true;
 }
 
 void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 	IsRunCpp = false;
 }
 

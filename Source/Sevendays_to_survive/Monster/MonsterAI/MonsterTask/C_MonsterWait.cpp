@@ -15,12 +15,15 @@ EBTNodeResult::Type UC_MonsterWait::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	if (!IsValid(TaskController)) {
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
+
+	if (!IsValid(Controller)) {
 		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
 		return EBTNodeResult::Failed;
 	}
 
-	if (true == TaskController->GetIsFind()) {
+	if (true == Controller->GetIsFind()) {
 		return EBTNodeResult::Succeeded;
 	}
 
@@ -34,17 +37,20 @@ void UC_MonsterWait::InitTask(UBehaviorTreeComponent* OwnerComp)
 
 void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
+
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	if (true == TaskController->GetIsFind()) {
+	if (true == Controller->GetIsFind()) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
-	float Time = BlackboardComp->GetValueAsFloat(*WaitTimeName);
+	float Time = BlackBoard->GetValueAsFloat(*WaitTimeName);
 	if (Waiting > Time) {
-		BlackboardComp->SetValueAsFloat(*WaitTimeName, Time + DeltaSeconds);
+		BlackBoard->SetValueAsFloat(*WaitTimeName, Time + DeltaSeconds);
 	}
 	else {
-		BlackboardComp->SetValueAsFloat(*WaitTimeName, 0.f);
+		BlackBoard->SetValueAsFloat(*WaitTimeName, 0.f);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

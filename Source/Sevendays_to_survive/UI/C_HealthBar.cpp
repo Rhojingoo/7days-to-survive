@@ -24,6 +24,15 @@ float UC_HealthBar::HealBar(float _HealNum) //체력회복 및 값이 올라가는 값
 
 }
 
+float UC_HealthBar::DecreaseObjectHp(AActor* _Object, float _Damage)
+{
+	//여기에 무언가 넣을려고 했는데 필요가 없다.
+
+	CurHealth = CurHealth - _Damage;
+
+	return CurHealth;
+}
+
 
 
 

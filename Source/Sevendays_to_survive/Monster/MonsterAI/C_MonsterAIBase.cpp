@@ -60,6 +60,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 
 		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
+		BBC->SetValueAsObject("SelfActor", GetPawn());
 		APC->InitializeComponent();
 
 		//BTC->StartTree(*Monster->AITree);  // 원래 존재하거나 이미 실행중이던 behavior tree를 시작 혹은 재시작하는데 쓰임

@@ -13,15 +13,24 @@ UC_BlackBoardBase::UC_BlackBoardBase()
 EBTNodeResult::Type UC_BlackBoardBase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
-	if (IsInit == false) {
-		IsInit = true;
-		InitTask(&OwnerComp);
-	}
 	return EBTNodeResult::Type();
 }
 
 void UC_BlackBoardBase::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
-	TaskController = Cast<AC_MonsterAIBase>(OwnerComp->GetOwner());
-	BlackboardComp = OwnerComp->GetBlackboardComponent();
+}
+
+UBlackboardComponent* UC_BlackBoardBase::GetBlackBoard(UBehaviorTreeComponent* OwnerComp)
+{
+	return OwnerComp->GetBlackboardComponent();
+}
+
+UObject* UC_BlackBoardBase::GetSelf(UBehaviorTreeComponent* OwnerComp)
+{
+	return GetBlackBoard(OwnerComp)->GetValueAsObject("SelfActor");
+}
+
+AC_MonsterAIBase* UC_BlackBoardBase::GetController(UBehaviorTreeComponent* OwnerComp)
+{
+	return Cast< AC_MonsterAIBase>(OwnerComp->GetOwner());
 }

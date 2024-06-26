@@ -28,6 +28,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetMaxHealth(float _Num);
 
+
+	UFUNCTION(BlueprintCallable)
+	float DecreaseObjectHp(AActor* _Object, float _Damage);
+
 	
 
 
