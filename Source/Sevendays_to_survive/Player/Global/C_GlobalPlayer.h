@@ -116,7 +116,7 @@ protected:
 
 private:
 	// 게임 인스턴스 관리
-	FC_PlayerValue PlayerDT;
+	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
@@ -151,4 +151,10 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float stamina = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float Hp = 0.0f;
 };
