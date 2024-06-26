@@ -40,7 +40,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// instead of recompiling to adjust them
 	
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -148,7 +147,10 @@ void AC_GlobalPlayer::BeginPlay()
 	
 	// 플레이어 데이터 테이블 값 가져오기
 	{
+		GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
+		stamina = PlayerDT.stamina;
+		Hp = PlayerDT.Hp;
 	}
 	
 	//Add Input Mapping Context
@@ -224,13 +226,13 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.RunSpeed;
 	IsRunCpp = true;
 }
 
 void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 	IsRunCpp = false;
 }
 

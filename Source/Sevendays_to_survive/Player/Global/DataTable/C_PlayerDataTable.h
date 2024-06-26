@@ -11,7 +11,7 @@
  * 
  */
 USTRUCT(BlueprintType)
-struct FC_PlayerValue : public FTableRowBase
+struct FC_PlayerCommonValue : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float JumpZVelocity; // 캐릭터 점프력
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float WalkSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float RunSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float Hp;
+
 };
+
 
 USTRUCT(BlueprintType)
 struct FC_CameraValue : public FTableRowBase
@@ -44,7 +57,7 @@ struct FC_PlayerDataTable : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	FC_PlayerValue PlayerValue;
+	FC_PlayerCommonValue PlayerValue;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
