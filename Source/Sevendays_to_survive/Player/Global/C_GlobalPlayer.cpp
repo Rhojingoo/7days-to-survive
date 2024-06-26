@@ -90,8 +90,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
-	InventoryComponent = CreateDefaultSubobject<UC_InventoryComponent>(TEXT("InventoryComponent"));
-
 	UEnum* Enum = StaticEnum<EPlayerItemSlot>();
 
 	for (size_t i = 1; i < static_cast<size_t>(EPlayerItemSlot::SlotMax); i++)
@@ -211,6 +209,18 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(-LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
+{
+	if (true==GetCharacterMovement()->bWantsToCrouch)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Crouch();
 	}
 }
 

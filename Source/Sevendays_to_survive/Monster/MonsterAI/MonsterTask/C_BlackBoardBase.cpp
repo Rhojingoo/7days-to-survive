@@ -22,9 +22,6 @@ EBTNodeResult::Type UC_BlackBoardBase::ExecuteTask(UBehaviorTreeComponent& Owner
 
 void UC_BlackBoardBase::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
-	BoolName = "IsActEnd";
-	WaitTimeName = "WaitTime";
-	TargetActorName = "TargetActor";
 	TaskController = Cast<AC_MonsterAIBase>(OwnerComp->GetOwner());
 	BlackboardComp = OwnerComp->GetBlackboardComponent();
 }

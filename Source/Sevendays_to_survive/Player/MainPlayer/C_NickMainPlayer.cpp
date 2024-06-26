@@ -47,19 +47,20 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 
 		// Moving
-		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::MoveStart);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
-		//EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::IdleStart);
-
+	
+		// Run
 		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
 		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
 
-		// Looking
-		EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
-		EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
+		//Crouch
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
+		// Att 
+		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
+		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
 	}
 	else
 	{

@@ -22,26 +22,17 @@ protected:
     UFUNCTION()
     virtual void InitTask(UBehaviorTreeComponent* OwnerComp);
 
-    UPROPERTY()
-    uint16 EnemyKeyId;
-
-    UPROPERTY(VisibleAnywhere, Category = "Blackboard")
-    AActor* TargetActor = nullptr;
-
-    UPROPERTY(VisibleAnywhere, Category = "Blackboard")
+    UPROPERTY(VisibleAnywhere, Category = "BlackboardConst")
     class AC_MonsterAIBase* TaskController = nullptr;
 
-    UPROPERTY(VisibleAnywhere, Category = "Blackboard")
-    FString TargetActorName;
-
-    UPROPERTY(VisibleAnywhere, Category = "BlackboardKey")
-    FString BoolName;
-
-    UPROPERTY(VisibleAnywhere, Category = "BlackboardKey")
-    FString WaitTimeName;
-
-    UPROPERTY(VisibleAnywhere, Category = "BlackboardKey")
+    UPROPERTY(VisibleAnywhere, Category = "BlackboardConst")
     UBlackboardComponent* BlackboardComp = nullptr;
+
+    const FString TargetActorName = "TargetActor";
+    const FString BoolName = "IsActEnd";
+    const FString WaitTimeName = "WaitTime";
+
+
 
     UPROPERTY()
     bool IsInit = false;

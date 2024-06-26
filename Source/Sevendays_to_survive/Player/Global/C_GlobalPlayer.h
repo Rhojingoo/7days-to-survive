@@ -17,6 +17,7 @@ class UC_GlobalAnimInstance; // 애님 인스턴스
 class UStaticMeshComponent;
 class UChildActorComponent;
 class UC_InventoryComponent;
+class UC_BuildingComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -59,9 +60,13 @@ public:
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
 
-
+	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void CrouchCpp(const FInputActionValue& Value);
 
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
@@ -96,6 +101,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttAction = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction = nullptr;
 
 	// 애님 인스턴스 관리
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
@@ -132,6 +140,9 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UC_InventoryComponent* InventoryComponent = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_BuildingComponent* BuildingComponent = nullptr;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

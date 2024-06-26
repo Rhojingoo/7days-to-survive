@@ -28,6 +28,11 @@ protected:
 
 	virtual void Damage_Implementation(APlayerController* _CallingController, int _Index, int _Damage);
 
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	virtual void RemoveInstanceMulticast(int _Index);
+
+	virtual void RemoveInstanceMulticast_Implementation(int _Index);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UHierarchicalInstancedStaticMeshComponent* HISMComponent = nullptr;
@@ -46,4 +51,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data", meta=(AllowPrivateAccess = "true"))
 	FC_ItemSourceTableRow Row;
+
+	void RemoveInstance_Internal(int _Index);
 };
