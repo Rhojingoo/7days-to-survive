@@ -24,10 +24,6 @@ public:
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
-	UPROPERTY()
-	FVector RandomVector = FVector::ZeroVector;
-
 	void InitTask(UBehaviorTreeComponent* OwnerComp) override;
 };
 

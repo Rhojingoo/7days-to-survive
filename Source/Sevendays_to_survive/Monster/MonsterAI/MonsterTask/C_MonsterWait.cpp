@@ -37,6 +37,7 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	if (true == TaskController->GetIsFind()) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 	float Time = BlackboardComp->GetValueAsFloat(*WaitTimeName);
 	if (Waiting > Time) {
@@ -45,5 +46,6 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	else {
 		BlackboardComp->SetValueAsFloat(*WaitTimeName, 0.f);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 }

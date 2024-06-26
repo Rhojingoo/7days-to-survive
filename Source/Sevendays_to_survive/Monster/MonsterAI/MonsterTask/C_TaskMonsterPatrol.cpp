@@ -22,16 +22,16 @@ void UC_TaskMonsterPatrol::InitTask(UBehaviorTreeComponent* OwnerComp)
 
 EBTNodeResult::Type UC_TaskMonsterPatrol::PatrolMove(AC_MonsterAIBase* _MonsterController)
 {
-	FVector Origin = FVector(_MonsterController->GetPawn()->GetActorLocation()); // 자기 자신의 위치 (예: 현재 Actor의 위치)
-	float Radius = 1000.0f; // 반경
-	RandomVector = GetRandomVectorInRadius(Origin, Radius);
-	UE_LOG(LogTemp, Log, TEXT("Random Vector in Radius: %s"), *RandomVector.ToString());
+	//FVector Origin = FVector(_MonsterController->GetPawn()->GetActorLocation()); // 자기 자신의 위치 (예: 현재 Actor의 위치)
+	//float Radius = 1000.0f; // 반경
+	//RandomVector = GetRandomVectorInRadius(Origin, Radius);
+	//UE_LOG(LogTemp, Log, TEXT("Random Vector in Radius: %s"), *RandomVector.ToString());
 
-	EPathFollowingRequestResult::Type MoveResult = _MonsterController->MoveToLocation(RandomVector);
-	if (MoveResult == EPathFollowingRequestResult::Failed)
-	{
-		return EBTNodeResult::Failed;
-	}
+	//EPathFollowingRequestResult::Type MoveResult = _MonsterController->MoveToLocation(RandomVector);
+	//if (MoveResult == EPathFollowingRequestResult::Failed)
+	//{
+	//	return EBTNodeResult::Failed;
+	//}
 	return EBTNodeResult::InProgress;
 }
 
@@ -59,11 +59,12 @@ void UC_TaskMonsterPatrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	if (TaskController->GetIsFind() || TaskController->GetMoveStatus() != EPathFollowingStatus::Moving) {
-		TaskController->GetBlackboardComponent()->SetValueAsBool(*BoolName, true);
-		RandomVector = FVector::ZeroVector;
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}
+	//if (TaskController->GetIsFind() || TaskController->GetMoveStatus() != EPathFollowingStatus::Moving) {
+	//	TaskController->GetBlackboardComponent()->SetValueAsBool(*BoolName, true);
+	//	RandomVector = FVector::ZeroVector;
+	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	//	return;
+	//}
 }
 
 // 주어진 반경 내에서 랜덤 벡터를 반환하는 함수

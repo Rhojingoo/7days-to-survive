@@ -15,19 +15,20 @@ EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	if (!IsValid(TaskController)) {
-		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
-		return EBTNodeResult::Failed;
-	}
-	if (TaskController->GetIsFind()) {
-		TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(*TargetActorName));
-		TaskController->MoveToLocation(TargetActor->GetActorLocation());
-		return EBTNodeResult::Succeeded;
-	}
+	//if (!IsValid(TaskController)) {
+	//	UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
+	//	return EBTNodeResult::Failed;
+	//}
+	//if (TaskController->GetIsFind()) {
+	//	TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(*TargetActorName));
+	//	TaskController->MoveToLocation(TargetActor->GetActorLocation());
+	//	return EBTNodeResult::Succeeded;
+	//}
 
-	else {
-		return EBTNodeResult::Failed;
-	}
+	//else {
+	//	return EBTNodeResult::Failed;
+	//}
+	return EBTNodeResult::Type::Failed;
 }
 
 void UC_TaskMonsterChase::InitTask(UBehaviorTreeComponent* OwnerComp)
