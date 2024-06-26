@@ -9,7 +9,7 @@
 #include "Map/C_MapDataAsset.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Map/C_Items.h"
-#include "Player/Global/C_GlobalPlayer.h"
+#include "Player/Global/C_MapPlayer.h"
 #include "Inventory/C_InventoryComponent.h"
 #include "STS/C_STSMacros.h"
 
@@ -71,15 +71,9 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 	}
 }
 
-void AC_ItemSourceHISMA::GainDropItems()
+void AC_ItemSourceHISMA::GainDropItems(AC_MapPlayer* _HitCharacter)
 {
-	AC_GlobalPlayer* PlayerCharacter = Cast<AC_GlobalPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (nullptr == PlayerCharacter)
-	{
-		STS_FATAL("[%s] PlayerCharacter is NULL.", __FUNCTION__);
-	}
-
-	UC_InventoryComponent* InventoryComponent = PlayerCharacter->GetComponentByClass<UC_InventoryComponent>();
+	UC_InventoryComponent* InventoryComponent = _HitCharacter->GetComponentByClass<UC_InventoryComponent>();
 	if (nullptr == InventoryComponent)
 	{
 		STS_FATAL("[%s] InventoryComponent is NULL.", __FUNCTION__);
@@ -89,6 +83,5 @@ void AC_ItemSourceHISMA::GainDropItems()
 	{
 		InventoryComponent->AddItem(DropItem.Item, DropItem.Count);
 		STS_LOG("got %d %ss.", DropItem.Count, *DropItem.Item->Name);
-		// TODO: 아이템 획득을 서버에 알린다.
 	}
 }

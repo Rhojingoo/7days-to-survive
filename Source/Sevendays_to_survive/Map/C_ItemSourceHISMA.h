@@ -10,6 +10,7 @@
 #include "C_ItemSourceHISMA.generated.h"
 
 class UC_Item;
+class AC_MapPlayer;
 struct FC_ItemAndCount;
 
 UCLASS()
@@ -24,7 +25,7 @@ public:
 public:
 	virtual void Damage(int _Index, int _Damage);
 
-	virtual void GainDropItems();
+	virtual void GainDropItems(AC_MapPlayer* _HitCharacter);
 
 protected:
 	virtual void BeginPlay() override;
