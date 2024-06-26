@@ -34,6 +34,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::PatrolMove(AC_MonsterAIBase* _MonsterC
 	{
 		return EBTNodeResult::Failed;
 	}
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -54,6 +55,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	else {
 		BlackBoard->SetValueAsBool(*BoolName, false);
+		GetSelf(&OwnerComp)->SetState(MonsterEnum::Move);
 		return PatrolMove(Controller);
 	}
 	//return EBTNodeResult::Failed;

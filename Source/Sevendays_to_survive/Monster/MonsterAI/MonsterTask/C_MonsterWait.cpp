@@ -26,7 +26,7 @@ EBTNodeResult::Type UC_MonsterWait::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (true == Controller->GetIsFind()) {
 		return EBTNodeResult::Succeeded;
 	}
-
+	GetSelf(&OwnerComp)->SetState(MonsterEnum::Idle);
 	return EBTNodeResult::InProgress;
 }
 

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "Monster/C_ZombieBase.h"
 #include "C_BlackBoardBase.generated.h"
+
 
 /**
  * 
@@ -23,7 +25,7 @@ protected:
     virtual void InitTask(UBehaviorTreeComponent* OwnerComp);
 
     UBlackboardComponent* GetBlackBoard(UBehaviorTreeComponent* OwnerComp);
-    UObject* GetSelf(UBehaviorTreeComponent* OwnerComp);
+    AC_ZombieBase* GetSelf(UBehaviorTreeComponent* OwnerComp);
     class AC_MonsterAIBase* GetController(UBehaviorTreeComponent* OwnerComp);
 
     const FString TargetActorName = "TargetActor";

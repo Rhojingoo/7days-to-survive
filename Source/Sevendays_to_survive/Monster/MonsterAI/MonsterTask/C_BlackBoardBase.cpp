@@ -25,9 +25,9 @@ UBlackboardComponent* UC_BlackBoardBase::GetBlackBoard(UBehaviorTreeComponent* O
 	return OwnerComp->GetBlackboardComponent();
 }
 
-UObject* UC_BlackBoardBase::GetSelf(UBehaviorTreeComponent* OwnerComp)
+AC_ZombieBase* UC_BlackBoardBase::GetSelf(UBehaviorTreeComponent* OwnerComp)
 {
-	return GetBlackBoard(OwnerComp)->GetValueAsObject("SelfActor");
+	return Cast<AC_ZombieBase>(GetBlackBoard(OwnerComp)->GetValueAsObject("SelfActor"));
 }
 
 AC_MonsterAIBase* UC_BlackBoardBase::GetController(UBehaviorTreeComponent* OwnerComp)
