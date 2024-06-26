@@ -34,9 +34,3 @@ public:
 
 
 
-//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	// 에디터에서 사용하기 위해서 해주는 프로퍼  
-	//bool UIOn = false;
-	// 내가 사용할 데이터 테이블 
-
-//제꺼

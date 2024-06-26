@@ -7,6 +7,11 @@
 float UC_HealthBar::DecreaseBar(float _Damage) // 감소하는 함수
 {
 
+	if (CurHealth < 0)
+	{
+		CurHealth = 0;
+		return CurHealth;
+	}
 	CurHealth = CurHealth - _Damage;
 	return CurHealth;
 	
@@ -19,10 +24,7 @@ float UC_HealthBar::HealBar(float _HealNum) //체력회복 및 값이 올라가는 값
 
 }
 
-void UC_HealthBar::VisiableHpText() //텍스트를 컨트롤 할 함수
-{
 
-}
 
 
 
