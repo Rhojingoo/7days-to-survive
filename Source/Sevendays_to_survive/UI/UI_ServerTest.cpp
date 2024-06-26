@@ -17,10 +17,10 @@ void AUI_ServerTest::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("%S(%u)> if (PortNumber == 0)"), __FUNCTION__, __LINE__);
 		PortNumber = 30002;
-		// UE_LOG(GIMATLog, Fatal, TEXT("%S(%u)> if (PortNumber == 0)"), __FUNCTION__, __LINE__);
+	
 	}
 
-	// FString:: Inst->SideScrollGameInfo.PORT;
+	
 	Inst->EnableListenServer(true, PortNumber);
 
 }

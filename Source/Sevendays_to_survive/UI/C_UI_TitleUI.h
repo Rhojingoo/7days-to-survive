@@ -15,21 +15,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_TitleUI : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	//UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	//FString IPAddress = TEXT("127.0.0.1"); //IP주소
-	//
-	//UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	//FString Port = TEXT("30002"); //포트 설정 
-	//
-	
-	//UFUNCTION(BlueprintCallable)
-	//void SelectChange(FString _Text); //서버 접속 
-
-	//UFUNCTION(BlueprintCallable)
-	//void SelectChange(FString _Text);
-	//
-
-	
 
 	FString IPAddress = "None";
 private:
