@@ -23,8 +23,8 @@ public:
 	~UC_InputActionDatas();
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UInputMappingContext* InputMapping;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//UInputMappingContext* InputMapping;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EPlayerState,UInputAction*> Actions;

@@ -15,7 +15,9 @@ enum class EPlayerState : uint8
 	Run,
 	Jump,
 	Aim,
-	Punch
+	Punch,
+	Crouch
+
 };
 
 UENUM(BlueprintType)
