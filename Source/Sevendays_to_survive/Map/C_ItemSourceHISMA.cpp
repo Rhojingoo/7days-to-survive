@@ -12,6 +12,7 @@
 #include "Player/Global/C_MapPlayer.h"
 #include "Inventory/C_InventoryComponent.h"
 #include "STS/C_STSMacros.h"
+#include "UI/C_HealthBar.h"
 
 AC_ItemSourceHISMA::AC_ItemSourceHISMA()
 {
@@ -19,6 +20,9 @@ AC_ItemSourceHISMA::AC_ItemSourceHISMA()
 
 	HISMComponent = CreateDefaultSubobject<UHierarchicalInstancedStaticMeshComponent>(TEXT("HierarchicalInstancedStaticMesh"));
 	SetRootComponent(HISMComponent);
+
+	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
+	HpBar->SetupAttachment(HISMComponent);
 }
 
 void AC_ItemSourceHISMA::BeginPlay()
@@ -42,6 +46,15 @@ void AC_ItemSourceHISMA::BeginPlay()
 		MaxHpMap.Emplace(i, MaxHp);
 		HpMap.Emplace(i, MaxHp);
 	}
+
+	HpBarWidget = Cast<UC_HealthBar>(HpBar->GetWidget());
+
+	if (nullptr == HpBarWidget)
+	{
+		STS_FATAL("[%s] HpBarWidget is NULL.", __FUNCTION__);
+	}
+
+	HpBarWidget->SetMaxHealth(MaxHp);
 }
 
 void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
@@ -68,6 +81,14 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 		{
 			STS_PRINTSTRING("[%s:%d] destroyed successfully.", *GetName(), _Index);
 		}
+
+		return;
+	}
+
+	// 위젯 업데이트
+	if (true == HpBar->IsActive() && _Index == HpBarTargetIndex)
+	{
+		HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
 	}
 }
 
@@ -84,4 +105,21 @@ void AC_ItemSourceHISMA::GainDropItems(AC_MapPlayer* _HitCharacter)
 		InventoryComponent->AddItem(DropItem.Item, DropItem.Count);
 		STS_LOG("got %d %ss.", DropItem.Count, *DropItem.Item->Name);
 	}
+}
+
+void AC_ItemSourceHISMA::ShowHpBar(int _Index)
+{
+	HpBar->SetActive(true);
+
+	HISMComponent->GetInstanceTransform(_Index, HpBarTransform, true);
+
+	// HpBar 갱신
+	HpBar->SetWorldTransform(HpBarTransform);
+	HpBarTargetIndex = _Index;
+	HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
+}
+
+void AC_ItemSourceHISMA::HideHpBar(int _Index)
+{
+	HpBar->SetActive(false);
 }

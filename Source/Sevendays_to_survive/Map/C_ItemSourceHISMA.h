@@ -6,12 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Map/C_ItemSourceTableRow.h"
+#include "Components/WidgetComponent.h"
 
 #include "C_ItemSourceHISMA.generated.h"
 
 class UC_Item;
 class AC_MapPlayer;
 struct FC_ItemAndCount;
+class UC_HealthBar;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_ItemSourceHISMA : public AActor
@@ -27,12 +29,27 @@ public:
 
 	virtual void GainDropItems(AC_MapPlayer* _HitCharacter);
 
+	UFUNCTION(BlueprintCallable)
+	void ShowHpBar(int _Index);
+
+	UFUNCTION(BlueprintCallable)
+	void HideHpBar(int _Index);
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UHierarchicalInstancedStaticMeshComponent* HISMComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* HpBar = nullptr;
+
+	UC_HealthBar* HpBarWidget = nullptr;
+
+	FTransform HpBarTransform;
+
+	int HpBarTargetIndex = 0;
 
 	// MaxHP of each instance.
 	TMap<int, int> MaxHpMap;
