@@ -34,6 +34,25 @@ float UC_HealthBar::DecreaseObjectHp(AActor* _Object, float _Damage)
 }
 
 
+void UC_HealthBar::CureStamina()
+{
+	STimer += GetWorld()->GetDeltaSeconds();
+	if (CurStamina < MaxStatmina && STimer >=4)
+	{
+	
+	CurStamina += 10;
+	}
+	
+	if (CurStamina >= MaxStatmina)
+	{
+		CurStamina = MaxStatmina;
+		STimer = 0;
+		//풀 충전 되었을때는 
+	}
+	
+
+
+}
 
 
 
@@ -43,6 +62,10 @@ void UC_HealthBar::SetCurHealth(float _Num)
 	CurHealth = _Num;
 }
 
+void UC_HealthBar::SetMaxStamina(float _Num)
+{
+	MaxStatmina = _Num;	
+}
 
 
 void UC_HealthBar::SetMaxHealth(float _Num)

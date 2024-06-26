@@ -32,7 +32,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float DecreaseObjectHp(AActor* _Object, float _Damage);
 
-	
+	UFUNCTION(BlueprintCallable)
+	void SetMaxStamina(float _Num);
+
+	UFUNCTION(BlueprintCallable)
+	void CureStamina();
+
 
 
 private:
@@ -40,8 +45,17 @@ private:
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float CurHealth = 0.0f;
 
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float CurStamina = 0.0f;
+
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float MaxStatmina;
 
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float MaxHealth = 100.0f;
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsActing = false; //뛰거나 점프를 했을때 체크 
+
+	float STimer = 0.0f;
 
 };
