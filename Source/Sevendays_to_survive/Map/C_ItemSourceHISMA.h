@@ -20,18 +20,14 @@ class SEVENDAYS_TO_SURVIVE_API AC_ItemSourceHISMA : public AActor
 public:
 	AC_ItemSourceHISMA();
 
+
+public:
+	virtual void Damage(int _Index, int _Damage);
+
+	virtual void GainDropItems();
+
 protected:
 	virtual void BeginPlay() override;
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	virtual void Damage(APlayerController* _CallingController, int _Index, int _Damage);
-
-	virtual void Damage_Implementation(APlayerController* _CallingController, int _Index, int _Damage);
-
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	virtual void RemoveInstanceMulticast(int _Index);
-
-	virtual void RemoveInstanceMulticast_Implementation(int _Index);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -51,6 +47,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data", meta=(AllowPrivateAccess = "true"))
 	FC_ItemSourceTableRow Row;
-
-	void RemoveInstance_Internal(int _Index);
 };

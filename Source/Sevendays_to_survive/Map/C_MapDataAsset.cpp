@@ -2,10 +2,30 @@
 
 
 #include "Map/C_MapDataAsset.h"
+
 #include "BuildingSystem/C_BuildingPartTableRow.h"
+#include "Map/C_MapComponentRow.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Map/C_ItemRows.h"
 #include "Map/C_Items.h"
+
+TSubclassOf<UActorComponent> UC_MapDataAsset::GetMapComponentClass(FName _Id)
+{
+    if (nullptr == MapComponentTable)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("게임 인스턴스의 MapComponentTable이 nullptr입니다."));
+    }
+
+    FString ContextString;
+    FC_MapComponentRow* Row = MapComponentTable->FindRow<FC_MapComponentRow>(_Id, ContextString);
+
+    if (nullptr == Row)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("MapComponentTable에 행 이름이 %s인 행이 없습니다."), *_Id.ToString());
+    }
+
+    return Row->ComponentClass;
+}
 
 TArray<FC_BuildingPartTableRow> UC_MapDataAsset::GetBuildPartData()
 {
