@@ -30,10 +30,10 @@ public:
 	virtual void GainDropItems(AC_MapPlayer* _HitCharacter);
 
 	UFUNCTION(BlueprintCallable)
-	void ShowHpBar(int _Index);
+	void UpdateHpBar(int _Index);
 
 	UFUNCTION(BlueprintCallable)
-	void HideHpBar(int _Index);
+	void HideHpBar();
 
 protected:
 	virtual void BeginPlay() override;

@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Player/Global/C_MapPlayer.h"
+#include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
 
 UC_MapInteractionComponent::UC_MapInteractionComponent()
@@ -17,13 +18,13 @@ void UC_MapInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	Owner = Cast<AC_MapPlayer>(GetOwner());
+	Camera = Owner->GetComponentByClass<UCameraComponent>();
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 }
 
 void UC_MapInteractionComponent::DamageItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
@@ -62,7 +63,60 @@ void UC_MapInteractionComponent::Multicast_DamageItemSource_Implementation(APlay
 	_ItemSource->Damage(_Index, _Damage);
 }
 
-bool UC_MapInteractionComponent::IsServer()
+bool UC_MapInteractionComponent::IsServer() const
 {
 	return UKismetSystemLibrary::IsServer(GetWorld());
+}
+
+bool UC_MapInteractionComponent::IsOwnerLocallyControlled() const
+{
+	return Owner->IsLocallyControlled();
+}
+
+FVector UC_MapInteractionComponent::GetHpBarTraceStartPoint() const
+{
+	FVector CameraLocation = Camera->GetComponentLocation();
+	FVector CameraForward = Camera->GetForwardVector();
+	return CameraLocation + CameraForward * HpBarTraceStartRange;
+}
+
+FVector UC_MapInteractionComponent::GetHpBarTraceEndPoint() const
+{
+	FVector CameraLocation = Camera->GetComponentLocation();
+	FVector CameraForward = Camera->GetForwardVector();
+	return CameraLocation + CameraForward * HpBarTraceEndRange;
+}
+
+FRotator UC_MapInteractionComponent::GetCameraRotation() const
+{
+	return Camera->GetComponentRotation();
+}
+
+void UC_MapInteractionComponent::TraitBoxTraceResult(FHitResult _HitResult, bool _IsHit)
+{
+	// 아이템 소스를 보지 않게 되는 경우
+	if (false == _IsHit)
+	{
+		if (true == IsValid(LastHitItemSource))
+		{
+			LastHitItemSource->HideHpBar();
+		}
+		LastHitItemSource = nullptr;
+		return;
+	}
+
+	// 같은 아이템 소스를 계속 보는 경우
+	if (LastHitItemSource == _HitResult.GetActor())
+	{
+		LastHitItemSource->UpdateHpBar(_HitResult.Item);
+		return;
+	}
+
+	// 다른 아이템 소스를 보게 되는 경우
+	if (true == IsValid(LastHitItemSource))
+	{
+		LastHitItemSource->HideHpBar();
+	}
+	LastHitItemSource = Cast<AC_ItemSourceHISMA>(_HitResult.GetActor());
+	LastHitItemSource->UpdateHpBar(_HitResult.Item);
 }

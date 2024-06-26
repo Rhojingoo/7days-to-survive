@@ -4,6 +4,7 @@
 #include "Map/C_ItemSourceHISMA.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
@@ -23,6 +24,7 @@ AC_ItemSourceHISMA::AC_ItemSourceHISMA()
 
 	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	HpBar->SetupAttachment(HISMComponent);
+	HpBar->SetActive(false);
 }
 
 void AC_ItemSourceHISMA::BeginPlay()
@@ -89,6 +91,7 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 	if (true == HpBar->IsActive() && _Index == HpBarTargetIndex)
 	{
 		HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
+		HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
 	}
 }
 
@@ -107,19 +110,46 @@ void AC_ItemSourceHISMA::GainDropItems(AC_MapPlayer* _HitCharacter)
 	}
 }
 
-void AC_ItemSourceHISMA::ShowHpBar(int _Index)
+void AC_ItemSourceHISMA::UpdateHpBar(int _Index)
 {
-	HpBar->SetActive(true);
+	if (true == Id.IsNone())
+	{
+		return;
+	}
+
+	if (false == HpBar->IsActive())
+	{
+		HpBar->SetActive(true);
+	}
+
+	HpBarTargetIndex = _Index;
 
 	HISMComponent->GetInstanceTransform(_Index, HpBarTransform, true);
+	FVector InstLocation = HpBarTransform.GetLocation() + FVector::UpVector * 300.0f;
+
+	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	UCameraComponent* Camera = PlayerCharacter->GetComponentByClass<UCameraComponent>();
+	FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(InstLocation, Camera->GetComponentLocation());
+	HpBarTransform.SetRotation(LookAtRot.Quaternion());
+	HpBarTransform.SetLocation(InstLocation + LookAtRot.Vector() * 300.0f);
 
 	// HpBar °»½Å
 	HpBar->SetWorldTransform(HpBarTransform);
-	HpBarTargetIndex = _Index;
 	HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
+	HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
 }
 
-void AC_ItemSourceHISMA::HideHpBar(int _Index)
+void AC_ItemSourceHISMA::HideHpBar()
 {
+	if (true == Id.IsNone())
+	{
+		return;
+	}
+
+	if (false == HpBar->IsActive())
+	{
+		return;
+	}
+
 	HpBar->SetActive(false);
 }
