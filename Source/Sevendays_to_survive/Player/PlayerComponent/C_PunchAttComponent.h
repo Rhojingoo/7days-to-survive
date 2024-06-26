@@ -21,6 +21,10 @@ public:
 	UFUNCTION(BlueprintCallable,Reliable, NetMulticast)
 	void AttStart(); //
 	void AttStart_Implementation();
+
+	void ReSetComboAtt();
+	void SetAttCombo();
+	void SetAttCombo2();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -42,5 +46,6 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UAnimMontage*> AttAni;
-		
+
+	FScriptDelegate Delegate_OnMontageNotifyBegin;
 };

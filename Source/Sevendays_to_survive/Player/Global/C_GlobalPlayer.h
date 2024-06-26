@@ -18,6 +18,7 @@ class UStaticMeshComponent;
 class UChildActorComponent;
 class UC_InventoryComponent;
 class UC_BuildingComponent;
+class UC_MapInteractionComponent;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -112,6 +113,7 @@ protected:
 	bool IsAttCpp = false;
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	int ComboCounterCpp = 0;
+
 private:
 	// 게임 인스턴스 관리
 	FC_PlayerValue PlayerDT;
@@ -137,13 +139,6 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
 
-
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_InventoryComponent* InventoryComponent = nullptr;
-
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_BuildingComponent* BuildingComponent = nullptr;
-
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;
@@ -156,5 +151,4 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
-	
 };

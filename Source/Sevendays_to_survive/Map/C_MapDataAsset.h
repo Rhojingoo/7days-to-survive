@@ -17,6 +17,9 @@ class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 
 public:
 	UFUNCTION(BlueprintCallable)
+	TSubclassOf<UActorComponent> GetMapComponentClass(FName _Id);
+
+	UFUNCTION(BlueprintCallable)
 	TArray<FC_BuildingPartTableRow> GetBuildPartData();
 
 	UFUNCTION(BlueprintCallable)
@@ -33,6 +36,9 @@ private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* MapComponentTable;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BuildPartTable;
 

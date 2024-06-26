@@ -25,17 +25,23 @@ void UC_PunchAttComponent::AttStart_Implementation()
 		switch (ComboCPP)
 		{
 		case 0:
+
+			//Delegate_OnMontageNotifyBegin.BindUFunction(this, FName("SetAttCombo"));
+			//PlayerMesh->GetAnimInstance()->OnPlayMontageNotifyBegin.Add(Delegate_OnMontageNotifyBegin);
 			PlayerMesh->GetAnimInstance()->Montage_Play(AttAni[ComboCPP]);
+			//Player->PlayAnimMontage(AttAni[ComboCPP]->Throw)
 			IsAttCPP = false;
 			ComboCPP = 1;
-			//Player->GetWorldTimerManager().SetTimer(MyTimerHandle, this, &UC_PunchAttComponent::AttStart_Implementation, 1.0f, false, false);
-			//UKismetSystemLibrary::K2_SetTimer(this, "ComboCPP1", 1.0f);
+			Player->GetWorldTimerManager().SetTimer(MyTimerHandle, this, &UC_PunchAttComponent::ReSetComboAtt, 1.0f, false);
 			break;
 		case 1:
+
+			//Delegate_OnMontageNotifyBegin.BindUFunction(this, FName("SetAttCombo2"));
+			//PlayerMesh->GetAnimInstance()->OnPlayMontageNotifyBegin.Add(Delegate_OnMontageNotifyBegin);
 			PlayerMesh->GetAnimInstance()->Montage_Play(AttAni[ComboCPP]);
 			IsAttCPP = false;
 			ComboCPP = 2;
-			//Player->GetWorldTimerManager().SetTimer(MyTimerHandle, this, &UC_PunchAttComponent::AttStart_Implementation, 1.0f, false, false);
+			Player->GetWorldTimerManager().SetTimer(MyTimerHandle, this,&UC_PunchAttComponent::ReSetComboAtt, 1.0f, false);
 			break;
 		case 2:
 			PlayerMesh->GetAnimInstance()->Montage_Play(AttAni[ComboCPP]);
@@ -47,6 +53,23 @@ void UC_PunchAttComponent::AttStart_Implementation()
 			break;
 		}
 	}
+}
+
+void UC_PunchAttComponent::ReSetComboAtt()
+{
+	ComboCPP = 0;
+}
+
+void UC_PunchAttComponent::SetAttCombo()
+{
+	IsAttCPP = false;
+	ComboCPP=1;
+}
+
+void UC_PunchAttComponent::SetAttCombo2()
+{
+	IsAttCPP = false;
+	ComboCPP = 2;
 }
 
 // Called when the game starts
