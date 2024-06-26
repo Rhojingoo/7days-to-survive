@@ -10,9 +10,12 @@
 UENUM(BlueprintType)
 enum class EPlayerState : uint8
 {
-	None,
-	Idle,
-	Walk
+	Move,
+	Look,
+	Run,
+	Jump,
+	Aim,
+	Punch
 };
 
 UENUM(BlueprintType)
