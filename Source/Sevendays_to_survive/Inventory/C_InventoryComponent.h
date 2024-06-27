@@ -29,12 +29,14 @@ public:
 	void AddItem(const UC_Item* _Item, int _Count);
 
 	UFUNCTION(BlueprintCallable)
-	int GetItemCount() const;
+	int Num() const;
+
+	UFUNCTION(BlueprintCallable)
+	const FC_ItemAndCount& GetItemAndCount(int _X, int _Y) const;
 
 private:
 	
 
 private:
-	
 	TArray<TArray<FC_ItemAndCount>> Inventory;
 };
