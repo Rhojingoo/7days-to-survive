@@ -4,7 +4,7 @@
 #include "UI/C_HealthBar.h"
 
 
-float UC_HealthBar::DecreaseBar(float _Damage) // 감소하는 함수
+double UC_HealthBar::DecreaseBar(double _Damage) // 감소하는 함수
 {
 
 	if (CurHealth < 0)
@@ -16,7 +16,7 @@ float UC_HealthBar::DecreaseBar(float _Damage) // 감소하는 함수
 	return CurHealth;
 	
 }
-float UC_HealthBar::HealBar(float _HealNum) //체력회복 및 값이 올라가는 값
+double UC_HealthBar::HealBar(double _HealNum) //체력회복 및 값이 올라가는 값
 {
 	CurHealth = CurHealth + _HealNum;
 
@@ -24,7 +24,7 @@ float UC_HealthBar::HealBar(float _HealNum) //체력회복 및 값이 올라가는 값
 
 }
 
-float UC_HealthBar::DecreaseObjectHp(AActor* _Object, float _Damage)
+double UC_HealthBar::DecreaseObjectHp(AActor* _Object, double _Damage)
 {
 	//여기에 무언가 넣을려고 했는데 필요가 없다.
 
@@ -37,7 +37,7 @@ float UC_HealthBar::DecreaseObjectHp(AActor* _Object, float _Damage)
 void UC_HealthBar::CureStamina()
 {
 	STimer += GetWorld()->GetDeltaSeconds();
-	if (CurStamina < MaxStatmina && STimer >=4)
+	if (CurStamina < MaxStatmina && STimer >=4) 
 	{
 	
 	CurStamina += 10;
@@ -57,18 +57,23 @@ void UC_HealthBar::CureStamina()
 
 
 
-void UC_HealthBar::SetCurHealth(float _Num)
+void UC_HealthBar::SetCurHealth(double _Num)
 {
 	CurHealth = _Num;
 }
 
-void UC_HealthBar::SetMaxStamina(float _Num)
+void UC_HealthBar::SetStamina(double _Num)
+{
+	CurStamina = _Num;
+}
+
+void UC_HealthBar::SetMaxStamina(double _Num)
 {
 	MaxStatmina = _Num;	
 }
 
 
-void UC_HealthBar::SetMaxHealth(float _Num)
+void UC_HealthBar::SetMaxHealth(double _Num)
 {
 	MaxHealth = _Num; //장비를 입을때 마다 값이 늘엊나게 할 생각임 
 }
