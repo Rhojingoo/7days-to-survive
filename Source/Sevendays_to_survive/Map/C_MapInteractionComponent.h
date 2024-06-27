@@ -60,14 +60,14 @@ private:
 
 private:
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    float HpBarTraceStartRange = 500.0f;
+    float HpBarTraceStartRange = 400.0f;
 
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    float HpBarTraceEndRange = 1000.0f;
+    float HpBarTraceEndRange = 800.0f;
 
 
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    FVector HpBarLineTraceBoxSize = {300.0f, 300.0f, 300.0f};
+    FVector HpBarLineTraceBoxSize = {100.0f, 100.0f, 100.0f};
 
     AC_MapPlayer* Owner = nullptr;
     UCameraComponent* Camera = nullptr;
