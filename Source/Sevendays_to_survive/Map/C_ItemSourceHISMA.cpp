@@ -24,12 +24,20 @@ AC_ItemSourceHISMA::AC_ItemSourceHISMA()
 
 	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	HpBar->SetupAttachment(HISMComponent);
-	HpBar->SetActive(false);
 }
 
 void AC_ItemSourceHISMA::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HpBarWidget = Cast<UC_HealthBar>(HpBar->GetWidget());
+
+	if (nullptr == HpBarWidget)
+	{
+		STS_FATAL("[%s] HpBarWidget is NULL.", __FUNCTION__);
+	}
+
+	HideHpBar();
 
 	if (true == Id.IsNone())
 	{
@@ -49,21 +57,18 @@ void AC_ItemSourceHISMA::BeginPlay()
 		HpMap.Emplace(i, MaxHp);
 	}
 
-	HpBarWidget = Cast<UC_HealthBar>(HpBar->GetWidget());
-
-	if (nullptr == HpBarWidget)
-	{
-		STS_FATAL("[%s] HpBarWidget is NULL.", __FUNCTION__);
-	}
-
 	HpBarWidget->SetMaxHealth(MaxHp);
+}
+
+void AC_ItemSourceHISMA::Tick(float _DeltaSeconds)
+{
+	Super::Tick(_DeltaSeconds);
 }
 
 void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 {
 	if (true == Id.IsNone())
 	{
-		STS_PRINTSTRING("[%s:%d] Id is not set. Can't be damaged.", *GetName(), _Index);
 		return;
 	}
 
@@ -81,7 +86,8 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 		}
 		else
 		{
-			STS_PRINTSTRING("[%s:%d] destroyed successfully.", *GetName(), _Index);
+			HideHpBar();
+			STS_LOG("[%s:%d] destroyed successfully.", *GetName(), _Index);
 		}
 
 		return;
@@ -117,39 +123,36 @@ void AC_ItemSourceHISMA::UpdateHpBar(int _Index)
 		return;
 	}
 
-	if (false == HpBar->IsActive())
+	if (_Index < 0 || _Index >= HpMap.Num())
 	{
-		HpBar->SetActive(true);
+		STS_LOG("UpdateHpBar failed. Given Index %d is out of range.", _Index);
+		return;
+	}
+
+	if (HpMap[_Index] <= 0)
+	{
+		STS_LOG("UpdateHpBar failed. Given instance(%d) is already destroyed.", _Index);
+		return;
+	}
+
+	if (false == HpBarWidget->IsVisible())
+	{
+		HpBarWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 
 	HpBarTargetIndex = _Index;
 
 	HISMComponent->GetInstanceTransform(_Index, HpBarTransform, true);
 	FVector InstLocation = HpBarTransform.GetLocation() + FVector::UpVector * 300.0f;
-
-	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	UCameraComponent* Camera = PlayerCharacter->GetComponentByClass<UCameraComponent>();
-	FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(InstLocation, Camera->GetComponentLocation());
-	HpBarTransform.SetRotation(LookAtRot.Quaternion());
-	HpBarTransform.SetLocation(InstLocation + LookAtRot.Vector() * 300.0f);
+	FVector DrawLocation = InstLocation;
 
 	// HpBar °»½Å
-	HpBar->SetWorldTransform(HpBarTransform);
+	HpBar->SetWorldLocation(DrawLocation);
 	HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
 	HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
 }
 
 void AC_ItemSourceHISMA::HideHpBar()
 {
-	if (true == Id.IsNone())
-	{
-		return;
-	}
-
-	if (false == HpBar->IsActive())
-	{
-		return;
-	}
-
-	HpBar->SetActive(false);
+	HpBarWidget->SetVisibility(ESlateVisibility::Hidden);
 }
