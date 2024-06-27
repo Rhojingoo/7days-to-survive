@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Calstamina();
+
 	UFUNCTION(BlueprintCallable)
 	void CrouchCpp(const FInputActionValue& Value);
 
@@ -127,7 +130,14 @@ private:
 	bool IsRunCpp = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float stamina = 0.0f;
+	int Maxstamina = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int stamina = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int staminaCalValue = 0;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float Hp = 0.0f;

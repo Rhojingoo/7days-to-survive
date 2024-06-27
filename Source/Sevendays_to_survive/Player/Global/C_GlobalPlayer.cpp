@@ -162,7 +162,9 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
+		Maxstamina= PlayerDT.stamina;
 		stamina = PlayerDT.stamina;
+		staminaCalValue = PlayerDT.staminaCalValue;
 		Hp = PlayerDT.Hp;
 	}
 	
@@ -180,7 +182,7 @@ void AC_GlobalPlayer::BeginPlay()
 void AC_GlobalPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	Calstamina();
 }
 
 // Called to bind functionality to input
@@ -198,7 +200,10 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Move], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
 
 		// Run
+		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
+		
+		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
@@ -219,6 +224,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
+
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
@@ -252,8 +258,30 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
+void AC_GlobalPlayer::Calstamina()
+{
+	if (false == IsRunCpp)
+	{
+		if (stamina == Maxstamina)
+		{
+			return;
+		}
+		stamina += staminaCalValue;
+	}
+	else if (true==IsRunCpp) // 점프 체크 값 추가로 넣어야함
+	{
+		if (stamina == 0)
+		{
+			RunEnd_Implementation(0);
+			return;
+		}
+		stamina -= staminaCalValue;
+	}
+}
+
 void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 {
+
 	if (true==GetCharacterMovement()->bWantsToCrouch)
 	{
 		UnCrouch();
@@ -266,6 +294,13 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+
+	if (stamina == 0)
+	{
+		return;
+	}
+	
+
 	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.RunSpeed;
 	IsRunCpp = true;
 }

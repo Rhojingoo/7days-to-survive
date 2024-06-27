@@ -37,6 +37,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float _DeltaSeconds) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -65,4 +66,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Data", meta=(AllowPrivateAccess = "true"))
 	FC_ItemSourceTableRow Row;
+
+private:
+	float TempTimer = 0.0f;
 };

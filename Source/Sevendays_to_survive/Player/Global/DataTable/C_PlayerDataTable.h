@@ -27,7 +27,10 @@ public:
 	float RunSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float stamina;
+	int stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int staminaCalValue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float Hp;
