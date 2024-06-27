@@ -42,7 +42,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh);
+	void ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
 
 	// ÃÑ °ü·Ã bool ÇÔ¼ö
 	UFUNCTION(BlueprintCallable, Category = Weapon)
@@ -85,7 +85,7 @@ protected:
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
-	bool bHasRifle;
+	bool bHasRifle=false;
 
 
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
@@ -118,7 +118,10 @@ private:
 	USkeletalMeshComponent* Mesh1P;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TArray<UStaticMeshComponent*> ItemMesh;
+	TArray<UStaticMeshComponent*> StaticItemMesh;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<USkeletalMeshComponent*> SkeletalItemMesh;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;

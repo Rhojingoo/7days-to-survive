@@ -85,21 +85,36 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
-	UEnum* Enum = StaticEnum<EPlayerItemSlot>();
-
-	for (size_t i = 0; i < static_cast<size_t>(EPlayerItemSlot::SlotMax); i++)
+	
 	{
-		FString Name = Enum->GetNameStringByValue(i);
-		UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
-		NewSlotMesh->SetupAttachment(GetMesh(), *Name);
+		{
+			UEnum* Enum = StaticEnum<EStaticItemSlot>();
+			// UStaticMeshComponent 슬롯 전용
+			for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+			{
+				FString Name = Enum->GetNameStringByValue(i);
+				UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
+				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
 
-		ItemMesh.Push(NewSlotMesh);
+				StaticItemMesh.Push(NewSlotMesh);
+			}
+		}
+		
+		{
+			UEnum* Enum = StaticEnum<ESkerItemSlot>();
+			// USkeletalMeshComponent 슬롯 전용
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				FString Name = Enum->GetNameStringByValue(i);
+				USkeletalMeshComponent* NewSlotMesh = CreateDefaultSubobject<USkeletalMeshComponent>(*Name);
+				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
+
+				SkeletalItemMesh.Push(NewSlotMesh);
+			}
+		}
 	}
 
+	// 데이터 에셋
 	{
 		FString RefPathString = TEXT("/Script/Sevendays_to_survive.C_InputActionDatas'/Game/Level/TestLevel/CharTest/Player/Input/DA_Input.DA_Input'");
 
@@ -311,16 +326,16 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 	IsRunCpp = false;
 }
 
-void AC_GlobalPlayer::ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
-	if (ItemMesh.Num() <= SlotIndex)
+	if (StaticItemMesh.Num() <= SlotIndex)
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
 		return;
 	}
 
-	ItemMesh[SlotIndex]->SetStaticMesh(_Mesh);
+	StaticItemMesh[SlotIndex]->SetStaticMesh(_Mesh);
 }
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
