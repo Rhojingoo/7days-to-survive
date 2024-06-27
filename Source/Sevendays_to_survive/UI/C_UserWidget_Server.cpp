@@ -24,7 +24,7 @@ void UC_UserWidget_Server::ServerOpen()
 		}
 
 		Inst->TitleToGameInfo.ServerOpenCheck = true;
-		Inst->TitleToGameInfo.UserIp = "127.0.0.1"; //값을 계속 수동으로 변경해줘야합니다. 아직은
+		Inst->TitleToGameInfo.UserIp = "192.168.0.173"; //값을 계속 수동으로 변경해줘야합니다. 아직은
 		Inst->TitleToGameInfo.ServerPort = "30002"; //포트 값을 가져와야한다.
 		
 
