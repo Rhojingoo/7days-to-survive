@@ -60,7 +60,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 	int a = 0;
 }
 
-int UC_InventoryComponent::GetItemCount() const
+int UC_InventoryComponent::Num() const
 {
 	int Count = 0;
 	for (int i = 0; i < Inventory.Num();++i)
@@ -71,4 +71,9 @@ int UC_InventoryComponent::GetItemCount() const
 		}
 	}
 	return Count;
+}
+
+const FC_ItemAndCount& UC_InventoryComponent::GetItemAndCount(int _X, int _Y) const
+{
+	return Inventory[_X][_Y];
 }

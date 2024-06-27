@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Map/C_Items.h"
+#include "Engine/Texture2D.h"
 #include "C_ItemRows.generated.h"
 
 USTRUCT(BlueprintType)
@@ -17,6 +18,9 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ItemRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemType Type = EItemType::NONE;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Icon = nullptr;
 };
 
 USTRUCT(BlueprintType)

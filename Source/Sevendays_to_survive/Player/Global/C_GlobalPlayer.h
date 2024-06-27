@@ -37,9 +37,10 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 
-	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; } // 총 저장 용 매쉬
-	/** Returns FirstPersonCameraComponent subobject **/
+	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
+	{
+		return StaticItemMesh;
+	}
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
@@ -113,9 +114,6 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UChildActorComponent* FPSCamera = nullptr;
-	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* Mesh1P;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> StaticItemMesh;
