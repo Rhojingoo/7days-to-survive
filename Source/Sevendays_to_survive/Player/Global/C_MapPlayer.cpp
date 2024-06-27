@@ -9,7 +9,7 @@
 
 AC_MapPlayer::AC_MapPlayer()
 {
-	static ConstructorHelpers::FClassFinder<UC_BuildingComponent> BpBuildingComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/TestLevel/MapTestLevel/BP/BP_BuildingComponent.BP_BuildingComponent_C'"));
+	static ConstructorHelpers::FClassFinder<UC_BuildingComponent> BpBuildingComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/Main_Level/MapContent/BP/BP_BuildingComponent.BP_BuildingComponent_C'"));
 	if (true == BpBuildingComponentAsset.Succeeded())
 	{
 		TSubclassOf<UActorComponent> BpClass = BpBuildingComponentAsset.Class;
@@ -20,7 +20,7 @@ AC_MapPlayer::AC_MapPlayer()
 		UE_LOG(LogTemp, Fatal, TEXT("Can't find BP Building Component"));
 	}
 
-	static ConstructorHelpers::FClassFinder<UC_InventoryComponent> BpInventoryComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/TestLevel/MapTestLevel/BP/BP_InventoryComponent.BP_InventoryComponent_C'"));
+	static ConstructorHelpers::FClassFinder<UC_InventoryComponent> BpInventoryComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/Main_Level/MapContent/BP/BP_InventoryComponent.BP_InventoryComponent_C'"));
 	if (true == BpInventoryComponentAsset.Succeeded())
 	{
 		TSubclassOf<UActorComponent> BpClass = BpInventoryComponentAsset.Class;
@@ -31,11 +31,11 @@ AC_MapPlayer::AC_MapPlayer()
 		UE_LOG(LogTemp, Fatal, TEXT("Can't find BP Inventory Component"));
 	}
 
-	static ConstructorHelpers::FClassFinder<UC_MapInteractionComponent> BpMapInteractionComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/TestLevel/MapTestLevel/BP/BP_MapInteractionComponent.BP_MapInteractionComponent_C'"));
+	static ConstructorHelpers::FClassFinder<UC_MapInteractionComponent> BpMapInteractionComponentAsset(TEXT("/Script/Engine.Blueprint'/Game/Level/Main_Level/MapContent/BP/BP_MapInteractionComponent.BP_MapInteractionComponent_C'"));
 	if (true == BpMapInteractionComponentAsset.Succeeded())
 	{
 		TSubclassOf<UActorComponent> BpClass = BpMapInteractionComponentAsset.Class;
-		MapInteractionComponent = Cast<UC_MapInteractionComponent>(CreateDefaultSubobject(TEXT("Map Interaction Component"), UC_MapInteractionComponent::StaticClass(), BpClass.Get(), true, false));
+		MapInteractionComp = Cast<UC_MapInteractionComponent>(CreateDefaultSubobject(TEXT("Map Interaction Component"), UC_MapInteractionComponent::StaticClass(), BpClass.Get(), true, false));
 	}
 	else
 	{
