@@ -30,5 +30,5 @@ protected:
 	UC_InventoryComponent* InventoryComponent = nullptr;
 
 	UPROPERTY(Category = "Contents | Map", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_MapInteractionComponent* MapInteractionComponent = nullptr;
+	UC_MapInteractionComponent* MapInteractionComp = nullptr;
 };
