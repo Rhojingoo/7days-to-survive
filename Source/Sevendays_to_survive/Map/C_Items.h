@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Engine/Texture2D.h"
 #include "C_Items.generated.h"
 
 UENUM(BlueprintType)
@@ -42,9 +43,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EItemType Type = EItemType::NONE;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* Icon = nullptr;
+
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> ActorClass;*/
-
 protected:
 	void InitItem(FTableRowBase* _ItemRow);
 };

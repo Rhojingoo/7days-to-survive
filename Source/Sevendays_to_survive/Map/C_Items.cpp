@@ -16,6 +16,7 @@ void UC_Item::InitItem(FTableRowBase* _ItemRow)
 
     Name = ItemRow->Name;
     Type = ItemRow->Type;
+    Icon = ItemRow->Icon;
 }
 
 void UC_Material::Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
