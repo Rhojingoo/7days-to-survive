@@ -119,8 +119,6 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
-	DOREPLIFETIME(AC_GlobalPlayer, IsAttCpp);
-	DOREPLIFETIME(AC_GlobalPlayer, ComboCounterCpp);
 }
 
 // Called when the game starts or when spawned

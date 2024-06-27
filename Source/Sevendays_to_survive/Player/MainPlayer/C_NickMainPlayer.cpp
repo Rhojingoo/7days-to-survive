@@ -11,16 +11,7 @@
 
 
 
-void AC_NickMainPlayer::PunchAtt_Implementation(const FInputActionValue& Value)
-{
-	
-	IsAttCpp = true;
-}
 
-void AC_NickMainPlayer::PunchAttEnd_Implementation(const FInputActionValue& Value)
-{
-	IsAttCpp = false;
-}
 
 void AC_NickMainPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
