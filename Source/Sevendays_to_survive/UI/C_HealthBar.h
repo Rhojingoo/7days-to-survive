@@ -17,42 +17,45 @@ class SEVENDAYS_TO_SURVIVE_API UC_HealthBar : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	float DecreaseBar(float _Damage);
+	double DecreaseBar(double _Damage);
 
 	UFUNCTION(BlueprintCallable)
-	float HealBar(float _HealNum);
+	double HealBar(double _HealNum);
 
 	UFUNCTION(BlueprintCallable)
-	void SetCurHealth(float _Num);
+	void SetCurHealth(double _Num);
 
 	UFUNCTION(BlueprintCallable)
-	void SetMaxHealth(float _Num);
+	void SetMaxHealth(double _Num);
 
 
 	UFUNCTION(BlueprintCallable)
-	float DecreaseObjectHp(AActor* _Object, float _Damage);
+	double DecreaseObjectHp(AActor* _Object, double _Damage);
 
 	UFUNCTION(BlueprintCallable)
-	void SetMaxStamina(float _Num);
+	void SetMaxStamina(double _Num);
 
 	UFUNCTION(BlueprintCallable)
 	void CureStamina();
+
+	UFUNCTION(BlueprintCallable)
+	void SetStamina(double _Num);
 
 
 
 private:
  
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float CurHealth = 0.0f;
+	double CurHealth = 0;
 
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float CurStamina = 0.0f;
+	double CurStamina = 0;
 
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float MaxStatmina;
+	double MaxStatmina;
 
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float MaxHealth = 100.0f;
+	double MaxHealth = 100;
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsActing = false; //뛰거나 점프를 했을때 체크 
 
