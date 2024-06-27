@@ -37,12 +37,13 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 
-	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; } // 총 저장 용 매쉬
-	/** Returns FirstPersonCameraComponent subobject **/
+	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
+	{
+		return StaticItemMesh;
+	}
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh);
+	void ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
 
 	// 총 관련 bool 함수
 	UFUNCTION(BlueprintCallable, Category = Weapon)
@@ -85,12 +86,13 @@ protected:
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
-	bool bHasRifle;
+	bool bHasRifle=false;
 
 
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;
 	UPROPERTY()
 	UC_InputActionDatas* InputData=nullptr;
+
 private:
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
@@ -112,16 +114,15 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UChildActorComponent* FPSCamera = nullptr;
-	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* Mesh1P;
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<UStaticMeshComponent*> StaticItemMesh;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<USkeletalMeshComponent*> SkeletalItemMesh;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TArray<UStaticMeshComponent*> ItemMeshs;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;

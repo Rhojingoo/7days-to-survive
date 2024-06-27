@@ -24,7 +24,7 @@ void UC_GunComponent::AttachWeapon(AC_NickMainPlayer* TargetCharacter)
 
 	// Attach the weapon to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-	AttachToComponent(Character->GetMesh1P(), AttachmentRules, FName(TEXT("GripPoint")));
+	AttachToComponent(Character->GetStaticItemMesh()[0], AttachmentRules, FName(TEXT("GripPoint")));
 
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
