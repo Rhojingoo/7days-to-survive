@@ -15,6 +15,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_InventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+
 public:	
 	UC_InventoryComponent();
 
