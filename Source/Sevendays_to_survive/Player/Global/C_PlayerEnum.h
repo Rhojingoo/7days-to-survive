@@ -35,9 +35,11 @@ enum class EWeaponUseState : uint8
 UENUM(BlueprintType)
 enum class EPlayerItemSlot : uint8
 {
-	None,
-	LWeapon,
-	RWeapon,
+	LRifle,
+	LPistol,
+	LShotgun,
+	RSword,
+	RAxe,
 	SlotMax
 };
 /**

@@ -91,13 +91,13 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 	UEnum* Enum = StaticEnum<EPlayerItemSlot>();
 
-	for (size_t i = 1; i < static_cast<size_t>(EPlayerItemSlot::SlotMax); i++)
+	for (size_t i = 0; i < static_cast<size_t>(EPlayerItemSlot::SlotMax); i++)
 	{
 		FString Name = Enum->GetNameStringByValue(i);
 		UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
 		NewSlotMesh->SetupAttachment(GetMesh(), *Name);
 
-		ItemMeshs.Push(NewSlotMesh);
+		ItemMesh.Push(NewSlotMesh);
 	}
 
 	{
@@ -314,13 +314,13 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 void AC_GlobalPlayer::ChangeSlotMesh(EPlayerItemSlot _Slot, UStaticMesh* _Mesh)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
-	if (ItemMeshs.Num() <= SlotIndex)
+	if (ItemMesh.Num() <= SlotIndex)
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
 		return;
 	}
 
-	ItemMeshs[SlotIndex]->SetStaticMesh(_Mesh);
+	ItemMesh[SlotIndex]->SetStaticMesh(_Mesh);
 }
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
