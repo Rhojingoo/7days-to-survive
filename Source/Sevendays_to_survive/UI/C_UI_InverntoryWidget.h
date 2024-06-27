@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Inventory/C_InventoryComponent.h"
-#include "CommonLazyWidget.h"
+//#include "CommonLazyWidget.h"
 #include "C_UI_InverntoryWidget.generated.h"
 
 /**
@@ -16,8 +16,8 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InverntoryWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	UFUNCTION(BlueprintCallable)
-	void SettingData();
+	//UFUNCTION(BlueprintCallable)
+	//void SettingData();
 	
 public:
 
