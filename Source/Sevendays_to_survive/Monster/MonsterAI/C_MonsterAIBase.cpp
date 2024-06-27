@@ -133,6 +133,7 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 		BBC->SetValueAsObject(EnemyKeyId, Actor);
 		IsFind = true;
 		APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);
+		break;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 }
