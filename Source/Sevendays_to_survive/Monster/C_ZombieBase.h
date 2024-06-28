@@ -42,7 +42,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Idle();
-	void Move();
+	void Move(FVector _Location);
 
 
 

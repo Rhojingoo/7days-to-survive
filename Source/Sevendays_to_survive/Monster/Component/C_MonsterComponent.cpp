@@ -39,12 +39,14 @@ void UC_MonsterComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-void UC_MonsterComponent::Move()
+void UC_MonsterComponent::Move(FVector _Location)
 {
+	MonsterPawn->Move(_Location);
 }
 
 void UC_MonsterComponent::Idle()
 {
+	MonsterPawn->Idle();
 }
 
 void UC_MonsterComponent::Init()

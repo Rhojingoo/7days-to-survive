@@ -38,7 +38,7 @@ public:
 	/*void Attack();
 	void Dead();
 	void Run();*/
-	void Move();
+	void Move(FVector _Location);
 	void Idle();
 
 private:
@@ -49,6 +49,6 @@ private:
 	const FTableRowBase* MonsterData = nullptr; 
 
 	UPROPERTY()
-	const AC_ZombieBase* MonsterPawn = nullptr;
+	AC_ZombieBase* MonsterPawn = nullptr;
 		
 };

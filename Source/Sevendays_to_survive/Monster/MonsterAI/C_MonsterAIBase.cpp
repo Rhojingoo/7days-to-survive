@@ -146,3 +146,8 @@ void AC_MonsterAIBase::OffSightUpdated(AActor* _ForgotActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OffSight"));
 }
+
+UC_MonsterComponent* AC_MonsterAIBase::GetMCP()
+{
+	return MCP;
+}

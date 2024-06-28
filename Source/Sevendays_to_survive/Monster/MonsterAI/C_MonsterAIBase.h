@@ -41,6 +41,8 @@ public:
 		return Monster;
 	}
 
+	class UC_MonsterComponent* GetMCP();
+
 	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
 private:
@@ -64,7 +66,7 @@ private:
 	class UAIPerceptionComponent* APC;
 
 	UPROPERTY()
-	class UC_MonsterComponent* MCP;
+	UC_MonsterComponent* MCP;
 
 	UPROPERTY()
 	bool IsFind = false;

@@ -28,7 +28,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::PatrolMove(AC_MonsterAIBase* _MonsterC
 	UBlackboardComponent* Blackboard = _MonsterController->GetBlackboardComponent();
 	Blackboard->SetValueAsVector(*RandomVector, GetRandomVectorInRadius(Origin, Radius));
 	UE_LOG(LogTemp, Log, TEXT("Random Vector in Radius: %s"), *RandomVector);
-
+	//_MonsterController->GetMCP()->Move(RandomVector);
 	EPathFollowingRequestResult::Type MoveResult = _MonsterController->MoveToLocation(Blackboard->GetValueAsVector(*RandomVector));
 	if (MoveResult == EPathFollowingRequestResult::Failed)
 	{
