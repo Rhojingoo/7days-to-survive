@@ -287,6 +287,7 @@ void AC_GlobalPlayer::Calstamina()
 	}
 	else if (true==IsRunCpp) // 점프 체크 값 추가로 넣어야함
 	{
+		
 		if (true == GetCharacterMovement()->bWantsToCrouch)
 		{
 			return;
@@ -318,13 +319,23 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
 
+
+	if (GetCharacterMovement()->Velocity.Length()<=0)
+	{
+		return;
+	}
+
 	if (stamina == 0)
 	{
 		return;
 	}
 	
 
+
 	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.RunSpeed;
+
+	
+
 	IsRunCpp = true;
 }
 
