@@ -52,6 +52,10 @@ public:
 	bool GetHasRifle();
 	//------------------------------------------------
 
+	EWeaponUseState GetPlayerCurState()
+	{
+		return PlayerCurState;
+	}
 	
 
 protected:

@@ -20,6 +20,10 @@ public:
 	UFUNCTION(BlueprintCallable, Reliable, NetMulticast)
 	void AttStart(); //
 	void AttStart_Implementation();
+
+	UFUNCTION(BlueprintCallable, Reliable, NetMulticast)
+	void AttStart2(); //
+	void AttStart2_Implementation();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -35,6 +39,9 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* AttAni;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* AttAni2;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAttCPP = false;
