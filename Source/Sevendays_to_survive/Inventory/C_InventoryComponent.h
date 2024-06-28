@@ -9,34 +9,52 @@
 #include "Map/C_Items.h"
 #include "C_InventoryComponent.generated.h"
 
-// NOTICE: 임시로 비효율적으로 구현
-UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SEVENDAYS_TO_SURVIVE_API UC_InventoryComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 
-public:	
-	UC_InventoryComponent();
+public:
+    UC_InventoryComponent();
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+public:
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
-	void AddItem(const UC_Item* _Item, int _Count);
+    UFUNCTION(BlueprintCallable)
+    void AddItem(const UC_Item* _Item, int _Count);
 
-	UFUNCTION(BlueprintCallable)
-	int Num() const;
+    // void DropItemAll(const UC_Item* _Item);
+    // void DropItem(const UC_Item* _Item, int _Count);
+    // void UseItem(const UC_Item* _Item);
 
-	UFUNCTION(BlueprintCallable)
-	const FC_ItemAndCount& GetItemAndCount(int _X, int _Y) const;
+    UFUNCTION(BlueprintPure)
+    bool HasItem(const UC_Item* _Item) const;
+
+    UFUNCTION(BlueprintPure)
+    bool IsFull() const;
+
+    UFUNCTION(BlueprintCallable)
+    const FC_ItemAndCount& GetItemAndCount(int _X, int _Y) const;
+
+    UFUNCTION(BlueprintCallable)
+    bool IsEmptySlot(int _X, int _Y) const;
+private:
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int R = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int C = 10;
 
 private:
-	
+    FIntPoint FindEmptySlot() const;
+    bool IsValidPoint(FIntPoint _Point) const;
 
 private:
-	TArray<TArray<FC_ItemAndCount>> Inventory;
+    int UsingSlotCount = 0;
+    TMap<FName, FIntPoint> ItemIdToPoint;
+    TArray<TArray<FC_ItemAndCount>> Inventory;
 };
