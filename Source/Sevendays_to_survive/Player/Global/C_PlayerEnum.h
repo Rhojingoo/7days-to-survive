@@ -16,7 +16,10 @@ enum class EPlayerState : uint8
 	Jump,
 	Aim,
 	Punch,
-	Crouch
+	Crouch,
+	Number1Weapon,
+	Number2Weapon,
+	NoWeapon
 
 };
 

@@ -42,8 +42,6 @@ public:
 		return StaticItemMesh;
 	}
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
 
 	// 총 관련 bool 함수
 	UFUNCTION(BlueprintCallable, Category = Weapon)
@@ -68,6 +66,22 @@ protected:
 
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
+	UFUNCTION(Reliable, NetMulticast)
+	void ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
+	void ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
+
+	UFUNCTION(BlueprintCallable,Reliable, Server)
+	void ChangeSlotMeshServer(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
+	void ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void ChangeSlotSkeletal(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+
+	UFUNCTION(BlueprintCallable, Reliable, Server)
+	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
 	void RunStart_Implementation(const FInputActionValue& Value);
@@ -87,8 +101,6 @@ protected:
 	void CrouchCpp(const FInputActionValue& Value);
 
 
-	UFUNCTION()
-	void WeaponUseCheck();
 
 
 

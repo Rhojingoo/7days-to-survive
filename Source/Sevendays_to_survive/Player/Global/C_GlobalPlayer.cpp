@@ -199,7 +199,6 @@ void AC_GlobalPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	Calstamina();
-	WeaponUseCheck();
 }
 
 // Called to bind functionality to input
@@ -277,11 +276,7 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::Calstamina()
 {
-	if (true == GetCharacterMovement()->bWantsToCrouch)
-	{
-		return;
-	}
-
+	
 	if (false == IsRunCpp)
 	{
 		if (stamina == Maxstamina)
@@ -292,6 +287,11 @@ void AC_GlobalPlayer::Calstamina()
 	}
 	else if (true==IsRunCpp) // 점프 체크 값 추가로 넣어야함
 	{
+		if (true == GetCharacterMovement()->bWantsToCrouch)
+		{
+			return;
+		}
+
 		if (stamina == 0)
 		{
 			RunEnd_Implementation(0);
@@ -314,33 +314,6 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::WeaponUseCheck()
-{
-	if (StaticItemMesh[0]->GetStaticMesh() == nullptr && StaticItemMesh[1]->GetStaticMesh() == nullptr && SkeletalItemMesh[0]->SkeletalMesh == nullptr && SkeletalItemMesh[1]->SkeletalMesh == nullptr && SkeletalItemMesh[2]->SkeletalMesh == nullptr)
-	{
-		PlayerCurState = EWeaponUseState::NoWeapon;
-	}
-	else if (StaticItemMesh[0]->GetStaticMesh() != nullptr)
-	{
-		PlayerCurState = EWeaponUseState::Sword;
-	}
-	else if (StaticItemMesh[1]->GetStaticMesh() != nullptr)
-	{
-		PlayerCurState = EWeaponUseState::Axe;
-	}
-	else if (SkeletalItemMesh[0]->SkeletalMesh != nullptr)
-	{
-		PlayerCurState = EWeaponUseState::Rifle;
-	}
-	else if (SkeletalItemMesh[1]->SkeletalMesh != nullptr)
-	{
-		PlayerCurState = EWeaponUseState::Pistol;
-	}
-	else if (SkeletalItemMesh[2]->SkeletalMesh != nullptr)
-	{
-		PlayerCurState = EWeaponUseState::Shotgun;
-	}
-}
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
@@ -361,7 +334,7 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 	IsRunCpp = false;
 }
 
-void AC_GlobalPlayer::ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (StaticItemMesh.Num() <= SlotIndex)
@@ -370,8 +343,82 @@ void AC_GlobalPlayer::ChangeSlotMesh(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 		return;
 	}
 
+	UEnum* Enum = StaticEnum<ESkerItemSlot>();
+	// USkeletalMeshComponent 슬롯 전용
+	for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+	{
+		SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+	}
+
+	switch (_Slot)
+	{
+	case EStaticItemSlot::RSword:
+		StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
+
+
+		PlayerCurState = EWeaponUseState::Sword;
+		break;
+	case EStaticItemSlot::RAxe:
+		break;
+	case EStaticItemSlot::SlotMax:
+		break;
+	default:
+		break;
+	}
+
+
 	StaticItemMesh[SlotIndex]->SetStaticMesh(_Mesh);
 }
+
+void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
+{
+	ChangeSlotMesh(_Slot, _Mesh);
+}
+
+void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+{
+	uint8 SlotIndex = static_cast<uint8>(_Slot);
+	if (SkeletalItemMesh.Num() <= SlotIndex)
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
+		return;
+	}
+
+	UEnum* Enum = StaticEnum<ESkerItemSlot>();
+	// USkeletalMeshComponent 슬롯 전용
+	for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+	{
+		StaticItemMesh[i]->SetStaticMesh(nullptr);
+	}
+
+	switch (_Slot)
+	{
+	case ESkerItemSlot::LRifle:
+		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::RPistol)]->SetSkeletalMesh(nullptr);
+		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SetSkeletalMesh(nullptr);
+
+		PlayerCurState = EWeaponUseState::Rifle;
+		break;
+	case ESkerItemSlot::RPistol:
+		break;
+	case ESkerItemSlot::LShotgun:
+		break;
+	case ESkerItemSlot::SlotMax:
+		break;
+	default:
+		break;
+	}
+
+	
+
+	SkeletalItemMesh[SlotIndex]->SetSkeletalMesh(_Mesh);
+}
+
+void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+{
+	ChangeSlotSkeletal(_Slot, _Mesh);
+}
+
 
 void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
 {
