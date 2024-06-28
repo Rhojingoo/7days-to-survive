@@ -18,6 +18,8 @@ class SEVENDAYS_TO_SURVIVE_API AC_MapPlayer : public AC_GlobalPlayer
 public:
 	AC_MapPlayer();
 
+
+
 protected:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
