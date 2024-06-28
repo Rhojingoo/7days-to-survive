@@ -37,6 +37,10 @@ public:
 		return IsFind;
 	}
 
+	class AC_ZombieBase* GetMonster() {
+		return Monster;
+	}
+
 	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
 private:
@@ -60,7 +64,12 @@ private:
 	class UAIPerceptionComponent* APC;
 
 	UPROPERTY()
+	class UC_MonsterComponent* MCP;
+
+	UPROPERTY()
 	bool IsFind = false;
 
+	UPROPERTY()
+	AC_ZombieBase* Monster = nullptr;
 };
 

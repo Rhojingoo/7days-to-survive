@@ -41,11 +41,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(Server, Reliable, WithValidation)
-	void SetState(MonsterEnum _Enum);
+	void Idle();
+	void Move();
+
+
+
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();
+	UFUNCTION(Server, Reliable, WithValidation)
+	void SetState(MonsterEnum _Enum);
 
 	// ServerOnlyFunction의 유효성 검사 함수
 	bool SetState_Validate(MonsterEnum _Enum);
@@ -53,9 +58,14 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	/*UFUNCTION(Server, Reliable, WithValidation)
+	virtual void GetDataFromName();*/
+	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
+
 private:
 	UPROPERTY(Replicated, EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	MonsterEnum MonsterState;
+
 };
 
 

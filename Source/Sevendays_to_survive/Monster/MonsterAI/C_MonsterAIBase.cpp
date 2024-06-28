@@ -12,7 +12,7 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Player/MainPlayer/C_NickMainPlayer.h"
-
+#include "Monster/Component/C_MonsterComponent.h"
 
 AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 	: Super(_ObjectInitializer)
@@ -21,6 +21,7 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 		BBC = CreateDefaultSubobject<UBlackboardComponent>(TEXT("Blackboard Component"));
 		BTC = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTree Component"));
 		APC = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception Component"));
+		MCP = CreateDefaultSubobject<UC_MonsterComponent>(TEXT("Monster Component"));
 	}
 
 	{
@@ -44,7 +45,10 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 	UE_LOG(LogTemp, Warning, TEXT("OnPossess Its Testing Message in USM"));
 
-	AC_ZombieBase* Monster = Cast<AC_ZombieBase>(InPawn);
+	Monster = Cast<AC_ZombieBase>(InPawn);
+
+	MCP->SetController(this);
+	MCP->SetMonster(Monster);
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
 
