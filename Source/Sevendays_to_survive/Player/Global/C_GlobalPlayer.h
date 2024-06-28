@@ -82,6 +82,15 @@ protected:
 	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
 	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
 
+	UFUNCTION(Reliable, NetMulticast)
+	void ChangeNoWeapon();
+	void ChangeNoWeapon_Implementation();
+
+	UFUNCTION(BlueprintCallable, Reliable, Server)
+	void ChangeNoWeaponServer();
+	void ChangeNoWeaponServer_Implementation();
+
+
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
 	void RunStart_Implementation(const FInputActionValue& Value);

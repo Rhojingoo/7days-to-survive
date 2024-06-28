@@ -377,6 +377,7 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 
 void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
 {
+
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (SkeletalItemMesh.Num() <= SlotIndex)
 	{
@@ -417,6 +418,41 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
 {
 	ChangeSlotSkeletal(_Slot, _Mesh);
+}
+
+void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
+{
+	if (PlayerCurState == EWeaponUseState::NoWeapon)
+	{
+		return;
+	}
+	
+
+	{
+		UEnum* Enum = StaticEnum<ESkerItemSlot>();
+		// USkeletalMeshComponent ½½·Ô Àü¿ë
+		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+		{
+			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+		}
+
+	}
+
+	{
+		UEnum* Enum = StaticEnum<ESkerItemSlot>();
+		// USkeletalMeshComponent ½½·Ô Àü¿ë
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMesh[i]->SetStaticMesh(nullptr);
+		}
+	}
+	
+	PlayerCurState = EWeaponUseState::NoWeapon;
+}
+
+void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
+{
+	ChangeNoWeapon();
 }
 
 
