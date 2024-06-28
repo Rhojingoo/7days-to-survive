@@ -275,6 +275,11 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::Calstamina()
 {
+	if (true == GetCharacterMovement()->bWantsToCrouch)
+	{
+		return;
+	}
+
 	if (false == IsRunCpp)
 	{
 		if (stamina == Maxstamina)
