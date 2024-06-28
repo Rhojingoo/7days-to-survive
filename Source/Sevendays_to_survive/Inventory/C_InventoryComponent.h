@@ -27,9 +27,14 @@ public:
     UFUNCTION(BlueprintCallable)
     void AddItem(const UC_Item* _Item, int _Count);
 
-    // void DropItemAll(const UC_Item* _Item);
-    // void DropItem(const UC_Item* _Item, int _Count);
-    // void UseItem(const UC_Item* _Item);
+    UFUNCTION(BlueprintCallable)
+    void DropItemAll(const UC_Item* _Item);
+
+    UFUNCTION(BlueprintCallable)
+    void DropItem(const UC_Item* _Item, int _Count);
+
+    // UFUNCTION(BlueprintCallable)
+    //void UseItem(const UC_Item* _Item);
 
     UFUNCTION(BlueprintPure)
     bool HasItem(const UC_Item* _Item) const;
@@ -52,9 +57,11 @@ private:
 private:
     FIntPoint FindEmptySlot() const;
     bool IsValidPoint(FIntPoint _Point) const;
-
+    void SpawnItem(const UC_Item* _Item, int _Count);
 private:
     int UsingSlotCount = 0;
     TMap<FName, FIntPoint> ItemIdToPoint;
     TArray<TArray<FC_ItemAndCount>> Inventory;
+
+    FC_ItemAndCount NullItem = { nullptr, 0 };
 };
