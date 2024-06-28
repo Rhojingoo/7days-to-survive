@@ -55,3 +55,8 @@ void AC_ZombieBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(AC_ZombieBase, MonsterState);
 }
+
+//void AC_ZombieBase::GetDataFromName()
+//{
+//}
+
