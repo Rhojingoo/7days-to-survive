@@ -134,6 +134,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 }
 
 // Called when the game starts or when spawned
@@ -198,6 +199,7 @@ void AC_GlobalPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	Calstamina();
+	WeaponUseCheck();
 }
 
 // Called to bind functionality to input
@@ -309,6 +311,34 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 	else
 	{
 		Crouch();
+	}
+}
+
+void AC_GlobalPlayer::WeaponUseCheck()
+{
+	if (StaticItemMesh[0]->GetStaticMesh() == nullptr && StaticItemMesh[1]->GetStaticMesh() == nullptr && SkeletalItemMesh[0]->SkeletalMesh == nullptr && SkeletalItemMesh[1]->SkeletalMesh == nullptr && SkeletalItemMesh[2]->SkeletalMesh == nullptr)
+	{
+		PlayerCurState = EWeaponUseState::NoWeapon;
+	}
+	else if (StaticItemMesh[0]->GetStaticMesh() != nullptr)
+	{
+		PlayerCurState = EWeaponUseState::Sword;
+	}
+	else if (StaticItemMesh[1]->GetStaticMesh() != nullptr)
+	{
+		PlayerCurState = EWeaponUseState::Axe;
+	}
+	else if (SkeletalItemMesh[0]->SkeletalMesh != nullptr)
+	{
+		PlayerCurState = EWeaponUseState::Rifle;
+	}
+	else if (SkeletalItemMesh[1]->SkeletalMesh != nullptr)
+	{
+		PlayerCurState = EWeaponUseState::Pistol;
+	}
+	else if (SkeletalItemMesh[2]->SkeletalMesh != nullptr)
+	{
+		PlayerCurState = EWeaponUseState::Shotgun;
 	}
 }
 

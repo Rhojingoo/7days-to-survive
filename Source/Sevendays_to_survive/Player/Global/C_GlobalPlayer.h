@@ -54,6 +54,18 @@ public:
 	bool GetHasRifle();
 	//------------------------------------------------
 
+	
+
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
+	// Called when the game starts or when spawned
+	void BeginPlay() override;
+	// Called every frame
+	void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
+
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
 	UFUNCTION(Reliable, Server)
@@ -74,15 +86,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CrouchCpp(const FInputActionValue& Value);
 
-protected:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
-	// Called when the game starts or when spawned
-	void BeginPlay() override;
-	// Called every frame
-	void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
+	UFUNCTION()
+	void WeaponUseCheck();
+
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
@@ -143,6 +150,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float Hp = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;
 };
