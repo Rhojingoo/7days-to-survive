@@ -5,6 +5,7 @@
 
 #include "BuildingSystem/C_BuildingComponent.h"
 #include "Inventory/C_InventoryComponent.h"
+
 #include "Map/C_MapInteractionComponent.h"
 
 AC_MapPlayer::AC_MapPlayer()
@@ -52,3 +53,4 @@ void AC_MapPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+

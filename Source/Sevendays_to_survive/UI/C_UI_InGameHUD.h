@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-
 #include "C_UI_InGameHUD.generated.h"
 
 
@@ -20,6 +19,8 @@ public:
 	virtual void DrawHUD() override; //주요 드로 콜
 
 protected:
+
+	
 	UPROPERTY(EditDefaultsOnly)
 	UTexture2D* CrosshairTexture;
 
