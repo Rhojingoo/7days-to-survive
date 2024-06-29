@@ -102,10 +102,17 @@ protected:
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
 
+	UFUNCTION(Reliable, Server)
+	void ResultPitchCal(float _Pitch);
+	void ResultPitchCal_Implementation(float _Pitch);
+
+	UFUNCTION(BlueprintCallable)
+	void LookMove(const FInputActionValue& Value);
+
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
-	UFUNCTION(BlueprintCallable)
-	void Look(const FInputActionValue& Value);
+
+	
 
 	UFUNCTION()
 	void Calstamina();
@@ -156,9 +163,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float CameraRotSpeed = 100.0f;
-
+	
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
 
@@ -174,6 +179,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float Hp = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float CameraRotSpeed = 100.0f;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float PitchCPP = 0.0f;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;

@@ -14,12 +14,13 @@ enum class EPlayerState : uint8
 	Look,
 	Run,
 	Jump,
-	Aim,
+	Zoom,
 	Punch,
 	Crouch,
 	Number1Weapon,
 	Number2Weapon,
-	NoWeapon
+	NoWeapon,
+	CameraMode
 
 };
 

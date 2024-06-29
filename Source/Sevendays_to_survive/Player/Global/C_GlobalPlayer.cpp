@@ -18,6 +18,7 @@
 #include "Components/ChildActorComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Player/Input/C_InputActionDatas.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -135,6 +136,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
+	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 }
 
 // Called when the game starts or when spawned
@@ -223,7 +225,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::LookMove);
 
 		//Crouch
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
@@ -261,17 +263,28 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::Look(const FInputActionValue& Value)
+
+
+void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
+{
+	PitchCPP = UKismetMathLibrary::FClamp(_Pitch, -30.0f, 30.0f);
+}
+
+void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
+	PitchCPP += LookAxisVector.Y;
+	
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(-LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+
+	ResultPitchCal(PitchCPP);
 }
 
 void AC_GlobalPlayer::Calstamina()
