@@ -32,6 +32,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void NativeConstruct() override;
 
+	UFUNCTION(Blueprintcallable)
+	void GetDataInventory(FC_ItemAndCount _Inventory);
+
 private:
 
 
@@ -39,6 +42,7 @@ private:
 
 	UC_InventoryComponent* WidgetInventory;
 
-	const FC_ItemAndCount* widget;
+	AC_MapPlayer* MapPlayer;
 	
+	TArray<TArray<FC_ItemAndCount>> UIInventory;
 };
