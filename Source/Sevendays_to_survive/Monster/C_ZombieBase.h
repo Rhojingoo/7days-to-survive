@@ -41,8 +41,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void Idle();
-	void Move(FVector _Location);
+	virtual void Idle();
+	virtual void Move(FVector _Location);
 
 
 

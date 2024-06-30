@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "Monster/C_ZombieBase.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
+#include "Monster/Component/C_MonsterComponent.h"
 #include "C_BlackBoardBase.generated.h"
 
 
@@ -23,14 +26,17 @@ protected:
 
     UFUNCTION()
     virtual void InitTask(UBehaviorTreeComponent* OwnerComp);
-
+    
     UBlackboardComponent* GetBlackBoard(UBehaviorTreeComponent* OwnerComp);
     AC_ZombieBase* GetSelf(UBehaviorTreeComponent* OwnerComp);
-    class AC_MonsterAIBase* GetController(UBehaviorTreeComponent* OwnerComp);
+    AC_MonsterAIBase* GetController(UBehaviorTreeComponent* OwnerComp);
+    FVector GetSelfLocationNoneZ(UBehaviorTreeComponent* OwnerComp);
+    FVector GetSelfLocation(UBehaviorTreeComponent* OwnerComp);
 
-    const FString TargetActorName = "TargetActor";
-    const FString BoolName = "IsActEnd";
-    const FString WaitTimeName = "WaitTime";
+    const FString TargetActor = "TargetActor";
+    const FString IsActEnd = "IsActEnd";
+    const FString WaitTime = "WaitTime";
     const FString RandomVector = "RandomVector";
-    const FString BoolInit = "IsInit";
+    const FString TargetVector = "TargetVector";
+    const FString IsInit = "IsInit";
 };

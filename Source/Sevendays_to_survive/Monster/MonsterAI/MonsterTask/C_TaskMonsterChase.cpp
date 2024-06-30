@@ -20,7 +20,7 @@ EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	if (Controller->GetIsFind()) {
-		APawn* Pawn = Cast<APawn>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActorName));
+		APawn* Pawn = Cast<APawn>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 		Controller->MoveToLocation(Pawn->GetActorLocation());
 		GetSelf(&OwnerComp)->SetState(MonsterEnum::Move);
 		return EBTNodeResult::Succeeded;

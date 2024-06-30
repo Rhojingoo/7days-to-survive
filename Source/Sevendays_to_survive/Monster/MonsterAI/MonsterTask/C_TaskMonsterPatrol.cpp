@@ -54,7 +54,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 	}
 
 	else {
-		BlackBoard->SetValueAsBool(*BoolName, false);
+		BlackBoard->SetValueAsBool(*IsActEnd, false);
 		GetSelf(&OwnerComp)->SetState(MonsterEnum::Move);
 		return PatrolMove(Controller);
 	}
@@ -67,7 +67,7 @@ void UC_TaskMonsterPatrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
 	if (Controller->GetIsFind() || Controller->GetMoveStatus() != EPathFollowingStatus::Moving) {
-		BlackBoard->SetValueAsBool(*BoolName, true);
+		BlackBoard->SetValueAsBool(*IsActEnd, true);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

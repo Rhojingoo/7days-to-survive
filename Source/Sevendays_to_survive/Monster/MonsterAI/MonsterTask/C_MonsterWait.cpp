@@ -45,12 +45,12 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
-	float Time = BlackBoard->GetValueAsFloat(*WaitTimeName);
+	float Time = BlackBoard->GetValueAsFloat(*WaitTime);
 	if (Waiting > Time) {
-		BlackBoard->SetValueAsFloat(*WaitTimeName, Time + DeltaSeconds);
+		BlackBoard->SetValueAsFloat(*WaitTime, Time + DeltaSeconds);
 	}
 	else {
-		BlackBoard->SetValueAsFloat(*WaitTimeName, 0.f);
+		BlackBoard->SetValueAsFloat(*WaitTime, 0.f);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

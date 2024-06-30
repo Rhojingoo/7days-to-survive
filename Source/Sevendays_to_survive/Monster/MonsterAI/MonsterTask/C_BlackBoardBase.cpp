@@ -3,8 +3,7 @@
 
 #include "Monster/MonsterAI/MonsterTask/C_BlackBoardBase.h"
 #include "Kismet/GameplayStatics.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "Monster/MonsterAI/C_MonsterAIBase.h"
+
 
 UC_BlackBoardBase::UC_BlackBoardBase()
 {
@@ -20,6 +19,7 @@ void UC_BlackBoardBase::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
 }
 
+
 UBlackboardComponent* UC_BlackBoardBase::GetBlackBoard(UBehaviorTreeComponent* OwnerComp)
 {
 	return OwnerComp->GetBlackboardComponent();
@@ -33,4 +33,17 @@ AC_ZombieBase* UC_BlackBoardBase::GetSelf(UBehaviorTreeComponent* OwnerComp)
 AC_MonsterAIBase* UC_BlackBoardBase::GetController(UBehaviorTreeComponent* OwnerComp)
 {
 	return Cast< AC_MonsterAIBase>(OwnerComp->GetOwner());
+}
+
+FVector UC_BlackBoardBase::GetSelfLocationNoneZ(UBehaviorTreeComponent* OwnerComp)
+{
+	FVector Vec = GetSelf(OwnerComp)->GetActorLocation();
+	Vec.Z = 0;
+	return Vec;
+}
+
+FVector UC_BlackBoardBase::GetSelfLocation(UBehaviorTreeComponent* OwnerComp)
+{
+	FVector Vec = GetSelf(OwnerComp)->GetActorLocation();
+	return Vec;
 }

@@ -40,7 +40,6 @@ void AC_ZombieBase::Idle()
 
 void AC_ZombieBase::Move(FVector _Location)
 {
-	_Location.Z = 0;
 	AddMovementInput(_Location);
 }
 

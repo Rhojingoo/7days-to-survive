@@ -82,11 +82,11 @@ ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other
 		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController())) { //controller가 Igenericteamagentinterface를 갖고있어야함
 			FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();		// id받아와서
 			if (GetGenericTeamId() == OtherTeamID) {	 // 같으면 팀
-				UE_LOG(LogTemp, Warning, TEXT("Friend Found"));
+				//UE_LOG(LogTemp, Warning, TEXT("Friend Found"));
 				return ETeamAttitude::Neutral;
 			}		
 			else {										//아니면 적
-				UE_LOG(LogTemp, Warning, TEXT("Enemy Found"));
+				//UE_LOG(LogTemp, Warning, TEXT("Enemy Found"));
 				return ETeamAttitude::Hostile;
 			}
 		}

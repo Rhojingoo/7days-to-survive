@@ -27,17 +27,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	double HP = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	double PatrolTime = 0.0f;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//double PatrolTime = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int PatrolCount = 0;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//int PatrolCount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float PatrolMinRange = 0;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//float PatrolMinRange = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float PatrolMaxRange = 0;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//float PatrolMaxRange = 0;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//TMap<FMonsterDataRow, class UAnimMontage* > AnimMontages;
