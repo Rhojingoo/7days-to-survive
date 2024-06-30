@@ -41,7 +41,7 @@ private:
 	UAnimMontage* AttAni;
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* AttAni2;
+	UAnimMontage* AttAni22;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAttCPP = false;

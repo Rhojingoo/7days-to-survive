@@ -31,7 +31,7 @@ void UC_MainWeaponAttComponent::AttStart2_Implementation()
 	if (false == IsAttCPP)
 	{
 		IsAttCPP = true;
-		PlayerMesh->GetAnimInstance()->Montage_Play(AttAni2);
+		PlayerMesh->GetAnimInstance()->Montage_Play(AttAni22);
 		IsAttCPP = false;
 	}
 }
