@@ -50,5 +50,4 @@ private:
 
 	UPROPERTY()
 	AC_ZombieBase* MonsterPawn = nullptr;
-		
 };

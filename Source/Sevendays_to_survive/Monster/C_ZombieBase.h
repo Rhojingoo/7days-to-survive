@@ -61,8 +61,13 @@ public:
 	/*UFUNCTION(Server, Reliable, WithValidation)
 	virtual void GetDataFromName();*/
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
+	FString GetName();
 
-private:
+protected:
+	FString MonsterName;
+
+	class UC_MonsterAnim* AnimInstance;
+
 	UPROPERTY(Replicated, EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	MonsterEnum MonsterState;
 

@@ -27,6 +27,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	double HP = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<uint8, class UAnimMontage* > AnimMontages;
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//double PatrolTime = 0.0f;
 
@@ -51,15 +53,15 @@ class UMonsterDataObject : public UObject
 public:
 	const FMonsterDataRow* Data;
 
-	TArray<FVector> PatrolPoints;
+	//TArray<FVector> PatrolPoints;
 
-	float IdleTime = 0.0f;
+	//float IdleTime = 0.0f;
 
-	float AttackTime = 0.0f;
+	//float AttackTime = 0.0f;
 
-	FVector OriginPos = FVector::ZeroVector;
+	//FVector OriginPos = FVector::ZeroVector;
 
-	FVector TargetPos;
+	//FVector TargetPos;
 
 	//bool IsPatrol();
 

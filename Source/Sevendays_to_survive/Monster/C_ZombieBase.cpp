@@ -3,6 +3,7 @@
 
 #include "Monster/C_ZombieBase.h"
 #include "Net/UnrealNetwork.h"
+#include "C_MonsterAnim.h"
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
 {
@@ -36,6 +37,7 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AC_ZombieBase::Idle()
 {
+
 }
 
 void AC_ZombieBase::Move(FVector _Location)
@@ -69,3 +71,7 @@ void AC_ZombieBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 //{
 //}
 
+FString AC_ZombieBase::GetName()
+{
+	return MonsterName;
+}
