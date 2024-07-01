@@ -5,7 +5,7 @@
 
 #include "Map/C_ItemRows.h"
 
-void UC_Item::InitItem(FTableRowBase* _ItemRow)
+void UC_Item::InitItem(FName _Id, FTableRowBase* _ItemRow)
 {
     FC_ItemRow* ItemRow = reinterpret_cast<FC_ItemRow*>(_ItemRow);
 
@@ -14,14 +14,15 @@ void UC_Item::InitItem(FTableRowBase* _ItemRow)
         UE_LOG(LogTemp, Fatal, TEXT("_ItemRow should be a FC_ItemRow type."));
     }
 
+    Id = _Id;
     Name = ItemRow->Name;
     Type = ItemRow->Type;
     Icon = ItemRow->Icon;
 }
 
-void UC_Material::Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
+void UC_Material::Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
 {
-    Super::InitItem(_ItemRow);
+    Super::InitItem(_Id, _ItemRow);
 
     FC_MaterialRow* TypeRow = reinterpret_cast<FC_MaterialRow*>(_TypeRow);
 
@@ -33,9 +34,9 @@ void UC_Material::Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
     MaxCount = TypeRow->MaxCount;
 }
 
-void UC_Weapon::Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
+void UC_Weapon::Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
 {
-    Super::InitItem(_ItemRow);
+    Super::InitItem(_Id, _ItemRow);
 
     FC_WeaponRow* TypeRow = reinterpret_cast<FC_WeaponRow*>(_TypeRow);
 

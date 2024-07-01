@@ -26,7 +26,7 @@ public:
 	int GetItemSourceMaxHp(FName _Id);
 
 	UFUNCTION(BlueprintCallable)
-	const UC_Item* FindItem(FName _Name);
+	const UC_Item* FindItem(FName _Id);
 
 public:
 	UFUNCTION(BlueprintCallable)
