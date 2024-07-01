@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
 #include "Map/C_Items.h"
+#include "UI/Inventory/C_UI_InverntoryWidget.h"
 
 UC_InventoryComponent::UC_InventoryComponent()
 {
@@ -53,6 +54,9 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     ItemIdToPoint.Emplace(_Item->Id, Point);
     Inventory[Point.X][Point.Y].Item = _Item;
     Inventory[Point.X][Point.Y].Count = _Count;
+
+    int Index = Point.X * C + Point.Y;
+    InventoryWidget->SetIcon(Index, _Item->Icon);
     ++UsingSlotCount;
 }
 
