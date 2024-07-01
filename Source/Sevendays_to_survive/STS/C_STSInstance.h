@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "UI/C_UITableRow.h"
+#include "Monster/MonsterData/MonsterDataRow.h"
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
@@ -21,6 +22,8 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSInstance : public UGameInstance
 public:
 	UFUNCTION(BlueprintCallable)
 	class UC_MapDataAsset* GetMapDataAsset();
+
+	FMonsterDataRow* GetMonsterData(FName _Name);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FC_UITableRow> GetPlayerInfoData();

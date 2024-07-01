@@ -4,6 +4,9 @@
 #include "Monster/C_ZombieBase.h"
 #include "Net/UnrealNetwork.h"
 #include "C_MonsterAnim.h"
+#include "MonsterData/MonsterDataRow.h"
+#include "STS/C_STSInstance.h"
+
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
 {
@@ -16,7 +19,20 @@ AC_ZombieBase::AC_ZombieBase()
 void AC_ZombieBase::BeginPlay()
 {
 	Super::BeginPlay();
+	USkeletalMeshComponent* Sk = GetMesh();
+	UAnimInstance* Anim = Sk->GetAnimInstance();
+	AnimInstance = Cast<UC_MonsterAnim>(Anim);
 	MonsterState = MonsterEnum::Idle;
+
+	UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+	FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterName);
+
+	{
+		for (TPair<uint8, class UAnimMontage*> Montage : Row->AnimMontages)
+		{
+			AnimInstance->PushAnimation(Montage.Key, Montage.Value);
+		}
+	}
 }
 
 // Called every frame
@@ -26,6 +42,7 @@ void AC_ZombieBase::Tick(float DeltaTime)
 
 	TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
 	AnimInstance->ChangeAnimation(MonsterState);
+
 
 }
 
@@ -38,12 +55,13 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AC_ZombieBase::Idle()
 {
-
+	SetState_Implementation(MonsterEnum::Idle);
 }
 
 void AC_ZombieBase::Move(FVector _Location)
 {
 	AddMovementInput(_Location);
+	SetState_Implementation(MonsterEnum::Move);
 }
 
 MonsterEnum AC_ZombieBase::GetState()
