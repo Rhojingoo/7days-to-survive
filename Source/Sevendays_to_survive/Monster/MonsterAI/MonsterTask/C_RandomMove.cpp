@@ -33,7 +33,7 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Vec);
 #endif
 
-	if (Vec < 100.f) {
+	if (Vec < 300.f) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }
