@@ -8,6 +8,7 @@
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
+struct FC_WeaponDataTable;
 struct FC_UITableRow;
 /**
  * 
@@ -35,6 +36,8 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WeaponDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
