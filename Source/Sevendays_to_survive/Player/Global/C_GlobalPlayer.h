@@ -133,6 +133,9 @@ protected:
 	UC_InputActionDatas* InputData=nullptr;
 
 private:
+	UFUNCTION()
+	void PlayerMeshOption();
+
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;

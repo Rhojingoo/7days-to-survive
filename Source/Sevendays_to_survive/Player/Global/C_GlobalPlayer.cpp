@@ -26,6 +26,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	PlayerMeshOption();
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	//PlayerDT = STSInstance->GetPlayerDataTable();
@@ -326,6 +327,12 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 	{
 		Crouch();
 	}
+}
+
+void AC_GlobalPlayer::PlayerMeshOption()
+{
+	GetMesh()->SetGenerateOverlapEvents(true);
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 
