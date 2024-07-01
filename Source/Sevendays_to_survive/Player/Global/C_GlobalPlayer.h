@@ -106,9 +106,18 @@ protected:
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
 	void RunStart_Implementation(const FInputActionValue& Value);
+
+	UFUNCTION(Reliable, Server)
+	void AimStart(const FInputActionValue& Value); //
+	void AimStart_Implementation(const FInputActionValue& Value);
+
 	UFUNCTION(Reliable, Server)
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
+
+	UFUNCTION(Reliable, Server)
+	void AimEnd(const FInputActionValue& Value); //
+	void AimEnd_Implementation(const FInputActionValue& Value);
 
 	UFUNCTION(Reliable, Server)
 	void ResultPitchCal(float _Pitch);
@@ -178,6 +187,9 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
 
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsAimCpp = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Maxstamina = 0;
 
@@ -196,6 +208,7 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float PitchCPP = 0.0f;
+
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;
