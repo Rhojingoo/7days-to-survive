@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
-#include "Player/MainPlayer/C_NickMainPlayer.h"
+#include "Player/Global/C_GlobalPlayer.h"
 #include "C_PickUpComponent.generated.h"
 
 /**
  * 
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AC_NickMainPlayer*, PickUpCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AC_GlobalPlayer*, PickUpCharacter);
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 
 class SEVENDAYS_TO_SURVIVE_API UC_PickUpComponent : public USphereComponent

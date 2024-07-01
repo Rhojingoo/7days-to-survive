@@ -2,6 +2,9 @@
 
 
 #include "Weapon/C_PickUpWeapon.h"
+#include "Weapon/C_GunComponent.h"
+#include "Weapon/C_PickUpComponent.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -11,10 +14,10 @@ AC_PickUpWeapon::AC_PickUpWeapon()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
+	Weapon = CreateDefaultSubobject<UC_GunComponent>(TEXT("Weapon"));
 	SetRootComponent(Weapon);
 
-	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
+	Sphere = CreateDefaultSubobject<UC_PickUpComponent>(TEXT("Sphere"));
 	Sphere->SetupAttachment(Weapon);
 	Sphere->InitSphereRadius(64.0f);
 }

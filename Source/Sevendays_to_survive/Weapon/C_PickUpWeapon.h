@@ -6,8 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "C_PickUpWeapon.generated.h"
 
-class UStaticMeshComponent;
-class USphereComponent;
+class UC_GunComponent;
+class UC_PickUpComponent;
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SEVENDAYS_TO_SURVIVE_API AC_PickUpWeapon : public AActor
@@ -26,9 +26,9 @@ protected:
 private:	
 	// Called every frame
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Weapon = nullptr;
+	UC_GunComponent* Weapon = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
-	USphereComponent* Sphere = nullptr;
+	UC_PickUpComponent* Sphere = nullptr;
 
 };
