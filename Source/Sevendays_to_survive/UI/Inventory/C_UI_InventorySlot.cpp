@@ -19,3 +19,8 @@ UTexture2D* UC_UI_InventorySlot::GetIcons(FString _Key)
 	
 
 }
+
+void UC_UI_InventorySlot::SetItemNum(int _Num)
+{
+	Num = _Num;
+}

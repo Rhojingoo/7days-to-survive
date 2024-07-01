@@ -9,6 +9,8 @@
 #include "Map/C_Items.h"
 #include "C_InventoryComponent.generated.h"
 
+class UC_UI_InverntoryWidget;
+
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SEVENDAYS_TO_SURVIVE_API UC_InventoryComponent : public UActorComponent
 {
@@ -53,6 +55,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     int C = 10;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UC_UI_InverntoryWidget* InventoryWidget = nullptr;
 
 private:
     FIntPoint FindEmptySlot() const;

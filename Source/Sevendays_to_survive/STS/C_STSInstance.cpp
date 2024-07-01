@@ -10,6 +10,24 @@ UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
     return MapDataAsset;
 }
 
+FMonsterDataRow* UC_STSInstance::GetMonsterData(FName _Name)
+{
+    if (nullptr == DT_MonsterData)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerDataTable)"), __FUNCTION__, __LINE__);
+    }
+
+    FMonsterDataRow* Data = DT_MonsterData->FindRow<FMonsterDataRow>(_Name, nullptr);
+
+    if (nullptr == Data)
+    {
+        UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+        return nullptr;
+    }
+
+    return Data;
+}
+
 FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
 {
     if (nullptr == PlayerDataTable)

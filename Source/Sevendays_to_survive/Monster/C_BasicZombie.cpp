@@ -3,10 +3,14 @@
 
 #include "Monster/C_BasicZombie.h"
 
+AC_BasicZombie::AC_BasicZombie()
+{
+	SetName("BaseZombie");
+}
+
 void AC_BasicZombie::BeginPlay()
 {
 	Super::BeginPlay();
-	SetName("BaseZombie");
 }
 
 void AC_BasicZombie::Tick(float _DeltaTime)

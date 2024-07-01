@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UTexture2D* GetIcons(FString _Key);
 
+	UFUNCTION(BlueprintCallable)
+	void SetItemNum(int _Num);
+
 
 private:
 	TMap<FString,UTexture2D*> ItemIcons;

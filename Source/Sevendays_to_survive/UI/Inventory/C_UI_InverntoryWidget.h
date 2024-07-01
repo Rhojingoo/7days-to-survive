@@ -27,6 +27,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetIcon(int _Index, UTexture2D* _Icon);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetNumber(int _Index, int _Num);
+
+
 protected:
 	
 	
