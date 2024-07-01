@@ -6,6 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "C_STSGlobalFunctions.generated.h"
 
+class UTimelineComponent;
+class ALight;
 class AC_MapPlayer;
 class UC_BuildingComponent;
 class UC_InventoryComponent;
@@ -32,7 +34,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static AC_MapPlayer* GetMapPlayerCharacter();
 
-
+	UFUNCTION(BlueprintCallable, Category = "Content")
+	static void Day_And_Night_Cycle(ALight* _DirectionLight);
 
 private:
 	

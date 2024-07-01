@@ -9,6 +9,8 @@
 #include "BuildingSystem/C_BuildingComponent.h"
 #include "Inventory/C_InventoryComponent.h"
 #include "Map/C_MapInteractionComponent.h"
+#include "Engine/Light.h"
+#include "Components/TimelineComponent.h"
 
 UC_BuildingComponent* UC_STSGlobalFunctions::GetBuildingComponent()
 {
@@ -29,4 +31,26 @@ AC_MapPlayer* UC_STSGlobalFunctions::GetMapPlayerCharacter()
 {
     UWorld* World = GEngine->GameViewport->GetWorld();
     return Cast<AC_MapPlayer>(UGameplayStatics::GetPlayerPawn(World, 0));
+}
+
+void UC_STSGlobalFunctions::Day_And_Night_Cycle(ALight* _DirectionLight)
+{
+    if (nullptr == _DirectionLight)
+    {
+        int a = 0;
+        return;
+    }
+
+    TObjectPtr<class ULightComponent> LightComponent = _DirectionLight->GetLightComponent();
+
+    if (nullptr == LightComponent)
+    {
+        int a = 0;
+        return;
+    }
+
+
+
+
+    LightComponent;   
 }

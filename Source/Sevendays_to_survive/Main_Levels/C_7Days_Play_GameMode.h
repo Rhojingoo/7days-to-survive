@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
-#include "Engine/Light.h"
-#include "Components/DirectionalLightComponent.h"
 #include "C_7Days_Play_GameMode.generated.h"
 
+class UTimelineComponent;
+class ALight;
 /**
  * 
  */
@@ -17,13 +17,23 @@ class SEVENDAYS_TO_SURVIVE_API AC_7Days_Play_GameMode : public AGameMode
 	GENERATED_BODY()
 	
 public:
+	void BeginPlay() override;
+
+	void Tick(float _DeltaTime) override;
+
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AStaticMeshActor* Moon = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	AActor* DirectionLight;
+	ALight* DirectionLight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool DebugLight;
+	UTimelineComponent* DayNight_Timeline;
+
+	UPROPERTY()
+	UCurveFloat* FloatCurve;
+
 
 };
