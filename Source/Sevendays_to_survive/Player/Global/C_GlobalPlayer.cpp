@@ -139,6 +139,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsRunCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
+	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
 }
 
 // Called when the game starts or when spawned
@@ -231,6 +232,9 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		//Crouch
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
+
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Started, this, &AC_GlobalPlayer::AimStart);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Completed, this, &AC_GlobalPlayer::AimEnd);
 		// Att 
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
@@ -360,10 +364,20 @@ void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 	IsRunCpp = true;
 }
 
+void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
+{
+	IsAimCpp = true;
+}
+
 void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 	IsRunCpp = false;
+}
+
+void AC_GlobalPlayer::AimEnd_Implementation(const FInputActionValue& Value)
+{
+	IsAimCpp = false;
 }
 
 void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
