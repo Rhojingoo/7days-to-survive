@@ -15,6 +15,8 @@ class SEVENDAYS_TO_SURVIVE_API AC_BasicZombie : public AC_ZombieBase
 	GENERATED_BODY()
 	
 public:
+	AC_BasicZombie();
+
 	void BeginPlay() override final;
 	void Tick(float _DeltaTime) override final;
 	void SetName(FString _Name) override final;
