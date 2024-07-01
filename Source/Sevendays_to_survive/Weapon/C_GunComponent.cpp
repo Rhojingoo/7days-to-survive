@@ -4,15 +4,16 @@
 #include "Weapon/C_GunComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Player/MainPlayer/C_NickMainPlayer.h"
+#include "Player/Global/C_GlobalPlayer.h"
+#include "Player/Global/C_PlayerEnum.h"
 
 UC_GunComponent::UC_GunComponent()
 {
 	// Default offset from the character location for projectiles to spawn
-	MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
+	//MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
 }
 
-void UC_GunComponent::AttachWeapon(AC_NickMainPlayer* TargetCharacter)
+void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 {
 	Character = TargetCharacter;
 
@@ -21,13 +22,19 @@ void UC_GunComponent::AttachWeapon(AC_NickMainPlayer* TargetCharacter)
 	{
 		return;
 	}
-
+	Character->SetPlayerCurState(EWeaponUseState::Rifle);
 	// Attach the weapon to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-	AttachToComponent(Character->GetStaticItemMesh()[0], AttachmentRules, FName(TEXT("GripPoint")));
 
-	// switch bHasRifle so the animation blueprint can switch to another animation set
-	Character->SetHasRifle(true);
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SkeletalMesh == nullptr)
+	{
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)], AttachmentRules, FName(TEXT("LRifle")));
+
+		// switch bHasRifle so the animation blueprint can switch to another animation set
+		Character->SetHasRifle(true);
+	}
+
+	
 
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
