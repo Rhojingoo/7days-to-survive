@@ -32,8 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static AC_MapPlayer* GetMapPlayerCharacter();
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static AC_MapPlayer* GetMapPlayerCharacter();
+
 
 private:
 	
