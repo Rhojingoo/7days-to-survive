@@ -69,19 +69,19 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetItemSourceDropItems(FName _Id)
     return DropItems;
 }
 
-const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
+const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
 {
-    if (true == Items.Contains(_Name))
+    if (true == Items.Contains(_Id))
     {
-        return Items[_Name];
+        return Items[_Id];
     }
 
     FString ContextString;
-    FC_ItemRow* ItemRow = ItemTable->FindRow<FC_ItemRow>(_Name, ContextString);
+    FC_ItemRow* ItemRow = ItemTable->FindRow<FC_ItemRow>(_Id, ContextString);
 
     if (nullptr == ItemRow)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("%s is undefined item."), *_Name.ToString());
+        UE_LOG(LogTemp, Fatal, TEXT("%s is undefined item."), *_Id.ToString());
         return nullptr;
     }
 
@@ -96,16 +96,16 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
         break;
     case EItemType::Material:
     {
-        FC_MaterialRow* TypeRow = MaterialTable->FindRow<FC_MaterialRow>(_Name, ContextString);
+        FC_MaterialRow* TypeRow = MaterialTable->FindRow<FC_MaterialRow>(_Id, ContextString);
         FoundItem = NewObject<UC_Material>();
-        FoundItem->Init(ItemRow, TypeRow);
+        FoundItem->Init(_Id, ItemRow, TypeRow);
         break;
     }
     case EItemType::Weapon:
     {
-        FC_WeaponRow* TypeRow = WeaponTable->FindRow<FC_WeaponRow>(_Name, ContextString);
+        FC_WeaponRow* TypeRow = WeaponTable->FindRow<FC_WeaponRow>(_Id, ContextString);
         FoundItem = NewObject<UC_Weapon>();
-        FoundItem->Init(ItemRow, TypeRow);
+        FoundItem->Init(_Id, ItemRow, TypeRow);
         break;
     }
         break;
@@ -115,7 +115,7 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Name)
         break;
     }
 
-    Items.Emplace(_Name, FoundItem);
+    Items.Emplace(_Id, FoundItem);
 
     return FoundItem;
 }
