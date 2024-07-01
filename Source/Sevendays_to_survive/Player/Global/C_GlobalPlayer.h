@@ -42,6 +42,10 @@ public:
 		return StaticItemMesh;
 	}
 
+	TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
+	{
+		return SkeletalItemMesh;
+	}
 
 	// 총 관련 bool 함수
 	UFUNCTION(BlueprintCallable, Category = Weapon)
@@ -57,6 +61,10 @@ public:
 		return PlayerCurState;
 	}
 	
+	void SetPlayerCurState(EWeaponUseState _PlayerCurState)
+	{
+		PlayerCurState = _PlayerCurState;
+	}
 
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!

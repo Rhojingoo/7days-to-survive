@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/SkeletalMeshComponent.h"
+//#include "Components/StaticMeshComponent.h"
 #include "C_GunComponent.generated.h"
 
-class AC_NickMainPlayer;
+class AC_GlobalPlayer;
 /**
  * 
  */
@@ -45,7 +46,7 @@ public:
 
 	/** Attaches the actor to a FirstPersonCharacter */
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachWeapon(AC_NickMainPlayer* TargetCharacter);
+	void AttachWeapon(AC_GlobalPlayer* TargetCharacter);
 
 	/** Make the weapon Fire a Projectile */
 	//UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -58,5 +59,5 @@ protected:
 
 private:
 	/** The Character holding this weapon*/
-	AC_NickMainPlayer* Character;
+	AC_GlobalPlayer* Character = nullptr;
 };

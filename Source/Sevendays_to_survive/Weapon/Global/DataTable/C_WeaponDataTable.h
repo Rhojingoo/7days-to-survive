@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/DataTable.h"
+#include "Player/Global/C_PlayerEnum.h"
+#include "Weapon/C_PickUpWeapon.h"
 #include "C_WeaponDataTable.generated.h"
 
 /**
@@ -12,37 +14,23 @@
  */
 
 USTRUCT(BlueprintType)
-struct FC_StaticMeshValue : public FTableRowBase
-{
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	UStaticMesh* StaticMesh;
-};
-
-
-USTRUCT(BlueprintType)
-struct FC_SkeletalMeshValue : public FTableRowBase
-{
-	GENERATED_BODY()
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	USkeletalMesh* SkeletalMesh;
-
-
-};
-
-USTRUCT(BlueprintType)
 struct FC_WeaponDataTable : public FTableRowBase
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	FC_StaticMeshValue WeaponStaticMeshValue;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	FC_SkeletalMeshValue WeaponSkeletalMeshValue;
+	FName WeaponName = "";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	EWeaponUseState WeaponType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float Damage = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int MagagineSize = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	AC_PickUpWeapon* PickUp;
 };
