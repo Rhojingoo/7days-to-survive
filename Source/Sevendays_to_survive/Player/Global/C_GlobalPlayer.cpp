@@ -97,6 +97,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 				FString Name = Enum->GetNameStringByValue(i);
 				UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
 				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
+				NewSlotMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
 				StaticItemMesh.Push(NewSlotMesh);
 			}
@@ -110,7 +111,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 				FString Name = Enum->GetNameStringByValue(i);
 				USkeletalMeshComponent* NewSlotMesh = CreateDefaultSubobject<USkeletalMeshComponent>(*Name);
 				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
-
+				NewSlotMesh->SetCollisionProfileName(TEXT("NoCollision"));
 				SkeletalItemMesh.Push(NewSlotMesh);
 			}
 		}
