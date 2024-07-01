@@ -109,7 +109,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	FHitResult* OutHit = nullptr;
 	for (FHitResult& Hit : OutHits)
 	{
-		if (true == Hit.GetActor()->ActorHasTag(TEXT("Ground")))
+		if (true == Hit.GetActor()->IsA<ALandscapeProxy>())
 		{
 			IsLandHit = true;
 			OutHit = &Hit;
