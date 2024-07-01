@@ -24,6 +24,8 @@ public:
 
 	
 public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetIcon(int _Index, UTexture2D* _Icon);
 
 protected:
 	
@@ -35,8 +37,9 @@ protected:
 	UFUNCTION(Blueprintcallable)
 	void GetDataInventory(FC_ItemAndCount _Inventory);
 
+	
 private:
-
+	
 
 	APlayerController* WidgetPlayerCOntorller;
 

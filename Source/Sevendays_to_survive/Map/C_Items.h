@@ -10,68 +10,68 @@
 UENUM(BlueprintType)
 enum class EItemType : uint8
 {
-	NONE,
-	Material,
-	Weapon,
-	MAX,
+    NONE,
+    Material,
+    Weapon,
+    MAX,
 };
 
 USTRUCT(BlueprintType)
 struct SEVENDAYS_TO_SURVIVE_API FC_ItemAndCount
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	const class UC_Item* Item = nullptr;
-	int Count = 0;
+    const class UC_Item* Item = nullptr;
+    int Count = 0;
 };
 
 UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	virtual void Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) {};
+    virtual void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) {};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FName Id;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    FName Id;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FString Name;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    FString Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	EItemType Type = EItemType::NONE;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    EItemType Type = EItemType::NONE;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* Icon = nullptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UTexture2D* Icon = nullptr;
 
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> ActorClass;*/
+    /*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<AActor> ActorClass;*/
 protected:
-	void InitItem(FTableRowBase* _ItemRow);
+    void InitItem(FName _Id, FTableRowBase* _ItemRow);
 };
 
 UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Material : public UC_Item
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
+    void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int MaxCount = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int MaxCount = 0;
 };
 
 UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Weapon : public UC_Item
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void Init(FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
+    void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Damage = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int Damage = 0;
 };

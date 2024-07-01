@@ -24,7 +24,8 @@ void AC_ZombieBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
+	AnimInstance->ChangeAnimation(MonsterState);
 
 }
 
