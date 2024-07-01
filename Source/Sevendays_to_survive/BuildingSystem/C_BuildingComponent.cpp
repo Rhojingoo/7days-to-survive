@@ -78,6 +78,9 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 
 	// 레이가 소켓에 적중한 경우에 대한 처리
+	// - 가장 멀리 있는 소켓을 기준으로 트랜스폼 결정
+	bool SocketHit = false;
+	float MaxDistance = 0.0f;
 	for (FHitResult& OutHit : OutHits)
 	{
 		AActor* HitActor = OutHit.GetActor();
@@ -86,6 +89,13 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		{
 			continue;
 		}
+
+		if (OutHit.Distance < MaxDistance)
+		{
+			continue;
+		}
+		SocketHit = true;
+		MaxDistance = OutHit.Distance;
 
 		BuildTransform = OutHit.GetComponent()->GetComponentTransform();
 		RefreshPreviewTransform();
@@ -100,10 +110,13 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 			// 충돌이 없는 경우
 			SetCanBuild(true);
 		}
+	}
 
+	if (true == SocketHit)
+	{
 		return;
 	}
-	
+
 	// 레이가 적중한 경우에 대한 처리
 	bool IsLandHit = false;
 	FHitResult* OutHit = nullptr;
