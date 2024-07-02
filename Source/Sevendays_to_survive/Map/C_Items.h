@@ -13,6 +13,7 @@ enum class EItemType : uint8
     NONE,
     Material,
     Weapon,
+    Consumable,
     MAX,
 };
 
@@ -32,7 +33,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_Item : public UObject
     GENERATED_BODY()
 
 public:
-    virtual void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) {};
+    virtual void Init(FName _Id, TArray<FTableRowBase*> _JoinRows);
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     FName Id;
@@ -46,10 +47,18 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     UTexture2D* Icon = nullptr;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    TMap<FName, int> CraftMaterials;
+
     /*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<AActor> ActorClass;*/
-protected:
-    void InitItem(FName _Id, FTableRowBase* _ItemRow);
+    UStaticMesh* Mesh = nullptr;*/
+
+public:
+    UFUNCTION(BlueprintPure)
+    bool IsCraftable() const;
+
+private:
+    int RowIndex = 0;
 };
 
 UCLASS(BlueprintType)
@@ -58,20 +67,42 @@ class SEVENDAYS_TO_SURVIVE_API UC_Material : public UC_Item
     GENERATED_BODY()
 
 public:
-    void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
+    void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     int MaxCount = 0;
+
+private:
+    int RowIndex = 1;
 };
 
 UCLASS(BlueprintType)
 class SEVENDAYS_TO_SURVIVE_API UC_Weapon : public UC_Item
 {
     GENERATED_BODY()
-
 public:
-    void Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow) override;
+    void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     int Damage = 0;
+
+private:
+    int RowIndex = 1;
+};
+
+UCLASS(BlueprintType)
+class SEVENDAYS_TO_SURVIVE_API UC_Consumable : public UC_Item
+{
+    GENERATED_BODY()
+public:
+    void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int Hp = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int Stamina = 0;
+
+private:
+    int RowIndex = 1;
 };

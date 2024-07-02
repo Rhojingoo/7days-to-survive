@@ -76,6 +76,13 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage, AActor* _HitActor)
 	STS_LOG("[%s:%d] damaged by % d", *GetName(), _Index, _Damage);
 	STS_LOG("[%s:%d] HP: %d/%d", *GetName(), _Index, HpMap[_Index], MaxHpMap[_Index]);
 
+	// æ∆¿Ã≈€ »πµÊ
+	AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
+	if (nullptr != ItemGainer)
+	{
+		GainDropItems(ItemGainer);
+	}
+
 	if (HpMap[_Index] <= 0)
 	{
 		bool Result = HISMComponent->RemoveInstance(_Index);
@@ -98,13 +105,6 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage, AActor* _HitActor)
 	{
 		HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
 		HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
-	}
-
-	// æ∆¿Ã≈€ »πµÊ
-	AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
-	if (nullptr != ItemGainer)
-	{
-		GainDropItems(ItemGainer);
 	}
 }
 
