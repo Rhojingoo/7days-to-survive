@@ -3,11 +3,16 @@
 
 #include "Monster/MonsterAI/MonsterTask/C_AttackTask.h"
 
+UC_AttackTask::UC_AttackTask() {
+	NodeName = "AttackTask";
+}
+
+
 EBTNodeResult::Type UC_AttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	GetController(&OwnerComp)->GetMCP()->Attack();
 
-	return EBTNodeResult::Type();
+	return EBTNodeResult::Type::InProgress;
 }

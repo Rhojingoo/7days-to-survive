@@ -14,6 +14,10 @@ class SEVENDAYS_TO_SURVIVE_API UC_AttackTask : public UC_BlackBoardBase
 {
 	GENERATED_BODY()
 	
+	UC_AttackTask();
+
+public:
+
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 };

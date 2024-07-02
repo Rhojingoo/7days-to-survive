@@ -21,5 +21,6 @@ public:
 	void Tick(float _DeltaTime) override final;
 	void SetName(FString _Name) override final;
 	void Idle() override final;
+	void Attack() override final;
 	void Move(FVector _Location) override final;
 };
