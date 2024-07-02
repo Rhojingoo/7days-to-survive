@@ -2,6 +2,7 @@
 
 
 #include "Monster/Notify/C_AttackNotify.h"
+#include "Monster/C_ZombieBase.h"
 
 UC_AttackNotify::UC_AttackNotify()
 {
@@ -10,6 +11,8 @@ UC_AttackNotify::UC_AttackNotify()
 
 void UC_AttackNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
+	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
+	Zombie->CollisionOn();
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 }
 void UC_AttackNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
@@ -18,5 +21,7 @@ void UC_AttackNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequence
 }
 void UC_AttackNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
+	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
+	Zombie->CollisionOff();
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 }
