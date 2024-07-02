@@ -32,5 +32,8 @@ public:
 	int MagagineSize = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	AC_PickUpWeapon* PickUp;
+	TSubclassOf<AActor> PickUp=nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	TSubclassOf<AActor> Equip = nullptr;
 };

@@ -54,9 +54,9 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	Cameras = CreateDefaultSubobject<UChildActorComponent >(TEXT("FollowCamera"));
+	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	//Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	TPSZoomSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("TPSZoomSpringArm"));
@@ -190,7 +190,8 @@ void AC_GlobalPlayer::BeginPlay()
 	}
 	
 	//Add Input Mapping Context
-	if (AC_MainPlayerController* PlayerController = Cast<AC_MainPlayerController>(Controller))
+	PlayerController = Cast<AC_MainPlayerController>(Controller);
+	if (PlayerController)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -279,7 +280,7 @@ void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
+	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
 	PitchCPP += LookAxisVector.Y;
 	

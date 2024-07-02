@@ -19,7 +19,8 @@ void UC_MapInteractionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<AC_MapPlayer>(GetOwner());
-	Camera = Owner->GetComponentByClass<UCameraComponent>();
+	Camera = Owner->GetCamera();
+		//Owner->GetComponentByClass<UCameraComponent>();
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
