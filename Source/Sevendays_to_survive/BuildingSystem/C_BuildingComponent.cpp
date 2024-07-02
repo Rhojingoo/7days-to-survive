@@ -36,8 +36,7 @@ void UC_BuildingComponent::BeginPlay()
 	SetPreviewMesh(nullptr);
 
 	AC_NickMainPlayer* PC = GetOwner<AC_NickMainPlayer>();
-	CameraComponent = PC->GetCamera();
-//>GetComponentByClass<UCameraComponent>();
+	CameraComponent = PC->GetComponentByClass<UCameraComponent>();
 
 	int a = 0;
 }
