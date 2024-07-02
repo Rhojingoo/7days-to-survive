@@ -37,7 +37,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras->GetChildActor()->GetComponentByClass<UCameraComponent>(); }
+	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras; }
 
 	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
@@ -162,19 +162,7 @@ private:
 	USpringArmComponent* SpringArm = nullptr;
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* Cameras = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* TPSZoomSpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* TPSZoomCamera = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* FPSSpringArm = nullptr;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* FPSCamera = nullptr;
+	UCameraComponent* Cameras = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> StaticItemMesh;
