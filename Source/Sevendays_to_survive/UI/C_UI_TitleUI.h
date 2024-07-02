@@ -16,7 +16,14 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_TitleUI : public UUserWidget
 
 public:
 
-	FString IPAddress = "None";
-private:
+	UFUNCTION(BlueprintCallable)
+	void SelectChange(FString _Text);
 
+
+private:
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString IPAddress = TEXT("127.0.0.1");
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString Port = TEXT("30002");
 };
