@@ -28,7 +28,7 @@ void UC_UserWidget_Server::ServerOpen()
 		Inst->TitleToGameInfo.ServerPort = "30002"; //포트 값을 가져와야한다.
 		
 
-		UGameplayStatics::OpenLevel(GetWorld(), TEXT("testPlayLevel")); //임시로 열어둠 
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("testChartestLevel")); //임시로 열어둠 
 	//서버 오픈 끝
 
 
