@@ -14,6 +14,8 @@ enum class MonsterEnum : uint8
 	Idle UMETA(DisplayName = "Idle"),
 	Move UMETA(DisplayName = "Move"),
 	Attack UMETA(DisplayName = "Attack"),
+	RunAttack UMETA(DisplayName = "RunAttack"),
+	Climb UMETA(DisplayName = "Climb"),
 	Dead UMETA(DisplayName = "Dead"),
 	End UMETA(DisplayName = "End")
 };
@@ -44,6 +46,8 @@ public:
 	virtual void Idle();
 	virtual void Move(FVector _Location);
 	virtual void Attack();
+	virtual void RunAttack();
+
 
 	void CollisionOn();
 	void CollisionOff();

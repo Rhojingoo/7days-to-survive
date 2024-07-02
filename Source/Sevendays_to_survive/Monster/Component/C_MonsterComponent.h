@@ -40,9 +40,9 @@ public:
 	void Move(FVector _Location);
 	void Idle();
 	void Attack();
+	void RunAttack();
 
 private:
-	void Init();
 	UPROPERTY()
 	const AAIController* Controller = nullptr;
 

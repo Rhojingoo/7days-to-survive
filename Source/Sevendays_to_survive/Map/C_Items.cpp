@@ -52,3 +52,20 @@ void UC_Weapon::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
 
     Damage = TypeRow->Damage;
 }
+
+
+void UC_Consumable::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
+{
+    Super::Init(_Id, _JoinRows);
+
+    FC_ConsumableRow* TypeRow = reinterpret_cast<FC_ConsumableRow*>(_JoinRows[UC_Consumable::RowIndex]);
+
+    if (nullptr == TypeRow)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("Row should be a FC_ConsumableRow type."));
+    }
+
+    Hp = TypeRow->Hp;
+
+    Stamina = TypeRow->Stamina;
+}

@@ -43,3 +43,15 @@ struct SEVENDAYS_TO_SURVIVE_API FC_WeaponRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Damage = 0;
 };
+
+USTRUCT(BlueprintType)
+struct SEVENDAYS_TO_SURVIVE_API FC_ConsumableRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Hp = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Stamina = 0;
+};
