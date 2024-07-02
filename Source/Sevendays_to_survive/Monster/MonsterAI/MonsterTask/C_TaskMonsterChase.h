@@ -21,7 +21,7 @@ protected:
 
     void InitTask(UBehaviorTreeComponent* OwnerComp) override;
 
-
+    void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
 
 private:
 

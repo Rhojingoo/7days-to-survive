@@ -64,6 +64,11 @@ void AC_ZombieBase::Move(FVector _Location)
 	SetState_Implementation(MonsterEnum::Move);
 }
 
+void AC_ZombieBase::Attack()
+{
+	SetState_Implementation(MonsterEnum::Attack);
+}
+
 MonsterEnum AC_ZombieBase::GetState()
 {
 	return MonsterState;
