@@ -28,6 +28,11 @@ void AC_BasicZombie::Idle()
 	Super::Idle();
 }
 
+void AC_BasicZombie::Attack()
+{
+	Super::Attack();
+}
+
 void AC_BasicZombie::Move(FVector _Location)
 {
 	Super::Move(_Location);
