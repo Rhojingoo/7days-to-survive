@@ -35,11 +35,11 @@ public:
 	// Called every frame
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	/*void Attack();
-	void Dead();
+	/*void Dead();
 	void Run();*/
 	void Move(FVector _Location);
 	void Idle();
+	void Attack();
 
 private:
 	void Init();

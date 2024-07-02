@@ -9,6 +9,7 @@
 UC_TaskMonsterChase::UC_TaskMonsterChase()
 {
 	NodeName = "MonsterChase";
+	bNotifyTick = true;
 }
 
 EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -20,19 +21,45 @@ EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	if (Controller->GetIsFind()) {
-		APawn* Pawn = Cast<APawn>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-		Controller->MoveToLocation(Pawn->GetActorLocation());
-		GetSelf(&OwnerComp)->SetState(MonsterEnum::Move);
-		return EBTNodeResult::Succeeded;
+		return EBTNodeResult::InProgress;
 	}
 
 	else {
 		return EBTNodeResult::Failed;
 	}
-	return EBTNodeResult::Type::Failed;
 }
 
 void UC_TaskMonsterChase::InitTask(UBehaviorTreeComponent* OwnerComp)
 {
 	Super::InitTask(OwnerComp);
 }
+
+void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+
+	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	FVector TargetLocation = Target->GetActorLocation();
+	TargetLocation.Z = 0;
+
+	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
+
+	GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
+
+	float Vec = FVector::Dist(SelfLocation, TargetLocation);
+
+#ifdef WITH_EDITOR
+	UE_LOG(LogTemp, Warning, TEXT("MonsterrChase Task"));
+	UE_LOG(LogTemp, Warning, TEXT("TargetLocation: X = %f  : Y = %f "), TargetLocation.X, TargetLocation.Y);
+	UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
+	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
+#endif
+
+	if (Vec < TargetDistance) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+
+}
+
+

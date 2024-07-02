@@ -39,4 +39,6 @@ protected:
     const FString RandomVector = "RandomVector";
     const FString TargetVector = "TargetVector";
     const FString IsInit = "IsInit";
+
+    const float TargetDistance = 100.f;
 };
