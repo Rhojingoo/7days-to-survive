@@ -54,6 +54,7 @@ void UC_MonsterComponent::Attack()
 	MonsterPawn->Attack();
 }
 
-void UC_MonsterComponent::Init()
+void UC_MonsterComponent::RunAttack()
 {
+	MonsterPawn->RunAttack();
 }

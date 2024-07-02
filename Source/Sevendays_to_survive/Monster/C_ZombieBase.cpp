@@ -11,7 +11,7 @@
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
@@ -47,9 +47,9 @@ void AC_ZombieBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
+
+	//UAnimMontage* PrevMon = AnimInstance->GetCurrentActiveMontage();
 	//AnimInstance->ChangeAnimation(MonsterState);
-
-
 }
 
 // Called to bind functionality to input
@@ -72,8 +72,13 @@ void AC_ZombieBase::Move(FVector _Location)
 
 void AC_ZombieBase::Attack()
 {
-	AnimInstance->ChangeAnimation(MonsterEnum::Attack);
-	//SetState_Implementation(MonsterEnum::Attack);
+	//AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+	SetState_Implementation(MonsterEnum::Attack);
+}
+
+void AC_ZombieBase::RunAttack()
+{
+	SetState_Implementation(MonsterEnum::RunAttack);
 }
 
 void AC_ZombieBase::CollisionOn()
