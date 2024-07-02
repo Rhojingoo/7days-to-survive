@@ -45,14 +45,15 @@ public:
 	virtual void Move(FVector _Location);
 	virtual void Attack();
 
-
+	void CollisionOn();
+	void CollisionOff();
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();
 	UFUNCTION(Server, Reliable, WithValidation)
-	void SetState(MonsterEnum _Enum);
 
 	// ServerOnlyFunction의 유효성 검사 함수
+	void SetState(MonsterEnum _Enum);
 	bool SetState_Validate(MonsterEnum _Enum);
 	void SetState_Implementation(MonsterEnum _Enum);
 
@@ -60,9 +61,12 @@ public:
 
 	/*UFUNCTION(Server, Reliable, WithValidation)
 	virtual void GetDataFromName();*/
-	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
 	FString GetName();
 
+	UFUNCTION(BlueprintCallable)
+	void Collision(AActor* _Actor);
+
+	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
 protected:
 	FString MonsterName;
 
@@ -71,6 +75,9 @@ protected:
 
 	UPROPERTY(Replicated, EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	MonsterEnum MonsterState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
+	class UBoxComponent* AttackComponent;
 
 };
 

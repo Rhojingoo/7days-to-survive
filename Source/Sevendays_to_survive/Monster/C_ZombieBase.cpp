@@ -6,6 +6,7 @@
 #include "C_MonsterAnim.h"
 #include "MonsterData/MonsterDataRow.h"
 #include "STS/C_STSInstance.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -13,6 +14,11 @@ AC_ZombieBase::AC_ZombieBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+
+	AttackComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	AttackComponent->SetupAttachment(GetMesh());
+	AttackComponent->SetCollisionProfileName("NoCollision");
+
 }
 
 // Called when the game starts or when spawned
@@ -40,8 +46,8 @@ void AC_ZombieBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
-	AnimInstance->ChangeAnimation(MonsterState);
+	//TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
+	//AnimInstance->ChangeAnimation(MonsterState);
 
 
 }
@@ -66,7 +72,18 @@ void AC_ZombieBase::Move(FVector _Location)
 
 void AC_ZombieBase::Attack()
 {
-	SetState_Implementation(MonsterEnum::Attack);
+	AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+	//SetState_Implementation(MonsterEnum::Attack);
+}
+
+void AC_ZombieBase::CollisionOn()
+{
+	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
+}
+
+void AC_ZombieBase::CollisionOff()
+{
+	AttackComponent->SetCollisionProfileName("NoCollision");
 }
 
 MonsterEnum AC_ZombieBase::GetState()
@@ -99,3 +116,9 @@ FString AC_ZombieBase::GetName()
 {
 	return MonsterName;
 }
+
+void AC_ZombieBase::Collision(AActor* _Actor)
+{
+	// if _Actor is Player
+}
+
