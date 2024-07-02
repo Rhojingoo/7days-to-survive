@@ -20,7 +20,7 @@ void UC_MapInteractionComponent::BeginPlay()
 
 	Owner = Cast<AC_MapPlayer>(GetOwner());
 	Camera = Owner->GetCamera();
-		//Owner->GetComponentByClass<UCameraComponent>();
+		//GetComponentByClass<UCameraComponent>();
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
