@@ -5,44 +5,49 @@
 
 #include "Map/C_ItemRows.h"
 
-void UC_Item::InitItem(FName _Id, FTableRowBase* _ItemRow)
+void UC_Item::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
 {
-    FC_ItemRow* ItemRow = reinterpret_cast<FC_ItemRow*>(_ItemRow);
+    FC_ItemRow* Row = reinterpret_cast<FC_ItemRow*>(_JoinRows[UC_Item::RowIndex]);
 
-    if (nullptr == ItemRow)
+    if (nullptr == Row)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("_ItemRow should be a FC_ItemRow type."));
+        UE_LOG(LogTemp, Fatal, TEXT("Row should be a FC_ItemRow type."));
     }
 
     Id = _Id;
-    Name = ItemRow->Name;
-    Type = ItemRow->Type;
-    Icon = ItemRow->Icon;
+    Name = Row->Name;
+    Type = Row->Type;
+    Icon = Row->Icon;
 }
 
-void UC_Material::Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
+bool UC_Item::IsCraftable() const
 {
-    Super::InitItem(_Id, _ItemRow);
+    return !CraftMaterials.IsEmpty();
+}
 
-    FC_MaterialRow* TypeRow = reinterpret_cast<FC_MaterialRow*>(_TypeRow);
+void UC_Material::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
+{
+    Super::Init(_Id, _JoinRows);
 
-    if (nullptr == TypeRow)
+    FC_MaterialRow* Row = reinterpret_cast<FC_MaterialRow*>(_JoinRows[UC_Material::RowIndex]);
+
+    if (nullptr == Row)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("_TypeRow should be a FC_MaterialRow type."));
+        UE_LOG(LogTemp, Fatal, TEXT("Row should be a FC_MaterialRow type."));
     }
 
-    MaxCount = TypeRow->MaxCount;
+    MaxCount = Row->MaxCount;
 }
 
-void UC_Weapon::Init(FName _Id, FTableRowBase* _ItemRow, FTableRowBase* _TypeRow)
+void UC_Weapon::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
 {
-    Super::InitItem(_Id, _ItemRow);
+    Super::Init(_Id, _JoinRows);
 
-    FC_WeaponRow* TypeRow = reinterpret_cast<FC_WeaponRow*>(_TypeRow);
+    FC_WeaponRow* TypeRow = reinterpret_cast<FC_WeaponRow*>(_JoinRows[UC_Weapon::RowIndex]);
 
     if (nullptr == TypeRow)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("_TypeRow should be a FC_WeaponRow type."));
+        UE_LOG(LogTemp, Fatal, TEXT("Row should be a FC_WeaponRow type."));
     }
 
     Damage = TypeRow->Damage;

@@ -21,19 +21,7 @@ public:
 
 	void Tick(float _DeltaTime) override;
 
-
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	AStaticMeshActor* Moon = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	ALight* DirectionLight;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UTimelineComponent* DayNight_Timeline;
-
-	UPROPERTY()
-	UCurveFloat* FloatCurve;
-
+	bool IsServer = false;
 
 };

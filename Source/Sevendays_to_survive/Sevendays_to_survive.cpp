@@ -4,3 +4,5 @@
 #include "Modules/ModuleManager.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Sevendays_to_survive, "Sevendays_to_survive" );
+
+DEFINE_LOG_CATEGORY(SevenDays_Log);

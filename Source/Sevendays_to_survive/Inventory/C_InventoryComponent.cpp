@@ -95,7 +95,7 @@ void UC_InventoryComponent::DropItem(const UC_Item* _Item, int _Count)
 
     if (false == HasItem(_Item))
     {
-        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *_Item->Id.ToString());
+        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *_Item->Name);
         return;
     }
 
@@ -194,5 +194,5 @@ bool UC_InventoryComponent::IsValidPoint(FIntPoint _Point) const
 
 void UC_InventoryComponent::SpawnItem(const UC_Item* _Item, int _Count)
 {
-    STS_LOG("Spawned %d of %s.", _Count, *_Item->Id.ToString());
+    STS_LOG("Spawned %d of %s.", _Count, *_Item->Name);
 }

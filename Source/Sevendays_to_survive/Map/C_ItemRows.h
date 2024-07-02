@@ -21,6 +21,9 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ItemRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Icon = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, int> CraftMaterials;
 };
 
 USTRUCT(BlueprintType)
