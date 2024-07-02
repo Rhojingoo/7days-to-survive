@@ -89,7 +89,13 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
         FoundItem->Init(_Id, { ItemRow, TypeRow });
         break;
     }
+    case EItemType::Consumable:
+    {
+        FC_ConsumableRow* TypeRow = ConsumableTable->FindRow<FC_ConsumableRow>(_Id, ContextString);
+        FoundItem = NewObject<UC_Consumable>();
+        FoundItem->Init(_Id, { ItemRow, TypeRow });
         break;
+    }
     case EItemType::MAX:
         break;
     default:

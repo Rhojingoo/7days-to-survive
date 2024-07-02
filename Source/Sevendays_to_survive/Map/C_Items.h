@@ -89,3 +89,20 @@ public:
 private:
     int RowIndex = 1;
 };
+
+UCLASS(BlueprintType)
+class SEVENDAYS_TO_SURVIVE_API UC_Consumable : public UC_Item
+{
+    GENERATED_BODY()
+public:
+    void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int Hp = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int Stamina = 0;
+
+private:
+    int RowIndex = 1;
+};
