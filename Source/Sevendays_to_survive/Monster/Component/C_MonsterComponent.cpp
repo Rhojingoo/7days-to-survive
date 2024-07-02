@@ -49,6 +49,11 @@ void UC_MonsterComponent::Idle()
 	MonsterPawn->Idle();
 }
 
+void UC_MonsterComponent::Attack()
+{
+	MonsterPawn->Attack();
+}
+
 void UC_MonsterComponent::Init()
 {
 }

@@ -24,18 +24,18 @@ protected:
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction))
     void DamageItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage);
 
 private:
     // Deprecated. 동기화 방식 변경으로 인해 더이상 사용하지 않지만 혹시 모를 상황을 위해 남겨둔 함수.
-    UFUNCTION(Server, Reliable)
+    UFUNCTION(Server, Reliable, meta = (DeprecatedFunction))
     void Server_DamageItemSource(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage);
 
     void Server_DamageItemSource_Implementation(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage);
 
     // Deprecated. 동기화 방식 변경으로 인해 더이상 사용하지 않지만 혹시 모를 상황을 위해 남겨둔 함수.
-    UFUNCTION(NetMulticast, Reliable)
+    UFUNCTION(NetMulticast, Reliable, meta = (DeprecatedFunction))
     void Multicast_DamageItemSource(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage);
 
     void Multicast_DamageItemSource_Implementation(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage);

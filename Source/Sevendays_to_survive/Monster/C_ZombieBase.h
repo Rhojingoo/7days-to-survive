@@ -43,7 +43,7 @@ public:
 
 	virtual void Idle();
 	virtual void Move(FVector _Location);
-
+	virtual void Attack();
 
 
 

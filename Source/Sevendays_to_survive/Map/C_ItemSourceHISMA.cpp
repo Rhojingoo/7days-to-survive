@@ -65,7 +65,7 @@ void AC_ItemSourceHISMA::Tick(float _DeltaSeconds)
 	Super::Tick(_DeltaSeconds);
 }
 
-void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
+void AC_ItemSourceHISMA::Damage(int _Index, int _Damage, AActor* _HitActor)
 {
 	if (true == Id.IsNone())
 	{
@@ -98,6 +98,13 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage)
 	{
 		HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
 		HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
+	}
+
+	// æ∆¿Ã≈€ »πµÊ
+	AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
+	if (nullptr != ItemGainer)
+	{
+		GainDropItems(ItemGainer);
 	}
 }
 
