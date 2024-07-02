@@ -20,6 +20,8 @@ class UC_InventoryComponent;
 class UC_BuildingComponent;
 class UC_MapInteractionComponent;
 class UC_InputActionDatas;
+class AC_EquipWeapon;
+class AC_MainPlayerController;
 struct FInputActionValue; // ÀÔ·Â °ª
 
 UCLASS()
@@ -35,7 +37,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
+	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras->GetChildActor()->GetComponentByClass<UCameraComponent>(); }
 
 	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
@@ -159,8 +161,8 @@ private:
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
 
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera = nullptr;
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* Cameras = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* TPSZoomSpringArm = nullptr;
@@ -209,7 +211,12 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float PitchCPP = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	AC_MainPlayerController* PlayerController = nullptr;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;
+
+	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AC_EquipWeapon* CurWeapon = nullptr;
 };

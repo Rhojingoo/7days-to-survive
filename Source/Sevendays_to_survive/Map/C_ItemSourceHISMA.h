@@ -25,7 +25,8 @@ public:
 
 
 public:
-	virtual void Damage(int _Index, int _Damage);
+	UFUNCTION(BlueprintCallable)
+	virtual void Damage(int _Index, int _Damage, AActor* _HitActor);
 
 	virtual void GainDropItems(AC_MapPlayer* _HitCharacter);
 

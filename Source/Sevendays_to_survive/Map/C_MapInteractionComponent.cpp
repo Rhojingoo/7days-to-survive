@@ -19,7 +19,8 @@ void UC_MapInteractionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<AC_MapPlayer>(GetOwner());
-	Camera = Owner->GetComponentByClass<UCameraComponent>();
+	Camera = Owner->GetCamera();
+		//Owner->GetComponentByClass<UCameraComponent>();
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -29,20 +30,19 @@ void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 void UC_MapInteractionComponent::DamageItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
 {
-	_ItemSource->Damage(_Index, _Damage);
-
 	AC_MapPlayer* HitCharacter = Cast<AC_MapPlayer>(GetOwner());
 	if (nullptr == HitCharacter)
 	{
 		STS_FATAL("[%s] HitCharacter is NULL.", __FUNCTION__);
 	}
 
-	_ItemSource->GainDropItems(HitCharacter);
+	_ItemSource->Damage(_Index, _Damage, HitCharacter);
+	//_ItemSource->GainDropItems(HitCharacter);
 }
 
 void UC_MapInteractionComponent::Server_DamageItemSource_Implementation(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
 {
-	_ItemSource->Damage(_Index, _Damage);
+	_ItemSource->Damage(_Index, _Damage, nullptr);
 	Multicast_DamageItemSource(_CallingController, _ItemSource, _Index, _Damage);
 }
 
@@ -60,7 +60,7 @@ void UC_MapInteractionComponent::Multicast_DamageItemSource_Implementation(APlay
 		return;
 	}
 
-	_ItemSource->Damage(_Index, _Damage);
+	_ItemSource->Damage(_Index, _Damage, nullptr);
 }
 
 bool UC_MapInteractionComponent::IsServer() const
