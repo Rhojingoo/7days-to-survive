@@ -155,6 +155,9 @@ private:
 	UFUNCTION()
 	void PlayerMeshOption();
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<EWeaponUseState, AC_EquipWeapon*> GunWeapon;
+
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
