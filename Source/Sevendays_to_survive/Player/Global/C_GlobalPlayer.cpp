@@ -20,7 +20,7 @@
 #include "Player/Input/C_InputActionDatas.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
-
+#include "Weapon/C_EquipWeapon.h"
 
 
 // Sets default values
@@ -184,6 +184,10 @@ void AC_GlobalPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
+	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
+	//CurWeapon->SetActorHiddenInGame(false);
 }
 
 // Called every frame
