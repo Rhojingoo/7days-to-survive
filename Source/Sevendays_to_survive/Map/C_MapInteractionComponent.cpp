@@ -5,7 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
-#include "Map/C_ItemPouch.h"
+#include "Map/C_MapInteractable.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -90,10 +90,10 @@ void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResu
 {
 	if (true == _IsHit)
 	{
-		AC_ItemPouch* ItemPouch = Cast<AC_ItemPouch>(_HitResult.GetActor());
+		AC_MapInteractable* ItemPouch = Cast<AC_MapInteractable>(_HitResult.GetActor());
 		if (false == IsValid(ItemPouch))
 		{
-			STS_FATAL("[%s] Given item pouch is invalid.", __FUNCTION__);
+			STS_FATAL("[%s] Given actor is not map interactable or invalid.", __FUNCTION__);
 		}
 		ViewingItemPouch = ItemPouch;
 		ViewingItemPouch->ShowInteractionWidget();

@@ -23,10 +23,10 @@ public:
 	virtual void MapInteract() PURE_VIRTUAL(MapInteract, )
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ShowInteractionWidget() PURE_VIRTUAL(ShowInteractionWidget, )
+	virtual void ShowInteractionWidget();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void HideInteractionWidget() PURE_VIRTUAL(HideInteractionWidget, )
+	virtual void HideInteractionWidget();
 
 protected:
 	virtual void BeginPlay() override;

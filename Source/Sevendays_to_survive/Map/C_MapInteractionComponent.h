@@ -7,7 +7,7 @@
 #include "C_MapInteractionComponent.generated.h"
 
 class AC_ItemSourceHISMA;
-class AC_ItemPouch;
+class AC_MapInteractable;
 class AC_MapPlayer;
 class UCameraComponent;
 
@@ -64,5 +64,5 @@ private:
     AC_ItemSourceHISMA* ViewingItemSource = nullptr;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    AC_ItemPouch* ViewingItemPouch = nullptr;
+    AC_MapInteractable* ViewingItemPouch = nullptr;
 };

@@ -11,6 +11,16 @@ AC_MapInteractable::AC_MapInteractable()
     MapInteractionWidgetComponent->SetupAttachment(GetRootComponent());
 }
 
+void AC_MapInteractable::ShowInteractionWidget()
+{
+    MapInteractionWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+}
+
+void AC_MapInteractable::HideInteractionWidget()
+{
+    MapInteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
 void AC_MapInteractable::BeginPlay()
 {
     Super::BeginPlay();

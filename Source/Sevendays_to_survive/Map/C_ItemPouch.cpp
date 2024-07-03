@@ -43,7 +43,7 @@ void AC_ItemPouch::MapInteract()
 
 void AC_ItemPouch::ShowInteractionWidget()
 {
-	MapInteractionWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+	Super::ShowInteractionWidget();
 	
 	FVector Location = GetActorLocation() + FVector::UpVector * 50.0f;
 	MapInteractionWidgetComponent->SetWorldLocation(Location);
@@ -57,13 +57,18 @@ void AC_ItemPouch::ShowInteractionWidget()
 		Count = Pair.Value;
 	}
 
+	if (false == IsValid(Item))
+	{
+		return;
+	}
+
 	FString Text = Item->Name + TEXT(" ¡¿ ") + FString::FromInt(Count);
 	MapInteractionWidget->SetMessage(Text);
 }
 
 void AC_ItemPouch::HideInteractionWidget()
 {
-	MapInteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
+	Super::HideInteractionWidget();
 }
 
 // Called when the game starts or when spawned
