@@ -32,6 +32,6 @@ public:
 	int MagagineSize = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TObjectPtr<AActor> Equip = nullptr;
+	TSubclassOf<AActor> Equip;
 
 };

@@ -19,6 +19,8 @@
 #include "Animation/AnimMontage.h"
 #include "Player/Input/C_InputActionDatas.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Weapon/Global/DataTable/C_WeaponDataTable.h"
+
 
 
 // Sets default values
@@ -132,6 +134,8 @@ void AC_GlobalPlayer::BeginPlay()
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
 	
+	Rifle = STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
+
 	{
 		FString& Port = STSInstance->TitleToGameInfo.ServerPort;
 		//if (STSInstance->TitleToGameInfo.ServerOpenCheck == true)

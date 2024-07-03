@@ -18,7 +18,7 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 	Character = TargetCharacter;
 
 	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr || Character->GetHasRifle())
+	if (Character == nullptr /*|| Character->GetHasRifle()*/)
 	{
 		return;
 	}
