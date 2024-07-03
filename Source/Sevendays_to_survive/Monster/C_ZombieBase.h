@@ -74,7 +74,6 @@ public:
 protected:
 	FString MonsterName;
 
-	UPROPERTY()
 	class UC_MonsterAnim* AnimInstance;
 
 	UPROPERTY(Replicated, EditAnywhere, meta = (AllowPrivateAccess = "true"))

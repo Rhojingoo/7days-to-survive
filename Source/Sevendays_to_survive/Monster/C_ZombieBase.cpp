@@ -46,6 +46,11 @@ void AC_ZombieBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	if (MonsterState == MonsterEnum::Attack || MonsterState == MonsterEnum::RunAttack)
+	{
+		AnimInstance->ChangeAnimation(MonsterState);
+	}
 	//TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
 
 	//UAnimMontage* PrevMon = AnimInstance->GetCurrentActiveMontage();
@@ -72,7 +77,6 @@ void AC_ZombieBase::Move(FVector _Location)
 
 void AC_ZombieBase::Attack()
 {
-	//AnimInstance->ChangeAnimation(MonsterEnum::Attack);
 	SetState_Implementation(MonsterEnum::Attack);
 }
 
