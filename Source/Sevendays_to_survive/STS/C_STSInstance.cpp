@@ -4,6 +4,7 @@
 #include "STS/C_STSInstance.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "UI/C_UITableRow.h"
+#include "Weapon/Global/DataTable/C_WeaponDataTable.h"
 
 UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
 {
@@ -36,6 +37,24 @@ FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
     }
 
     FC_PlayerDataTable* Data = PlayerDataTable->FindRow<FC_PlayerDataTable>(TEXT("Player"), nullptr);
+
+    if (nullptr == Data)
+    {
+        UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+        return nullptr;
+    }
+
+    return Data;
+}
+
+FC_WeaponDataTable* UC_STSInstance::GetWeaPonDataTable(FName _Name)
+{
+    if (nullptr == WeaponDataTable)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerDataTable)"), __FUNCTION__, __LINE__);
+    }
+
+    FC_WeaponDataTable* Data = WeaponDataTable->FindRow<FC_WeaponDataTable>(_Name, nullptr);
 
     if (nullptr == Data)
     {

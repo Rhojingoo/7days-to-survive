@@ -33,6 +33,7 @@ public:
 
 	FC_PlayerDataTable* GetPlayerDataTable();
 
+	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
 	FC_UITableRow TitleToGameInfo;
 

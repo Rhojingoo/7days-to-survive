@@ -32,8 +32,6 @@ public:
 	int MagagineSize = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TSubclassOf<AActor> PickUp=nullptr;
+	TObjectPtr<AActor> Equip = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TSubclassOf<AActor> Equip = nullptr;
 };
