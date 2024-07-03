@@ -48,6 +48,8 @@ public:
 	virtual void Attack();
 	virtual void RunAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void SetRagDoll();
 
 	void CollisionOn();
 	void CollisionOff();

@@ -18,6 +18,15 @@ EBTNodeResult::Type UC_RandomMove::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+
+
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
+	if (true == Controller->GetIsFind()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
+	}
 	FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
 	FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
 	FVector Direction = (RanVec - SelfVec).GetSafeNormal();

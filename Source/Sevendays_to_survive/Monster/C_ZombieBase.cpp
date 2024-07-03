@@ -7,6 +7,11 @@
 #include "MonsterData/MonsterDataRow.h"
 #include "STS/C_STSInstance.h"
 #include "Components/BoxComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
+
+
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -62,6 +67,33 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AC_ZombieBase::SetRagDoll() {
+	UCharacterMovementComponent* Component = GetCharacterMovement();
+	Component->DisableMovement();
+
+	// Enable physics simulation on the skeletal mesh
+	USkeletalMeshComponent* MyMesh = GetMesh();
+	if (MyMesh)
+	{
+		MyMesh->SetSimulatePhysics(true);
+		MyMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		// Optionally disable animation
+		MyMesh->bPauseAnims = true;
+		
+		UCapsuleComponent* Capsule = GetCapsuleComponent();
+		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		MyMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		// Set the root component to follow the ragdoll
+		AC_MonsterAIBase* ActorController = Cast<AC_MonsterAIBase>(GetController());
+		if (ActorController->IsValidLowLevel())
+		{
+			ActorController->UnPossess();
+			ActorController->Destroy();
+		}
+	}
 }
 
 void AC_ZombieBase::Idle()
