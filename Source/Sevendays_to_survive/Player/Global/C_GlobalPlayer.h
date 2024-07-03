@@ -104,6 +104,9 @@ protected:
 	void ChangeNoWeaponServer();
 	void ChangeNoWeaponServer_Implementation();
 
+	//UFUNCTION(Reliable, NetMulticast)
+	//void ChangeWeaponRifle();
+
 
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
