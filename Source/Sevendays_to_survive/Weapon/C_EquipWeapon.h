@@ -12,11 +12,16 @@ UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_EquipWeapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AC_EquipWeapon();
 
+	UFUNCTION()
+	UC_GunComponent* GetWeaponMesh()
+	{
+		return SkeletalMesh;
+	}
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

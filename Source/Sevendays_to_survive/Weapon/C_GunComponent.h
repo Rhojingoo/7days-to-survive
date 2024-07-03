@@ -48,6 +48,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void AttachWeapon(AC_GlobalPlayer* TargetCharacter);
 
+
+
 	/** Make the weapon Fire a Projectile */
 	//UFUNCTION(BlueprintCallable, Category = "Weapon")
 	//void Fire();
