@@ -33,7 +33,7 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UWidgetComponent* InteractionWidgetComponent = nullptr;
+	UWidgetComponent* MapInteractionWidgetComponent = nullptr;
 
-	UC_MapInteractionWidget* InteractionWidget = nullptr;
+	UC_MapInteractionWidget* MapInteractionWidget = nullptr;
 };
