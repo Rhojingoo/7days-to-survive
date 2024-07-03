@@ -116,14 +116,19 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     else if (_Count == ItemAndCount.Count)
     {
         SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
-        --UsingSlotCount;
+
         ItemIdToPoint.Remove(ItemAndCount.Item->Id);
         ItemAndCount = NullItem;
+
+        InventoryWidget->SetIcon(_Index, nullptr);
+        InventoryWidget->SetNumber(_Index, 0);
+        --UsingSlotCount;
         return;
     }
 
     SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
     ItemAndCount.Count -= _Count;
+    InventoryWidget->SetNumber(_Index, ItemAndCount.Count);
 }
 
 bool UC_InventoryComponent::HasItem(const UC_Item* _Item) const

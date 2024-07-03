@@ -7,6 +7,7 @@
 #include "C_MapInteractionComponent.generated.h"
 
 class AC_ItemSourceHISMA;
+class AC_ItemPouch;
 class AC_MapPlayer;
 class UCameraComponent;
 
@@ -56,7 +57,10 @@ private:
     FRotator GetCameraRotation() const;
 
     UFUNCTION(BlueprintCallable)
-    void TraitBoxTraceResult(FHitResult _HitResult, bool _IsHit);
+    void ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit);
+
+    UFUNCTION(BlueprintCallable)
+    void ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit);
 
 private:
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -70,7 +74,11 @@ private:
     FVector HpBarLineTraceBoxSize = {100.0f, 100.0f, 100.0f};
 
     AC_MapPlayer* Owner = nullptr;
-    UCameraComponent* Camera = nullptr;
+    UCameraComponent* CameraComponent = nullptr;
 
-    AC_ItemSourceHISMA* LastHitItemSource = nullptr;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    AC_ItemSourceHISMA* ViewingItemSource = nullptr;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    AC_ItemPouch* ViewingItemPouch = nullptr;
 };

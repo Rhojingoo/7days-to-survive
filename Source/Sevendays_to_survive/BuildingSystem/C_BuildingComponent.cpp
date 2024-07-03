@@ -14,7 +14,7 @@
 #include "Landscape.h"
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
-#include "Player/MainPlayer/C_NickMainPlayer.h"
+#include "Player/Global/C_GlobalPlayer.h"
 
 UC_BuildingComponent::UC_BuildingComponent()
 {
@@ -35,10 +35,8 @@ void UC_BuildingComponent::BeginPlay()
 	PreviewActor->SetOwner(GetOwner());
 	SetPreviewMesh(nullptr);
 
-	AC_NickMainPlayer* PC = GetOwner<AC_NickMainPlayer>();
+	AC_GlobalPlayer* PC = GetOwner<AC_GlobalPlayer>();
 	CameraComponent = PC->GetComponentByClass<UCameraComponent>();
-
-	int a = 0;
 }
 
 void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

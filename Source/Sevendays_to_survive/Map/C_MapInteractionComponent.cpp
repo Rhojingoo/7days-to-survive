@@ -5,6 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
+#include "Map/C_ItemPouch.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -18,8 +19,8 @@ void UC_MapInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Owner = Cast<AC_MapPlayer>(GetOwner());
-	Camera = Owner->GetComponentByClass<UCameraComponent>();
+	Owner = GetOwner<AC_MapPlayer>();
+	CameraComponent = Owner->GetComponentByClass<UCameraComponent>();
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -74,48 +75,64 @@ bool UC_MapInteractionComponent::IsOwnerLocallyControlled() const
 
 FVector UC_MapInteractionComponent::GetHpBarTraceStartPoint() const
 {
-	FVector CameraLocation = Camera->GetComponentLocation();
-	FVector CameraForward = Camera->GetForwardVector();
+	FVector CameraLocation = CameraComponent->GetComponentLocation();
+	FVector CameraForward = CameraComponent->GetForwardVector();
 	return CameraLocation + CameraForward * HpBarTraceStartRange;
 }
 
 FVector UC_MapInteractionComponent::GetHpBarTraceEndPoint() const
 {
-	FVector CameraLocation = Camera->GetComponentLocation();
-	FVector CameraForward = Camera->GetForwardVector();
+	FVector CameraLocation = CameraComponent->GetComponentLocation();
+	FVector CameraForward = CameraComponent->GetForwardVector();
 	return CameraLocation + CameraForward * HpBarTraceEndRange;
 }
 
 FRotator UC_MapInteractionComponent::GetCameraRotation() const
 {
-	return Camera->GetComponentRotation();
+	return CameraComponent->GetComponentRotation();
 }
 
-void UC_MapInteractionComponent::TraitBoxTraceResult(FHitResult _HitResult, bool _IsHit)
+void UC_MapInteractionComponent::ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit)
 {
 	// 아이템 소스를 보지 않게 되는 경우
 	if (false == _IsHit)
 	{
-		if (true == IsValid(LastHitItemSource))
+		if (true == IsValid(ViewingItemSource))
 		{
-			LastHitItemSource->HideHpBar();
+			ViewingItemSource->HideHpBar();
 		}
-		LastHitItemSource = nullptr;
+		ViewingItemSource = nullptr;
 		return;
 	}
 
 	// 같은 아이템 소스를 계속 보는 경우
-	if (LastHitItemSource == _HitResult.GetActor())
+	if (ViewingItemSource == _HitResult.GetActor())
 	{
-		LastHitItemSource->UpdateHpBar(_HitResult.Item);
+		ViewingItemSource->UpdateHpBar(_HitResult.Item);
 		return;
 	}
 
 	// 다른 아이템 소스를 보게 되는 경우
-	if (true == IsValid(LastHitItemSource))
+	if (true == IsValid(ViewingItemSource))
 	{
-		LastHitItemSource->HideHpBar();
+		ViewingItemSource->HideHpBar();
 	}
-	LastHitItemSource = Cast<AC_ItemSourceHISMA>(_HitResult.GetActor());
-	LastHitItemSource->UpdateHpBar(_HitResult.Item);
+	ViewingItemSource = Cast<AC_ItemSourceHISMA>(_HitResult.GetActor());
+	ViewingItemSource->UpdateHpBar(_HitResult.Item);
+}
+
+void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit)
+{
+	if (true == _IsHit)
+	{
+		AC_ItemPouch* ItemPouch = Cast<AC_ItemPouch>(_HitResult.GetActor());
+		if (false == IsValid(ItemPouch))
+		{
+			STS_FATAL("[%s] Given item pouch is invalid.", __FUNCTION__);
+		}
+		ViewingItemPouch = ItemPouch;
+		return;
+	}
+
+	ViewingItemPouch = nullptr;
 }

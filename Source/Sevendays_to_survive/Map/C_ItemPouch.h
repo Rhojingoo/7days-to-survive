@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Map/C_MapInteractableInterface.h"
 #include "C_ItemPouch.generated.h"
 
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_ItemPouch : public AActor
+class SEVENDAYS_TO_SURVIVE_API AC_ItemPouch : public AActor, public IC_MapInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -21,6 +22,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetItems(const TMap<FName, int>& _Items);
 
+	void MapInteract_Implementation() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,6 +31,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	UFUNCTION(Server, Reliable)
+	void Server_Destroy();
+
+	void Server_Destroy_Implementation();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

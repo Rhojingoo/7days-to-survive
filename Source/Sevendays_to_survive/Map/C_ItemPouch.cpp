@@ -3,6 +3,10 @@
 
 #include "Map/C_ItemPouch.h"
 
+#include "STS/C_STSGlobalFunctions.h"
+#include "Inventory/C_InventoryComponent.h"
+#include "Map/C_MapDataAsset.h"
+
 // Sets default values
 AC_ItemPouch::AC_ItemPouch()
 {
@@ -23,6 +27,19 @@ void AC_ItemPouch::SetItems(const TMap<FName, int>& _Items)
 	Items = _Items;
 }
 
+void AC_ItemPouch::MapInteract_Implementation()
+{
+	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
+	
+	for (TPair<FName, int>& Pair : Items)
+	{
+		UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+		Inventory->AddItem(MapDataAsset->FindItem(Pair.Key), Pair.Value);
+	}
+
+	Server_Destroy();
+}
+
 // Called when the game starts or when spawned
 void AC_ItemPouch::BeginPlay()
 {
@@ -35,5 +52,10 @@ void AC_ItemPouch::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AC_ItemPouch::Server_Destroy_Implementation()
+{
+	Destroy();
 }
 

@@ -12,6 +12,7 @@ class AC_MapPlayer;
 class UC_BuildingComponent;
 class UC_InventoryComponent;
 class UC_MapInteractionComponent;
+class UC_MapDataAsset;
 
 /**
  * 
@@ -33,6 +34,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static AC_MapPlayer* GetMapPlayerCharacter();
+
+	UFUNCTION(BlueprintCallable, Category = "Content")
+	static UC_MapDataAsset* GetMapDataAsset();
 
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static void Day_And_Night_Cycle(ALight* _DirectionLight);
