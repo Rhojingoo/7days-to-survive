@@ -158,6 +158,10 @@ private:
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> Rifle;
+
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
 

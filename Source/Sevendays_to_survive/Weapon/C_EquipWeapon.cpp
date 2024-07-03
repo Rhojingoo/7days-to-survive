@@ -2,6 +2,7 @@
 
 
 #include "Weapon/C_EquipWeapon.h"
+#include "Weapon/C_GunComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
@@ -10,7 +11,7 @@ AC_EquipWeapon::AC_EquipWeapon()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
+	SkeletalMesh = CreateDefaultSubobject<UC_GunComponent>(TEXT("SkeletalMesh"));
 	SetRootComponent(SkeletalMesh);
 }
 
