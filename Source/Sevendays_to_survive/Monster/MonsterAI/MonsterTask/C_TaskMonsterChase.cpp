@@ -56,8 +56,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
 
+	if (Vec < 200.f) {
+		GetController(&OwnerComp)->GetMCP()->RunAttack();
+		return;
+	}
+
+
 	if (Vec < TargetDistance) {
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		GetController(&OwnerComp)->GetMCP()->Attack();
+		return;
+		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
 }
