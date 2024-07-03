@@ -27,7 +27,7 @@ void AC_ItemPouch::SetItems(const TMap<FName, int>& _Items)
 	Items = _Items;
 }
 
-void AC_ItemPouch::MapInteract_Implementation()
+void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
 	
@@ -38,6 +38,16 @@ void AC_ItemPouch::MapInteract_Implementation()
 	}
 
 	Server_Destroy();
+}
+
+void AC_ItemPouch::ShowInteractionWidget()
+{
+
+}
+
+void AC_ItemPouch::HideInteractionWidget()
+{
+
 }
 
 // Called when the game starts or when spawned
