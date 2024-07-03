@@ -184,6 +184,12 @@ void AC_GlobalPlayer::BeginPlay()
 		}
 	}
 
+	{
+		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
+		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
+		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
+	}
+
 	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
 	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
 	//CurWeapon->SetActorHiddenInGame(false);
