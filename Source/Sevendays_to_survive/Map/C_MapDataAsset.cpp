@@ -50,6 +50,11 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetItemSourceDropItems(FName _Id)
     return DropItems;
 }
 
+TSubclassOf<AC_ItemPouch> UC_MapDataAsset::GetItemPouchClass() const
+{
+    return ItemPouchClass;
+}
+
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
 {
     if (true == Items.Contains(_Id))

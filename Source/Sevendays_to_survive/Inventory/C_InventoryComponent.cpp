@@ -5,7 +5,10 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
+#include "STS/C_STSInstance.h"
 #include "Map/C_Items.h"
+#include "Map/C_ItemPouch.h"
+#include "Map/C_MapDataAsset.h"
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
 
 UC_InventoryComponent::UC_InventoryComponent()
@@ -18,6 +21,10 @@ UC_InventoryComponent::UC_InventoryComponent()
 void UC_InventoryComponent::BeginPlay()
 {
     Super::BeginPlay();
+
+    UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+    UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
+    ItemPouchClass = MapDataAsset->GetItemPouchClass();
 
     Inventory.SetNum(R);
     for (int i = 0; i < Inventory.Num(); ++i)
@@ -36,7 +43,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 {
     if (true == IsFull())
     {
-        SpawnItem(_Item, _Count);
+        SpawnItem(GetItemSpawnTransform(), _Item, _Count);
         STS_LOG("[DebugOnly] [%s] Inventory is full. Failed to add {Item: %s, Count: %d}.", __FUNCTION__, *_Item->Name, _Count);
         return;
     }
@@ -47,7 +54,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
         FIntPoint Point = ItemIdToPoint[_Item->Id];
         Inventory[Point.X][Point.Y].Count += _Count;
 
-        int Index = Point.X * C + Point.Y;
+        int Index = PointToIndex(Point);
         InventoryWidget->SetNumber(Index, Inventory[Point.X][Point.Y].Count);
         return;
     }
@@ -58,66 +65,64 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     Inventory[Point.X][Point.Y].Item = _Item;
     Inventory[Point.X][Point.Y].Count = _Count;
 
-    int Index = Point.X * C + Point.Y;
+    int Index = PointToIndex(Point);
     InventoryWidget->SetIcon(Index, _Item->Icon);
     InventoryWidget->SetNumber(Index, _Count);
     ++UsingSlotCount;
 }
 
-void UC_InventoryComponent::DropItemAll(const UC_Item* _Item)
+void UC_InventoryComponent::DropItemAll(int _Index)
 {
-    if (nullptr == _Item)
+    FIntPoint Point = IndexToPoint(_Index);
+    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
+
+    if (nullptr == ItemAndCount.Item)
     {
         STS_FATAL("[%s] Given item is NULL.", __FUNCTION__);
         return;
     }
 
-    if (false == HasItem(_Item))
+    if (false == HasItem(ItemAndCount.Item))
     {
-        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *_Item->Name);
+        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *ItemAndCount.Item->Name);
         return;
     }
 
-    FIntPoint Point = ItemIdToPoint[_Item->Id];
-
-    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
-
-    DropItem(_Item, ItemAndCount.Count);
+    DropItem(_Index, ItemAndCount.Count);
 }
 
-void UC_InventoryComponent::DropItem(const UC_Item* _Item, int _Count)
+void UC_InventoryComponent::DropItem(int _Index, int _Count)
 {
-    if (nullptr == _Item)
+    FIntPoint Point = IndexToPoint(_Index);
+    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
+
+    if (nullptr == ItemAndCount.Item)
     {
         STS_FATAL("[%s] Given item is NULL.", __FUNCTION__);
         return;
     }
 
-    if (false == HasItem(_Item))
+    if (false == HasItem(ItemAndCount.Item))
     {
-        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *_Item->Name);
+        STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *ItemAndCount.Item->Name);
         return;
     }
 
-    FIntPoint Point = ItemIdToPoint[_Item->Id];
-    
-    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
-    
     if (_Count > ItemAndCount.Count)
     {
-        STS_FATAL("[%s] There is only %d of %s in the inventory. But you tried to drop %d of %s.", __FUNCTION__, ItemAndCount.Count, *_Item->Name, _Count, *_Item->Name);
+        STS_FATAL("[%s] There is only %d of %s in the inventory. But you tried to drop %d of %s.", __FUNCTION__, ItemAndCount.Count, *ItemAndCount.Item->Name, _Count, *ItemAndCount.Item->Name);
         return;
     }
     else if (_Count == ItemAndCount.Count)
     {
-        SpawnItem(_Item, _Count);
+        SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
         --UsingSlotCount;
-        ItemAndCount = { nullptr, 0 };
-        ItemIdToPoint.Remove(_Item->Id);
+        ItemIdToPoint.Remove(ItemAndCount.Item->Id);
+        ItemAndCount = NullItem;
         return;
     }
 
-    SpawnItem(_Item, _Count);
+    SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
     ItemAndCount.Count -= _Count;
 }
 
@@ -192,7 +197,46 @@ bool UC_InventoryComponent::IsValidPoint(FIntPoint _Point) const
     return false;
 }
 
-void UC_InventoryComponent::SpawnItem(const UC_Item* _Item, int _Count)
+FIntPoint UC_InventoryComponent::IndexToPoint(int _Index) const
+{
+    if (_Index < 0 || _Index >= R * C)
+    {
+        STS_FATAL("[%s] %d is an invalid index.", __FUNCTION__, _Index);
+        return { 0, 0 };
+    }
+
+    return { _Index / C , _Index % C };
+}
+
+int UC_InventoryComponent::PointToIndex(FIntPoint _Point) const
+{
+    if (false == IsValidPoint(_Point))
+    {
+        STS_FATAL("[%s] (%d, %d) is an invalid point.", __FUNCTION__, _Point.X, _Point.Y);
+        return 0;
+    }
+
+    return _Point.X * C + _Point.Y;
+}
+
+FTransform UC_InventoryComponent::GetItemSpawnTransform() const
+{
+    FVector SpawnLocation = GetOwner()->GetActorLocation();
+    SpawnLocation += GetOwner()->GetActorForwardVector() * SpawnDistance;
+
+    FTransform SpawnTransform;
+    SpawnTransform.SetLocation(SpawnLocation);
+
+    return SpawnTransform;
+}
+
+void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, const UC_Item* _Item, int _Count)
 {
     STS_LOG("Spawned %d of %s.", _Count, *_Item->Name);
+
+    TMap<FName, int> Items;
+    Items.Emplace(_Item->Id, _Count);
+
+    AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), _SpawnTransform);
+    ItemPouch->SetItems(Items);
 }

@@ -9,6 +9,7 @@
 struct FC_BuildingPartTableRow;
 struct FC_ItemSourceTableRow;
 class UC_Item;
+class AC_ItemPouch;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
@@ -25,9 +26,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const UC_Item* FindItem(FName _Id);
 
-public:
 	UFUNCTION(BlueprintCallable)
 	TArray<FC_ItemAndCount> GetItemSourceDropItems(FName _Id);
+
+	UFUNCTION(BlueprintCallable)
+	TSubclassOf<AC_ItemPouch> GetItemPouchClass() const;
 
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
@@ -53,4 +56,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TMap<FName, UC_Item*> Items;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;
 };
