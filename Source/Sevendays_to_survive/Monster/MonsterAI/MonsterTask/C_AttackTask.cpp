@@ -15,7 +15,7 @@ EBTNodeResult::Type UC_AttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 	if (Target->IsValidLowLevel()) {
-	return EBTNodeResult::Type::InProgress;
+		return EBTNodeResult::Type::InProgress;
 	}
 
 	else {
@@ -36,20 +36,24 @@ void UC_AttackTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
+	GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
+	//if (Vec < 100.f) {
+	//	GetController(&OwnerComp)->GetMCP()->Attack();
+	//	return;
+	//}
+	//else if (Vec < 200.f) {
+	//	GetController(&OwnerComp)->GetMCP()->RunAttack();
+	//	GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
+	//	return;
+	//}
+	//else {
 	if (Vec < 100.f) {
 		GetController(&OwnerComp)->GetMCP()->Attack();
 		return;
 	}
-	else if (Vec < 200.f) {
-		GetController(&OwnerComp)->GetMCP()->RunAttack();
-		GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
-		return;
-	}
-	else {
-		GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
-		return;
-	}
-
+	//return;
+	//}
+	return;
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return;
 }
