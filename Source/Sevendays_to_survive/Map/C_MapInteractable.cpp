@@ -7,14 +7,15 @@
 
 AC_MapInteractable::AC_MapInteractable()
 {
-    InteractionWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Interaction Widget Component"));
-    InteractionWidgetComponent->SetupAttachment(GetRootComponent());
+    MapInteractionWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Interaction Widget Component"));
+    MapInteractionWidgetComponent->SetupAttachment(GetRootComponent());
 }
 
 void AC_MapInteractable::BeginPlay()
 {
     Super::BeginPlay();
 
-    InteractionWidget = Cast<UC_MapInteractionWidget>(InteractionWidgetComponent->GetWidget());
+    MapInteractionWidget = Cast<UC_MapInteractionWidget>(MapInteractionWidgetComponent->GetWidget());
+    MapInteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
