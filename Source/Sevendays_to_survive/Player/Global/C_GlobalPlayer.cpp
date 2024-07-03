@@ -15,12 +15,11 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/ChildActorComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Player/Input/C_InputActionDatas.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
-
+#include "Weapon/C_EquipWeapon.h"
 
 
 // Sets default values
@@ -184,6 +183,16 @@ void AC_GlobalPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	{
+		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
+		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
+		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
+	}
+
+	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
+	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
+	//CurWeapon->SetActorHiddenInGame(false);
 }
 
 // Called every frame

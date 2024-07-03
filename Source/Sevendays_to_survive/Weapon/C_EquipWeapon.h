@@ -7,16 +7,23 @@
 #include "C_EquipWeapon.generated.h"
 
 class UC_GunComponent;
+class USpringArmComponent;
+class UCameraComponent;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_EquipWeapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AC_EquipWeapon();
 
+	UFUNCTION()
+	UC_GunComponent* GetWeaponMesh()
+	{
+		return SkeletalMesh;
+	}
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,5 +34,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UC_GunComponent* SkeletalMesh = nullptr;
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Cameras = nullptr;
 };
 

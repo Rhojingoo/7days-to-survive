@@ -6,6 +6,7 @@
 #include "STS/C_STSGlobalFunctions.h"
 #include "Inventory/C_InventoryComponent.h"
 #include "Map/C_MapDataAsset.h"
+#include "Map/UI/C_MapInteractionWidget.h"
 
 // Sets default values
 AC_ItemPouch::AC_ItemPouch()
@@ -27,7 +28,7 @@ void AC_ItemPouch::SetItems(const TMap<FName, int>& _Items)
 	Items = _Items;
 }
 
-void AC_ItemPouch::MapInteract_Implementation()
+void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
 	
@@ -38,6 +39,36 @@ void AC_ItemPouch::MapInteract_Implementation()
 	}
 
 	Server_Destroy();
+}
+
+void AC_ItemPouch::ShowInteractionWidget()
+{
+	Super::ShowInteractionWidget();
+	
+	FVector Location = GetActorLocation() + FVector::UpVector * 50.0f;
+	MapInteractionWidgetComponent->SetWorldLocation(Location);
+	
+	const UC_Item* Item = nullptr;
+	int Count = 0;
+	for (auto Pair : Items)
+	{
+		UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+		Item = MapDataAsset->FindItem(Pair.Key);
+		Count = Pair.Value;
+	}
+
+	if (false == IsValid(Item))
+	{
+		return;
+	}
+
+	FString Text = Item->Name + TEXT(" ¡¿ ") + FString::FromInt(Count);
+	MapInteractionWidget->SetMessage(Text);
+}
+
+void AC_ItemPouch::HideInteractionWidget()
+{
+	Super::HideInteractionWidget();
 }
 
 // Called when the game starts or when spawned

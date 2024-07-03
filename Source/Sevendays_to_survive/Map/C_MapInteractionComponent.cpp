@@ -5,7 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
-#include "Map/C_ItemPouch.h"
+#include "Map/C_MapInteractable.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -26,41 +26,6 @@ void UC_MapInteractionComponent::BeginPlay()
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
-void UC_MapInteractionComponent::DamageItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
-{
-	AC_MapPlayer* HitCharacter = Cast<AC_MapPlayer>(GetOwner());
-	if (nullptr == HitCharacter)
-	{
-		STS_FATAL("[%s] HitCharacter is NULL.", __FUNCTION__);
-	}
-
-	_ItemSource->Damage(_Index, _Damage, HitCharacter);
-	//_ItemSource->GainDropItems(HitCharacter);
-}
-
-void UC_MapInteractionComponent::Server_DamageItemSource_Implementation(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
-{
-	_ItemSource->Damage(_Index, _Damage, nullptr);
-	Multicast_DamageItemSource(_CallingController, _ItemSource, _Index, _Damage);
-}
-
-void UC_MapInteractionComponent::Multicast_DamageItemSource_Implementation(APlayerController* _CallingController, AC_ItemSourceHISMA* _ItemSource, int _Index, int _Damage)
-{
-	// 서버는 멀티캐스트에서 제외한다.
-	if (true == IsServer())
-	{
-		return;
-	}
-
-	// 멀티캐스트를 야기한 플레이어는 멀티캐스트에서 제외한다.
-	if (true == IsValid(_CallingController) && true == _CallingController->IsLocalController())
-	{
-		return;
-	}
-
-	_ItemSource->Damage(_Index, _Damage, nullptr);
 }
 
 bool UC_MapInteractionComponent::IsServer() const
@@ -125,13 +90,19 @@ void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResu
 {
 	if (true == _IsHit)
 	{
-		AC_ItemPouch* ItemPouch = Cast<AC_ItemPouch>(_HitResult.GetActor());
+		AC_MapInteractable* ItemPouch = Cast<AC_MapInteractable>(_HitResult.GetActor());
 		if (false == IsValid(ItemPouch))
 		{
-			STS_FATAL("[%s] Given item pouch is invalid.", __FUNCTION__);
+			STS_FATAL("[%s] Given actor is not map interactable or invalid.", __FUNCTION__);
 		}
 		ViewingItemPouch = ItemPouch;
+		ViewingItemPouch->ShowInteractionWidget();
 		return;
+	}
+
+	if (true == IsValid(ViewingItemPouch))
+	{
+		ViewingItemPouch->HideInteractionWidget();
 	}
 
 	ViewingItemPouch = nullptr;

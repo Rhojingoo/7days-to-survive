@@ -104,6 +104,9 @@ protected:
 	void ChangeNoWeaponServer();
 	void ChangeNoWeaponServer_Implementation();
 
+	//UFUNCTION(Reliable, NetMulticast)
+	//void ChangeWeaponRifle();
+
 
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
@@ -154,6 +157,9 @@ protected:
 private:
 	UFUNCTION()
 	void PlayerMeshOption();
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<EWeaponUseState, AC_EquipWeapon*> GunWeapon;
 
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;

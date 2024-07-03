@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Map/C_MapInteractableInterface.h"
+#include "Map/C_MapInteractable.h"
 #include "C_ItemPouch.generated.h"
 
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API AC_ItemPouch : public AActor, public IC_MapInteractableInterface
+class SEVENDAYS_TO_SURVIVE_API AC_ItemPouch : public AC_MapInteractable
 {
 	GENERATED_BODY()
 	
@@ -22,7 +22,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetItems(const TMap<FName, int>& _Items);
 
-	void MapInteract_Implementation() override;
+	void MapInteract() override;
+
+	void ShowInteractionWidget() override;
+
+	void HideInteractionWidget() override;
 
 protected:
 	// Called when the game starts or when spawned
