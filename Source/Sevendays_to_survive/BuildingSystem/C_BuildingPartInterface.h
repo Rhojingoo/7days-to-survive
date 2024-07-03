@@ -14,9 +14,6 @@ class UC_BuildingPartInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class SEVENDAYS_TO_SURVIVE_API IC_BuildingPartInterface
 {
 	GENERATED_BODY()

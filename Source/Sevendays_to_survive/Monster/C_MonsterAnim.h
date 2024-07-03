@@ -15,14 +15,20 @@ class SEVENDAYS_TO_SURVIVE_API UC_MonsterAnim : public UAnimInstance
 	GENERATED_BODY()
 
 public:
+
+	UC_MonsterAnim();
 	template<typename EnumType>
 	void ChangeAnimation(EnumType Key)
 	{
 		ChangeAnimation(static_cast<uint8>(Key));
+		//ChangeAnimation_Implementation(static_cast<uint8>(Key));
 	}
 
-	void ChangeAnimation(uint8 Key);
 
+
+	//UFUNCTION(NetMulticast, Reliable)
+	void ChangeAnimation(uint8 Key);
+	//void ChangeAnimation_Implementation(uint8 Key);
 
 	template<typename EnumType>
 	void PushAnimation(EnumType Key, class UAnimMontage* _Montage)
