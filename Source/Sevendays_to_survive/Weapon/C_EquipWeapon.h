@@ -7,6 +7,8 @@
 #include "C_EquipWeapon.generated.h"
 
 class UC_GunComponent;
+class USpringArmComponent;
+class UCameraComponent;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_EquipWeapon : public AActor
@@ -32,5 +34,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UC_GunComponent* SkeletalMesh = nullptr;
 
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Cameras = nullptr;
 };
 
