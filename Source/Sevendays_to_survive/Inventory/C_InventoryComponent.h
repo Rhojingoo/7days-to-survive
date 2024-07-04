@@ -58,8 +58,20 @@ public:
     UFUNCTION(BlueprintPure)
     bool IsFull() const;
 
+    UFUNCTION(BlueprintPure)
+    bool IsEmpty() const;
+
     UFUNCTION(BlueprintCallable)
     bool IsEmptySlot(int _Index) const;
+
+    UFUNCTION(BlueprintCallable)
+    int GetUsingSize() const;
+
+    UFUNCTION(BlueprintCallable)
+    int FindEmptySlot() const;
+
+    UFUNCTION(BlueprintCallable)
+    int FindNonEmptySlot() const;
 
     UFUNCTION(BlueprintCallable)
     void Craft(FName _Id);
@@ -80,11 +92,10 @@ private:
     UC_UI_InverntoryWidget* InventoryWidget = nullptr;
 
 private:
-    int FindEmptySlot() const;
     bool IsValidSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
 private:
-    int UsingSlotCount = 0;
+    int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;
     TArray<FC_ItemAndCount> Inventory;
 

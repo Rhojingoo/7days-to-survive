@@ -62,7 +62,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 
     InventoryWidget->SetIcon(Index, _Item->Icon);
     InventoryWidget->SetNumber(Index, _Count);
-    ++UsingSlotCount;
+    ++UsingSize;
 }
 
 void UC_InventoryComponent::DropItemAll(int _Index)
@@ -114,7 +114,7 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
 
         InventoryWidget->SetIcon(_Index, nullptr);
         InventoryWidget->SetNumber(_Index, 0);
-        --UsingSlotCount;
+        --UsingSize;
         return;
     }
 
@@ -149,6 +149,11 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
             ,Inventory[_Index].Count, *ItemName, _Count, *ItemName);
 
         return;
+    }
+    if (Inventory[_Index].Count == _Count)
+    {
+        Inventory[_Index].Item = nullptr;
+        --UsingSize;
     }
 
     Inventory[_Index].Count -= _Count;
@@ -189,7 +194,12 @@ int UC_InventoryComponent::GetCountByItemId(FName _Id) const
 
 bool UC_InventoryComponent::IsFull() const
 {
-    return UsingSlotCount == Size;
+    return UsingSize == Size;
+}
+
+bool UC_InventoryComponent::IsEmpty() const
+{
+    return UsingSize == 0;
 }
 
 bool UC_InventoryComponent::IsEmptySlot(int _Index) const
@@ -201,6 +211,11 @@ bool UC_InventoryComponent::IsEmptySlot(int _Index) const
     }
 
     return nullptr == Inventory[_Index].Item;
+}
+
+int UC_InventoryComponent::GetUsingSize() const
+{
+    return UsingSize;
 }
 
 void UC_InventoryComponent::Craft(FName _Id)
@@ -274,6 +289,26 @@ int UC_InventoryComponent::FindEmptySlot() const
     }
 
     STS_FATAL("[%s] Inventory is not full, but there is no empty slot. Something is wrong.", __FUNCTION__);
+    return -1;
+}
+
+int UC_InventoryComponent::FindNonEmptySlot() const
+{
+    if (true == IsEmpty())
+    {
+        STS_FATAL("[%s] Inventory is empty. There's no non-empty slot.", __FUNCTION__);
+        return -1;
+    }
+
+    for (int Index = 0; Index < Size; ++Index)
+    {
+        if (false == IsEmptySlot(Index))
+        {
+            return Index;
+        }
+    }
+
+    STS_FATAL("[%s] Inventory is non-empty. But there's no non-empty slot. Something is wrong.", __FUNCTION__);
     return -1;
 }
 
