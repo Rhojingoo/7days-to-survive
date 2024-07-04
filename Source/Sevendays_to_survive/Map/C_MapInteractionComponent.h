@@ -8,6 +8,7 @@
 
 class AC_ItemSourceHISMA;
 class AC_MapInteractable;
+class AC_BuildingPart;
 class AC_MapPlayer;
 class UCameraComponent;
 
@@ -47,10 +48,16 @@ private:
     FRotator GetCameraRotation() const;
 
     UFUNCTION(BlueprintCallable)
+    void ProcessMapDamageableActorTraceResult(FHitResult _HitResult, bool _IsHit);
+
+    UFUNCTION(BlueprintCallable)
     void ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit);
 
     UFUNCTION(BlueprintCallable)
     void ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit);
+
+    UFUNCTION(BlueprintCallable)
+    void ProcessBuildingPartTraceResult(FHitResult _HitResult, bool _IsHit);
 
 private:
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -71,4 +78,7 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     AC_MapInteractable* ViewingItemPouch = nullptr;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    AC_BuildingPart* ViewingBuildingPart = nullptr;
 };

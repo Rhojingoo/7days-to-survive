@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Map/C_MapInteractionComponent.h"
 
@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Map/C_MapInteractable.h"
+#include "BuildingSystem/C_BuildingPart.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -57,9 +58,13 @@ FRotator UC_MapInteractionComponent::GetCameraRotation() const
 	return CameraComponent->GetComponentRotation();
 }
 
+void UC_MapInteractionComponent::ProcessMapDamageableActorTraceResult(FHitResult _HitResult, bool _IsHit)
+{
+}
+
 void UC_MapInteractionComponent::ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit)
 {
-	// ¾ÆÀÌÅÛ ¼Ò½º¸¦ º¸Áö ¾Ê°Ô µÇ´Â °æ¿ì
+	// ì•„ì´í…œ ì†ŒìŠ¤ë¥¼ ë³´ì§€ ì•Šê²Œ ë˜ëŠ” ê²½ìš°
 	if (false == _IsHit)
 	{
 		if (true == IsValid(ViewingItemSource))
@@ -70,14 +75,14 @@ void UC_MapInteractionComponent::ProcessItemSourceTraceResult(FHitResult _HitRes
 		return;
 	}
 
-	// °°Àº ¾ÆÀÌÅÛ ¼Ò½º¸¦ °è¼Ó º¸´Â °æ¿ì
+	// ê°™ì€ ì•„ì´í…œ ì†ŒìŠ¤ë¥¼ ê³„ì† ë³´ëŠ” ê²½ìš°
 	if (ViewingItemSource == _HitResult.GetActor())
 	{
 		ViewingItemSource->UpdateHpBar(_HitResult.Item);
 		return;
 	}
 
-	// ´Ù¸¥ ¾ÆÀÌÅÛ ¼Ò½º¸¦ º¸°Ô µÇ´Â °æ¿ì
+	// ë‹¤ë¥¸ ì•„ì´í…œ ì†ŒìŠ¤ë¥¼ ë³´ê²Œ ë˜ëŠ” ê²½ìš°
 	if (true == IsValid(ViewingItemSource))
 	{
 		ViewingItemSource->HideHpBar();
@@ -106,6 +111,35 @@ void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResu
 	}
 
 	ViewingItemPouch = nullptr;
+}
+
+void UC_MapInteractionComponent::ProcessBuildingPartTraceResult(FHitResult _HitResult, bool _IsHit)
+{
+	// ê±´ì¶•ë¬¼ì„ ë³´ì§€ ì•Šê²Œ ë˜ëŠ” ê²½ìš°
+	if (false == _IsHit)
+	{
+		if (true == IsValid(ViewingBuildingPart))
+		{
+			ViewingBuildingPart->HideHpBar();
+		}
+		ViewingBuildingPart = nullptr;
+		return;
+	}
+
+	// ê°™ì€ ê±´ì¶•ë¬¼ì„ ê³„ì† ë³´ëŠ” ê²½ìš°
+	if (ViewingBuildingPart == _HitResult.GetActor())
+	{
+		ViewingBuildingPart->UpdateHpBar();
+		return;
+	}
+
+	// ë‹¤ë¥¸ ê±´ì¶•ë¬¼ì„ ë³´ê²Œ ë˜ëŠ” ê²½ìš°
+	if (true == IsValid(ViewingBuildingPart))
+	{
+		ViewingBuildingPart->HideHpBar();
+	}
+	ViewingBuildingPart = Cast<AC_BuildingPart>(_HitResult.GetActor());
+	ViewingBuildingPart->UpdateHpBar();
 }
 
 void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
