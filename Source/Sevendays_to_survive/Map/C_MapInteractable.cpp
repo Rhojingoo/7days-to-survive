@@ -17,8 +17,6 @@ AC_MapInteractable::AC_MapInteractable()
 void AC_MapInteractable::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-    //DOREPLIFETIME(AC_MapInteractable, VariableName);
 }
 
 void AC_MapInteractable::ShowInteractionWidget()

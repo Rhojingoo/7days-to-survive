@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Map/C_MapInteractable.h"
+#include "Map/C_Items.h"
+
 #include "C_ItemPouch.generated.h"
 
 UCLASS()
@@ -16,11 +18,15 @@ public:
 	// Sets default values for this actor's properties
 	AC_ItemPouch();
 
-	UFUNCTION(BlueprintCallable)
-	TMap<FName, int> GetItems();
+	void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetItems(const TMap<FName, int>& _Items);
+	UFUNCTION(BlueprintPure)
+	FC_ItemAndCount GetItemAndCount() const;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetItemAndCount(FName _Id, int _Count);
+
+	void SetItemAndCount_Implementation(FName _Id, int _Count);
 
 	void MapInteract() override;
 
@@ -47,5 +53,5 @@ private:
 	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TMap<FName, int> Items;
+	FC_ItemAndCount ItemAndCount;
 };

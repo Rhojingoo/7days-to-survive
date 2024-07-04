@@ -147,7 +147,7 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
     {
         FString ItemName = Inventory[_Index].Item->Name;
         STS_FATAL("[%s] There is %d of %s in the inventory. But you tried to decrease %d of %s.", __FUNCTION__
-            ,Inventory[_Index].Count, *ItemName, _Count, *ItemName);
+            , Inventory[_Index].Count, *ItemName, _Count, *ItemName);
 
         return;
     }
@@ -228,7 +228,7 @@ void UC_InventoryComponent::Craft(FName _Id)
     }
 
     const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
-    
+
     TMap<FName, int> CraftMaterials = CraftItem->CraftMaterials;
 
     for (TPair<FName, int>& Pair : CraftMaterials)
@@ -360,9 +360,6 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
 
 void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count)
 {
-    TMap<FName, int> Items;
-    Items.Emplace(_Id, _Count);
-
     AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), _SpawnTransform);
-    ItemPouch->SetItems(Items);
+    ItemPouch->SetItemAndCount(_Id, _Count);
 }

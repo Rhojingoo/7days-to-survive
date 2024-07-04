@@ -19,6 +19,8 @@ class SEVENDAYS_TO_SURVIVE_API AC_MapInteractable : public AActor
 public:
 	AC_MapInteractable();
 
+	void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void MapInteract() PURE_VIRTUAL(MapInteract, )
 
@@ -28,8 +30,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void HideInteractionWidget();
 
-private:
-	void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
