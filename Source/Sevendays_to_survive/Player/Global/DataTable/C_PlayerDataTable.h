@@ -18,22 +18,22 @@ struct FC_PlayerCommonValue : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float JumpZVelocity; // 캐릭터 점프력
+	float JumpZVelocity=0.0f; // 캐릭터 점프력
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float WalkSpeed;
+	float WalkSpeed=0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float RunSpeed;
+	float RunSpeed=0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	int stamina;
+	int stamina=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	int staminaCalValue;
+	int staminaCalValue=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float Hp;
+	float Hp=0.0f;
 
 };
 
@@ -46,9 +46,9 @@ struct FC_CameraValue : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float TargetArmLength; // 암 길이 (카메라 봉)
+	float TargetArmLength=0.0f; // 암 길이 (카메라 봉)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float CameraRotSpeed; // 카메라 회전 속도
+	float CameraRotSpeed=0.0f; // 카메라 회전 속도
 
 };
 

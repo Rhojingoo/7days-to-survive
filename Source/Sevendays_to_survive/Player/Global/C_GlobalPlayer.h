@@ -142,7 +142,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
 
-	
+	UFUNCTION()
+	void GunLineTrace();
 
 	UFUNCTION()
 	void Calstamina();
@@ -219,6 +220,9 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float PitchCPP = 0.0f;
+
+	UPROPERTY()
+	float LineTraceValue = 10000.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	AC_MainPlayerController* PlayerController = nullptr;
