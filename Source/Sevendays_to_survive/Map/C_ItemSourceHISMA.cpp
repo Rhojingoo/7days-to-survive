@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_ItemSourceHISMA.h"
@@ -76,7 +76,7 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage, AActor* _HitActor)
 	STS_LOG("[%s:%d] damaged by % d", *GetName(), _Index, _Damage);
 	STS_LOG("[%s:%d] HP: %d/%d", *GetName(), _Index, HpMap[_Index], MaxHpMap[_Index]);
 
-	// æ∆¿Ã≈€ »πµÊ
+	// ÏïÑÏù¥ÌÖú ÌöçÎìù
 	AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
 	if (nullptr != ItemGainer)
 	{
@@ -100,7 +100,7 @@ void AC_ItemSourceHISMA::Damage(int _Index, int _Damage, AActor* _HitActor)
 		return;
 	}
 
-	// ¿ß¡¨ æ˜µ•¿Ã∆Æ
+	// ÏúÑÏ†Ø ÏóÖÎç∞Ïù¥Ìä∏
 	if (true == HpBar->IsActive() && _Index == HpBarTargetIndex)
 	{
 		HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
@@ -150,10 +150,10 @@ void AC_ItemSourceHISMA::UpdateHpBar(int _Index)
 	HpBarTargetIndex = _Index;
 
 	HISMComponent->GetInstanceTransform(_Index, HpBarTransform, true);
-	FVector InstLocation = HpBarTransform.GetLocation() + FVector::UpVector * 300.0f;
+	FVector InstLocation = HpBarTransform.GetLocation() + FVector::UpVector * HpBarHeight;
 	FVector DrawLocation = InstLocation;
 
-	// HpBar ∞ªΩ≈
+	// HpBar Í∞±Ïã†
 	HpBar->SetWorldLocation(DrawLocation);
 	HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
 	HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
