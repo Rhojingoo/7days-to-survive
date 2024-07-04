@@ -41,7 +41,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 {
     if (true == IsFull())
     {
-        SpawnItem(GetItemSpawnTransform(), _Item, _Count);
+        SpawnItem(GetItemSpawnTransform(), _Item->Id, _Count);
         STS_LOG("[DebugOnly] [%s] Inventory is full. Failed to add {Item: %s, Count: %d}.", __FUNCTION__, *_Item->Name, _Count);
         return;
     }
@@ -108,7 +108,7 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     }
     else if (_Count == ItemAndCount.Count)
     {
-        SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
+        SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item->Id, _Count);
 
         ItemIdToIndex.Remove(ItemAndCount.Item->Id);
         ItemAndCount = NullItem;
@@ -119,7 +119,7 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
         return;
     }
 
-    SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
+    SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item->Id, _Count);
     ItemAndCount.Count -= _Count;
     InventoryWidget->SetNumber(_Index, ItemAndCount.Count);
 }
@@ -147,7 +147,7 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
     {
         FString ItemName = Inventory[_Index].Item->Name;
         STS_FATAL("[%s] There is %d of %s in the inventory. But you tried to decrease %d of %s.", __FUNCTION__
-            ,Inventory[_Index].Count, *ItemName, _Count, *ItemName);
+            , Inventory[_Index].Count, *ItemName, _Count, *ItemName);
 
         return;
     }
@@ -228,7 +228,7 @@ void UC_InventoryComponent::Craft(FName _Id)
     }
 
     const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
-    
+
     TMap<FName, int> CraftMaterials = CraftItem->CraftMaterials;
 
     for (TPair<FName, int>& Pair : CraftMaterials)
@@ -358,11 +358,8 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
     return SpawnTransform;
 }
 
-void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, const UC_Item* _Item, int _Count)
+void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count)
 {
-    TMap<FName, int> Items;
-    Items.Emplace(_Item->Id, _Count);
-
     AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), _SpawnTransform);
-    ItemPouch->SetItems(Items);
+    ItemPouch->SetItemAndCount(_Id, _Count);
 }

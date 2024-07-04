@@ -87,8 +87,8 @@ public:
 
 private:
     UFUNCTION(Server, Reliable)
-    void SpawnItem(FTransform _SpawnTransform, const UC_Item* _Item, int _Count);
-    void SpawnItem_Implementation(FTransform _SpawnTransform, const UC_Item* _Item, int _Count);
+    void SpawnItem(FTransform _SpawnTransform, FName _Id, int _Count);
+    void SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count);
 
 private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

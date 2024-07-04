@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_ItemPouch.h"
@@ -7,6 +7,7 @@
 #include "Inventory/C_InventoryComponent.h"
 #include "Map/C_MapDataAsset.h"
 #include "Map/UI/C_MapInteractionWidget.h"
+#include "Map/C_MapInteractionComponent.h"
 
 // Sets default values
 AC_ItemPouch::AC_ItemPouch()
@@ -18,27 +19,27 @@ AC_ItemPouch::AC_ItemPouch()
 	SetRootComponent(StaticMeshComponent);
 }
 
-TMap<FName, int> AC_ItemPouch::GetItems()
+void AC_ItemPouch::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	return Items;
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
-void AC_ItemPouch::SetItems(const TMap<FName, int>& _Items)
+FC_ItemAndCount AC_ItemPouch::GetItemAndCount() const
 {
-	Items = _Items;
+	return ItemAndCount;
+}
+
+void AC_ItemPouch::SetItemAndCount_Implementation(FName _Id, int _Count)
+{
+	ItemAndCount.Item = UC_STSGlobalFunctions::FindItem(_Id);
+	ItemAndCount.Count = _Count;
 }
 
 void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
-	
-	for (TPair<FName, int>& Pair : Items)
-	{
-		UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
-		Inventory->AddItem(MapDataAsset->FindItem(Pair.Key), Pair.Value);
-	}
-
-	Server_Destroy();
+	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
+	DestroyOnServer();
 }
 
 void AC_ItemPouch::ShowInteractionWidget()
@@ -47,22 +48,8 @@ void AC_ItemPouch::ShowInteractionWidget()
 	
 	FVector Location = GetActorLocation() + FVector::UpVector * 50.0f;
 	MapInteractionWidgetComponent->SetWorldLocation(Location);
-	
-	const UC_Item* Item = nullptr;
-	int Count = 0;
-	for (auto Pair : Items)
-	{
-		UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
-		Item = MapDataAsset->FindItem(Pair.Key);
-		Count = Pair.Value;
-	}
 
-	if (false == IsValid(Item))
-	{
-		return;
-	}
-
-	FString Text = Item->Name + TEXT(" ¡¿ ") + FString::FromInt(Count);
+	FString Text = ItemAndCount.Item->Name + TEXT(" Ã— ") + FString::FromInt(ItemAndCount.Count);
 	MapInteractionWidget->SetMessage(Text);
 }
 
@@ -85,8 +72,8 @@ void AC_ItemPouch::Tick(float DeltaTime)
 
 }
 
-void AC_ItemPouch::Server_Destroy_Implementation()
+void AC_ItemPouch::DestroyOnServer()
 {
-	Destroy();
+	UC_STSGlobalFunctions::GetMapInteractionComponent()->DestroyActor(this);
 }
 

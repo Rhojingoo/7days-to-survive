@@ -23,7 +23,10 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ItemAndCount
     GENERATED_BODY()
 
 public:
+    UPROPERTY()
     const class UC_Item* Item = nullptr;
+
+    UPROPERTY()
     int Count = 0;
 };
 
