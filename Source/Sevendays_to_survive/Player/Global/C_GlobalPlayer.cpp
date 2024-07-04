@@ -123,6 +123,8 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
+	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 }
 
 // Called when the game starts or when spawned
@@ -184,11 +186,11 @@ void AC_GlobalPlayer::BeginPlay()
 		}
 	}
 
-	{
+	/*{
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
 		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
 		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
-	}
+	}*/
 
 	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
 	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
@@ -234,6 +236,11 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Att 
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
+
+		//Fire
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::FireStart);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 	}
 	else
 	{
@@ -378,6 +385,11 @@ void AC_GlobalPlayer::AimEnd_Implementation(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 {
+	if (nullptr!=CurWeapon)
+	{
+		CurWeapon->Destroy();
+	}
+
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (StaticItemMesh.Num() <= SlotIndex)
 	{
@@ -495,6 +507,19 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 {
 	ChangeNoWeapon();
+}
+
+void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
+{
+	if (true == IsAimCpp)
+	{
+		IsFireCpp = true;
+	}
+}
+
+void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
+{
+	IsFireCpp = false;
 }
 
 

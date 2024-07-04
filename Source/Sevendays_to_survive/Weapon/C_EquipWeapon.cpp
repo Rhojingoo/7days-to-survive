@@ -15,6 +15,7 @@ AC_EquipWeapon::AC_EquipWeapon()
 
 	SkeletalMesh = CreateDefaultSubobject<UC_GunComponent>(TEXT("SkeletalMesh"));
 	SetRootComponent(SkeletalMesh);
+	SkeletalMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("GunCamera"));
 	SpringArm->SetupAttachment(SkeletalMesh, *FString("Zoom"));

@@ -107,6 +107,14 @@ protected:
 	//UFUNCTION(Reliable, NetMulticast)
 	//void ChangeWeaponRifle();
 
+	UFUNCTION(Reliable, Server)
+	void FireStart(const FInputActionValue& Value); //
+	void FireStart_Implementation(const FInputActionValue& Value);
+
+	UFUNCTION(Reliable, Server)
+	void FireEnd(const FInputActionValue& Value); //
+	void FireEnd_Implementation(const FInputActionValue& Value);
+
 
 	UFUNCTION(Reliable, Server)
 	void RunStart(const FInputActionValue& Value); //
@@ -189,6 +197,9 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAimCpp = false;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsFireCpp = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Maxstamina = 0;
