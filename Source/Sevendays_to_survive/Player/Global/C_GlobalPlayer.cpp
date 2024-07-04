@@ -123,6 +123,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
 }
 
 // Called when the game starts or when spawned
@@ -184,11 +185,11 @@ void AC_GlobalPlayer::BeginPlay()
 		}
 	}
 
-	{
+	/*{
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
 		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
 		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
-	}
+	}*/
 
 	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
 	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
@@ -378,6 +379,11 @@ void AC_GlobalPlayer::AimEnd_Implementation(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 {
+	if (nullptr!=CurWeapon)
+	{
+		CurWeapon->Destroy();
+	}
+
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (StaticItemMesh.Num() <= SlotIndex)
 	{
