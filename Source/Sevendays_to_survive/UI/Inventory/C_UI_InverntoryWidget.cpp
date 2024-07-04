@@ -4,6 +4,7 @@
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
 
 #include "Player/Global/C_MapPlayer.h"
+#include "Inventory/C_InventoryComponent.h"
 
 
 void UC_UI_InverntoryWidget::NativeConstruct()

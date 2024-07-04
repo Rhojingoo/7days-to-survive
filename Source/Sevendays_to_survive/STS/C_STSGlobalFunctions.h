@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static void Day_And_Night_Cycle(ALight* _DirectionLight);
 
+	UFUNCTION(BlueprintCallable)
+	static const UC_Item* FindItem(FName _Id);
+
 private:
 	
 };

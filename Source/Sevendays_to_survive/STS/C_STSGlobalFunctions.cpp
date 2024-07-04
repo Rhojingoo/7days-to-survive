@@ -64,3 +64,8 @@ void UC_STSGlobalFunctions::Day_And_Night_Cycle(ALight* _DirectionLight)
 
     LightComponent;   
 }
+
+const UC_Item* UC_STSGlobalFunctions::FindItem(FName _Id)
+{
+    return GetMapDataAsset()->FindItem(_Id);
+}

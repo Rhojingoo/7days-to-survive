@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 
-#include "Inventory/C_InventoryComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/Global/C_MapPlayer.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
+
+class UC_InventoryComponent;
 
 /**
  * 

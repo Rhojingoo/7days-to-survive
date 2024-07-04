@@ -169,6 +169,20 @@ bool UC_InventoryComponent::IsEmptySlot(int _X, int _Y) const
     return nullptr == Inventory[_X][_Y].Item;
 }
 
+bool UC_InventoryComponent::Craft(FName _Id)
+{
+
+
+    return false;
+}
+
+bool UC_InventoryComponent::IsCraftable(FName _Id)
+{
+    
+
+    return false;
+}
+
 FIntPoint UC_InventoryComponent::FindEmptySlot() const
 {
     if (true == IsFull())

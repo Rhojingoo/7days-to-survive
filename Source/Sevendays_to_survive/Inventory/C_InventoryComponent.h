@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Delegates/Delegate.h"
 #include "Map/C_Items.h"
+
 #include "C_InventoryComponent.generated.h"
 
 class UC_UI_InverntoryWidget;
@@ -50,6 +51,12 @@ public:
 
     UFUNCTION(BlueprintCallable)
     bool IsEmptySlot(int _X, int _Y) const;
+
+    UFUNCTION(BlueprintCallable)
+    bool Craft(FName _Id);
+
+    UFUNCTION(BlueprintCallable)
+    bool IsCraftable(FName _Id);
 
 private:
     UFUNCTION(Server, Reliable)
