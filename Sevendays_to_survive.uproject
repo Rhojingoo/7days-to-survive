@@ -5,6 +5,15 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "Sevendays_to_survive_Editor",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Blutility",
+				"Engine"
+			]
+		},
+		{
 			"Name": "Sevendays_to_survive",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
