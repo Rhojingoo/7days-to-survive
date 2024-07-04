@@ -20,6 +20,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
 #include "Weapon/C_EquipWeapon.h"
+#include "Weapon/C_GunComponent.h"
 
 
 // Sets default values
@@ -238,7 +239,8 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Completed, this, &AC_NickMainPlayer::PunchAttEnd);
 
 		//Fire
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::FireStart);
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 	}
@@ -270,6 +272,32 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
+}
+
+void AC_GlobalPlayer::GunLineTrace()
+{
+	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
+
+	FHitResult Hit;
+	//ector ShotDirection;
+
+	FVector GunLocation = GunMesh->GetSocketLocation(FName("Muzzle"));
+	FRotator GunRotation = GunMesh->GetSocketRotation(FName("Muzzle"));
+	FVector GunForwardVector =  UKismetMathLibrary::GetForwardVector(GunRotation);
+	
+	FVector Start = GunLocation;
+	FVector End = (GunForwardVector * LineTraceValue) + GunLocation;
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(CurWeapon);
+	Params.AddIgnoredActor(this);
+
+	TArray<AActor*> Actors;
+
+	Actors.Add(CurWeapon);
+	UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, Params, EDrawDebugTrace::ForDuration);
+	//GunRotation.
 }
 
 
@@ -514,6 +542,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
+		GunLineTrace();
 	}
 }
 
