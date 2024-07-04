@@ -29,3 +29,21 @@
 	 IFileManager::Get().FindFiles(FoundFileName, *Result, *fileExt);
 
 }
+
+ void USTSBlueprintFunctionLibrary::GetOpenDirectoryDialog(FString DirectoryPath, FString& Directory, bool& IsSelet)
+ {
+	 IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
+	 FString DefaultFile = TEXT("");
+	 FString DefaultPath = DirectoryPath;
+	 //FString Directory;
+
+	 if (DesktopPlatform) {
+		 DesktopPlatform->OpenDirectoryDialog(
+			 NULL,
+			 TEXT("Select Directory"),	// 탐색기 제목
+			 DefaultPath,	// 열고싶은 탐색기 경로
+			 Directory	// 선택한 디렉토리 경로가 여기에 들어옴
+		 );
+	 }
+	 	
+ }

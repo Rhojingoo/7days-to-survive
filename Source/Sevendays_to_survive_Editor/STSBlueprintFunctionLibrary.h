@@ -17,4 +17,14 @@ class SEVENDAYS_TO_SURVIVE_EDITOR_API USTSBlueprintFunctionLibrary : public UBlu
 public:
 	UFUNCTION(BlueprintCallable)
 	static void GetAllFileName();
+
+	UFUNCTION(BlueprintCallable)
+	static void GetOpenDirectoryDialog(FString DirectoryPath, FString& Directory, bool& IsSelet);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	TArray<FString> FoundFileNames;
+	
+	
+
+	
 };
