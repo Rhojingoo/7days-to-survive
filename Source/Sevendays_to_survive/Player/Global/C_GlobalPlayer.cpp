@@ -240,7 +240,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		//Fire
 		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
-		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 	}
@@ -274,8 +274,13 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::GunLineTrace()
+void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 
 	FHitResult Hit;
@@ -322,6 +327,11 @@ void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
 	}
 
 	ResultPitchCal(PitchCPP);
+}
+
+void AC_GlobalPlayer::GunLineTraceServer_Implementation()
+{
+	GunLineTrace();
 }
 
 void AC_GlobalPlayer::Calstamina()
@@ -542,7 +552,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
-		GunLineTrace();
+		GunLineTraceServer();
 	}
 }
 

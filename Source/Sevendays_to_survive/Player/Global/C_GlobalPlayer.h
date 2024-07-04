@@ -142,8 +142,14 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
 
-	UFUNCTION()
+	UFUNCTION(Reliable, NetMulticast)
 	void GunLineTrace();
+	void GunLineTrace_Implementation();
+
+	UFUNCTION(Reliable, Server)
+	void GunLineTraceServer();
+	void GunLineTraceServer_Implementation();
+
 
 	UFUNCTION()
 	void Calstamina();
