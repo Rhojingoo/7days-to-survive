@@ -20,7 +20,8 @@ enum class EPlayerState : uint8
 	Number1Weapon,
 	Number2Weapon,
 	NoWeapon,
-	PickUp
+	PickUp,
+	Fire
 
 };
 
