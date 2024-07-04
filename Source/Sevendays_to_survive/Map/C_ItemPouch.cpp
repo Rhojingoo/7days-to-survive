@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_ItemPouch.h"
@@ -49,7 +49,7 @@ void AC_ItemPouch::ShowInteractionWidget()
 	FVector Location = GetActorLocation() + FVector::UpVector * 50.0f;
 	MapInteractionWidgetComponent->SetWorldLocation(Location);
 
-	FString Text = ItemAndCount.Item->Name + TEXT(" ¡¿ ") + FString::FromInt(ItemAndCount.Count);
+	FString Text = ItemAndCount.Item->Name + TEXT(" Ã— ") + FString::FromInt(ItemAndCount.Count);
 	MapInteractionWidget->SetMessage(Text);
 }
 
