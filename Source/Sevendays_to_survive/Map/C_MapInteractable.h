@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void HideInteractionWidget();
 
+private:
+	void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+
 protected:
 	virtual void BeginPlay() override;
 

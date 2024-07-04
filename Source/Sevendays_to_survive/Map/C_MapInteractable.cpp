@@ -7,8 +7,18 @@
 
 AC_MapInteractable::AC_MapInteractable()
 {
+    bReplicates = true;
+
     MapInteractionWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Interaction Widget Component"));
     MapInteractionWidgetComponent->SetupAttachment(GetRootComponent());
+
+}
+
+void AC_MapInteractable::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    //DOREPLIFETIME(AC_MapInteractable, VariableName);
 }
 
 void AC_MapInteractable::ShowInteractionWidget()
