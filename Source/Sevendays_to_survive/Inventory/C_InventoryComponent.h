@@ -79,6 +79,12 @@ public:
     UFUNCTION(BlueprintPure)
     bool IsCraftable(FName _Id) const;
 
+    UFUNCTION(BlueprintCallable)
+    void ToggleUI();
+
+    UFUNCTION(BlueprintCallable)
+    void SetUIActive(bool _Activeness);
+
 private:
     UFUNCTION(Server, Reliable)
     void SpawnItem(FTransform _SpawnTransform, const UC_Item* _Item, int _Count);
@@ -90,6 +96,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     UC_UI_InverntoryWidget* InventoryWidget = nullptr;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    bool UIActiveness = false;
 
 private:
     bool IsValidSlot(int _Index) const;
