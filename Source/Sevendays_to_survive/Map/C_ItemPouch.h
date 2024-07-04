@@ -43,10 +43,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UFUNCTION(Server, Reliable)
-	void Server_Destroy();
-
-	void Server_Destroy_Implementation();
+	UFUNCTION(BlueprintCallable)
+	void DestroyOnServer();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

@@ -107,3 +107,8 @@ void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResu
 
 	ViewingItemPouch = nullptr;
 }
+
+void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
+{
+	_Actor->Destroy();
+}

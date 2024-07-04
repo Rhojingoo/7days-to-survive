@@ -7,6 +7,7 @@
 #include "Inventory/C_InventoryComponent.h"
 #include "Map/C_MapDataAsset.h"
 #include "Map/UI/C_MapInteractionWidget.h"
+#include "Map/C_MapInteractionComponent.h"
 
 // Sets default values
 AC_ItemPouch::AC_ItemPouch()
@@ -38,7 +39,7 @@ void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
 	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
-	Server_Destroy();
+	DestroyOnServer();
 }
 
 void AC_ItemPouch::ShowInteractionWidget()
@@ -71,8 +72,8 @@ void AC_ItemPouch::Tick(float DeltaTime)
 
 }
 
-void AC_ItemPouch::Server_Destroy_Implementation()
+void AC_ItemPouch::DestroyOnServer()
 {
-	Destroy();
+	UC_STSGlobalFunctions::GetMapInteractionComponent()->DestroyActor(this);
 }
 

@@ -24,6 +24,12 @@ protected:
 
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+public:
+    UFUNCTION(BlueprintCallable, Server, Reliable)
+    void DestroyActor(AActor* _Actor);
+    void DestroyActor_Implementation(AActor* _Actor);
+
 private:
     UFUNCTION(BlueprintPure)
     bool IsServer() const;
