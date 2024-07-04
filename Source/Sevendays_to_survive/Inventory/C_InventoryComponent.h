@@ -37,26 +37,47 @@ public:
     UFUNCTION(BlueprintCallable)
     void DropItem(int _Index, int _Count);
 
-    // UFUNCTION(BlueprintCallable)
-    //void UseItem(const UC_Item* _Item);
+    UFUNCTION(BlueprintCallable)
+    void IncItemCount(int _Index, int _Count);
+
+    UFUNCTION(BlueprintCallable)
+    void DecItemCount(int _Index, int _Count);
 
     UFUNCTION(BlueprintPure)
-    bool HasItem(const UC_Item* _Item) const;
+    bool HasItemByObject(const UC_Item* _Item) const;
+
+    UFUNCTION(BlueprintPure)
+    bool HasItem(FName _Id) const;
+
+    UFUNCTION(BlueprintPure)
+    int GetCount(int _Index) const;
+
+    UFUNCTION(BlueprintPure)
+    int GetCountByItemId(FName _Id) const;
 
     UFUNCTION(BlueprintPure)
     bool IsFull() const;
 
-    UFUNCTION(BlueprintCallable)
-    const FC_ItemAndCount& GetItemAndCount(int _X, int _Y) const;
+    UFUNCTION(BlueprintPure)
+    bool IsEmpty() const;
 
     UFUNCTION(BlueprintCallable)
-    bool IsEmptySlot(int _X, int _Y) const;
+    bool IsEmptySlot(int _Index) const;
 
     UFUNCTION(BlueprintCallable)
-    bool Craft(FName _Id);
+    int GetUsingSize() const;
 
     UFUNCTION(BlueprintCallable)
-    bool IsCraftable(FName _Id);
+    int FindEmptySlot() const;
+
+    UFUNCTION(BlueprintCallable)
+    int FindNonEmptySlot() const;
+
+    UFUNCTION(BlueprintCallable)
+    void Craft(FName _Id);
+
+    UFUNCTION(BlueprintPure)
+    bool IsCraftable(FName _Id) const;
 
 private:
     UFUNCTION(Server, Reliable)
@@ -65,24 +86,18 @@ private:
 
 private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-    int R = 10;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-    int C = 10;
+    int Size = 32;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     UC_UI_InverntoryWidget* InventoryWidget = nullptr;
 
 private:
-    FIntPoint FindEmptySlot() const;
-    bool IsValidPoint(FIntPoint _Point) const;
-    FIntPoint IndexToPoint(int _Index) const;
-    int PointToIndex(FIntPoint _Point) const;
+    bool IsValidSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
 private:
-    int UsingSlotCount = 0;
-    TMap<FName, FIntPoint> ItemIdToPoint;
-    TArray<TArray<FC_ItemAndCount>> Inventory;
+    int UsingSize = 0;
+    TMap<FName, int> ItemIdToIndex;
+    TArray<FC_ItemAndCount> Inventory;
 
     FC_ItemAndCount NullItem = { nullptr, 0 };
     TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;

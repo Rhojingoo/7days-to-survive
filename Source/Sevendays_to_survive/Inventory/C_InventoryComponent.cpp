@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
 #include "STS/C_STSInstance.h"
+#include "STS/C_STSGlobalFunctions.h"
 #include "Map/C_Items.h"
 #include "Map/C_ItemPouch.h"
 #include "Map/C_MapDataAsset.h"
@@ -26,11 +27,7 @@ void UC_InventoryComponent::BeginPlay()
     UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
     ItemPouchClass = MapDataAsset->GetItemPouchClass();
 
-    Inventory.SetNum(R);
-    for (int i = 0; i < Inventory.Num(); ++i)
-    {
-        Inventory[i].SetNum(C);
-    }
+    Inventory.SetNum(Size);
 }
 
 void UC_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -49,32 +46,28 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     }
 
     // 이미 가지고 있는 아이템을 추가하는 경우
-    if (true == HasItem(_Item))
+    if (true == HasItemByObject(_Item))
     {
-        FIntPoint Point = ItemIdToPoint[_Item->Id];
-        Inventory[Point.X][Point.Y].Count += _Count;
-
-        int Index = PointToIndex(Point);
-        InventoryWidget->SetNumber(Index, Inventory[Point.X][Point.Y].Count);
+        int Index = ItemIdToIndex[_Item->Id];
+        Inventory[Index].Count += _Count;
+        InventoryWidget->SetNumber(Index, Inventory[Index].Count);
         return;
     }
 
     // 가지고 있지 않은 아이템을 추가하는 경우
-    FIntPoint Point = FindEmptySlot();
-    ItemIdToPoint.Emplace(_Item->Id, Point);
-    Inventory[Point.X][Point.Y].Item = _Item;
-    Inventory[Point.X][Point.Y].Count = _Count;
+    int Index = FindEmptySlot();
+    ItemIdToIndex.Emplace(_Item->Id, Index);
+    Inventory[Index].Item = _Item;
+    Inventory[Index].Count = _Count;
 
-    int Index = PointToIndex(Point);
     InventoryWidget->SetIcon(Index, _Item->Icon);
     InventoryWidget->SetNumber(Index, _Count);
-    ++UsingSlotCount;
+    ++UsingSize;
 }
 
 void UC_InventoryComponent::DropItemAll(int _Index)
 {
-    FIntPoint Point = IndexToPoint(_Index);
-    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
+    FC_ItemAndCount& ItemAndCount = Inventory[_Index];
 
     if (nullptr == ItemAndCount.Item)
     {
@@ -82,7 +75,7 @@ void UC_InventoryComponent::DropItemAll(int _Index)
         return;
     }
 
-    if (false == HasItem(ItemAndCount.Item))
+    if (false == HasItemByObject(ItemAndCount.Item))
     {
         STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *ItemAndCount.Item->Name);
         return;
@@ -93,8 +86,7 @@ void UC_InventoryComponent::DropItemAll(int _Index)
 
 void UC_InventoryComponent::DropItem(int _Index, int _Count)
 {
-    FIntPoint Point = IndexToPoint(_Index);
-    FC_ItemAndCount& ItemAndCount = Inventory[Point.X][Point.Y];
+    FC_ItemAndCount& ItemAndCount = Inventory[_Index];
 
     if (nullptr == ItemAndCount.Item)
     {
@@ -102,7 +94,7 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
         return;
     }
 
-    if (false == HasItem(ItemAndCount.Item))
+    if (false == HasItemByObject(ItemAndCount.Item))
     {
         STS_FATAL("[%s] There is no %s in the inventory. Can't drop item.", __FUNCTION__, *ItemAndCount.Item->Name);
         return;
@@ -117,12 +109,12 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     {
         SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item, _Count);
 
-        ItemIdToPoint.Remove(ItemAndCount.Item->Id);
+        ItemIdToIndex.Remove(ItemAndCount.Item->Id);
         ItemAndCount = NullItem;
 
         InventoryWidget->SetIcon(_Index, nullptr);
         InventoryWidget->SetNumber(_Index, 0);
-        --UsingSlotCount;
+        --UsingSize;
         return;
     }
 
@@ -131,7 +123,43 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     InventoryWidget->SetNumber(_Index, ItemAndCount.Count);
 }
 
-bool UC_InventoryComponent::HasItem(const UC_Item* _Item) const
+void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
+{
+    if (true == IsEmptySlot(_Index))
+    {
+        STS_FATAL("[%s] %d is empty slot. Can't increase count.", __FUNCTION__, _Index);
+        return;
+    }
+
+    Inventory[_Index].Count += _Count;
+}
+
+void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
+{
+    if (true == IsEmptySlot(_Index))
+    {
+        STS_FATAL("[%s] %d is empty slot. Can't increase count.", __FUNCTION__, _Index);
+        return;
+    }
+
+    if (Inventory[_Index].Count < _Count)
+    {
+        FString ItemName = Inventory[_Index].Item->Name;
+        STS_FATAL("[%s] There is %d of %s in the inventory. But you tried to decrease %d of %s.", __FUNCTION__
+            ,Inventory[_Index].Count, *ItemName, _Count, *ItemName);
+
+        return;
+    }
+    if (Inventory[_Index].Count == _Count)
+    {
+        Inventory[_Index].Item = nullptr;
+        --UsingSize;
+    }
+
+    Inventory[_Index].Count -= _Count;
+}
+
+bool UC_InventoryComponent::HasItemByObject(const UC_Item* _Item) const
 {
     if (nullptr == _Item)
     {
@@ -139,103 +167,159 @@ bool UC_InventoryComponent::HasItem(const UC_Item* _Item) const
         return false;
     }
 
-    return ItemIdToPoint.Contains(_Item->Id);
+    return ItemIdToIndex.Contains(_Item->Id);
+}
+
+bool UC_InventoryComponent::HasItem(FName _Id) const
+{
+    return ItemIdToIndex.Contains(_Id);
+}
+
+int UC_InventoryComponent::GetCount(int _Index) const
+{
+    if (true == IsEmptySlot(_Index))
+    {
+        STS_FATAL("[%s] %d is empty slot. Can't get count.", __FUNCTION__, _Index);
+        return 0;
+    }
+
+    return Inventory[_Index].Count;
+}
+
+int UC_InventoryComponent::GetCountByItemId(FName _Id) const
+{
+    int Index = ItemIdToIndex[_Id];
+    return GetCount(Index);
 }
 
 bool UC_InventoryComponent::IsFull() const
 {
-    return UsingSlotCount == R * C;
+    return UsingSize == Size;
 }
 
-const FC_ItemAndCount& UC_InventoryComponent::GetItemAndCount(int _X, int _Y) const
+bool UC_InventoryComponent::IsEmpty() const
 {
-    if (true == IsEmptySlot(_X, _Y))
-    {
-        STS_FATAL("[%s] There is no item in (%d, %d).", __FUNCTION__, _X, _Y);
-        return NullItem;
-    }
-
-    return Inventory[_X][_Y];
+    return UsingSize == 0;
 }
 
-bool UC_InventoryComponent::IsEmptySlot(int _X, int _Y) const
+bool UC_InventoryComponent::IsEmptySlot(int _Index) const
 {
-    if (false == IsValidPoint({ _X, _Y }))
+    if (false == IsValidSlot(_Index))
     {
-        STS_FATAL("[%s] (%d, %d) is not a valid point. Can't check whether it's empty.", __FUNCTION__, _X, _Y);
+        STS_FATAL("[%s] %d is an invalid index. Can't check whether it's empty.", __FUNCTION__, _Index);
         return true;
     }
 
-    return nullptr == Inventory[_X][_Y].Item;
+    return nullptr == Inventory[_Index].Item;
 }
 
-bool UC_InventoryComponent::Craft(FName _Id)
+int UC_InventoryComponent::GetUsingSize() const
 {
-
-
-    return false;
+    return UsingSize;
 }
 
-bool UC_InventoryComponent::IsCraftable(FName _Id)
+void UC_InventoryComponent::Craft(FName _Id)
 {
-    
-
-    return false;
-}
-
-FIntPoint UC_InventoryComponent::FindEmptySlot() const
-{
-    if (true == IsFull())
+    if (false == IsCraftable(_Id))
     {
-        STS_FATAL("[%s] Inventory is full. Can't find empty point.", __FUNCTION__);
-        return FIntPoint::ZeroValue;
+        STS_FATAL("[%s] %s is not craftable item. Failed to craft.", __FUNCTION__, *_Id.ToString());
+        return;
     }
 
-    for (int x = 0; x < R; ++x)
+    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
+    
+    TMap<FName, int> CraftMaterials = CraftItem->CraftMaterials;
+
+    for (TPair<FName, int>& Pair : CraftMaterials)
     {
-        for (int y = 0; y < C; ++y)
+        FName MatId = Pair.Key;
+        int MatNeedCount = Pair.Value;
+
+        int Index = ItemIdToIndex[MatId];
+        DecItemCount(Index, MatNeedCount);
+    }
+
+    AddItem(CraftItem, 1);
+}
+
+bool UC_InventoryComponent::IsCraftable(FName _Id) const
+{
+    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
+
+    if (false == IsValid(CraftItem) || false == CraftItem->IsCraftable())
+    {
+        return false;
+    }
+
+    TMap<FName, int> CraftMaterials = CraftItem->CraftMaterials;
+
+    for (TPair<FName, int>& Pair : CraftMaterials)
+    {
+        FName MatId = Pair.Key;
+        int MatNeedCount = Pair.Value;
+
+        if (false == HasItem(MatId))
         {
-            if (true == IsEmptySlot(x, y))
-            {
-                return { x, y };
-            }
+            return false;
+        }
+
+        if (MatNeedCount > GetCountByItemId(MatId))
+        {
+            return false;
         }
     }
 
-    STS_FATAL("[%s] Inventory is not full, but there is no empty point.", __FUNCTION__);
-    return FIntPoint::ZeroValue;
+    return true;
 }
 
-bool UC_InventoryComponent::IsValidPoint(FIntPoint _Point) const
+int UC_InventoryComponent::FindEmptySlot() const
 {
-    if (0 <= _Point.X && _Point.X < R && 0 <= _Point.Y && _Point.Y < C)
+    if (true == IsFull())
+    {
+        STS_FATAL("[%s] Inventory is full. Can't find empty slot.", __FUNCTION__);
+        return -1;
+    }
+
+    for (int Index = 0; Index < Size; ++Index)
+    {
+        if (true == IsEmptySlot(Index))
+        {
+            return Index;
+        }
+    }
+
+    STS_FATAL("[%s] Inventory is not full, but there is no empty slot. Something is wrong.", __FUNCTION__);
+    return -1;
+}
+
+int UC_InventoryComponent::FindNonEmptySlot() const
+{
+    if (true == IsEmpty())
+    {
+        STS_FATAL("[%s] Inventory is empty. There's no non-empty slot.", __FUNCTION__);
+        return -1;
+    }
+
+    for (int Index = 0; Index < Size; ++Index)
+    {
+        if (false == IsEmptySlot(Index))
+        {
+            return Index;
+        }
+    }
+
+    STS_FATAL("[%s] Inventory is non-empty. But there's no non-empty slot. Something is wrong.", __FUNCTION__);
+    return -1;
+}
+
+bool UC_InventoryComponent::IsValidSlot(int _Index) const
+{
+    if (0 <= _Index && _Index < Size)
     {
         return true;
     }
 
     return false;
-}
-
-FIntPoint UC_InventoryComponent::IndexToPoint(int _Index) const
-{
-    if (_Index < 0 || _Index >= R * C)
-    {
-        STS_FATAL("[%s] %d is an invalid index.", __FUNCTION__, _Index);
-        return { 0, 0 };
-    }
-
-    return { _Index / C , _Index % C };
-}
-
-int UC_InventoryComponent::PointToIndex(FIntPoint _Point) const
-{
-    if (false == IsValidPoint(_Point))
-    {
-        STS_FATAL("[%s] (%d, %d) is an invalid point.", __FUNCTION__, _Point.X, _Point.Y);
-        return 0;
-    }
-
-    return _Point.X * C + _Point.Y;
 }
 
 FTransform UC_InventoryComponent::GetItemSpawnTransform() const
@@ -251,8 +335,6 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
 
 void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, const UC_Item* _Item, int _Count)
 {
-    STS_LOG("Spawned %d of %s.", _Count, *_Item->Name);
-
     TMap<FName, int> Items;
     Items.Emplace(_Item->Id, _Count);
 
