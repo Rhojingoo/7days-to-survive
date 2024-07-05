@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "WB_GetThingTXString.generated.h"
+#include "C_UI_GetThingTXString.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UWB_GetThingTXString : public UUserWidget
+class SEVENDAYS_TO_SURVIVE_API UC_UI_GetThingTXString : public UUserWidget
 {
 	GENERATED_BODY()
 	
