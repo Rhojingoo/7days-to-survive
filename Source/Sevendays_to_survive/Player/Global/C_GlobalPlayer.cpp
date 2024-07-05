@@ -229,7 +229,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::LookMove);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
 
 		//Crouch
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
@@ -311,31 +311,26 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
-	PitchCPP = UKismetMathLibrary::FClamp(_Pitch, MinCalPithchCPP, MaxCalPitchCPP);
+	PitchCPP += _Pitch;
+	if (PitchCPP >= MaxCalPitchCPP)
+	{
+		PitchCPP = MaxCalPitchCPP;
+	}
+	else if (PitchCPP <= MinCalPithchCPP)
+	{
+		PitchCPP = MinCalPithchCPP;
+	}
 }
 
-void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
+void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
 
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
-	if (LookAxisVector.Y > MaxCalPitchCPP)
-	{
-		LookAxisVector.Y = MaxCalPitchCPP;
-	}
-
-	if (LookAxisVector.Y < MinCalPithchCPP)
-	{
-		LookAxisVector.Y = MinCalPithchCPP;
-	}
-
-	
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
-	    PitchCPP += LookAxisVector.Y;
-		ResultPitchCal(PitchCPP);
+		ResultPitchCal(LookAxisVector.Y);
 
 		AddControllerYawInput(-LookAxisVector.X);
 		if (PitchCPP<=MaxCalPitchCPP && PitchCPP>=MinCalPithchCPP)
