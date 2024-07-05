@@ -174,7 +174,7 @@ private:
 	void PlayerMeshOption();
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TMap<EWeaponUseState, AC_EquipWeapon*> GunWeapon;
+	TMap<EWeaponUseState, TSubclassOf<AActor>> GunWeapon;
 
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
@@ -242,6 +242,6 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;
 
-	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_EquipWeapon* CurWeapon = nullptr;
 };

@@ -124,7 +124,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
-	DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
+	//DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
@@ -189,15 +189,15 @@ void AC_GlobalPlayer::BeginPlay()
 		}
 	}
 
-	/*{
+	{
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
-		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
-		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
-	}*/
+		GunWeapon.Add(EWeaponUseState::Rifle, M4);
 
-	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
-	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
-	//CurWeapon->SetActorHiddenInGame(false);
+		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
+	}
+
+	
 }
 
 // Called every frame
@@ -480,7 +480,6 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 
 void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
 {
-
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (SkeletalItemMesh.Num() <= SlotIndex)
 	{
@@ -498,12 +497,46 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 	switch (_Slot)
 	{
 	case ESkerItemSlot::LRifle:
-		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::RPistol)]->SetSkeletalMesh(nullptr);
-		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SetSkeletalMesh(nullptr);
+		if (PlayerCurState == EWeaponUseState::Rifle)
+		{
+			return;
+		}
 
-		PlayerCurState = EWeaponUseState::Rifle;
+		if (false == GunWeapon.Contains(EWeaponUseState::Rifle))
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+		}
+
+		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this);
+		//PlayerCurState = EWeaponUseState::Rifle;
 		break;
 	case ESkerItemSlot::RPistol:
+		if (PlayerCurState == EWeaponUseState::Pistol)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Pistol))
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+		}
+
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		break;
 	case ESkerItemSlot::LShotgun:
 		break;
