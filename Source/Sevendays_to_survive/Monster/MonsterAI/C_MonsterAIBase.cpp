@@ -82,7 +82,7 @@ ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other
 			FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();		// id받아와서
 			if (GetGenericTeamId() == OtherTeamID) {	 // 같으면 팀
 				//UE_LOG(LogTemp, Warning, TEXT("Friend Found"));
-				return ETeamAttitude::Neutral;
+				return ETeamAttitude::Friendly;
 			}		
 			else {										//아니면 적
 				//UE_LOG(LogTemp, Warning, TEXT("Enemy Found"));
@@ -90,7 +90,7 @@ ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other
 			}
 		}
 		else {				//캐스팅 안되면 nullptr이라는 것인데 펑
-			UE_LOG(LogTemp, Fatal, TEXT("Boom"));
+			return ETeamAttitude::Neutral;
 		}
 	}
 	return ETeamAttitude::Neutral;
