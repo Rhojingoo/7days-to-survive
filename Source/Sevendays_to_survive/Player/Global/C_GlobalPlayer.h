@@ -137,7 +137,7 @@ protected:
 	void ResultPitchCal_Implementation(float _Pitch);
 
 	UFUNCTION(BlueprintCallable)
-	void LookMove(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
