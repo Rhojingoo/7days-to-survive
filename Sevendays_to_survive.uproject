@@ -32,6 +32,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "DataRegistry",
+			"Enabled": true
 		}
 	]
 }
