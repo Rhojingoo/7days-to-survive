@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_TaskMonsterChase.h"
@@ -40,6 +40,9 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	if (Target->IsValidLowLevel() == false) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+	}
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = 0;
 
