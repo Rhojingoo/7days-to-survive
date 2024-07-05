@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/C_ZombieBase.h"
@@ -31,7 +31,7 @@ void AC_ZombieBase::BeginPlay()
 {
 	Super::BeginPlay();
 	USkeletalMeshComponent* Sk = GetMesh();
-	UAnimInstance* Anim = Sk->GetAnimInstance();
+	UAnimInstance* Anim = Sk->GetAnimInstance();	//c_zombiebase 기반 c++ 좀비를 하나 만들어서, 그 기반 블프까지 animation instance
 	AnimInstance = Cast<UC_MonsterAnim>(Anim);
 	MonsterState = MonsterEnum::Idle;
 
