@@ -12,6 +12,12 @@ USTRUCT(BlueprintType)
 struct SEVENDAYS_TO_SURVIVE_API FC_ItemRow : public FTableRowBase
 {
 	GENERATED_BODY()
+	
+public:
+	FC_ItemRow() { }
+	~FC_ItemRow() { }
+
+public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name;
@@ -31,6 +37,11 @@ struct SEVENDAYS_TO_SURVIVE_API FC_MaterialRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
+public:
+	FC_MaterialRow() { }
+	~FC_MaterialRow() { }
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxCount = 0;
 };
@@ -39,6 +50,12 @@ USTRUCT(BlueprintType)
 struct SEVENDAYS_TO_SURVIVE_API FC_WeaponRow : public FTableRowBase
 {
 	GENERATED_BODY()
+
+public:
+	FC_WeaponRow() {}
+	~FC_WeaponRow() {}
+
+public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Damage = 0;
@@ -49,6 +66,11 @@ struct SEVENDAYS_TO_SURVIVE_API FC_ConsumableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
+public:
+	FC_ConsumableRow() {}
+	~FC_ConsumableRow() {}
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Hp = 0;
 
