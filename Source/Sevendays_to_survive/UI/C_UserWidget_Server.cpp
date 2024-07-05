@@ -1,20 +1,20 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "UI/C_UserWidget_Server.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/C_UITableRow.h"
-#include "STS/C_STSInstance.h" // °ÔÀÓÀÎ½ºÅÏ½º
+#include "STS/C_STSInstance.h" // ê²Œì„ì¸ìŠ¤í„´ìŠ¤
 
 void UC_UserWidget_Server::StringTODataTable(FString _Name, FString _UserIP)
 {
-	UC_STSInstance* UserInfo = GetWorld()->GetGameInstanceChecked<UC_STSInstance>(); //°¡Á®¿À±â 
+	UC_STSInstance* UserInfo = GetWorld()->GetGameInstanceChecked<UC_STSInstance>(); //ê°€ì ¸ì˜¤ê¸° 
 	UserInfo->SetPlayerInfo(_Name,_UserIP);
 }
 void UC_UserWidget_Server::ServerOpen()
 {
 	UC_STSInstance* Inst = GetGameInstance<UC_STSInstance>();
-	//¿©±â¼­ µ¥ÀÌÅÍ Å×ÀÌºí Á¢±ÙÇØ¼­ °¡Á®¿À´Â°Í¸¸ ÇÏ¸éµÉµí ÇÑµ¥ 
+	//ì—¬ê¸°ì„œ ë°ì´í„° í…Œì´ë¸” ì ‘ê·¼í•´ì„œ ê°€ì ¸ì˜¤ëŠ”ê²ƒë§Œ í•˜ë©´ë ë“¯ í•œë° 
 	
 
 
@@ -24,12 +24,12 @@ void UC_UserWidget_Server::ServerOpen()
 		}
 
 		Inst->TitleToGameInfo.ServerOpenCheck = true;
-		Inst->TitleToGameInfo.UserIp = "192.168.0.173"; //°ªÀ» °è¼Ó ¼öµ¿À¸·Î º¯°æÇØÁà¾ßÇÕ´Ï´Ù. ¾ÆÁ÷Àº
-		Inst->TitleToGameInfo.ServerPort = "30002"; //Æ÷Æ® °ªÀ» °¡Á®¿Í¾ßÇÑ´Ù.
+		Inst->TitleToGameInfo.UserIp = "192.168.0.117"; //ê°’ì„ ê³„ì† ìˆ˜ë™ìœ¼ë¡œ ë³€ê²½í•´ì¤˜ì•¼í•©ë‹ˆë‹¤. ì•„ì§ì€
+		Inst->TitleToGameInfo.ServerPort = "30002"; //í¬íŠ¸ ê°’ì„ ê°€ì ¸ì™€ì•¼í•œë‹¤.
 		
-		//UGameplayStatics::OpenLevel(GetWorld(), TEXT("7Days_Map")); //¸ŞÀÎ °ÔÀÓÇÃ·¹ÀÌÀå¼Ò
-		UGameplayStatics::OpenLevel(GetWorld(), TEXT("testChartestLevel")); //ÀÓ½Ã·Î ¿­¾îµÒ 
-	//¼­¹ö ¿ÀÇÂ ³¡
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("7Days_Map")); //ë©”ì¸ ê²Œì„í”Œë ˆì´ì¥ì†Œ
+		//UGameplayStatics::OpenLevel(GetWorld(), TEXT("testChartestLevel")); //ì„ì‹œë¡œ ì—´ì–´ë‘  
+	//ì„œë²„ ì˜¤í”ˆ ë
 
 
 
