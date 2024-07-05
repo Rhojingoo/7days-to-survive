@@ -137,7 +137,7 @@ protected:
 	void ResultPitchCal_Implementation(float _Pitch);
 
 	UFUNCTION(BlueprintCallable)
-	void LookMove(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
@@ -174,7 +174,7 @@ private:
 	void PlayerMeshOption();
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TMap<EWeaponUseState, AC_EquipWeapon*> GunWeapon;
+	TMap<EWeaponUseState, TSubclassOf<AActor>> GunWeapon;
 
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
@@ -227,6 +227,12 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float PitchCPP = 0.0f;
 
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float MaxCalPitchCPP = 30.0f;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float MinCalPithchCPP = -30.0f;
+
 	UPROPERTY()
 	float LineTraceValue = 10000.0f;
 
@@ -236,6 +242,6 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	EWeaponUseState PlayerCurState = EWeaponUseState::NoWeapon;
 
-	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_EquipWeapon* CurWeapon = nullptr;
 };

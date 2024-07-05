@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Weapon/C_EquipWeapon.h"
@@ -19,7 +19,7 @@ AC_EquipWeapon::AC_EquipWeapon()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("GunCamera"));
 	SpringArm->SetupAttachment(SkeletalMesh, *FString("Zoom"));
-	//SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	SpringArm->TargetArmLength = 0.0f; // The camera follows at this distance behind the character	
 	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera

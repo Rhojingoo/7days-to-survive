@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
@@ -68,8 +68,8 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 		BBC->SetValueAsObject("SelfActor", GetPawn());
 		APC->InitializeComponent();
 
-		//BTC->StartTree(*Monster->AITree);  // ¿ø·¡ Á¸ÀçÇÏ°Å³ª ÀÌ¹Ì ½ÇÇàÁßÀÌ´ø behavior tree¸¦ ½ÃÀÛ È¤Àº Àç½ÃÀÛÇÏ´Âµ¥ ¾²ÀÓ
-		RunBehaviorTree(Monster->AITree);  // ¾î¶°ÇÑ behavior tree¸¦ ½ÇÇàÇÏ´Âµ¥ »ç¿ëµÇ´Â ÇÔ¼öÀÌ¸ç, ÀÌ¹Ì ½ÇÇàÇÏ´ø tree¿Í ´Ù¸¥ behavior tree¸¦ ½ÇÇàÇÏ°Ô ¹Ù²Ü ¼öµµ ÀÖÀ½
+		//BTC->StartTree(*Monster->AITree);  // ì›ë˜ ì¡´ì¬í•˜ê±°ë‚˜ ì´ë¯¸ ì‹¤í–‰ì¤‘ì´ë˜ behavior treeë¥¼ ì‹œì‘ í˜¹ì€ ì¬ì‹œì‘í•˜ëŠ”ë° ì“°ì„
+		RunBehaviorTree(Monster->AITree);  // ì–´ë– í•œ behavior treeë¥¼ ì‹¤í–‰í•˜ëŠ”ë° ì‚¬ìš©ë˜ëŠ” í•¨ìˆ˜ì´ë©°, ì´ë¯¸ ì‹¤í–‰í•˜ë˜ treeì™€ ë‹¤ë¥¸ behavior treeë¥¼ ì‹¤í–‰í•˜ê²Œ ë°”ê¿€ ìˆ˜ë„ ìˆìŒ
 	}
 }
 
@@ -77,20 +77,20 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	Super::GetTeamAttitudeTowards(Other);
-	if (const APawn* OtherPawn = Cast<APawn>(&Other)) {	// Actor´Â controller¸¦ ¹İÈ¯ÇÒ ¼ö ¾øÀ½
-		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController())) { //controller°¡ Igenericteamagentinterface¸¦ °®°íÀÖ¾î¾ßÇÔ
-			FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();		// id¹Ş¾Æ¿Í¼­
-			if (GetGenericTeamId() == OtherTeamID) {	 // °°À¸¸é ÆÀ
+	if (const APawn* OtherPawn = Cast<APawn>(&Other)) {	// ActorëŠ” controllerë¥¼ ë°˜í™˜í•  ìˆ˜ ì—†ìŒ
+		if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController())) { //controllerê°€ Igenericteamagentinterfaceë¥¼ ê°–ê³ ìˆì–´ì•¼í•¨
+			FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();		// idë°›ì•„ì™€ì„œ
+			if (GetGenericTeamId() == OtherTeamID) {	 // ê°™ìœ¼ë©´ íŒ€
 				//UE_LOG(LogTemp, Warning, TEXT("Friend Found"));
-				return ETeamAttitude::Neutral;
+				return ETeamAttitude::Friendly;
 			}		
-			else {										//¾Æ´Ï¸é Àû
+			else {										//ì•„ë‹ˆë©´ ì 
 				//UE_LOG(LogTemp, Warning, TEXT("Enemy Found"));
 				return ETeamAttitude::Hostile;
 			}
 		}
-		else {				//Ä³½ºÆÃ ¾ÈµÇ¸é nullptrÀÌ¶ó´Â °ÍÀÎµ¥ Æã
-			UE_LOG(LogTemp, Fatal, TEXT("Boom"));
+		else {				//ìºìŠ¤íŒ… ì•ˆë˜ë©´ nullptrì´ë¼ëŠ” ê²ƒì¸ë° í‘
+			return ETeamAttitude::Neutral;
 		}
 	}
 	return ETeamAttitude::Neutral;
@@ -121,7 +121,7 @@ void AC_MonsterAIBase::Tick(float _DeltaTime)
 	APC->GetCurrentlyPerceivedActors(SightConfig->GetClass(), PerceivedActors);
 	for (AActor* Actor : PerceivedActors) {
 		APC->HasAnyCurrentStimulus(*Actor);
-	}*/   // ÀÚ±Ø ÀÒ¾î¹ö·ÈÀ» ¶§ È®ÀÎÇÑ´À ÄÚµåÀÎµ¥ ¾Æ¸¶ ¾È¾µµí
+	}*/   // ìê·¹ ìƒì–´ë²„ë ¸ì„ ë•Œ í™•ì¸í•œëŠ ì½”ë“œì¸ë° ì•„ë§ˆ ì•ˆì“¸ë“¯
 }
 
 void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
@@ -132,7 +132,9 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 
 	for (AActor* Actor : _UpdateActors)
 	{
+#ifdef WITH_EDITOR
 		DrawDebugSphere(GetWorld(), Actor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 5.0f);
+#endif
 		BBC->SetValueAsObject(EnemyKeyId, Actor);
 		IsFind = true;
 		APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Player/Global/C_GlobalPlayer.h"
@@ -75,7 +75,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	{
 		{
 			UEnum* Enum = StaticEnum<EStaticItemSlot>();
-			// UStaticMeshComponent ΩΩ∑‘ ¿¸øÎ
+			// UStaticMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 			for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 			{
 				FString Name = Enum->GetNameStringByValue(i);
@@ -89,7 +89,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 		
 		{
 			UEnum* Enum = StaticEnum<ESkerItemSlot>();
-			// USkeletalMeshComponent ΩΩ∑‘ ¿¸øÎ
+			// USkeletalMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
 				FString Name = Enum->GetNameStringByValue(i);
@@ -101,13 +101,13 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 		}
 	}
 
-	// µ•¿Ã≈Õ ø°º¬
+	// Îç∞Ïù¥ÌÑ∞ ÏóêÏÖã
 	{
 		FString RefPathString = TEXT("/Script/Sevendays_to_survive.C_InputActionDatas'/Game/Level/TestLevel/CharTest/Player/Input/DA_Input.DA_Input'");
 
 		ConstructorHelpers::FObjectFinder<UC_InputActionDatas> ResPath(*RefPathString);
 
-		// ¿Ø»ø«— ∏Æº“Ω∫≥ƒ∏¶ ∆«¥‹«“ºˆ ¿÷Ω¿¥œ¥Ÿ.
+		// Ïú†Ìö®Ìïú Î¶¨ÏÜåÏä§ÎÉêÎ•º ÌåêÎã®Ìï†Ïàò ÏûàÏäµÎãàÎã§.
 		if (false == ResPath.Succeeded())
 		{
 			return;
@@ -124,8 +124,10 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
-	DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
+	//DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
+	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 }
 
 // Called when the game starts or when spawned
@@ -160,14 +162,14 @@ void AC_GlobalPlayer::BeginPlay()
 	}
 
 
-	// ƒ´∏ﬁ∂Û µ•¿Ã≈Õ ≈◊¿Ã∫Ì ∞™ ∞°¡Æø¿±‚
+	// Ïπ¥Î©îÎùº Îç∞Ïù¥ÌÑ∞ ÌÖåÏù¥Î∏î Í∞í Í∞ÄÏ†∏Ïò§Í∏∞
 	{
 		SpringArm->TargetArmLength = CameraDT.TargetArmLength;
 		CameraRotSpeed = CameraDT.CameraRotSpeed;
 	}
 
 	
-	// «√∑π¿ÃæÓ µ•¿Ã≈Õ ≈◊¿Ã∫Ì ∞™ ∞°¡Æø¿±‚
+	// ÌîåÎ†àÏù¥Ïñ¥ Îç∞Ïù¥ÌÑ∞ ÌÖåÏù¥Î∏î Í∞í Í∞ÄÏ†∏Ïò§Í∏∞
 	{
 		GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
@@ -187,15 +189,15 @@ void AC_GlobalPlayer::BeginPlay()
 		}
 	}
 
-	/*{
+	{
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
-		AC_EquipWeapon* Gun= GetWorld()->SpawnActor<AC_EquipWeapon>(M4);
-		GunWeapon.Add(EWeaponUseState::Rifle, Gun);
-	}*/
+		GunWeapon.Add(EWeaponUseState::Rifle, M4);
 
-	//CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(Rifle);
-	//CurWeapon->GetWeaponMesh()->AttachWeapon(this);
-	//CurWeapon->SetActorHiddenInGame(false);
+		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
+	}
+
+	
 }
 
 // Called every frame
@@ -227,7 +229,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::LookMove);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Look], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Look);
 
 		//Crouch
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
@@ -300,7 +302,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, Params, EDrawDebugTrace::ForDuration);
 	//GunRotation.
 }
@@ -309,24 +311,33 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
-	PitchCPP = UKismetMathLibrary::FClamp(_Pitch, -30.0f, 30.0f);
+	PitchCPP += _Pitch;
+	if (PitchCPP >= MaxCalPitchCPP)
+	{
+		PitchCPP = MaxCalPitchCPP;
+	}
+	else if (PitchCPP <= MinCalPithchCPP)
+	{
+		PitchCPP = MinCalPithchCPP;
+	}
 }
 
-void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
+void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
-	PitchCPP += LookAxisVector.Y;
-	
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
+
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(-LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
+		ResultPitchCal(LookAxisVector.Y);
 
-	ResultPitchCal(PitchCPP);
+		AddControllerYawInput(-LookAxisVector.X);
+		if (PitchCPP<=MaxCalPitchCPP && PitchCPP>=MinCalPithchCPP)
+		{
+			AddControllerPitchInput(LookAxisVector.Y);
+		}
+	}
 }
 
 void AC_GlobalPlayer::GunLineTraceServer_Implementation()
@@ -345,7 +356,7 @@ void AC_GlobalPlayer::Calstamina()
 		}
 		stamina += staminaCalValue;
 	}
-	else if (true==IsRunCpp) // ¡°«¡ √º≈© ∞™ √ﬂ∞°∑Œ ≥÷æÓæﬂ«‘
+	else if (true==IsRunCpp) // Ï†êÌîÑ Ï≤¥ÌÅ¨ Í∞í Ï∂îÍ∞ÄÎ°ú ÎÑ£Ïñ¥ÏïºÌï®
 	{
 		
 		if (true == GetCharacterMovement()->bWantsToCrouch)
@@ -436,7 +447,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	}
 
 	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent ΩΩ∑‘ ¿¸øÎ
+	// USkeletalMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 	for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 	{
 		SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -469,7 +480,6 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 
 void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
 {
-
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (SkeletalItemMesh.Num() <= SlotIndex)
 	{
@@ -478,7 +488,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 	}
 
 	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent ΩΩ∑‘ ¿¸øÎ
+	// USkeletalMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 	for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 	{
 		StaticItemMesh[i]->SetStaticMesh(nullptr);
@@ -487,12 +497,46 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 	switch (_Slot)
 	{
 	case ESkerItemSlot::LRifle:
-		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::RPistol)]->SetSkeletalMesh(nullptr);
-		SkeletalItemMesh[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SetSkeletalMesh(nullptr);
+		if (PlayerCurState == EWeaponUseState::Rifle)
+		{
+			return;
+		}
 
-		PlayerCurState = EWeaponUseState::Rifle;
+		if (false == GunWeapon.Contains(EWeaponUseState::Rifle))
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+		}
+
+		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this);
+		//PlayerCurState = EWeaponUseState::Rifle;
 		break;
 	case ESkerItemSlot::RPistol:
+		if (PlayerCurState == EWeaponUseState::Pistol)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Pistol))
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+		}
+
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		break;
 	case ESkerItemSlot::LShotgun:
 		break;
@@ -522,7 +566,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
-		// USkeletalMeshComponent ΩΩ∑‘ ¿¸øÎ
+		// USkeletalMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
 			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -532,7 +576,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
-		// USkeletalMeshComponent ΩΩ∑‘ ¿¸øÎ
+		// USkeletalMeshComponent Ïä¨Î°Ø Ï†ÑÏö©
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 		{
 			StaticItemMesh[i]->SetStaticMesh(nullptr);

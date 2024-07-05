@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Weapon/C_GunComponent.h"
@@ -36,19 +36,41 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 
 	
 
-	// Set up action bindings
-	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			// Set the priority of the mapping to 1, so that it overrides the Jump action with the Fire action when using touch input
-			Subsystem->AddMappingContext(FireMappingContext, 1);
-		}
+	//// Set up action bindings
+	//if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	//{
+	//	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+	//	{
+	//		// Set the priority of the mapping to 1, so that it overrides the Jump action with the Fire action when using touch input
+	//		Subsystem->AddMappingContext(FireMappingContext, 1);
+	//	}
 
-		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
-		{
-			// Fire
-			//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UC_GunComponent::Fire);
-		}
+	//	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+	//	{
+	//		// Fire
+	//		//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UC_GunComponent::Fire);
+	//	}
+	//}
+}
+
+void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
+{
+	Character = TargetCharacter;
+
+	// Check that the character is valid, and has no rifle yet
+	if (Character == nullptr /*|| Character->GetHasRifle()*/)
+	{
+		return;
+	}
+	Character->SetPlayerCurState(EWeaponUseState::Pistol);
+	// Attach the weapon to the First Person Character
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SkeletalMesh == nullptr)
+	{
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)], AttachmentRules, FName(TEXT("RPistol")));
+
+		// switch bHasRifle so the animation blueprint can switch to another animation set
+		Character->SetHasRifle(true);
 	}
 }
