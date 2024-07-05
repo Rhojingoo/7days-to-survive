@@ -227,6 +227,12 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float PitchCPP = 0.0f;
 
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float MaxCalPitchCPP = 30.0f;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float MinCalPithchCPP = -30.0f;
+
 	UPROPERTY()
 	float LineTraceValue = 10000.0f;
 

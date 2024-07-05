@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Player/Global/C_GlobalPlayer.h"
@@ -75,7 +75,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	{
 		{
 			UEnum* Enum = StaticEnum<EStaticItemSlot>();
-			// UStaticMeshComponent ½½·Ô Àü¿ë
+			// UStaticMeshComponent ìŠ¬ë¡¯ ì „ìš©
 			for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 			{
 				FString Name = Enum->GetNameStringByValue(i);
@@ -89,7 +89,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 		
 		{
 			UEnum* Enum = StaticEnum<ESkerItemSlot>();
-			// USkeletalMeshComponent ½½·Ô Àü¿ë
+			// USkeletalMeshComponent ìŠ¬ë¡¯ ì „ìš©
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
 				FString Name = Enum->GetNameStringByValue(i);
@@ -101,13 +101,13 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 		}
 	}
 
-	// µ¥ÀÌÅÍ ¿¡¼Â
+	// ë°ì´í„° ì—ì…‹
 	{
 		FString RefPathString = TEXT("/Script/Sevendays_to_survive.C_InputActionDatas'/Game/Level/TestLevel/CharTest/Player/Input/DA_Input.DA_Input'");
 
 		ConstructorHelpers::FObjectFinder<UC_InputActionDatas> ResPath(*RefPathString);
 
-		// À¯È¿ÇÑ ¸®¼Ò½º³Ä¸¦ ÆÇ´ÜÇÒ¼ö ÀÖ½À´Ï´Ù.
+		// ìœ íš¨í•œ ë¦¬ì†ŒìŠ¤ëƒë¥¼ íŒë‹¨í• ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 		if (false == ResPath.Succeeded())
 		{
 			return;
@@ -126,6 +126,8 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
+	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 }
 
 // Called when the game starts or when spawned
@@ -160,14 +162,14 @@ void AC_GlobalPlayer::BeginPlay()
 	}
 
 
-	// Ä«¸Ş¶ó µ¥ÀÌÅÍ Å×ÀÌºí °ª °¡Á®¿À±â
+	// ì¹´ë©”ë¼ ë°ì´í„° í…Œì´ë¸” ê°’ ê°€ì ¸ì˜¤ê¸°
 	{
 		SpringArm->TargetArmLength = CameraDT.TargetArmLength;
 		CameraRotSpeed = CameraDT.CameraRotSpeed;
 	}
 
 	
-	// ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ Å×ÀÌºí °ª °¡Á®¿À±â
+	// í”Œë ˆì´ì–´ ë°ì´í„° í…Œì´ë¸” ê°’ ê°€ì ¸ì˜¤ê¸°
 	{
 		GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 		GetCharacterMovement()->JumpZVelocity = PlayerDT.JumpZVelocity;
@@ -309,24 +311,38 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
-	PitchCPP = UKismetMathLibrary::FClamp(_Pitch, -30.0f, 30.0f);
+	PitchCPP = UKismetMathLibrary::FClamp(_Pitch, MinCalPithchCPP, MaxCalPitchCPP);
 }
 
 void AC_GlobalPlayer::LookMove(const FInputActionValue& Value)
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
-	PitchCPP += LookAxisVector.Y;
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
+
+	if (LookAxisVector.Y > MaxCalPitchCPP)
+	{
+		LookAxisVector.Y = MaxCalPitchCPP;
+	}
+
+	if (LookAxisVector.Y < MinCalPithchCPP)
+	{
+		LookAxisVector.Y = MinCalPithchCPP;
+	}
+
 	
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(-LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
+	    PitchCPP += LookAxisVector.Y;
+		ResultPitchCal(PitchCPP);
 
-	ResultPitchCal(PitchCPP);
+		AddControllerYawInput(-LookAxisVector.X);
+		if (PitchCPP<=MaxCalPitchCPP && PitchCPP>=MinCalPithchCPP)
+		{
+			AddControllerPitchInput(LookAxisVector.Y);
+		}
+	}
 }
 
 void AC_GlobalPlayer::GunLineTraceServer_Implementation()
@@ -345,7 +361,7 @@ void AC_GlobalPlayer::Calstamina()
 		}
 		stamina += staminaCalValue;
 	}
-	else if (true==IsRunCpp) // Á¡ÇÁ Ã¼Å© °ª Ãß°¡·Î ³Ö¾î¾ßÇÔ
+	else if (true==IsRunCpp) // ì í”„ ì²´í¬ ê°’ ì¶”ê°€ë¡œ ë„£ì–´ì•¼í•¨
 	{
 		
 		if (true == GetCharacterMovement()->bWantsToCrouch)
@@ -436,7 +452,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	}
 
 	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent ½½·Ô Àü¿ë
+	// USkeletalMeshComponent ìŠ¬ë¡¯ ì „ìš©
 	for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 	{
 		SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -478,7 +494,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 	}
 
 	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent ½½·Ô Àü¿ë
+	// USkeletalMeshComponent ìŠ¬ë¡¯ ì „ìš©
 	for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 	{
 		StaticItemMesh[i]->SetStaticMesh(nullptr);
@@ -522,7 +538,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
-		// USkeletalMeshComponent ½½·Ô Àü¿ë
+		// USkeletalMeshComponent ìŠ¬ë¡¯ ì „ìš©
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
 			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -532,7 +548,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
-		// USkeletalMeshComponent ½½·Ô Àü¿ë
+		// USkeletalMeshComponent ìŠ¬ë¡¯ ì „ìš©
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 		{
 			StaticItemMesh[i]->SetStaticMesh(nullptr);
