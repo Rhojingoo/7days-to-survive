@@ -74,3 +74,25 @@ void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
 		Character->SetHasRifle(true);
 	}
 }
+
+void UC_GunComponent::AttachShotGun(AC_GlobalPlayer* TargetCharacter)
+{
+	Character = TargetCharacter;
+
+	// Check that the character is valid, and has no rifle yet
+	if (Character == nullptr /*|| Character->GetHasRifle()*/)
+	{
+		return;
+	}
+	Character->SetPlayerCurState(EWeaponUseState::Shotgun);
+	// Attach the weapon to the First Person Character
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SkeletalMesh == nullptr)
+	{
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
+
+		// switch bHasRifle so the animation blueprint can switch to another animation set
+		Character->SetHasRifle(true);
+	}
+}

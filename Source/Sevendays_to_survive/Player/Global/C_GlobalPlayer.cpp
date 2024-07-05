@@ -195,6 +195,9 @@ void AC_GlobalPlayer::BeginPlay()
 
 		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
+
+		TSubclassOf<AActor> ShotGun = STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Shotgun, ShotGun);
 	}
 
 	
@@ -539,6 +542,27 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		break;
 	case ESkerItemSlot::LShotgun:
+
+		//ShotGun
+		if (PlayerCurState == EWeaponUseState::Shotgun)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Shotgun))
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+		}
+
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
 		break;
 	case ESkerItemSlot::SlotMax:
 		break;
