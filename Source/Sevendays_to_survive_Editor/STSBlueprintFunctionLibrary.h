@@ -15,16 +15,12 @@ class SEVENDAYS_TO_SURVIVE_EDITOR_API USTSBlueprintFunctionLibrary : public UBlu
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable)
-	static void GetAllFileName();
-
-	UFUNCTION(BlueprintCallable)
-	static void GetOpenDirectoryDialog(FString DirectoryPath, FString& Directory, bool& IsSelet);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TArray<FString> FoundFileNames;
-	
-	
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void DataTableSetting(UDataTable* DataTable);
 
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	TArray<FString> DataTableColumn;
+	
+		
 };
