@@ -48,12 +48,17 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-	
+	GetCharacterMovement()->bIgnoreBaseRotation = true; // 베이스 회전
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera"));
 	SpringArm->SetupAttachment(GetMesh(), *FString("Head"));
-	//SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	SpringArm->TargetArmLength = 0.0f; // The camera follows at this distance behind the character	
 	SpringArm->bUsePawnControlRotation = false; // Rotate the arm based on the controller
+	SpringArm->bEnableCameraRotationLag = true;
+	SpringArm->CameraRotationLagSpeed = 10.0f;
+
 
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("FollowCamera"));
@@ -218,8 +223,8 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		// Jumping
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Canceled, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
 
 		// Moving
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Move], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
@@ -227,8 +232,6 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Run
 		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
-		
-		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
@@ -429,6 +432,7 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = PlayerDT.WalkSpeed;
 	IsRunCpp = false;
 }
+
 
 void AC_GlobalPlayer::AimEnd_Implementation(const FInputActionValue& Value)
 {

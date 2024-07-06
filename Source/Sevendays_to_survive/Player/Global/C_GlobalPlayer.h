@@ -128,6 +128,9 @@ protected:
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
 
+	
+
+
 	UFUNCTION(Reliable, Server)
 	void AimEnd(const FInputActionValue& Value); //
 	void AimEnd_Implementation(const FInputActionValue& Value);
@@ -201,6 +204,9 @@ private:
 	
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsRunCpp = false;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsJumpCpp = false;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAimCpp = false;
