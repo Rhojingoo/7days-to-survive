@@ -53,7 +53,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera"));
 	SpringArm->SetupAttachment(GetMesh(), *FString("Head"));
 	//SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	SpringArm->bUsePawnControlRotation = false; // Rotate the arm based on the controller
 
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("FollowCamera"));
