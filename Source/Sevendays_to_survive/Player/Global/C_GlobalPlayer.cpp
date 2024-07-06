@@ -142,8 +142,8 @@ void AC_GlobalPlayer::BeginPlay()
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
-	
-	Rifle = STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
+	BulletDT = STSInstance->GetPlayerDataTable()->BulletValue;
+
 
 	{
 		FString& Port = STSInstance->TitleToGameInfo.ServerPort;
