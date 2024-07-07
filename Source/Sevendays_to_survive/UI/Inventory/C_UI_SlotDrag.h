@@ -18,5 +18,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void DragImage();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	UWidget* DragCurWidget();
 
+
+private:
+	UWidget* CurWidget;
 };
