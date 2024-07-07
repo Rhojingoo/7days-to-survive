@@ -33,14 +33,14 @@ void AC_BasicZombie::Attack_Implementation()
 	//Super::Attack();
 	SetState(MonsterEnum::Idle);
 	if (false == AnimInstance->IsPlayMontage()) {
-		if (FMath::RandBool())
-		{
+		//if (FMath::RandBool())
+		//{
 			AnimInstance->ChangeAnimation(MonsterEnum::Attack);
-		}
-		else
-		{
-			AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
-		}
+		//}
+		//else
+		//{
+		//	AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+		//}
 	}
 }
 
@@ -48,14 +48,14 @@ void AC_BasicZombie::RunAttack_Implementation()
 {
 	SetState(MonsterEnum::Run);
 	if (false == AnimInstance->IsPlayMontage()) {
-		if (FMath::RandBool())
-		{
-			AnimInstance->ChangeAnimation(MonsterEnum::Attack);
-		}
-		else
-		{
+		//if (FMath::RandBool())
+		//{
+		//	AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+		//}
+		//else
+		//{
 			AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
-		}
+		//}
 	}
 }
 

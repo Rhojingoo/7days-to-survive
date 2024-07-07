@@ -36,7 +36,7 @@ UC_MonsterAnim::UC_MonsterAnim()
 //	}
 //}
 
-void UC_MonsterAnim::ChangeAnimation_Implementation(uint8 Key)
+void UC_MonsterAnim::ChangeAnimation(uint8 Key)
 {
 	if (false == AnimMontages.Contains(Key))
 	{
