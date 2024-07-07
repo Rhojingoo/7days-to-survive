@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
@@ -17,7 +17,7 @@ void UC_UI_InverntoryWidget::NativeConstruct()
 
 	//WidgetInventory = MapPlayer->GetmapInventory();
 	
-	//WidgetInventory->GetItemAndCount(0, 0); //0,0¹øÂ° ¾ÆÀÌÅÛÀ» °¡Á®¿Â´Ù.
+	//WidgetInventory->GetItemAndCount(0, 0); //0,0ë²ˆì§¸ ì•„ì´í…œì„ ê°€ì ¸ì˜¨ë‹¤.
 
 
 }
@@ -31,9 +31,22 @@ void UC_UI_InverntoryWidget::GetDataInventory(FC_ItemAndCount _Inventory)
 		{
 	
 			UIInventory[i][j] = _Inventory;
-			//µ¥ÀÌÅÍ °¡Á®¿À±â 
+			//ë°ì´í„° ê°€ì ¸ì˜¤ê¸° 
 		}
 	}
 		
 
+}
+
+
+void UC_UI_InverntoryWidget::SettingSlots(UPanelWidget* _Pannel) // ìŠ¬ë¡¯ ê°€ì ¸ì˜¤ê¸° 
+{
+	Slots = _Pannel->GetAllChildren();
+	
+}
+
+
+void UC_UI_InverntoryWidget::SwitchSlot(int _PrevIndex, int _ChangeIndex)
+{
+	
 }
