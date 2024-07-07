@@ -89,12 +89,12 @@ protected:
 	void ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
 
 	UFUNCTION(Reliable, NetMulticast)
-	void ChangeSlotSkeletal(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
-	void ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletal(ESkerItemSlot _Slot);
+	void ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot);
 
 	UFUNCTION(BlueprintCallable, Reliable, Server)
-	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
-	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot);
+	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot);
 
 	UFUNCTION(Reliable, NetMulticast)
 	void ChangeNoWeapon();

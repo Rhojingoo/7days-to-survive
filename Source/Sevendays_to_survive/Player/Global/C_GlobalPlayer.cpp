@@ -192,6 +192,8 @@ void AC_GlobalPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+
+		PlayerController->SetViewTarget(this);
 	}
 
 	{
@@ -204,8 +206,6 @@ void AC_GlobalPlayer::BeginPlay()
 		TSubclassOf<AActor> ShotGun = STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Shotgun, ShotGun);
 	}
-
-	
 }
 
 // Called every frame
@@ -444,6 +444,10 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	if (nullptr!=CurWeapon)
 	{
 		CurWeapon->Destroy();
+		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+		{
+			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+		}
 	}
 
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
@@ -485,7 +489,7 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 	ChangeSlotMesh(_Slot, _Mesh);
 }
 
-void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (SkeletalItemMesh.Num() <= SlotIndex)
@@ -514,9 +518,18 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 			return;
 		}
 
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SkeletalMesh != nullptr)
+		{
+			return;
+		}
+
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
 		}
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
@@ -535,9 +548,18 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 			return;
 		}
 
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SkeletalMesh != nullptr)
+		{
+			return;
+		}
+
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
 		}
 
 
@@ -558,9 +580,18 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 			return;
 		}
 
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SkeletalMesh != nullptr)
+		{
+			return;
+		}
+
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
 		}
 
 
@@ -573,15 +604,11 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 	default:
 		break;
 	}
-
-	
-
-	SkeletalItemMesh[SlotIndex]->SetSkeletalMesh(_Mesh);
 }
 
-void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot)
 {
-	ChangeSlotSkeletal(_Slot, _Mesh);
+	ChangeSlotSkeletal(_Slot);
 }
 
 void AC_GlobalPlayer::ChangeNoWeapon_Implementation()

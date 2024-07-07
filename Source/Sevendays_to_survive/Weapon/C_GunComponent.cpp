@@ -28,6 +28,7 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 
 	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SkeletalMesh == nullptr)
 	{
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SkeletalMesh = SkeletalMesh;
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)], AttachmentRules, FName(TEXT("LRifle")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
@@ -68,6 +69,7 @@ void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
 
 	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SkeletalMesh == nullptr)
 	{
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SkeletalMesh = SkeletalMesh;
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)], AttachmentRules, FName(TEXT("RPistol")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
@@ -90,6 +92,7 @@ void UC_GunComponent::AttachShotGun(AC_GlobalPlayer* TargetCharacter)
 
 	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SkeletalMesh == nullptr)
 	{
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SkeletalMesh = SkeletalMesh;
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
