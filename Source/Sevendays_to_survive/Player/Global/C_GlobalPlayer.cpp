@@ -457,22 +457,23 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 		return;
 	}
 
-	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent 슬롯 전용
-	for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
-	{
-		SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
-	}
-
 	switch (_Slot)
 	{
 	case EStaticItemSlot::RSword:
-		StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
-
+		//StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMesh[i]->SetStaticMesh(nullptr);
+		}
 
 		PlayerCurState = EWeaponUseState::Sword;
 		break;
 	case EStaticItemSlot::RAxe:
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMesh[i]->SetStaticMesh(nullptr);
+		}
+		PlayerCurState = EWeaponUseState::Axe;
 		break;
 	case EStaticItemSlot::SlotMax:
 		break;
