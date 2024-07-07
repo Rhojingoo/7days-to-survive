@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Monster/C_ZombieBase.h"
+#include "Net/UnrealNetwork.h"
 #include "C_BasicZombie.generated.h"
 
 /**
@@ -21,6 +22,13 @@ public:
 	void Tick(float _DeltaTime) override final;
 	void SetName(FString _Name) override final;
 	void Idle() override final;
+	UFUNCTION(NetMulticast, Reliable)
 	void Attack() override final;
+	void Attack_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void RunAttack() override final;
+	void RunAttack_Implementation();
+	void Run(FVector _Location) override final;
 	void Move(FVector _Location) override final;
 };

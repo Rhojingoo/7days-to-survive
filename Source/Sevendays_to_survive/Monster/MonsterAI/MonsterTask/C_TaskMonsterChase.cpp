@@ -48,7 +48,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
-	GetController(&OwnerComp)->GetMCP()->Move(Target->GetActorLocation() - SelfLocation);
+	GetController(&OwnerComp)->GetMCP()->Run(Target->GetActorLocation() - SelfLocation);
 
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
@@ -59,18 +59,18 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
 
-
-
 	if (Vec < TargetDistance) {
 		GetController(&OwnerComp)->GetMCP()->Attack();
 		return;
 		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
-	if (Vec < 200.f) {
+	else if (Vec < 200.f) {
 		GetController(&OwnerComp)->GetMCP()->RunAttack();
 		return;
 	}
+
+	return;
 }
 
 

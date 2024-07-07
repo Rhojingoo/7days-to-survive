@@ -38,6 +38,7 @@ public:
 	/*void Dead();
 	void Run();*/
 	void Move(FVector _Location);
+	void Run(FVector _Location);
 	void Idle();
 	void Attack();
 	void RunAttack();

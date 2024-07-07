@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/Component/C_MonsterComponent.h"
@@ -44,6 +44,11 @@ void UC_MonsterComponent::Move(FVector _Location)
 	MonsterPawn->Move(_Location);
 }
 
+void UC_MonsterComponent::Run(FVector _Location)
+{
+	MonsterPawn->Run(_Location);
+}
+
 void UC_MonsterComponent::Idle()
 {
 	MonsterPawn->Idle();
@@ -58,3 +63,4 @@ void UC_MonsterComponent::RunAttack()
 {
 	MonsterPawn->RunAttack();
 }
+

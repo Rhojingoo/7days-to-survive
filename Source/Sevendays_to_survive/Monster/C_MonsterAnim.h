@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Net/UnrealNetwork.h"
 #include "C_MonsterAnim.generated.h"
 
 /**
@@ -26,9 +27,9 @@ public:
 
 
 
-	//UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void ChangeAnimation(uint8 Key);
-	//void ChangeAnimation_Implementation(uint8 Key);
+	void ChangeAnimation_Implementation(uint8 Key);
 
 	template<typename EnumType>
 	void PushAnimation(EnumType Key, class UAnimMontage* _Montage)
@@ -42,6 +43,8 @@ public:
 	{
 		return AnimMontages;
 	}
+
+	bool IsPlayMontage();
 
 protected:
 
