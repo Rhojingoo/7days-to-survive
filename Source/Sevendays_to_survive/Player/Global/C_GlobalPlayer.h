@@ -39,12 +39,12 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras; }
 
-	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
+	FORCEINLINE TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
 		return StaticItemMesh;
 	}
 
-	TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
+	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
 	{
 		return SkeletalItemMesh;
 	}
@@ -68,9 +68,11 @@ public:
 		PlayerCurState = _PlayerCurState;
 	}
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Playerhit(int _Damage);
 
+	UFUNCTION()
+	void ResetHit();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -255,4 +257,8 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_EquipWeapon* CurWeapon = nullptr;
+
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* hitMontage = nullptr;
 };

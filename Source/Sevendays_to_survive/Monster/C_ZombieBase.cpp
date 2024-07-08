@@ -132,12 +132,12 @@ void AC_ZombieBase::RunAttack()
 	SetState(MonsterEnum::RunAttack);
 }
 
-void AC_ZombieBase::CollisionOn()
+void AC_ZombieBase::OnNotifyBegin()
 {
 	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
 }
 
-void AC_ZombieBase::CollisionOff()
+void AC_ZombieBase::OnNotifyEnd()
 {
 	AttackComponent->SetCollisionProfileName("NoCollision");
 }

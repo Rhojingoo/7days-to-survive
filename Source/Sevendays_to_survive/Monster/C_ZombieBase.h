@@ -15,6 +15,7 @@ enum class MonsterEnum : uint8
 	Move UMETA(DisplayName = "Move"),
 	Attack UMETA(DisplayName = "Attack"),
 	RunAttack UMETA(DisplayName = "RunAttack"),
+	Shout UMETA(DisplayName = "Shout"),
 	Climb UMETA(DisplayName = "Climb"),
 	Dead UMETA(DisplayName = "Dead"),
 	Run UMETA(DisplayName = "Run"),
@@ -52,8 +53,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetRagDoll();
 
-	void CollisionOn();
-	void CollisionOff();
+	virtual void OnNotifyBegin();
+	virtual void OnNotifyEnd();
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();
