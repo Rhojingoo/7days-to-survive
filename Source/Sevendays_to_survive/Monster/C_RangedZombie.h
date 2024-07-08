@@ -43,4 +43,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> BulletClass = nullptr;
+
+	bool IsMeleeAttack = false;
 };
