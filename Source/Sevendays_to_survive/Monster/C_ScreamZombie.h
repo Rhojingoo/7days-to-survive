@@ -25,6 +25,10 @@ public:
 	void Idle() override final;
 
 	UFUNCTION(NetMulticast, Reliable)
+	void ShoutAttack();
+	void ShoutAttack_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Attack() override final;
 	void Attack_Implementation();
 
@@ -37,6 +41,6 @@ public:
 
 private:
 	//UPROPERTY(Blueprintecallable)
-	bool Shout = false;
+	//bool Shout = false;
 
 };
