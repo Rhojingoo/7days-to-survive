@@ -50,6 +50,8 @@ public:
 	virtual void Run(FVector _Location);
 	virtual void Attack();
 	virtual void RunAttack();
+	virtual void ShoutAttack();
+
 	UFUNCTION(BlueprintCallable)
 	void SetRagDoll();
 
@@ -71,6 +73,8 @@ public:
 
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
 
+	bool IsShout() { return Shout; }
+
 protected:
 	FString MonsterName;
 
@@ -81,6 +85,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	class UBoxComponent* AttackComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
+	bool Shout = false;
+
+
 };
 
 

@@ -76,6 +76,11 @@ void UC_MonsterComponent::RunAttack()
 	MonsterPawn->RunAttack();
 }
 
+void UC_MonsterComponent::Shout()
+{
+	MonsterPawn->ShoutAttack();
+}
+
 void UC_MonsterComponent::RangedAttack()
 {
 	AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(MonsterPawn);

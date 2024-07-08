@@ -26,6 +26,12 @@ public:
 		MonsterPawn = _Monster;
 	}
 
+	AC_ZombieBase* GetMonster() 
+	{
+		return MonsterPawn;
+	}
+
+
 	void SetData();
 protected:
 	// Called when the game starts
@@ -42,6 +48,7 @@ public:
 	void Idle();
 	void Attack();
 	void RunAttack();
+	void Shout();
 	void RangedAttack();
 
 	class UMonsterDataObject* GetData();

@@ -25,7 +25,7 @@ public:
 	void Idle() override final;
 
 	UFUNCTION(NetMulticast, Reliable)
-	void ShoutAttack();
+	void ShoutAttack() override final;
 	void ShoutAttack_Implementation();
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -39,8 +39,9 @@ public:
 	void Run(FVector _Location) override final;
 	void Move(FVector _Location) override final;	
 
-private:
-	//UPROPERTY(Blueprintecallable)
-	//bool Shout = false;
+	void OnNotifyBegin()override final;
+	void OnNotifyEnd()override final;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool ShoutBegin = false;
 };
