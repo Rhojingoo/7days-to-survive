@@ -519,7 +519,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			return;
 		}
 
-		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SkeletalMesh != nullptr)
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->GetSkinnedAsset() != nullptr)
 		{
 			return;
 		}
@@ -549,7 +549,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			return;
 		}
 
-		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SkeletalMesh != nullptr)
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->GetSkinnedAsset() != nullptr)
 		{
 			return;
 		}
@@ -581,7 +581,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			return;
 		}
 
-		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SkeletalMesh != nullptr)
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->GetSkinnedAsset() != nullptr)
 		{
 			return;
 		}
