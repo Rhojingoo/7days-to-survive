@@ -69,6 +69,7 @@ public:
 	void Collision(AActor* _Actor);
 
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
+
 protected:
 	FString MonsterName;
 
@@ -79,7 +80,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	class UBoxComponent* AttackComponent;
-
 };
 
 
