@@ -68,7 +68,7 @@ public:
 		PlayerCurState = _PlayerCurState;
 	}
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Playerhit(int _Damage);
 
 protected:
