@@ -26,7 +26,7 @@ public:
 		MonsterPawn = _Monster;
 	}
 
-	void SetData(FTableRowBase* _Data);
+	void SetData();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -43,11 +43,16 @@ public:
 	void Attack();
 	void RunAttack();
 
+	class UMonsterDataObject* GetData() {
+		return MonsterData;
+	}
+
 private:
 	UPROPERTY()
 	const AAIController* Controller = nullptr;
 
-	const FTableRowBase* MonsterData = nullptr; 
+	UPROPERTY()
+	UMonsterDataObject* MonsterData = nullptr;
 
 	UPROPERTY()
 	AC_ZombieBase* MonsterPawn = nullptr;

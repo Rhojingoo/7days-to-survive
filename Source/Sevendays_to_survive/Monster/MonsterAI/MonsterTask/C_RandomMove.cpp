@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_RandomMove.h"
@@ -43,7 +43,7 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Vec);
 #endif
 
-	if (Vec < TargetDistance) {
+	if (Vec < 100.f) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }
