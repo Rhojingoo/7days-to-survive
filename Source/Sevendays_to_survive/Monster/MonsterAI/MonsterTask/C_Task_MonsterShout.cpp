@@ -51,7 +51,10 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
-	MCP->Run(Target->GetActorLocation() - SelfLocation);
+	MCP->Shout();
+	AC_ZombieBase* ScreamZombie = MCP->GetMonster();
+	bool ShoutCheck = ScreamZombie->IsShout();
+	//MCP->Run(Target->GetActorLocation() - SelfLocation);
 
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
@@ -62,17 +65,10 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
 
-
-	//if (Vec < Minimum_Distance) {
-	//	GetController(&OwnerComp)->GetMCP()->Attack();
-	//	return;
-	//	//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	//}
-
-	//else if (Vec < MCP->GetData()->GetMonsterRange()) {
-	//	GetController(&OwnerComp)->GetMCP()->RunAttack();
-	//	return;
-	//}
+	if (ShoutCheck == true)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 
 	return;
 }

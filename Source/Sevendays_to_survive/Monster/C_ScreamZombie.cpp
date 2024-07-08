@@ -40,11 +40,10 @@ void AC_ScreamZombie::ShoutAttack_Implementation()
 		return;
 	}
 	SetState(MonsterEnum::Shout);
-
-	if (false == AnimInstance->IsPlayMontage())
-	{
-		AnimInstance->ChangeAnimation(MonsterEnum::Shout);
-	}
+	//	if (false == AnimInstance->IsPlayMontage())
+	//	{
+	//		AnimInstance->ChangeAnimation(MonsterEnum::Shout);
+	//	}
 }
 
 void AC_ScreamZombie::Attack_Implementation()
@@ -91,4 +90,19 @@ void AC_ScreamZombie::Move(FVector _Location)
 		return;
 	}
 	Super::Move(_Location);
+}
+
+void AC_ScreamZombie::OnNotifyBegin()
+{
+	Super::OnNotifyBegin();
+}
+
+void AC_ScreamZombie::OnNotifyEnd()
+{
+	Super::OnNotifyEnd();
+
+	if (Shout == false)
+	{
+		Shout = true;
+	}
 }

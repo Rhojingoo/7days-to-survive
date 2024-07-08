@@ -75,6 +75,11 @@ void UC_MonsterComponent::RunAttack()
 	MonsterPawn->RunAttack();
 }
 
+void UC_MonsterComponent::Shout()
+{
+	MonsterPawn->ShoutAttack();
+}
+
 UMonsterDataObject* UC_MonsterComponent::GetData()
 {
 	return MonsterData;

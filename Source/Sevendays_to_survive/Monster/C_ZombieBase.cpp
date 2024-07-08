@@ -127,6 +127,11 @@ void AC_ZombieBase::Attack()
 	SetState(MonsterEnum::Attack);
 }
 
+void AC_ZombieBase::ShoutAttack()
+{
+	SetState(MonsterEnum::Shout);
+}
+
 void AC_ZombieBase::RunAttack()
 {
 	SetState(MonsterEnum::RunAttack);
