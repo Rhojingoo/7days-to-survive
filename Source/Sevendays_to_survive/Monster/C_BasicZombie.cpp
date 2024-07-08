@@ -3,6 +3,8 @@
 
 #include "Monster/C_BasicZombie.h"
 #include "C_MonsterAnim.h"
+
+
 AC_BasicZombie::AC_BasicZombie()
 {
 	SetName("BaseZombie");

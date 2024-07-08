@@ -74,7 +74,8 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AC_ZombieBase::SetRagDoll() {
+void AC_ZombieBase::SetRagDoll() 
+{
 	UCharacterMovementComponent* Component = GetCharacterMovement();
 	Component->DisableMovement();
 

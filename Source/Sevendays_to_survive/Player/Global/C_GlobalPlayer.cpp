@@ -122,6 +122,54 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	}
 }
 
+void AC_GlobalPlayer::Playerhit(int _Damage)
+{
+	//if (true == Id.IsNone())
+	//{
+	//	return;
+	//}
+
+	if (Hp <= 0)
+	{
+		return;
+	}
+
+	//HpMap[_Index] -= _Damage;
+	//STS_LOG("[%s:%d] damaged by % d", *GetName(), _Index, _Damage);
+	//STS_LOG("[%s:%d] HP: %d/%d", *GetName(), _Index, HpMap[_Index], MaxHpMap[_Index]);
+
+	//// 아이템 획득
+	//AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
+	//if (nullptr != ItemGainer)
+	//{
+	//	GainDropItems(ItemGainer);
+	//}
+
+	//if (HpMap[_Index] <= 0)
+	//{
+	//	bool Result = HISMComponent->RemoveInstance(_Index);
+
+	//	if (false == Result)
+	//	{
+	//		STS_FATAL("[%s:%d] destroy failed.", *GetName(), _Index);
+	//	}
+	//	else
+	//	{
+	//		HideHpBar();
+	//		STS_LOG("[%s:%d] destroyed successfully.", *GetName(), _Index);
+	//	}
+
+	//	return;
+	//}
+
+	//// 위젯 업데이트
+	//if (true == HpBar->IsActive() && _Index == HpBarTargetIndex)
+	//{
+	//	HpBarWidget->SetCurHealth(HpMap[HpBarTargetIndex]);
+	//	HpBarWidget->SetMaxHealth(MaxHpMap[HpBarTargetIndex]);
+	//}
+}
+
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
