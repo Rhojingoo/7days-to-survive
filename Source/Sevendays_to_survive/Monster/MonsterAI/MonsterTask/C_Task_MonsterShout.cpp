@@ -57,7 +57,6 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 	FVector Direction = (Target->GetActorLocation() - SelfLocation).GetSafeNormal();
 
-	// Add rotation logic to face the target
 	FRotator LookAtRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
 	Controller->GetPawn()->SetActorRotation(LookAtRotation);
 

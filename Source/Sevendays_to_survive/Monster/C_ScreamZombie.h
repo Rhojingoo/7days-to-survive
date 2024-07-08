@@ -41,4 +41,7 @@ public:
 
 	void OnNotifyBegin()override final;
 	void OnNotifyEnd()override final;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool ShoutBegin = false;
 };

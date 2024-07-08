@@ -39,6 +39,7 @@ void AC_ScreamZombie::ShoutAttack_Implementation()
 	{
 		return;
 	}
+	ShoutBegin = true;
 	SetState(MonsterEnum::Shout);
 	//	if (false == AnimInstance->IsPlayMontage())
 	//	{

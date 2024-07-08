@@ -88,6 +88,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	bool Shout = false;
+
+
 };
 
 
