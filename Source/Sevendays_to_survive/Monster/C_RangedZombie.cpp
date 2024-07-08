@@ -50,19 +50,19 @@ void AC_RangedZombie::OnNotifyBegin()
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
 
     AActor* TargetActor = GetTargetActor();
-    FVector TargetLocation = TargetActor->GetActorLocation();
+    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
 
-    float d = GetHorizontalDistanceTo(TargetActor);
+    float d = GetHorizontalDistance(SpawnLocation, TargetLocation);
     float g = -GetWorld()->GetGravityZ();
     float s = Bullet->GetInitialSpeed();
 
     float a = (d * d * g) / (2 * s * s);
     float b = -d;
-    float c = (d * d * g) / (2 * s * s) + (TargetLocation - GetActorLocation()).Z;
+    float c = (d * d * g) / (2 * s * s) + (TargetLocation - SpawnLocation).Z;
 
     float tangent = SolveQuadraticEquation(a, b, c);
 
-    FVector Direction2D = TargetLocation - GetActorLocation();
+    FVector Direction2D = TargetLocation - SpawnLocation;
     Direction2D.Z = 0.0f;
     Direction2D.Normalize();
 
@@ -86,6 +86,11 @@ AActor* AC_RangedZombie::GetTargetActor()
     AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(GetController());
     UObject* TargetObject = AIController->GetBlackboardComponent()->GetValueAsObject(TEXT("TargetActor"));
     return Cast<AActor>(TargetObject);
+}
+
+float AC_RangedZombie::GetHorizontalDistance(FVector v1, FVector v2)
+{
+    return (v1 - v2).Size2D();
 }
 
 float AC_RangedZombie::SolveQuadraticEquation(float a, float b, float c)
