@@ -40,5 +40,5 @@ protected:
     const FString TargetVector = "TargetVector";
     const FString IsInit = "IsInit";
 
-    const float TargetDistance = 100.f;
+    const float Minimum_Distance = 100.f;
 };
