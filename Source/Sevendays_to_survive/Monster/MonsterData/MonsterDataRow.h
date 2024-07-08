@@ -7,7 +7,7 @@
 #include "MonsterDataRow.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT(BlueprintType)
 struct FMonsterDataRow : public FTableRowBase
@@ -73,13 +73,46 @@ public:
 	}
 
 
-	const double GetHP(){
+	const double GetHP() {
 		return HP;
 	}
 
 
 	const double GetMonsterRange() {
 		return MonsterRange;
+	}
+
+	void SetOriginPos(FVector _OriginVec) {
+		OriginPos = _OriginVec;
+	}
+
+	bool PathIsEmpty() {
+		if (0 == PathPoints.Num()) {
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void SetPath(TArray<FVector>& _Array) {
+		PathPoints = _Array;
+	}
+
+	int GetPathLength() {
+		return PathPoints.Num();
+	}
+
+	void PathHeadRemove() {
+		if (PathIsEmpty()) {
+			UE_LOG(LogTemp, Fatal, TEXT("Index Error"));
+		}
+		PathPoints.RemoveAt(0);
+	}
+
+	const FVector NextPath() {
+		return PathPoints[0];
 	}
 private:
 	UPROPERTY()
@@ -90,4 +123,10 @@ private:
 
 	UPROPERTY()
 	double MonsterRange = 0.0f;
+
+	UPROPERTY()
+	FVector OriginPos = FVector::ZeroVector;
+
+	UPROPERTY()
+	TArray<FVector> PathPoints;
 };

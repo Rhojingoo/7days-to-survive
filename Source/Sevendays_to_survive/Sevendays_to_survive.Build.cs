@@ -10,7 +10,8 @@ public class Sevendays_to_survive : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule", "Landscape", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule", "Landscape", "UMG",
+        "NavigationSystem"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
