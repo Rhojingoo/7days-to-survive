@@ -50,7 +50,7 @@ void AC_RangedZombie::OnNotifyBegin()
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
 
     AActor* TargetActor = GetTargetActor();
-    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, TargetHeight };
+    FVector TargetLocation = TargetActor->GetActorLocation();
 
     float d = GetHorizontalDistanceTo(TargetActor);
     float g = -GetWorld()->GetGravityZ();

@@ -27,9 +27,6 @@ public:
 
 	float GetInitialSpeed() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
-	float InitialSpeed = 2000.0f;
-
 	// Sphere collision component.
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	USphereComponent* CollisionComponent = nullptr;
