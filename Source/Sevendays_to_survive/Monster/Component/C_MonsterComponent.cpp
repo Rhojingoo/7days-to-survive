@@ -4,6 +4,10 @@
 #include "Monster/Component/C_MonsterComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/C_ZombieBase.h"
+#include "STS/C_STSInstance.h"
+#include "Engine/Engine.h"
+#include "Monster/MonsterData/MonsterDataRow.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values for this component's properties
 UC_MonsterComponent::UC_MonsterComponent()
@@ -16,9 +20,16 @@ UC_MonsterComponent::UC_MonsterComponent()
 }
 
 
-void UC_MonsterComponent::SetData(FTableRowBase* _Data)
+void UC_MonsterComponent::SetData()
 {
+	UC_STSInstance* Inst = Cast<UC_STSInstance>(MonsterPawn->GetGameInstance());
+	FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterPawn->GetName());
 
+	MonsterData = NewObject<UMonsterDataObject>();
+	MonsterData->MonsterDataInit(*Row);
+#ifdef WITH_EDITOR
+	int a = 0;
+#endif
 }
 
 // Called when the game starts

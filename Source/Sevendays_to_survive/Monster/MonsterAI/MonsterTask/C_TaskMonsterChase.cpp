@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
+#include "Monster/MonsterData/MonsterDataRow.h"
 
 UC_TaskMonsterChase::UC_TaskMonsterChase()
 {
@@ -38,7 +39,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-
+	UC_MonsterComponent* MCP = Controller->GetMCP();
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 	if (Target->IsValidLowLevel() == false) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
@@ -48,7 +49,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
-	GetController(&OwnerComp)->GetMCP()->Run(Target->GetActorLocation() - SelfLocation);
+	MCP->Run(Target->GetActorLocation() - SelfLocation);
 
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
@@ -58,14 +59,13 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
 	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
-
-	if (Vec < TargetDistance) {
+	if (Vec < Minimum_Distance) {
 		GetController(&OwnerComp)->GetMCP()->Attack();
 		return;
 		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
-	else if (Vec < 200.f) {
+	else if (Vec < MCP->GetData()->GetMonsterRange()) {
 		GetController(&OwnerComp)->GetMCP()->RunAttack();
 		return;
 	}

@@ -49,6 +49,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 
 	MCP->SetController(this);
 	MCP->SetMonster(Monster);
+	MCP->SetData();
 	//MCP->SetData();
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {

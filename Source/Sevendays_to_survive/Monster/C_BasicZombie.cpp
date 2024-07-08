@@ -27,11 +27,17 @@ void AC_BasicZombie::SetName(FString _Name)
 
 void AC_BasicZombie::Idle()
 {
+	if (nullptr == AnimInstance) {
+		return;
+	}
 	Super::Idle();
 }
 
 void AC_BasicZombie::Attack_Implementation()
 {
+	if (nullptr == AnimInstance) {
+		return;
+	}
 	//Super::Attack();
 	SetState(MonsterEnum::Idle);
 	if (false == AnimInstance->IsPlayMontage()) {
@@ -48,6 +54,9 @@ void AC_BasicZombie::Attack_Implementation()
 
 void AC_BasicZombie::RunAttack_Implementation()
 {
+	if (nullptr == AnimInstance) {
+		return;
+	}
 	SetState(MonsterEnum::Run);
 	if (false == AnimInstance->IsPlayMontage()) {
 		//if (FMath::RandBool())
@@ -63,10 +72,16 @@ void AC_BasicZombie::RunAttack_Implementation()
 
 void AC_BasicZombie::Run(FVector _Location)
 {
+	if (nullptr == AnimInstance) {
+		return;
+	}
 	Super::Run(_Location);
 }
 
 void AC_BasicZombie::Move(FVector _Location)
 {
+	if (nullptr == AnimInstance) {
+		return;
+	}
 	Super::Move(_Location);
 }
