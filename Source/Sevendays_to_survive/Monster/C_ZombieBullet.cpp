@@ -18,8 +18,6 @@ AC_ZombieBullet::AC_ZombieBullet()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = 2000.0f;
-    ProjectileMovementComponent->MaxSpeed = 2000.0f;
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     ProjectileMovementComponent->ProjectileGravityScale = 1.0f;
@@ -37,6 +35,11 @@ void AC_ZombieBullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float AC_ZombieBullet::GetInitialSpeed() const
+{
+    return ProjectileMovementComponent->InitialSpeed;
 }
 
 void AC_ZombieBullet::SetDirection(const FVector& ShootDirection)
