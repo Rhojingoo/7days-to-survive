@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Monster/C_ZombieBase.h"
 #include "Components/SphereComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "C_RangedZombie.generated.h"
 
 /**
@@ -33,6 +34,8 @@ public:
 
 private:
 	void SetName(FString _Name) override;
+	AActor* GetTargetActor();
+	float SolveQuadraticEquation(float a, float b, float c);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* SpitTransformComponent = nullptr;
