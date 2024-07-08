@@ -35,6 +35,7 @@ public:
 private:
 	void SetName(FString _Name) override;
 	AActor* GetTargetActor();
+	float GetHorizontalDistance(FVector v1, FVector v2);
 	float SolveQuadraticEquation(float a, float b, float c);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
