@@ -33,6 +33,20 @@ void AC_ScreamZombie::Idle()
 	Super::Idle();
 }
 
+void AC_ScreamZombie::ShoutAttack_Implementation()
+{
+	if (nullptr == AnimInstance)
+	{
+		return;
+	}
+	SetState(MonsterEnum::Shout);
+
+	if (false == AnimInstance->IsPlayMontage())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Shout);
+	}
+}
+
 void AC_ScreamZombie::Attack_Implementation()
 {
 	if (nullptr == AnimInstance) 
