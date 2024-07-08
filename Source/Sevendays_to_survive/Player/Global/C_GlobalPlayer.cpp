@@ -124,15 +124,19 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 void AC_GlobalPlayer::Playerhit(int _Damage)
 {
-	//if (true == Id.IsNone())
-	//{
-	//	return;
-	//}
-
 	if (Hp <= 0)
 	{
 		return;
 	}
+
+	if (true == IsHitCpp)
+	{
+		return;
+	}
+
+
+
+
 
 	//HpMap[_Index] -= _Damage;
 	//STS_LOG("[%s:%d] damaged by % d", *GetName(), _Index, _Damage);
