@@ -42,6 +42,7 @@ public:
 	void Idle();
 	void Attack();
 	void RunAttack();
+	void RangedAttack();
 
 	class UMonsterDataObject* GetData();
 

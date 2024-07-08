@@ -19,8 +19,6 @@ class SEVENDAYS_TO_SURVIVE_API AC_RangedZombie : public AC_ZombieBase
 public:
 	AC_RangedZombie();
 
-	void Shoot();
-
 	UFUNCTION(NetMulticast, Reliable)
 	void Attack() override final;
 	void Attack_Implementation();
@@ -29,8 +27,14 @@ public:
 	void RunAttack() override final;
 	void RunAttack_Implementation();
 
-	void OnNotifyBegin() override;
-	void OnNotifyEnd() override;
+	UFUNCTION(NetMulticast, Reliable)
+	void RangedAttack();
+	void RangedAttack_Implementation();
+
+	void OnRangedAttackNotifyBegin();
+	void OnRangedAttackNotifyEnd();
+
+	bool IsRangedAttacking() const;
 
 private:
 	void SetName(FString _Name) override;
@@ -44,5 +48,5 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> BulletClass = nullptr;
 
-	bool IsMeleeAttack = false;
+	bool IsRangedAttackingValue = false;
 };

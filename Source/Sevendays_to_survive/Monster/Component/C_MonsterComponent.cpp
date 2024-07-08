@@ -4,6 +4,7 @@
 #include "Monster/Component/C_MonsterComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/C_ZombieBase.h"
+#include "Monster/C_RangedZombie.h"
 #include "STS/C_STSInstance.h"
 #include "Engine/Engine.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
@@ -73,6 +74,12 @@ void UC_MonsterComponent::Attack()
 void UC_MonsterComponent::RunAttack()
 {
 	MonsterPawn->RunAttack();
+}
+
+void UC_MonsterComponent::RangedAttack()
+{
+	AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(MonsterPawn);
+	RangedZombie->RangedAttack();
 }
 
 UMonsterDataObject* UC_MonsterComponent::GetData()

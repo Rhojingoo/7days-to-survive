@@ -13,7 +13,7 @@ void UC_AttackNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
 	if (Zombie->IsValidLowLevel()) {
-		Zombie->OnNotifyBegin();
+		Zombie->OnAttackNotifyBegin();
 	}
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 }
@@ -25,7 +25,7 @@ void UC_AttackNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 {
 	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
 	if (Zombie->IsValidLowLevel()) {
-		Zombie->OnNotifyEnd();
+		Zombie->OnAttackNotifyEnd();
 	}
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 }

@@ -16,11 +16,6 @@ AC_RangedZombie::AC_RangedZombie()
     SpitTransformComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Spit Transform Component"));
 }
 
-void AC_RangedZombie::Shoot()
-{
-
-}
-
 void AC_RangedZombie::Attack_Implementation()
 {
     if (nullptr == AnimInstance) {
@@ -43,20 +38,25 @@ void AC_RangedZombie::RunAttack_Implementation()
     }
 }
 
-void AC_RangedZombie::OnNotifyBegin()
+void AC_RangedZombie::RangedAttack_Implementation()
 {
-    AActor* TargetActor = GetTargetActor();
-    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
-    float CheckDist = GetHorizontalDistance(GetActorLocation(), TargetLocation);
-
-    if (CheckDist < 100.0f)
-    {
-        IsMeleeAttack = true;
-        Super::OnNotifyBegin();
+    if (nullptr == AnimInstance) {
         return;
     }
 
-    GetComponentByClass<UCharacterMovementComponent>()->DisableMovement();
+    IsRangedAttackingValue = true;
+
+    SetState(MonsterEnum::Idle);
+    if (false == AnimInstance->IsPlayMontage()) {
+        AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+    }
+}
+
+void AC_RangedZombie::OnRangedAttackNotifyBegin()
+{
+    // 투사체 발사
+    AActor* TargetActor = GetTargetActor();
+    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
 
     FVector SpawnLocation = GetActorLocation() + SpitTransformComponent->GetRelativeLocation();
     FVector SpawnRotation = FVector::ForwardVector;
@@ -83,16 +83,14 @@ void AC_RangedZombie::OnNotifyBegin()
     Bullet->SetDirection(Direction);
 }
 
-void AC_RangedZombie::OnNotifyEnd()
+void AC_RangedZombie::OnRangedAttackNotifyEnd()
 {
-    if (true == IsMeleeAttack)
-    {
-        Super::OnNotifyEnd();
-        IsMeleeAttack = false;
-        return;
-    }
+    IsRangedAttackingValue = false;
+}
 
-    GetComponentByClass<UCharacterMovementComponent>()->SetMovementMode(EMovementMode::MOVE_Walking);
+bool AC_RangedZombie::IsRangedAttacking() const
+{
+    return IsRangedAttackingValue;
 }
 
 void AC_RangedZombie::SetName(FString _Name)

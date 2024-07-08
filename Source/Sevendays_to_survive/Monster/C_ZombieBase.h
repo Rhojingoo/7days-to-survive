@@ -53,8 +53,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetRagDoll();
 
-	virtual void OnNotifyBegin();
-	virtual void OnNotifyEnd();
+	virtual void OnAttackNotifyBegin();
+	virtual void OnAttackNotifyEnd();
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();
