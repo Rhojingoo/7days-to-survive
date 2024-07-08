@@ -39,8 +39,8 @@ public:
 	void Run(FVector _Location) override final;
 	void Move(FVector _Location) override final;	
 
-	void OnNotifyBegin()override final;
-	void OnNotifyEnd()override final;
+	void OnAttackNotifyBegin()override final;
+	void OnAttackNotifyEnd()override final;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
 	bool ShoutBegin = false;

@@ -93,14 +93,14 @@ void AC_ScreamZombie::Move(FVector _Location)
 	Super::Move(_Location);
 }
 
-void AC_ScreamZombie::OnNotifyBegin()
+void AC_ScreamZombie::OnAttackNotifyBegin()
 {
-	Super::OnNotifyBegin();
+	Super::OnAttackNotifyBegin();
 }
 
-void AC_ScreamZombie::OnNotifyEnd()
+void AC_ScreamZombie::OnAttackNotifyEnd()
 {
-	Super::OnNotifyEnd();
+	Super::OnAttackNotifyEnd();
 
 	if (Shout == false)
 	{
