@@ -33,7 +33,7 @@ public:
 	int staminaCalValue=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float Hp=0.0f;
+	int Hp=0.0f;
 
 };
 

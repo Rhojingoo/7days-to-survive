@@ -68,6 +68,9 @@ public:
 		PlayerCurState = _PlayerCurState;
 	}
 
+	UFUNCTION()
+	void Playerhit(int _Damage);
+
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -212,6 +215,10 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsHitCpp = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Maxstamina = 0;
 
@@ -223,7 +230,7 @@ private:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float Hp = 0.0f;
+	int Hp = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;
