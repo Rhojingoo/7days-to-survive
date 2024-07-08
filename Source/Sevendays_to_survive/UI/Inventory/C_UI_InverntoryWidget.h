@@ -7,6 +7,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Player/Global/C_MapPlayer.h"
+#include "Components/PanelWidget.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
 
@@ -42,6 +43,12 @@ protected:
 	UFUNCTION(Blueprintcallable)
 	void GetDataInventory(FC_ItemAndCount _Inventory);
 
+	UFUNCTION(Blueprintcallable)
+	void SettingSlots(UPanelWidget* _Pannel);
+
+	UFUNCTION(Blueprintcallable)
+	void SwitchSlot(int _PrevIndex, int _ChangeIndex);
+	
 	
 private:
 	
@@ -53,4 +60,6 @@ private:
 	AC_MapPlayer* MapPlayer;
 	
 	TArray<TArray<FC_ItemAndCount>> UIInventory;
+
+	TArray<UWidget*> Slots;
 };

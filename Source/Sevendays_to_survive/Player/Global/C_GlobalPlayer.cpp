@@ -48,12 +48,17 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-	
+	GetCharacterMovement()->bIgnoreBaseRotation = true; // 베이스 회전
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera"));
 	SpringArm->SetupAttachment(GetMesh(), *FString("Head"));
-	//SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	SpringArm->TargetArmLength = 0.0f; // The camera follows at this distance behind the character	
+	SpringArm->bUsePawnControlRotation = false; // Rotate the arm based on the controller
+	SpringArm->bEnableCameraRotationLag = true;
+	SpringArm->CameraRotationLagSpeed = 10.0f;
+
 
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("FollowCamera"));
@@ -117,6 +122,30 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	}
 }
 
+void AC_GlobalPlayer::Playerhit(int _Damage)
+{
+	if (Hp <= 0)
+	{
+		return;
+	}
+
+	if (true == IsHitCpp)
+	{
+		return;
+	}
+	IsHitCpp = true;
+
+	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
+		//->OnPlayMontageNotifyEnd(this, &AC_GlobalPlayer::ResetHit);
+	//IsHitCpp = false;
+	//if()
+}
+
+void AC_GlobalPlayer::ResetHit()
+{
+	IsHitCpp = false;
+}
+
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -137,8 +166,9 @@ void AC_GlobalPlayer::BeginPlay()
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
-	
-	Rifle = STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
+	BulletDT = STSInstance->GetPlayerDataTable()->BulletValue;
+
+	Tags.Add(TEXT("Player"));
 
 	{
 		FString& Port = STSInstance->TitleToGameInfo.ServerPort;
@@ -187,6 +217,8 @@ void AC_GlobalPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+
+		PlayerController->SetViewTarget(this);
 	}
 
 	{
@@ -195,9 +227,10 @@ void AC_GlobalPlayer::BeginPlay()
 
 		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
-	}
 
-	
+		TSubclassOf<AActor> ShotGun = STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Shotgun, ShotGun);
+	}
 }
 
 // Called every frame
@@ -215,8 +248,8 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		// Jumping
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Canceled, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
 
 		// Moving
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Move], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::Move);
@@ -224,8 +257,6 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Run
 		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Triggered, this, &AC_GlobalPlayer::RunStart);
-		
-		
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Run], ETriggerEvent::Completed, this, &AC_GlobalPlayer::RunEnd);
 
 		// Looking
@@ -251,6 +282,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
@@ -427,6 +459,7 @@ void AC_GlobalPlayer::RunEnd_Implementation(const FInputActionValue& Value)
 	IsRunCpp = false;
 }
 
+
 void AC_GlobalPlayer::AimEnd_Implementation(const FInputActionValue& Value)
 {
 	IsAimCpp = false;
@@ -437,6 +470,10 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	if (nullptr!=CurWeapon)
 	{
 		CurWeapon->Destroy();
+		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+		{
+			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+		}
 	}
 
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
@@ -446,22 +483,23 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 		return;
 	}
 
-	UEnum* Enum = StaticEnum<ESkerItemSlot>();
-	// USkeletalMeshComponent 슬롯 전용
-	for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
-	{
-		SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
-	}
-
 	switch (_Slot)
 	{
 	case EStaticItemSlot::RSword:
-		StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
-
+		//StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMesh[i]->SetStaticMesh(nullptr);
+		}
 
 		PlayerCurState = EWeaponUseState::Sword;
 		break;
 	case EStaticItemSlot::RAxe:
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMesh[i]->SetStaticMesh(nullptr);
+		}
+		PlayerCurState = EWeaponUseState::Axe;
 		break;
 	case EStaticItemSlot::SlotMax:
 		break;
@@ -478,7 +516,7 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 	ChangeSlotMesh(_Slot, _Mesh);
 }
 
-void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
 	if (SkeletalItemMesh.Num() <= SlotIndex)
@@ -507,9 +545,18 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 			return;
 		}
 
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
 		}
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
@@ -528,9 +575,18 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 			return;
 		}
 
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
 		}
 
 
@@ -539,21 +595,47 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USk
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		break;
 	case ESkerItemSlot::LShotgun:
+
+		//ShotGun
+		if (PlayerCurState == EWeaponUseState::Shotgun)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Shotgun))
+		{
+			return;
+		}
+
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			}
+		}
+
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
 		break;
 	case ESkerItemSlot::SlotMax:
 		break;
 	default:
 		break;
 	}
-
-	
-
-	SkeletalItemMesh[SlotIndex]->SetSkeletalMesh(_Mesh);
 }
 
-void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh)
+void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot)
 {
-	ChangeSlotSkeletal(_Slot, _Mesh);
+	ChangeSlotSkeletal(_Slot);
 }
 
 void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
@@ -562,8 +644,12 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 	{
 		return;
 	}
-	
 
+	if (CurWeapon != nullptr)
+	{
+		CurWeapon->Destroy();
+	}
+	
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
 		// USkeletalMeshComponent 슬롯 전용

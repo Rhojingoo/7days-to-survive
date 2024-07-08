@@ -28,6 +28,9 @@ public:
 	double HP = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double MonsterRange = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<uint8, class UAnimMontage* > AnimMontages;
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//double PatrolTime = 0.0f;
@@ -50,23 +53,41 @@ class UMonsterDataObject : public UObject
 {
 	GENERATED_BODY()
 
+
 public:
-	const FMonsterDataRow* Data;
+	void MonsterDataInit(const FMonsterDataRow& Row);
 
-	//TArray<FVector> PatrolPoints;
+	double* GetAttRef() {
+		return &Att;
+	}
+	double* GetHPRef() {
+		return &HP;
+	}
+	double* GetMonsterRangeRef() {
+		return &MonsterRange;
+	}
 
-	//float IdleTime = 0.0f;
 
-	//float AttackTime = 0.0f;
+	const double GetAtt() {
+		return Att;
+	}
 
-	//FVector OriginPos = FVector::ZeroVector;
 
-	//FVector TargetPos;
+	const double GetHP(){
+		return HP;
+	}
 
-	//bool IsPatrol();
 
-	//FORCEINLINE void TargetPosToOriginPos()
-	//{
-	//	TargetPos = OriginPos;
-	//}
+	const double GetMonsterRange() {
+		return MonsterRange;
+	}
+private:
+	UPROPERTY()
+	double Att = 0.0f;
+
+	UPROPERTY()
+	double HP = 0.0f;
+
+	UPROPERTY()
+	double MonsterRange = 0.0f;
 };

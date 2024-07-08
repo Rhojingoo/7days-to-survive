@@ -33,7 +33,7 @@ public:
 	int staminaCalValue=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	float Hp=0.0f;
+	int Hp=0.0f;
 
 };
 
@@ -53,6 +53,17 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FC_BulletValue : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	TSubclassOf<AActor> BulletClass1;
+};
+
+USTRUCT(BlueprintType)
 struct FC_PlayerDataTable : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -65,5 +76,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	FC_CameraValue CameraValue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	FC_BulletValue BulletValue;
 
 };

@@ -33,7 +33,12 @@ void AC_ZombieBase::BeginPlay()
 	USkeletalMeshComponent* Sk = GetMesh();
 	UAnimInstance* Anim = Sk->GetAnimInstance();	//c_zombiebase 기반 c++ 좀비를 하나 만들어서, 그 기반 블프까지 animation instance
 	AnimInstance = Cast<UC_MonsterAnim>(Anim);
-	MonsterState = MonsterEnum::Idle;
+
+	if (HasAuthority())
+	{
+		// 서버에서만 초기 상태 설정
+		MonsterState = MonsterEnum::Idle;
+	}
 
 	UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
 	FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterName);
@@ -52,10 +57,10 @@ void AC_ZombieBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	if (MonsterState == MonsterEnum::Attack || MonsterState == MonsterEnum::RunAttack)
-	{
-		AnimInstance->ChangeAnimation(MonsterState);
-	}
+	//if (MonsterState == MonsterEnum::Attack || MonsterState == MonsterEnum::RunAttack)
+	//{
+	//	AnimInstance->ChangeAnimation(MonsterState);
+	//}
 	//TMap<uint8, class UAnimMontage* > AnimMontages = AnimInstance->GetAnimMontages();
 
 	//UAnimMontage* PrevMon = AnimInstance->GetCurrentActiveMontage();
@@ -69,7 +74,8 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AC_ZombieBase::SetRagDoll() {
+void AC_ZombieBase::SetRagDoll() 
+{
 	UCharacterMovementComponent* Component = GetCharacterMovement();
 	Component->DisableMovement();
 
@@ -82,7 +88,7 @@ void AC_ZombieBase::SetRagDoll() {
 
 		// Optionally disable animation
 		MyMesh->bPauseAnims = true;
-		
+
 		UCapsuleComponent* Capsule = GetCapsuleComponent();
 		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		MyMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
@@ -98,31 +104,37 @@ void AC_ZombieBase::SetRagDoll() {
 
 void AC_ZombieBase::Idle()
 {
-	SetState_Implementation(MonsterEnum::Idle);
+	SetState(MonsterEnum::Idle);
 }
 
 void AC_ZombieBase::Move(FVector _Location)
 {
+	SetState(MonsterEnum::Move);
 	AddMovementInput(_Location);
-	SetState_Implementation(MonsterEnum::Move);
+}
+
+void AC_ZombieBase::Run(FVector _Location)
+{
+	SetState(MonsterEnum::Run);
+	AddMovementInput(_Location);
 }
 
 void AC_ZombieBase::Attack()
 {
-	SetState_Implementation(MonsterEnum::Attack);
+	SetState(MonsterEnum::Attack);
 }
 
 void AC_ZombieBase::RunAttack()
 {
-	SetState_Implementation(MonsterEnum::RunAttack);
+	SetState(MonsterEnum::RunAttack);
 }
 
-void AC_ZombieBase::CollisionOn()
+void AC_ZombieBase::OnNotifyBegin()
 {
 	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
 }
 
-void AC_ZombieBase::CollisionOff()
+void AC_ZombieBase::OnNotifyEnd()
 {
 	AttackComponent->SetCollisionProfileName("NoCollision");
 }
@@ -132,14 +144,11 @@ MonsterEnum AC_ZombieBase::GetState()
 	return MonsterState;
 }
 
-bool AC_ZombieBase::SetState_Validate(MonsterEnum _Enum)
+void AC_ZombieBase::SetState(MonsterEnum _Enum)
 {
-	return true;
-}
-
-void AC_ZombieBase::SetState_Implementation(MonsterEnum _Enum)
-{
-	MonsterState = _Enum;
+	if (MonsterState != _Enum) {
+		MonsterState = _Enum;
+	}
 }
 
 void AC_ZombieBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -148,10 +157,6 @@ void AC_ZombieBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(AC_ZombieBase, MonsterState);
 }
-
-//void AC_ZombieBase::GetDataFromName()
-//{
-//}
 
 FString AC_ZombieBase::GetName()
 {

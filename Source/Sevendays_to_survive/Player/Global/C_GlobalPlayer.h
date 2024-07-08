@@ -39,12 +39,12 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras; }
 
-	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
+	FORCEINLINE TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
 		return StaticItemMesh;
 	}
 
-	TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
+	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
 	{
 		return SkeletalItemMesh;
 	}
@@ -68,6 +68,11 @@ public:
 		PlayerCurState = _PlayerCurState;
 	}
 
+	UFUNCTION(BlueprintCallable)
+	void Playerhit(int _Damage);
+
+	UFUNCTION()
+	void ResetHit();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -89,12 +94,12 @@ protected:
 	void ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh);
 
 	UFUNCTION(Reliable, NetMulticast)
-	void ChangeSlotSkeletal(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
-	void ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletal(ESkerItemSlot _Slot);
+	void ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot);
 
 	UFUNCTION(BlueprintCallable, Reliable, Server)
-	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
-	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot, USkeletalMesh* _Mesh);
+	void ChangeSlotSkeletalServer(ESkerItemSlot _Slot);
+	void ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot);
 
 	UFUNCTION(Reliable, NetMulticast)
 	void ChangeNoWeapon();
@@ -127,6 +132,9 @@ protected:
 	UFUNCTION(Reliable, Server)
 	void RunEnd(const FInputActionValue& Value);
 	void RunEnd_Implementation(const FInputActionValue& Value);
+
+	
+
 
 	UFUNCTION(Reliable, Server)
 	void AimEnd(const FInputActionValue& Value); //
@@ -179,9 +187,7 @@ private:
 	// 게임 인스턴스 관리
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
-
-	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> Rifle;
+	FC_BulletValue BulletDT;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
@@ -203,10 +209,17 @@ private:
 	bool IsRunCpp = false;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsJumpCpp = false;
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAimCpp = false;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
+
+
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsHitCpp = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Maxstamina = 0;
@@ -219,7 +232,7 @@ private:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	float Hp = 0.0f;
+	int Hp = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;
@@ -244,4 +257,8 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_EquipWeapon* CurWeapon = nullptr;
+
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* hitMontage = nullptr;
 };

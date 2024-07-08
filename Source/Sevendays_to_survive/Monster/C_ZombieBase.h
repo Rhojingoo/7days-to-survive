@@ -15,8 +15,10 @@ enum class MonsterEnum : uint8
 	Move UMETA(DisplayName = "Move"),
 	Attack UMETA(DisplayName = "Attack"),
 	RunAttack UMETA(DisplayName = "RunAttack"),
+	Shout UMETA(DisplayName = "Shout"),
 	Climb UMETA(DisplayName = "Climb"),
 	Dead UMETA(DisplayName = "Dead"),
+	Run UMETA(DisplayName = "Run"),
 	End UMETA(DisplayName = "End")
 };
 
@@ -45,34 +47,30 @@ public:
 
 	virtual void Idle();
 	virtual void Move(FVector _Location);
+	virtual void Run(FVector _Location);
 	virtual void Attack();
 	virtual void RunAttack();
-
 	UFUNCTION(BlueprintCallable)
 	void SetRagDoll();
 
-	void CollisionOn();
-	void CollisionOff();
+	virtual void OnNotifyBegin();
+	virtual void OnNotifyEnd();
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();
-	UFUNCTION(Server, Reliable, WithValidation)
 
 	// ServerOnlyFunction의 유효성 검사 함수
 	void SetState(MonsterEnum _Enum);
-	bool SetState_Validate(MonsterEnum _Enum);
-	void SetState_Implementation(MonsterEnum _Enum);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	/*UFUNCTION(Server, Reliable, WithValidation)
-	virtual void GetDataFromName();*/
 	FString GetName();
 
 	UFUNCTION(BlueprintCallable)
 	void Collision(AActor* _Actor);
 
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
+
 protected:
 	FString MonsterName;
 
@@ -83,7 +81,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	class UBoxComponent* AttackComponent;
-
 };
 
 
