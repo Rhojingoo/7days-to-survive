@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "C_MonsterAnim.h"
+#include "Monster/Component/C_MonsterComponent.h"
 
 AC_RangedZombie::AC_RangedZombie()
 {
