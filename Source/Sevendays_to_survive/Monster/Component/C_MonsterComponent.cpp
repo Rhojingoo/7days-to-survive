@@ -38,7 +38,7 @@ void UC_MonsterComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 
@@ -73,5 +73,10 @@ void UC_MonsterComponent::Attack()
 void UC_MonsterComponent::RunAttack()
 {
 	MonsterPawn->RunAttack();
+}
+
+UMonsterDataObject* UC_MonsterComponent::GetData()
+{
+	return MonsterData;
 }
 

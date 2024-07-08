@@ -22,6 +22,10 @@ public:
 	void AttStart_Implementation();
 
 	UFUNCTION(BlueprintCallable, Reliable, NetMulticast)
+	void AttEnd(); //
+	void AttEnd_Implementation();
+
+	UFUNCTION(BlueprintCallable, Reliable, NetMulticast)
 	void AttStart2(); //
 	void AttStart2_Implementation();
 protected:

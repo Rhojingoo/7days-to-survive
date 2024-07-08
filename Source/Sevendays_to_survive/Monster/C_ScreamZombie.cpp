@@ -54,6 +54,7 @@ void AC_ScreamZombie::RunAttack_Implementation()
 		return;
 	}
 	SetState(MonsterEnum::Run);
+
 	if (false == AnimInstance->IsPlayMontage()) 
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);

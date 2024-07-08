@@ -136,9 +136,14 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	IsHitCpp = true;
 
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
-
-	IsHitCpp = false;
+		//->OnPlayMontageNotifyEnd(this, &AC_GlobalPlayer::ResetHit);
+	//IsHitCpp = false;
 	//if()
+}
+
+void AC_GlobalPlayer::ResetHit()
+{
+	IsHitCpp = false;
 }
 
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
