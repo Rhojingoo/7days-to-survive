@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/Notify/C_AttackNotify.h"
@@ -13,7 +13,7 @@ void UC_AttackNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
 	if (Zombie->IsValidLowLevel()) {
-		Zombie->CollisionOn();
+		Zombie->OnNotifyBegin();
 	}
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 }
@@ -25,7 +25,7 @@ void UC_AttackNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 {
 	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
 	if (Zombie->IsValidLowLevel()) {
-		Zombie->CollisionOff();
+		Zombie->OnNotifyEnd();
 	}
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 }

@@ -52,8 +52,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetRagDoll();
 
-	void CollisionOn();
-	void CollisionOff();
+	virtual void OnNotifyBegin();
+	virtual void OnNotifyEnd();
 
 	UFUNCTION(BlueprintCallable)
 	MonsterEnum GetState();

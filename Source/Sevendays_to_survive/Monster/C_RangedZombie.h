@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Monster/C_ZombieBase.h"
+#include "Components/SphereComponent.h"
 #include "C_RangedZombie.generated.h"
 
 /**
@@ -27,6 +28,15 @@ public:
 	void RunAttack() override final;
 	void RunAttack_Implementation();
 
+	void OnNotifyBegin() override;
+	void OnNotifyEnd() override;
+
 private:
 	void SetName(FString _Name) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* SpitTransformComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> BulletClass = nullptr;
 };
