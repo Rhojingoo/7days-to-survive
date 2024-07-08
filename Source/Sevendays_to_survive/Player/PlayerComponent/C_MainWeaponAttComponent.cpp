@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Player/PlayerComponent/C_MainWeaponAttComponent.h"
@@ -22,8 +22,13 @@ void UC_MainWeaponAttComponent::AttStart_Implementation()
 	{
 		IsAttCPP = true;
 		PlayerMesh->GetAnimInstance()->Montage_Play(AttAni);
-		IsAttCPP = false;
+		//PlayerMesh->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic();
 	}
+}
+
+void UC_MainWeaponAttComponent::AttEnd_Implementation()
+{
+	IsAttCPP = false;
 }
 
 void UC_MainWeaponAttComponent::AttStart2_Implementation()
