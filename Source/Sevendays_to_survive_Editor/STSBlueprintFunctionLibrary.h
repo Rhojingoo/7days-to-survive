@@ -18,9 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Data")
 	static void DataTableSetting(UDataTable* DataTable);
 
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	TArray<FString> DataTableColumn;
-	
+	static FString FinalPath;
+
 		
 };

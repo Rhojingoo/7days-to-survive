@@ -34,4 +34,9 @@ public:
 
 	void Run(FVector _Location) override final;
 	void Move(FVector _Location) override final;	
+
+private:
+	//UPROPERTY(Blueprintecallable)
+	bool Shout = false;
+
 };
