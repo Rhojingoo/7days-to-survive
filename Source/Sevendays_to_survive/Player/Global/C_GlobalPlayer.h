@@ -39,12 +39,12 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetCamera() const { return Cameras; }
 
-	TArray<UStaticMeshComponent*> GetStaticItemMesh() const
+	FORCEINLINE TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
 		return StaticItemMesh;
 	}
 
-	TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
+	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
 	{
 		return SkeletalItemMesh;
 	}
@@ -255,4 +255,8 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_EquipWeapon* CurWeapon = nullptr;
+
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* hitMontage = nullptr;
 };
