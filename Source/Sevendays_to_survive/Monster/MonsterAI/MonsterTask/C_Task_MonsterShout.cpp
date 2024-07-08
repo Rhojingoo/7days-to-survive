@@ -54,7 +54,12 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	MCP->Shout();
 	AC_ZombieBase* ScreamZombie = MCP->GetMonster();
 	bool ShoutCheck = ScreamZombie->IsShout();
-	//MCP->Run(Target->GetActorLocation() - SelfLocation);
+
+	FVector Direction = (Target->GetActorLocation() - SelfLocation).GetSafeNormal();
+
+	// Add rotation logic to face the target
+	FRotator LookAtRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+	Controller->GetPawn()->SetActorRotation(LookAtRotation);
 
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
