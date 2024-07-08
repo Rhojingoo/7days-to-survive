@@ -639,8 +639,12 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 	{
 		return;
 	}
-	
 
+	if (CurWeapon != nullptr)
+	{
+		CurWeapon->Destroy();
+	}
+	
 	{
 		UEnum* Enum = StaticEnum<ESkerItemSlot>();
 		// USkeletalMeshComponent 슬롯 전용
