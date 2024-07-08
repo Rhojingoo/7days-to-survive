@@ -21,6 +21,7 @@
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
 #include "Weapon/C_EquipWeapon.h"
 #include "Weapon/C_GunComponent.h"
+#include "Monster/C_ZombieBase.h"
 
 
 // Sets default values
@@ -316,6 +317,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	}
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
 	FHitResult Hit;
 	//ector ShotDirection;
@@ -335,7 +337,19 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 	Actors.Add(CurWeapon);
 	UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
-	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, Params, EDrawDebugTrace::ForDuration);
+	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
+
+	AActor* ActorHit = Hit.GetActor();
+
+	if (ActorHit)
+	{
+		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
+		
+		Zombie->SetRagDoll();
+
+
+		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+	}
 	//GunRotation.
 }
 
