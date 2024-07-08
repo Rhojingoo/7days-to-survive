@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "C_MonsterAnim.h"
 
 AC_RangedZombie::AC_RangedZombie()
@@ -44,13 +45,23 @@ void AC_RangedZombie::RunAttack_Implementation()
 
 void AC_RangedZombie::OnNotifyBegin()
 {
+    AActor* TargetActor = GetTargetActor();
+    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
+    float CheckDist = GetHorizontalDistance(GetActorLocation(), TargetLocation);
+
+    if (CheckDist < 100.0f)
+    {
+        IsMeleeAttack = true;
+        Super::OnNotifyBegin();
+        return;
+    }
+
+    GetComponentByClass<UCharacterMovementComponent>()->DisableMovement();
+
     FVector SpawnLocation = GetActorLocation() + SpitTransformComponent->GetRelativeLocation();
     FVector SpawnRotation = FVector::ForwardVector;
 
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
-
-    AActor* TargetActor = GetTargetActor();
-    FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
 
     float d = GetHorizontalDistance(SpawnLocation, TargetLocation);
     float g = -GetWorld()->GetGravityZ();
@@ -74,6 +85,14 @@ void AC_RangedZombie::OnNotifyBegin()
 
 void AC_RangedZombie::OnNotifyEnd()
 {
+    if (true == IsMeleeAttack)
+    {
+        Super::OnNotifyEnd();
+        IsMeleeAttack = false;
+        return;
+    }
+
+    GetComponentByClass<UCharacterMovementComponent>()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
 void AC_RangedZombie::SetName(FString _Name)
