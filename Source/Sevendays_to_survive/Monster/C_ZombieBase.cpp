@@ -34,6 +34,9 @@ void AC_ZombieBase::BeginPlay()
 	UAnimInstance* Anim = Sk->GetAnimInstance();	//c_zombiebase 기반 c++ 좀비를 하나 만들어서, 그 기반 블프까지 animation instance
 	AnimInstance = Cast<UC_MonsterAnim>(Anim);
 
+	if (nullptr == AnimInstance) {
+		UE_LOG(LogTemp, Fatal, TEXT("Not Setting Animation Instance"));
+	}
 	if (HasAuthority())
 	{
 		// 서버에서만 초기 상태 설정

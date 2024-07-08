@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_MonsterWait.h"
@@ -51,7 +51,7 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	}
 	else {
 		BlackBoard->SetValueAsFloat(*WaitTime, 0.f);
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 }

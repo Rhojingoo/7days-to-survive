@@ -12,6 +12,7 @@
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Player/MainPlayer/C_NickMainPlayer.h"
 #include "Monster/Component/C_MonsterComponent.h"
+#include "Monster/MonsterData/MonsterDataRow.h"
 
 AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 	: Super(_ObjectInitializer)
@@ -50,6 +51,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	MCP->SetController(this);
 	MCP->SetMonster(Monster);
 	MCP->SetData();
+	MCP->GetData()->SetOriginPos(Monster->GetActorLocation());
 	//MCP->SetData();
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {

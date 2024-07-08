@@ -43,9 +43,7 @@ public:
 	void Attack();
 	void RunAttack();
 
-	class UMonsterDataObject* GetData() {
-		return MonsterData;
-	}
+	class UMonsterDataObject* GetData();
 
 private:
 	UPROPERTY()
