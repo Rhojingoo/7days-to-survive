@@ -95,7 +95,7 @@ float AC_RangedZombie::SolveQuadraticEquation(float a, float b, float c)
     float first = (-b + UKismetMathLibrary::Sqrt(b * b - 4 * a * c)) / (2 * a);
     float second = (-b - UKismetMathLibrary::Sqrt(b * b - 4 * a * c)) / (2 * a);
 
-    if (-1 <= first && first <= 1)
+    if (-2 <= first && first <= 2)
     {
         return first;
     }
