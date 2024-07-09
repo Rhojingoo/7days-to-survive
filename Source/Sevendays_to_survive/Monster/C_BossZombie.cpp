@@ -3,6 +3,8 @@
 
 #include "Monster/C_BossZombie.h"
 #include "Monster/C_MonsterAnim.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
 
 AC_BossZombie::AC_BossZombie()
 {
@@ -42,4 +44,24 @@ void AC_BossZombie::ConsumeIsBlocked()
 void AC_BossZombie::SetName(FString _Name)
 {
     MonsterName = _Name;
+}
+
+void AC_BossZombie::ApplyRushSpeed()
+{
+    GetCharacterMovement()->MaxWalkSpeed = RushSpeed;
+}
+
+void AC_BossZombie::ApplyRunSpeed()
+{
+    GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+}
+
+void AC_BossZombie::AttackCollisionOn()
+{
+    AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
+}
+
+void AC_BossZombie::AttackCollisionOff()
+{
+    AttackComponent->SetCollisionProfileName("NoCollision");
 }
