@@ -64,7 +64,7 @@ void AC_ZombieBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	RayTrace();
 	//if (MonsterState == MonsterEnum::Attack || MonsterState == MonsterEnum::RunAttack)
 	//{
 	//	AnimInstance->ChangeAnimation(MonsterState);
@@ -191,4 +191,54 @@ void AC_ZombieBase::Collision(AActor* _Actor)
 void AC_ZombieBase::Make_Noise(float _Loudness)
 {
 	UAISense_Hearing::ReportNoiseEvent(this, GetActorLocation(), _Loudness, this, 0.0f, TEXT("Noise"));
+}
+
+bool AC_ZombieBase::RayTrace()
+{
+	{
+		FVector Start = BottomArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
+		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
+		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FHitResult HitResult;
+
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);  // 충돌 검사에서 현재 캐릭터 무시
+
+		bool bottomIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+		if (bottomIsHit)
+		{
+			BottomRay = true;
+		}
+
+		// 디버그 라인 그리기
+		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1, 0, 1);
+	}
+
+
+	{
+		FVector Start = MiddleArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
+		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
+		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FHitResult HitResult;
+
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);  // 충돌 검사에서 현재 캐릭터 무시
+
+		bool MiddleIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+		if (MiddleIsHit)
+		{
+			MiddleRay = true;
+		}
+		// 디버그 라인 그리기
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+	}
+
+	if (true == MiddleRay && true == BottomRay) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

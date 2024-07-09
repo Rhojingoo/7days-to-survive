@@ -112,6 +112,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		}
 	}
 	else {
+		MCP->Run(Target->GetActorLocation() - SelfLocation);
 		if (Vec < Minimum_Distance) {
 			GetController(&OwnerComp)->GetMCP()->Attack();
 			return;
@@ -122,7 +123,6 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			GetController(&OwnerComp)->GetMCP()->RunAttack();
 			return;
 		}
-		MCP->Run(Target->GetActorLocation() - SelfLocation);
 		return;
 	}
 

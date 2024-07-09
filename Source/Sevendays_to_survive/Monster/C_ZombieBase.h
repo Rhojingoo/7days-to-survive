@@ -80,6 +80,8 @@ public:
 
 	bool IsShout() { return Shout; }
 
+	bool RayTrace();
+
 protected:
 	FString MonsterName;
 
@@ -102,6 +104,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UArrowComponent* MiddleArrowComponent;
+
+	UPROPERTY()
+	bool BottomRay;
+
+	UPROPERTY()
+	bool MiddleRay;
 };
 
 
