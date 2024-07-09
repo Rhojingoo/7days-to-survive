@@ -138,7 +138,7 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 		//->OnPlayMontageNotifyEnd(this, &AC_GlobalPlayer::ResetHit);
-	IsHitCpp = false;
+	//IsHitCpp = false;
 	//if()
 }
 
@@ -158,7 +158,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
-	DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
+	//DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
 }
 
 // Called when the game starts or when spawned
@@ -337,8 +337,13 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
+
+	if (false == OKAtt)
+	{
+		return;
+	}
 
 	AActor* ActorHit = Hit.GetActor();
 
@@ -346,8 +351,10 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	{
 		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 		
-		Zombie->SetRagDoll();
-
+		if (Zombie)
+		{
+			Zombie->SetRagDoll();
+		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
 	}

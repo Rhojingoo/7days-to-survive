@@ -53,7 +53,7 @@ void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint
     float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
     // 근거리 공격
-    if (Vec < Minimum_Distance && false == RangedZombie->IsRangedAttacking()) {
+    if (Vec < MeleeAttackDistance && false == RangedZombie->IsRangedAttacking()) {
         GetController(&OwnerComp)->GetMCP()->Attack();
     }
     // 원거리 공격

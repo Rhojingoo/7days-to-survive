@@ -14,6 +14,10 @@ UC_RandomMove::UC_RandomMove()
 EBTNodeResult::Type UC_RandomMove::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (true == IsPerceptionUpdated(Controller)) {
+		return EBTNodeResult::Type::Succeeded;
+	}
 	return EBTNodeResult::Type::InProgress;
 }
 
@@ -25,7 +29,7 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
-	if (true == Controller->GetIsFind()) {
+	if (true == IsPerceptionUpdated(Controller)) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

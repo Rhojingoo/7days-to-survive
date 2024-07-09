@@ -43,6 +43,11 @@ public:
 		return IsFind;
 	}
 
+	UFUNCTION()
+	bool GetIsSound() {
+		return IsSound;
+	}
+
 	class AC_ZombieBase* GetMonster() {
 		return Monster;
 	}
@@ -86,6 +91,9 @@ private:
 
 	UPROPERTY()
 	bool IsFind = false;
+
+	UPROPERTY()
+	bool IsSound = false;
 
 	UPROPERTY()
 	AC_ZombieBase* Monster = nullptr;
