@@ -22,6 +22,8 @@ EBTNodeResult::Type UC_MoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 	else {
 		return EBTNodeResult::Type::Failed;
 	}
+
+	//애니메이션이 변경이 안되네 전체적으로 소리들을때 무브투로가면 무조건 
 }
 
 void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -38,7 +40,8 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	SelfLocation.Z = 0;
 	FVector TargetLocation = Controller->GetBlackboardComponent()->GetValueAsVector(*SoundVector);
 	FVector Dist = TargetLocation - SelfLocation;
-	Controller->GetMCP()->Move(Dist);
+	Controller->GetMCP()->Run(Dist);
+	
 
 	//	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 	//	if (!NavSystem) {

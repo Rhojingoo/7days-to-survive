@@ -26,7 +26,6 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 
-
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
 	if (true == IsPerceptionUpdated(Controller)) {
@@ -34,19 +33,9 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		return;
 	}
 	
-	UAIPerceptionComponent* APC = Controller->GetAPC();
-	APC->SaveConfig();
-	UAISenseConfig_Hearing* HearingConfig = Controller->GetHearingConfig();
-	//for (AActor* Actor : UpdatedActors)
-	//{
-	//	// 소리를 감지한 액터에 대해 처리할 로직 작성
-	//	UE_LOG(LogTemp, Warning, TEXT("Heard actor: %s"), *Actor->GetName());
-	//}
-
 	FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
 	FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
 	FVector Direction = (RanVec - SelfVec).GetSafeNormal();
-
 
 	GetController(&OwnerComp)->GetMCP()->Move(Direction);
 
