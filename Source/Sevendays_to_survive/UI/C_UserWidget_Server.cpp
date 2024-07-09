@@ -27,8 +27,8 @@ void UC_UserWidget_Server::ServerOpen()
 		Inst->TitleToGameInfo.UserIp = "192.168.0.117"; //값을 계속 수동으로 변경해줘야합니다. 아직은
 		Inst->TitleToGameInfo.ServerPort = "30002"; //포트 값을 가져와야한다.
 		
-		UGameplayStatics::OpenLevel(GetWorld(), TEXT("MTM")); //메인 게임플레이장소
-		//UGameplayStatics::OpenLevel(GetWorld(), TEXT("testChartestLevel")); //임시로 열어둠 
+		//UGameplayStatics::OpenLevel(GetWorld(), TEXT("MTM")); //메인 게임플레이장소
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("testChartestLevel")); //임시로 열어둠 
 	//서버 오픈 끝
 
 

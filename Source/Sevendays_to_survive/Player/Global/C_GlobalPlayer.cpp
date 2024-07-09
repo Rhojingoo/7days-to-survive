@@ -394,10 +394,10 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::GunLineTraceServer_Implementation()
-{
-	GunLineTrace();
-}
+//void AC_GlobalPlayer::GunLineTraceServer_Implementation()
+//{
+//	GunLineTrace();
+//}
 
 void AC_GlobalPlayer::Calstamina()
 {
@@ -704,7 +704,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
-		GunLineTraceServer();
+		GunLineTrace();
 	}
 }
 
