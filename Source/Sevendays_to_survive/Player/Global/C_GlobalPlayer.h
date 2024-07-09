@@ -22,6 +22,7 @@ class UC_MapInteractionComponent;
 class UC_InputActionDatas;
 class AC_EquipWeapon;
 class AC_MainPlayerController;
+class AC_ZombieBase;
 struct FInputActionValue; // ÀÔ·Â °ª
 
 UCLASS()
@@ -154,6 +155,11 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void ZombieDieTrace(AC_ZombieBase* _Zombie);
+	void ZombieDieTrace_Implementation(AC_ZombieBase* _Zombie);
+
+
 	//UFUNCTION(Reliable, Server)
 	//void GunLineTraceServer();
 	//void GunLineTraceServer_Implementation();
@@ -214,6 +220,8 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
+	//UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//bool MonsterDie = false;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsHitCpp = false;

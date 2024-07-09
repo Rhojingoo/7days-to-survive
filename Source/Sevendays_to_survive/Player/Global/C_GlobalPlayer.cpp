@@ -312,6 +312,11 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
 	if (nullptr == CurWeapon)
 	{
 		return;
@@ -353,12 +358,18 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		
 		if (Zombie)
 		{
-			Zombie->SetRagDoll();
+			
+			ZombieDieTrace(Zombie);
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
 	}
 	//GunRotation.
+}
+
+void AC_GlobalPlayer::ZombieDieTrace_Implementation(AC_ZombieBase* _Zombie)
+{
+	_Zombie->SetRagDoll();
 }
 
 
@@ -704,6 +715,15 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
+
+	}
+
+	if (true == IsFireCpp)
+	{
+		if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+		{
+			return;
+		}
 		GunLineTrace();
 	}
 }

@@ -13,7 +13,7 @@ UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_BossZombie : public AC_ZombieBase
 {
 	GENERATED_BODY()
-	
+
 public:
 	AC_BossZombie();
 
@@ -28,9 +28,21 @@ public:
 	bool IsBlocked() const;
 	void ConsumeIsBlocked();
 
+	void ApplyRushSpeed();
+	void ApplyRunSpeed();
+
+	void AttackCollisionOn();
+	void AttackCollisionOff();
+
 private:
 	void SetName(FString _Name) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsBlockedValue = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float RushSpeed = 1300.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float RunSpeed = 600.0f;
 };
