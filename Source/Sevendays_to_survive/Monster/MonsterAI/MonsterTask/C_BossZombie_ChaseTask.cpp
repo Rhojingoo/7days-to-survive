@@ -5,7 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
-#include "Monster/C_RangedZombie.h"
+#include "Monster/C_BossZombie.h"
 
 UC_BossZombie_ChaseTask::UC_BossZombie_ChaseTask()
 {
@@ -33,10 +33,8 @@ EBTNodeResult::Type UC_BossZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponent&
 void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-    RangedAttackTimer -= DeltaSeconds;
 
-    AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(GetSelf(&OwnerComp));
-
+    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
     AC_MonsterAIBase* Controller = GetController(&OwnerComp);
     UC_MonsterComponent* MCP = Controller->GetMCP();
     AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
@@ -44,28 +42,43 @@ void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
         FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
     }
 
-
-    FVector TargetLocation = Target->GetActorLocation();
-    TargetLocation.Z = 0;
-
-    FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
-
-    float Vec = FVector::Dist(SelfLocation, TargetLocation);
-
-    // 근거리 공격
-    if (Vec < MeleeAttackDistance && false == RangedZombie->IsRangedAttacking()) {
-        GetController(&OwnerComp)->GetMCP()->Attack();
-    }
-    // 원거리 공격
-    else if (Vec < MCP->GetData()->GetMonsterRange() && RangedAttackTimer <= 0.0f) {
-        GetController(&OwnerComp)->GetMCP()->RangedAttack();
-        RangedAttackTimer = RangedAttackCooldown;
-        return;
-    }
-
-    if (false == RangedZombie->IsRangedAttacking())
+    if (true == IsRushWaiting && true == IsFirstTick)
     {
-        MCP->Run(Target->GetActorLocation() - SelfLocation);
+        RushWaitTimer = RushWaitCooldown;
+
+        BossZombie->RushWait();
+
+        IsFirstTick = false;
     }
-    return;
+    else if (true == IsRushWaiting && false == IsFirstTick)
+    {
+        RushWaitTimer -= DeltaSeconds;
+        if (RushWaitTimer <= 0.0f)
+        {
+            IsRushWaiting = false;
+            IsFirstTick = true;
+        }
+    }
+    else if (false == IsRushWaiting && true == IsFirstTick)
+    {
+        RushTargetHorizontalLocation = Target->GetActorLocation();
+        RushTargetHorizontalLocation.Z = 0;
+
+        BossZombie->Rush();
+
+        IsFirstTick = false;
+    }
+    else if (false == IsRushWaiting && false == IsFirstTick)
+    {
+        FVector BossZombieHorizontalLocation = BossZombie->GetActorLocation();
+        BossZombieHorizontalLocation.Z = 0;
+
+        BossZombie->AddMovementInput(RushTargetHorizontalLocation - BossZombieHorizontalLocation);
+
+        if (FVector::Dist2D(BossZombieHorizontalLocation, RushTargetHorizontalLocation) < 10.0f)
+        {
+            IsRushWaiting = true;
+            IsFirstTick = true;
+        }
+    }
 }
