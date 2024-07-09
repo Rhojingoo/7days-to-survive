@@ -52,8 +52,8 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
 	MCP->Shout();
-	AC_ZombieBase* ScreamZombie = MCP->GetMonster();
-	bool ShoutCheck = ScreamZombie->IsShout();
+	AC_ZombieBase* Scream_Zombie = MCP->GetMonster();
+	bool ShoutCheck = Scream_Zombie->IsShout();
 
 	FVector Direction = (Target->GetActorLocation() - SelfLocation).GetSafeNormal();
 

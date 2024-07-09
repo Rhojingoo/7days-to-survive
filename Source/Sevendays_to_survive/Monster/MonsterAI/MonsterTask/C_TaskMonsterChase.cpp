@@ -49,12 +49,9 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	
 	
 		FVector TargetLocation = Target->GetActorLocation();
-		TargetLocation.Z = 0;
-	
+		TargetLocation.Z = 0;	
 		FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
-	
-		MCP->Run(Target->GetActorLocation() - SelfLocation);
-	
+		MCP->Run(Target->GetActorLocation() - SelfLocation);	
 		float Vec = FVector::Dist(SelfLocation, TargetLocation);
 	
 	#ifdef WITH_EDITOR

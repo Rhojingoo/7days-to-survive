@@ -48,6 +48,18 @@ public:
 		return IsSound;
 	}
 
+	UFUNCTION()
+	void SetIsSound(bool _Set) 
+	{
+		IsSound = _Set;
+	}
+
+
+	UFUNCTION()
+	void IsFindOn() {
+		IsFind = true;
+	}
+
 	class AC_ZombieBase* GetMonster() {
 		return Monster;
 	}
@@ -57,6 +69,8 @@ public:
 	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
 	FName SoundVec = "SoundVector";
+
+	FName Scream_Zombie = "ScreamZombie";
 
 	class UAIPerceptionComponent* GetAPC() { return APC; }
 
