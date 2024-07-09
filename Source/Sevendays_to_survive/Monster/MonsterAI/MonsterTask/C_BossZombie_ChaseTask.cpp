@@ -53,6 +53,7 @@ void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
     else if (true == IsRushWaiting && false == IsFirstTick)
     {
         RushWaitTimer -= DeltaSeconds;
+
         if (RushWaitTimer <= 0.0f)
         {
             IsRushWaiting = false;

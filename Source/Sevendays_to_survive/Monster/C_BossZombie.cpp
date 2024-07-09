@@ -14,10 +14,9 @@ void AC_BossZombie::RushWait_Implementation()
     if (nullptr == AnimInstance) {
         return;
     }
+
     SetState(MonsterEnum::RushWait);
-    if (false == AnimInstance->IsPlayMontage()) {
-        AnimInstance->ChangeAnimation(MonsterEnum::RushWait);
-    }
+    AnimInstance->ChangeAnimation(MonsterEnum::RushWait);
 }
 
 void AC_BossZombie::Rush_Implementation()
@@ -25,10 +24,9 @@ void AC_BossZombie::Rush_Implementation()
     if (nullptr == AnimInstance) {
         return;
     }
+
     SetState(MonsterEnum::Rush);
-    if (false == AnimInstance->IsPlayMontage()) {
-        AnimInstance->ChangeAnimation(MonsterEnum::Rush);
-    }
+    AnimInstance->ChangeAnimation(MonsterEnum::Rush);
 }
 
 void AC_BossZombie::SetName(FString _Name)
