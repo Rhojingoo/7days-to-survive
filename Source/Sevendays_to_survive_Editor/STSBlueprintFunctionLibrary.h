@@ -15,10 +15,31 @@ class SEVENDAYS_TO_SURVIVE_EDITOR_API USTSBlueprintFunctionLibrary : public UBlu
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = "Data")
-	static void DataTableSetting(UDataTable* DataTable);
+	
+	static TArray<FString> ItemNameList;
+	static TMap<FString, TArray<FString>> AllNameList;
+	static FString FolderName;
 
-	static FString FinalPath;
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void ItemDataTableSetting(UDataTable* DataTable, FString& _FolderName);
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void BuildingPartDataTableSetting(UDataTable* DataTable);
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void ItemTypeCheck(FString _FolderName, EItemType& ItemType);
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void ConsumableDataRowSetting(UDataTable* DataTable, EItemType ItemType);
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void MaterialDataRowSetting(UDataTable* DataTable, EItemType ItemTyp);
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	static void WeaponDataRowSetting(UDataTable* DataTable, EItemType ItemTyp);
+
+
+
 
 		
 };
