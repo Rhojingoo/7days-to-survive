@@ -2,6 +2,7 @@
 
 
 #include "Monster/MonsterAI/MonsterTask/C_RangedZombie_ChaseTask.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
@@ -53,11 +54,14 @@ void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint
     float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
     // 근거리 공격
-    if (Vec < Minimum_Distance && false == RangedZombie->IsRangedAttacking()) {
+    if (Vec < MeleeAttackDistance && false == RangedZombie->IsRangedAttacking()) {
         GetController(&OwnerComp)->GetMCP()->Attack();
     }
     // 원거리 공격
     else if (Vec < MCP->GetData()->GetMonsterRange() && RangedAttackTimer <= 0.0f) {
+        FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(SelfLocation, TargetLocation);
+        RangedZombie->SetActorRotation(Rotator);
+
         GetController(&OwnerComp)->GetMCP()->RangedAttack();
         RangedAttackTimer = RangedAttackCooldown;
         return;

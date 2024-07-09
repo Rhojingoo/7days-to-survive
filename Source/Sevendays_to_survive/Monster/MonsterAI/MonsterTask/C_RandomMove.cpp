@@ -2,6 +2,8 @@
 
 
 #include "Monster/MonsterAI/MonsterTask/C_RandomMove.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Hearing.h"
 
 UC_RandomMove::UC_RandomMove()
 {
@@ -12,6 +14,10 @@ UC_RandomMove::UC_RandomMove()
 EBTNodeResult::Type UC_RandomMove::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (true == IsPerceptionUpdated(Controller)) {
+		return EBTNodeResult::Type::Succeeded;
+	}
 	return EBTNodeResult::Type::InProgress;
 }
 
@@ -20,17 +26,16 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 
-
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
-	if (true == Controller->GetIsFind()) {
+	if (true == IsPerceptionUpdated(Controller)) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
+	
 	FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
 	FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
 	FVector Direction = (RanVec - SelfVec).GetSafeNormal();
-
 
 	GetController(&OwnerComp)->GetMCP()->Move(Direction);
 

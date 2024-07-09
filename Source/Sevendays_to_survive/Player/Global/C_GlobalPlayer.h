@@ -22,6 +22,7 @@ class UC_MapInteractionComponent;
 class UC_InputActionDatas;
 class AC_EquipWeapon;
 class AC_MainPlayerController;
+class AC_ZombieBase;
 struct FInputActionValue; // ÀÔ·Â °ª
 
 UCLASS()
@@ -154,9 +155,11 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
-	UFUNCTION(Reliable, Server)
-	void GunLineTraceServer();
-	void GunLineTraceServer_Implementation();
+
+
+	//UFUNCTION(Reliable, Server)
+	//void GunLineTraceServer();
+	//void GunLineTraceServer_Implementation();
 
 
 	UFUNCTION()
@@ -209,16 +212,15 @@ private:
 	bool IsRunCpp = false;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool IsJumpCpp = false;
-
-	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsAimCpp = false;
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
+	//UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//bool MonsterDie = false;
 
-	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsHitCpp = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

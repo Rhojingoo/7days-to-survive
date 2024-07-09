@@ -10,8 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
-
-
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -23,6 +22,12 @@ AC_ZombieBase::AC_ZombieBase()
 	AttackComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	AttackComponent->SetupAttachment(GetMesh());
 	AttackComponent->SetCollisionProfileName("NoCollision");
+
+	BottomArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("BottomArrowComponent"));
+	BottomArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+
+	MiddleArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("MiddleArrowComponent"));
+	MiddleArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
 
 }
 
@@ -77,8 +82,9 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AC_ZombieBase::SetRagDoll() 
+void AC_ZombieBase::SetRagDoll_Implementation()
 {
+
 	UCharacterMovementComponent* Component = GetCharacterMovement();
 	Component->DisableMovement();
 
@@ -140,6 +146,8 @@ void AC_ZombieBase::RunAttack()
 void AC_ZombieBase::OnAttackNotifyBegin()
 {
 	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
+
+	MakeNoise(1000.f);
 }
 
 void AC_ZombieBase::OnAttackNotifyEnd()
@@ -176,3 +184,8 @@ void AC_ZombieBase::Collision(AActor* _Actor)
 	// if _Actor is Player
 }
 
+
+void AC_ZombieBase::Make_Noise(float _Loudness)
+{
+	UAISense_Hearing::ReportNoiseEvent(this, GetActorLocation(), _Loudness, this, 0.0f, TEXT("Noise"));
+}

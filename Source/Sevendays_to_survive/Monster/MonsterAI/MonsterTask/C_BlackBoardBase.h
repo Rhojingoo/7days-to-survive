@@ -32,13 +32,15 @@ protected:
     AC_MonsterAIBase* GetController(UBehaviorTreeComponent* OwnerComp);
     FVector GetSelfLocationNoneZ(UBehaviorTreeComponent* OwnerComp);
     FVector GetSelfLocation(UBehaviorTreeComponent* OwnerComp);
+    bool IsPerceptionUpdated(AC_MonsterAIBase* _Controller);
 
     const FString TargetActor = "TargetActor";
     const FString IsActEnd = "IsActEnd";
     const FString WaitTime = "WaitTime";
     const FString RandomVector = "RandomVector";
-    const FString TargetVector = "TargetVector";
+    const FString SoundVector = "SoundVector";
     const FString IsInit = "IsInit";
+    const FString VelocityTime = "VelocityTime";
 
     const float Minimum_Distance = 100.f;
 };

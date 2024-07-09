@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISense_Hearing.h"
 #include "C_ZombieBase.generated.h"
 
 
@@ -19,6 +20,9 @@ enum class MonsterEnum : uint8
 	Climb UMETA(DisplayName = "Climb"),
 	Dead UMETA(DisplayName = "Dead"),
 	Run UMETA(DisplayName = "Run"),
+	RangedAttack UMETA(DisplayName = "RangedAttack"),
+	RushWait UMETA(DisplayName = "RushWait"),
+	Rush UMETA(DisplayName = "Rush"),
 	End UMETA(DisplayName = "End")
 };
 
@@ -52,8 +56,9 @@ public:
 	virtual void RunAttack();
 	virtual void ShoutAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
 	void SetRagDoll();
+	void SetRagDoll_Implementation();
 
 	virtual void OnAttackNotifyBegin();
 	virtual void OnAttackNotifyEnd();
@@ -89,7 +94,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	bool Shout = false;
 
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	void Make_Noise(float _Loudness);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* BottomArrowComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* MiddleArrowComponent;
 };
 
 
