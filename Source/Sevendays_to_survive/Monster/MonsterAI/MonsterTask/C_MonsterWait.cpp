@@ -23,7 +23,7 @@ EBTNodeResult::Type UC_MonsterWait::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	if (true == Controller->GetIsFind()) {
+	if (true == IsPerceptionUpdated(Controller)) {
 		return EBTNodeResult::Succeeded;
 	}
 	GetSelf(&OwnerComp)->SetState(MonsterEnum::Idle);
@@ -41,7 +41,7 @@ void UC_MonsterWait::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
 
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	if (true == Controller->GetIsFind()) {
+	if (true == IsPerceptionUpdated(Controller)) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
