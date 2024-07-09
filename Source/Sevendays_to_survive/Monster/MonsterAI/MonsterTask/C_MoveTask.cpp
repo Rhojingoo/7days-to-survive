@@ -6,7 +6,7 @@
 
 UC_MoveTask::UC_MoveTask()
 {
-	//bNotifyTick = true;
+	bNotifyTick = true;
 }
 
 EBTNodeResult::Type UC_MoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

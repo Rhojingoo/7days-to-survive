@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Monster/C_ZombieBase.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 #include "C_ScreamZombie.generated.h"
 
 /**
@@ -41,6 +42,9 @@ public:
 
 	void OnAttackNotifyBegin()override final;
 	void OnAttackNotifyEnd()override final;
+
+	//UFUNCTION(BlueprintCallable, Category = "AI")
+	//void MakeNoise(float _Loudness);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
 	bool ShoutBegin = false;

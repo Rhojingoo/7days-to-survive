@@ -3,6 +3,7 @@
 
 #include "Monster/C_ScreamZombie.h"
 #include "C_MonsterAnim.h"
+#include "Perception/AISense_Hearing.h"
 
 AC_ScreamZombie::AC_ScreamZombie()
 {
@@ -107,3 +108,8 @@ void AC_ScreamZombie::OnAttackNotifyEnd()
 		Shout = true;
 	}
 }
+
+//void AC_ScreamZombie::MakeNoise(float _Loudness)
+//{
+//	UAISense_Hearing::ReportNoiseEvent(this, GetActorLocation(), _Loudness, this, 0.0f, TEXT("Noise"));
+//}
