@@ -2,6 +2,8 @@
 
 
 #include "Monster/MonsterAI/MonsterTask/C_RandomMove.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Hearing.h"
 
 UC_RandomMove::UC_RandomMove()
 {
@@ -31,6 +33,16 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
+	
+	UAIPerceptionComponent* APC = Controller->GetAPC();
+	APC->SaveConfig();
+	UAISenseConfig_Hearing* HearingConfig = Controller->GetHearingConfig();
+	//for (AActor* Actor : UpdatedActors)
+	//{
+	//	// 소리를 감지한 액터에 대해 처리할 로직 작성
+	//	UE_LOG(LogTemp, Warning, TEXT("Heard actor: %s"), *Actor->GetName());
+	//}
+
 	FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
 	FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
 	FVector Direction = (RanVec - SelfVec).GetSafeNormal();

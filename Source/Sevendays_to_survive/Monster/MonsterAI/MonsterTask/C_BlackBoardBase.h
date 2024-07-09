@@ -38,7 +38,7 @@ protected:
     const FString IsActEnd = "IsActEnd";
     const FString WaitTime = "WaitTime";
     const FString RandomVector = "RandomVector";
-    const FString TargetVector = "TargetVector";
+    const FString SoundVector = "SoundVector";
     const FString IsInit = "IsInit";
 
     const float Minimum_Distance = 100.f;

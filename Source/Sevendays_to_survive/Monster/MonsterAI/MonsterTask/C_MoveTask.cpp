@@ -36,8 +36,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	SelfLocation.Z = 0;
-	AActor* Actor = Cast<AActor>(Controller->GetBlackboardComponent()->GetValueAsObject(*TargetActor));
-	FVector TargetLocation = Actor->GetActorLocation();
+	FVector TargetLocation = Controller->GetBlackboardComponent()->GetValueAsVector(*SoundVector);
 	FVector Dist = TargetLocation - SelfLocation;
 	Controller->GetMCP()->Move(Dist);
 

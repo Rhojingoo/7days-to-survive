@@ -33,6 +33,12 @@ public:
 	void OffSightUpdated(AActor* _ForgotActor);
 
 	UFUNCTION()
+	void OnHearingUpdated(const TArray<AActor*>& _UpdateActors);
+
+	UFUNCTION()
+	void OffHearingUpdated(AActor* _ForgotActor);
+
+	UFUNCTION()
 	bool GetIsFind() {
 		return IsFind;
 	}
@@ -50,6 +56,11 @@ public:
 
 	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
+	class UAIPerceptionComponent* GetAPC() { return APC; }
+
+	class UAISenseConfig_Hearing* GetHearingConfig() { return HearingConfig; }
+
+
 private:
 	UPROPERTY()
 	float AISightRadius = 1000.f;
@@ -59,14 +70,19 @@ private:
 
 	UPROPERTY()
 	class UAISenseConfig_Sight* SightConfig;
-	/*UPROPERTY()
-	class UAISenseConfig_Hearing* HearingConfig;*/
+
+	UPROPERTY()
+	class UAISenseConfig_Hearing* HearingConfig;
+
 	UPROPERTY()
 	class UBehaviorTreeComponent* BTC;		// 어떻게 컨트롤 되어야 하지?	(로직 저장)
 
 	UPROPERTY()
 	class UBlackboardComponent* BBC;		// 어떤 값에 기반하여 컨트롤 해야 하지? (값 저장)
 
+	/// <summary>
+	/// 사운드 듣기 기능 컴포넌트
+	/// </summary>
 	UPROPERTY()
 	class UAIPerceptionComponent* APC;
 
