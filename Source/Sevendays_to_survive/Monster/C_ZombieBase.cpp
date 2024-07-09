@@ -10,7 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
-
+#include "Perception/AISenseConfig_Hearing.h"
 
 
 // Sets default values
@@ -140,6 +140,8 @@ void AC_ZombieBase::RunAttack()
 void AC_ZombieBase::OnAttackNotifyBegin()
 {
 	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
+
+	MakeNoise(1000.f);
 }
 
 void AC_ZombieBase::OnAttackNotifyEnd()
@@ -176,3 +178,8 @@ void AC_ZombieBase::Collision(AActor* _Actor)
 	// if _Actor is Player
 }
 
+
+void AC_ZombieBase::Make_Noise(float _Loudness)
+{
+	UAISense_Hearing::ReportNoiseEvent(this, GetActorLocation(), _Loudness, this, 0.0f, TEXT("Noise"));
+}

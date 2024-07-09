@@ -92,6 +92,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Attack")
 	bool Shout = false;
 
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	void Make_Noise(float _Loudness);
+
 
 };
 

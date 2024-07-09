@@ -56,9 +56,13 @@ public:
 
 	FName EnemyKeyId = "TargetActor";			//Key값 map이라고 생각해도 됨
 
+	FName SoundVec = "SoundVector";
+
 	class UAIPerceptionComponent* GetAPC() { return APC; }
 
 	class UAISenseConfig_Hearing* GetHearingConfig() { return HearingConfig; }
+
+
 
 
 private:
