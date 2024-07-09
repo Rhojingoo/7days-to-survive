@@ -39,7 +39,12 @@ protected:
     const FString WaitTime = "WaitTime";
     const FString RandomVector = "RandomVector";
     const FString SoundVector = "SoundVector";
+    const FString ScreamZombie = "ScreamZombie";
+    const FString FollowZombie = "FollowZombie";
     const FString IsInit = "IsInit";
+    const FString VelocityTime = "VelocityTime";
+
+    
 
     const float Minimum_Distance = 100.f;
 };
