@@ -6,6 +6,7 @@
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
 #include "Monster/C_BossZombie.h"
+#include "TimerManager.h"
 
 UC_BossZombie_ChaseTask::UC_BossZombie_ChaseTask()
 {
@@ -16,7 +17,13 @@ UC_BossZombie_ChaseTask::UC_BossZombie_ChaseTask()
 EBTNodeResult::Type UC_BossZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     Super::ExecuteTask(OwnerComp, NodeMemory);
+
+    BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
     AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+    Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+    if (Target->IsValidLowLevel() == false) {
+        return EBTNodeResult::Failed;
+    }
     if (!IsValid(Controller)) {
         UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
         return EBTNodeResult::Failed;
@@ -24,7 +31,6 @@ EBTNodeResult::Type UC_BossZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponent&
     if (Controller->GetIsFind()) {
         return EBTNodeResult::InProgress;
     }
-
     else {
         return EBTNodeResult::Failed;
     }
@@ -34,51 +40,125 @@ void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 {
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
-    AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-    UC_MonsterComponent* MCP = Controller->GetMCP();
-    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-    if (Target->IsValidLowLevel() == false) {
-        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-    }
-
-    if (true == IsRushWaiting && true == IsFirstTick)
+    if (true == IsFirstTick)
     {
-        RushWaitTimer = RushWaitCooldown;
-
-        BossZombie->RushWait();
-
-        IsFirstTick = false;
-    }
-    else if (true == IsRushWaiting && false == IsFirstTick)
-    {
-        RushWaitTimer -= DeltaSeconds;
-        if (RushWaitTimer <= 0.0f)
+        switch (TaskState)
         {
-            IsRushWaiting = false;
-            IsFirstTick = true;
+        case UC_BossZombie_ChaseTask::ETaskState::Run:
+            OnRunStart();
+            break;
+        case UC_BossZombie_ChaseTask::ETaskState::Rush:
+            OnRushStart();
+            break;
+        case UC_BossZombie_ChaseTask::ETaskState::RushWait:
+            OnRushWaitStart();
+            break;
+        default:
+            break;
         }
     }
-    else if (false == IsRushWaiting && true == IsFirstTick)
+    else
     {
-        RushTargetHorizontalLocation = Target->GetActorLocation();
-        RushTargetHorizontalLocation.Z = 0;
-
-        BossZombie->Rush();
-
-        IsFirstTick = false;
-    }
-    else if (false == IsRushWaiting && false == IsFirstTick)
-    {
-        FVector BossZombieHorizontalLocation = BossZombie->GetActorLocation();
-        BossZombieHorizontalLocation.Z = 0;
-
-        BossZombie->AddMovementInput(RushTargetHorizontalLocation - BossZombieHorizontalLocation);
-
-        if (FVector::Dist2D(BossZombieHorizontalLocation, RushTargetHorizontalLocation) < 10.0f)
+        switch (TaskState)
         {
-            IsRushWaiting = true;
-            IsFirstTick = true;
+        case UC_BossZombie_ChaseTask::ETaskState::Run:
+            OnRunTick(DeltaSeconds);
+            break;
+        case UC_BossZombie_ChaseTask::ETaskState::Rush:
+            OnRushTick(DeltaSeconds);
+            break;
+        case UC_BossZombie_ChaseTask::ETaskState::RushWait:
+            OnRushWaitTick(DeltaSeconds);
+            break;
+        default:
+            break;
         }
     }
+
+}
+
+void UC_BossZombie_ChaseTask::OnRunStart()
+{
+    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
+    BossZombieLocation2D.Z = 0;
+
+    FVector TargetLocation2D = Target->GetActorLocation();
+    TargetLocation2D.Z = 0;
+
+    BossZombie->Run(TargetLocation2D - BossZombieLocation2D);
+    BossZombie->ApplyRunSpeed();
+
+    IsFirstTick = false;
+
+    FTimerHandle UnusedHandle;
+    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, this, &UC_BossZombie_ChaseTask::OnRunEnd, RunTime, false);
+}
+
+void UC_BossZombie_ChaseTask::OnRunTick(float DeltaSeconds)
+{
+    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
+    BossZombieLocation2D.Z = 0;
+
+    FVector TargetLocation2D = Target->GetActorLocation();
+    TargetLocation2D.Z = 0;
+
+    BossZombie->AddMovementInput(TargetLocation2D - BossZombieLocation2D);
+}
+
+void UC_BossZombie_ChaseTask::OnRunEnd()
+{
+    TaskState = ETaskState::Rush;
+    IsFirstTick = true;
+}
+
+void UC_BossZombie_ChaseTask::OnRushStart()
+{
+    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
+    BossZombieLocation2D.Z = 0;
+
+    FVector RushTargetLocation2D = Target->GetActorLocation();
+    RushTargetLocation2D.Z = 0;
+
+    RushDirection = RushTargetLocation2D - BossZombieLocation2D;
+
+    BossZombie->Rush();
+    BossZombie->ApplyRushSpeed();
+    BossZombie->AttackCollisionOn();
+
+    IsFirstTick = false;
+
+    FTimerHandle UnusedHandle;
+    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, this, &UC_BossZombie_ChaseTask::OnRushEnd, RushTime, false);
+}
+
+void UC_BossZombie_ChaseTask::OnRushTick(float DeltaSeconds)
+{
+    BossZombie->AddMovementInput(RushDirection);
+}
+
+void UC_BossZombie_ChaseTask::OnRushEnd()
+{
+    TaskState = ETaskState::RushWait;
+    IsFirstTick = true;
+    BossZombie->AttackCollisionOff();
+}
+
+void UC_BossZombie_ChaseTask::OnRushWaitStart()
+{
+    BossZombie->RushWait();
+
+    IsFirstTick = false;
+
+    FTimerHandle UnusedHandle;
+    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, this, &UC_BossZombie_ChaseTask::OnRushWaitEnd, RushWaitTime, false);
+}
+
+void UC_BossZombie_ChaseTask::OnRushWaitTick(float DeltaSeconds)
+{
+}
+
+void UC_BossZombie_ChaseTask::OnRushWaitEnd()
+{
+    TaskState = ETaskState::Run;
+    IsFirstTick = true;
 }

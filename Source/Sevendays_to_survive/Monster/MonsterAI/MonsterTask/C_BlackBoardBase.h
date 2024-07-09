@@ -42,6 +42,7 @@ protected:
     const FString ScreamZombie = "ScreamZombie";
     const FString FollowZombie = "FollowZombie";
     const FString IsInit = "IsInit";
+    const FString VelocityTime = "VelocityTime";
 
     
 

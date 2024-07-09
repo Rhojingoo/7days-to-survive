@@ -312,6 +312,11 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
 	if (nullptr == CurWeapon)
 	{
 		return;
@@ -353,6 +358,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		
 		if (Zombie)
 		{
+			//ZombieDieTrace(Zombie);
 			Zombie->SetRagDoll();
 		}
 
@@ -360,8 +366,6 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	}
 	//GunRotation.
 }
-
-
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
@@ -394,10 +398,10 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-void AC_GlobalPlayer::GunLineTraceServer_Implementation()
-{
-	GunLineTrace();
-}
+//void AC_GlobalPlayer::GunLineTraceServer_Implementation()
+//{
+//	GunLineTrace();
+//}
 
 void AC_GlobalPlayer::Calstamina()
 {
@@ -704,7 +708,16 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
-		GunLineTraceServer();
+
+	}
+
+	if (true == IsFireCpp)
+	{
+		if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+		{
+			return;
+		}
+		GunLineTrace();
 	}
 }
 
