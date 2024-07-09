@@ -1,0 +1,37 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Monster/C_BossZombie.h"
+#include "Monster/C_MonsterAnim.h"
+
+AC_BossZombie::AC_BossZombie()
+{
+    SetName("BossZombie");
+}
+
+void AC_BossZombie::RushWait_Implementation()
+{
+    if (nullptr == AnimInstance) {
+        return;
+    }
+    SetState(MonsterEnum::RushWait);
+    if (false == AnimInstance->IsPlayMontage()) {
+        AnimInstance->ChangeAnimation(MonsterEnum::RushWait);
+    }
+}
+
+void AC_BossZombie::Rush_Implementation()
+{
+    if (nullptr == AnimInstance) {
+        return;
+    }
+    SetState(MonsterEnum::Rush);
+    if (false == AnimInstance->IsPlayMontage()) {
+        AnimInstance->ChangeAnimation(MonsterEnum::Rush);
+    }
+}
+
+void AC_BossZombie::SetName(FString _Name)
+{
+    MonsterName = _Name;
+}
