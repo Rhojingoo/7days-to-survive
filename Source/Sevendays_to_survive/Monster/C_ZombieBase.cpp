@@ -10,8 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
-#include "Perception/AISenseConfig_Hearing.h"
-
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -23,6 +22,12 @@ AC_ZombieBase::AC_ZombieBase()
 	AttackComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	AttackComponent->SetupAttachment(GetMesh());
 	AttackComponent->SetCollisionProfileName("NoCollision");
+
+	BottomArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("BottomArrowComponent"));
+	BottomArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+
+	MiddleArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("MiddleArrowComponent"));
+	MiddleArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
 
 }
 
@@ -77,8 +82,12 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AC_ZombieBase::SetRagDoll() 
+void AC_ZombieBase::SetRagDoll_Implementation()
 {
+	if (true != HasAuthority()) {
+		return;
+	}
+
 	UCharacterMovementComponent* Component = GetCharacterMovement();
 	Component->DisableMovement();
 

@@ -40,6 +40,7 @@ protected:
     const FString RandomVector = "RandomVector";
     const FString SoundVector = "SoundVector";
     const FString IsInit = "IsInit";
+    const FString VelocityTime = "VelocityTime";
 
     const float Minimum_Distance = 100.f;
 };

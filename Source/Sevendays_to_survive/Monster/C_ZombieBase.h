@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISense_Hearing.h"
 #include "C_ZombieBase.generated.h"
 
 
@@ -55,8 +56,9 @@ public:
 	virtual void RunAttack();
 	virtual void ShoutAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
 	void SetRagDoll();
+	void SetRagDoll_Implementation();
 
 	virtual void OnAttackNotifyBegin();
 	virtual void OnAttackNotifyEnd();
@@ -95,7 +97,11 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "AI")
 	void Make_Noise(float _Loudness);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* BottomArrowComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* MiddleArrowComponent;
 };
 
 
