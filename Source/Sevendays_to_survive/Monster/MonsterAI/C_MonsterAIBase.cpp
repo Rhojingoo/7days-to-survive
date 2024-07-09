@@ -36,6 +36,24 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 		SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
 		SightConfig->SetStartsEnabled(true);
 	}
+
+
+	{
+		HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
+		HearingConfig->HearingRange = 300.0f;  // 청각 범위 설정
+		HearingConfig->LoSHearingRange = 150.0f;  // 시야 내 청각 범위 설정
+		HearingConfig->DetectionByAffiliation.bDetectEnemies = true;  // 적 팀의 소리 감지 설정
+		HearingConfig->DetectionByAffiliation.bDetectNeutrals = false;  // 중립 팀의 소리 감지 설정
+		HearingConfig->DetectionByAffiliation.bDetectFriendlies = false;  // 아군 팀의 소리 감지 설정
+	}
+
+	APC->ConfigureSense(*HearingConfig);
+	APC->SetDominantSense(HearingConfig->GetSenseImplementation());
+
+	// Perception Updated 이벤트 바인딩
+	//APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnPerceptionUpdated);
+
+
 	SetPerceptionComponent(*APC);
 	SetGenericTeamId(FGenericTeamId(1));
 }
@@ -106,6 +124,9 @@ void AC_MonsterAIBase::BeginPlay()
 		UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, SightConfig->GetSenseImplementation(), GetPawn());
 		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnSightUpdated);
 		APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffSightUpdated);
+		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnHearingUpdated);
+		APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffHearingUpdated);
+
 		APC->Activate();
 	}
 
@@ -149,6 +170,55 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 void AC_MonsterAIBase::OffSightUpdated(AActor* _ForgotActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OffSight"));
+}
+
+void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
+{
+	if (_UpdateActors.Num() < 1) {
+		UE_LOG(LogTemp, Warning, TEXT("NO One"));
+	}
+
+
+//	for (AActor* Actor : _UpdateActors)
+//	{
+//#ifdef WITH_EDITOR
+//		DrawDebugSphere(GetWorld(), Actor->GetActorLocation(), 50.0f, 12, FColor::Red, false, 5.0f);
+//#endif
+//		BBC->SetValueAsObject(EnemyKeyId, Actor);
+//		IsFind = true;
+//		APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);
+//		break;
+//	}
+//	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
+
+
+	for (AActor* Actor : _UpdateActors)
+	{
+		// 청각으로 감지한 액터에 대해 처리할 로직 작성
+		FActorPerceptionBlueprintInfo Info;
+		PerceptionComponent->GetActorsPerception(Actor, Info);
+
+	
+
+		for (const auto& Stimulus : Info.LastSensedStimuli)
+		{
+			if (Stimulus.Type == UAISense::GetSenseID<UAISense_Hearing>() && Stimulus.WasSuccessfullySensed())
+			{
+				// 소리를 감지한 위치로 이동
+				//MoveToLocation(Stimulus.StimulusLocation);
+				BBC->SetValueAsObject(EnemyKeyId, Actor);
+				IsFind = true;
+				UE_LOG(LogTemp, Warning, TEXT("Heard actor: %s at location: %s"), *Actor->GetName(), *Stimulus.StimulusLocation.ToString());
+				//break;
+			}
+		}
+		//UE_LOG(LogTemp, Warning, TEXT("Heard actor: %s"), *Actor->GetName());
+	}
+}
+
+void AC_MonsterAIBase::OffHearingUpdated(AActor* _ForgotActor)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Forgot sound of actor: %s"), *_ForgotActor->GetName());
 }
 
 UC_MonsterComponent* AC_MonsterAIBase::GetMCP()
