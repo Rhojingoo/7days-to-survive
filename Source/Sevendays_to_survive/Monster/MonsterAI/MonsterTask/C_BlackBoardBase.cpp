@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_BlackBoardBase.h"
@@ -46,4 +46,15 @@ FVector UC_BlackBoardBase::GetSelfLocation(UBehaviorTreeComponent* OwnerComp)
 {
 	FVector Vec = GetSelf(OwnerComp)->GetActorLocation();
 	return Vec;
+}
+
+bool UC_BlackBoardBase::IsPerceptionUpdated(AC_MonsterAIBase* _Controller)
+{
+	if (true == _Controller->GetIsFind()) {
+		return true;;
+	}
+	else if (true == _Controller->GetIsSound()) {
+		return true;
+	}
+	return false;
 }
