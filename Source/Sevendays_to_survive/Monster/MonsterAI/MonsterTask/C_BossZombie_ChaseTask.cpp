@@ -76,8 +76,10 @@ void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 
         BossZombie->AddMovementInput(RushTargetHorizontalLocation - BossZombieHorizontalLocation);
 
-        if (FVector::Dist2D(BossZombieHorizontalLocation, RushTargetHorizontalLocation) < 10.0f)
+        if (true == BossZombie->IsBlocked()
+            || FVector::Dist2D(BossZombieHorizontalLocation, RushTargetHorizontalLocation) < 10.0f)
         {
+            BossZombie->ConsumeIsBlocked();
             IsRushWaiting = true;
             IsFirstTick = true;
         }

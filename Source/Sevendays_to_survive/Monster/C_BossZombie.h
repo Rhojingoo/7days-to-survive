@@ -25,6 +25,12 @@ public:
 	void Rush();
 	void Rush_Implementation();
 
+	bool IsBlocked() const;
+	void ConsumeIsBlocked();
+
 private:
 	void SetName(FString _Name) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsBlockedValue = false;
 };

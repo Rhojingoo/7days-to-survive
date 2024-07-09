@@ -29,6 +29,16 @@ void AC_BossZombie::Rush_Implementation()
     AnimInstance->ChangeAnimation(MonsterEnum::Rush);
 }
 
+bool AC_BossZombie::IsBlocked() const
+{
+    return IsBlockedValue;
+}
+
+void AC_BossZombie::ConsumeIsBlocked()
+{
+    IsBlockedValue = false;
+}
+
 void AC_BossZombie::SetName(FString _Name)
 {
     MonsterName = _Name;
