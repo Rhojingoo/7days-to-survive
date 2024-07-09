@@ -8,18 +8,20 @@
 
 class AC_BossZombie;
 
+UENUM(BlueprintType)
+enum class EBossZombieChaseTaskState : uint8
+{
+    Run,
+    Rush,
+    RushWait
+};
+
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_BossZombie_ChaseTask : public UC_BlackBoardBase
 {
 	GENERATED_BODY()
 	
 private:
-    enum class ETaskState
-    {
-        Run,
-        Rush,
-        RushWait
-    };
 
 public:
     UC_BossZombie_ChaseTask();
@@ -28,27 +30,19 @@ protected:
 
     void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
 
-    void OnRunStart();
-    void OnRunTick(float DeltaSeconds);
-    void OnRunEnd();
+    void OnRunStart(UBehaviorTreeComponent& OwnerComp);
+    void OnRunTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
+    void OnRunEnd(UBehaviorTreeComponent* OwnerComp);
 
-    void OnRushStart();
-    void OnRushTick(float DeltaSeconds);
-    void OnRushEnd();
+    void OnRushStart(UBehaviorTreeComponent& OwnerComp);
+    void OnRushTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
+    void OnRushEnd(UBehaviorTreeComponent* OwnerComp);
     
-    void OnRushWaitStart();
-    void OnRushWaitTick(float DeltaSeconds);
-    void OnRushWaitEnd();
+    void OnRushWaitStart(UBehaviorTreeComponent& OwnerComp);
+    void OnRushWaitTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
+    void OnRushWaitEnd(UBehaviorTreeComponent* OwnerComp);
 
-    AC_BossZombie* BossZombie = nullptr;
-    AActor* Target = nullptr;
-
-    FVector RushDirection = FVector::ZeroVector;
-    
     const float RunTime = 5.0f;
     const float RushTime = 3.0f;
     const float RushWaitTime = 6.0f;
-
-    ETaskState TaskState = ETaskState::Run;
-    bool IsFirstTick = true;
 };

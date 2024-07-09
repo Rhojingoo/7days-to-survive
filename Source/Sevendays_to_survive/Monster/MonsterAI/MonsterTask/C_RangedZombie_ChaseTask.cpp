@@ -34,7 +34,10 @@ EBTNodeResult::Type UC_RangedZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponen
 void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+    float RangedAttackTimer = GetBlackBoard(&OwnerComp)->GetValueAsFloat(TEXT("RangedAttackTimer"));
     RangedAttackTimer -= DeltaSeconds;
+    GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("RangedAttackTimer"), RangedAttackTimer);
 
     AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(GetSelf(&OwnerComp));
 
@@ -63,7 +66,7 @@ void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint
         RangedZombie->SetActorRotation(Rotator);
 
         GetController(&OwnerComp)->GetMCP()->RangedAttack();
-        RangedAttackTimer = RangedAttackCooldown;
+        GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("RangedAttackTimer"), RangedAttackCooldown);
         return;
     }
 
