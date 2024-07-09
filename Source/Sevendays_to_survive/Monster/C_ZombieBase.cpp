@@ -84,9 +84,6 @@ void AC_ZombieBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AC_ZombieBase::SetRagDoll_Implementation()
 {
-	if (true != HasAuthority()) {
-		return;
-	}
 
 	UCharacterMovementComponent* Component = GetCharacterMovement();
 	Component->DisableMovement();

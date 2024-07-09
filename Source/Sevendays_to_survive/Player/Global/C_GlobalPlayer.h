@@ -155,9 +155,6 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
-	UFUNCTION(Reliable, NetMulticast)
-	void ZombieDieTrace(AC_ZombieBase* _Zombie);
-	void ZombieDieTrace_Implementation(AC_ZombieBase* _Zombie);
 
 
 	//UFUNCTION(Reliable, Server)

@@ -358,21 +358,14 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		
 		if (Zombie)
 		{
-			
-			ZombieDieTrace(Zombie);
+			//ZombieDieTrace(Zombie);
+			Zombie->SetRagDoll();
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
 	}
 	//GunRotation.
 }
-
-void AC_GlobalPlayer::ZombieDieTrace_Implementation(AC_ZombieBase* _Zombie)
-{
-	_Zombie->SetRagDoll();
-}
-
-
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
