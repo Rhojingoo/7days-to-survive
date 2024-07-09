@@ -2,10 +2,12 @@
 
 
 #include "Monster/C_RangedZombie.h"
+
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Monster/C_ZombieBullet.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "C_MonsterAnim.h"
 #include "Monster/Component/C_MonsterComponent.h"
@@ -55,6 +57,11 @@ void AC_RangedZombie::RangedAttack_Implementation()
 
 void AC_RangedZombie::OnRangedAttackNotifyBegin()
 {
+    if (false == HasAuthority())
+    {
+        return;
+    }
+
     // 투사체 발사
     AActor* TargetActor = GetTargetActor();
     FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
@@ -63,6 +70,12 @@ void AC_RangedZombie::OnRangedAttackNotifyBegin()
     FVector SpawnRotation = FVector::ForwardVector;
 
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
+
+    if (nullptr == Bullet)
+    {
+        UE_LOG(LogTemp, Error, TEXT("[%s] Zombie bullet spawn failed."), __FUNCTION__);
+        return;
+    }
 
     float d = GetHorizontalDistance(SpawnLocation, TargetLocation);
     float g = -GetWorld()->GetGravityZ();
