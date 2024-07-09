@@ -138,7 +138,7 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 		//->OnPlayMontageNotifyEnd(this, &AC_GlobalPlayer::ResetHit);
-	//IsHitCpp = false;
+	IsHitCpp = false;
 	//if()
 }
 
@@ -158,6 +158,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
+	DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
 }
 
 // Called when the game starts or when spawned
