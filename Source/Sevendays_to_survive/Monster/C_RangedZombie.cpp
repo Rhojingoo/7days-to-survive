@@ -64,6 +64,12 @@ void AC_RangedZombie::OnRangedAttackNotifyBegin()
 
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
 
+    if (nullptr == Bullet)
+    {
+        UE_LOG(LogTemp, Error, TEXT("[%s] Zombie bullet spawn failed."), __FUNCTION__);
+        return;
+    }
+
     float d = GetHorizontalDistance(SpawnLocation, TargetLocation);
     float g = -GetWorld()->GetGravityZ();
     float s = Bullet->GetInitialSpeed();
