@@ -1,10 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "UI/C_HealthBar.h"
 
 
-double UC_HealthBar::DecreaseBar(double _Damage) // °¨¼ÒÇÏ´Â ÇÔ¼ö
+int  UC_HealthBar::DecreaseBar(int  _Damage) // ê°ì†Œí•˜ëŠ” í•¨ìˆ˜
 {
 
 	if (CurHealth < 0)
@@ -16,7 +16,7 @@ double UC_HealthBar::DecreaseBar(double _Damage) // °¨¼ÒÇÏ´Â ÇÔ¼ö
 	return CurHealth;
 	
 }
-double UC_HealthBar::HealBar(double _HealNum) //Ã¼·ÂÈ¸º¹ ¹× °ªÀÌ ¿Ã¶ó°¡´Â °ª
+int  UC_HealthBar::HealBar(int  _HealNum) //ì²´ë ¥íšŒë³µ ë° ê°’ì´ ì˜¬ë¼ê°€ëŠ” ê°’
 {
 	CurHealth = CurHealth + _HealNum;
 
@@ -24,9 +24,9 @@ double UC_HealthBar::HealBar(double _HealNum) //Ã¼·ÂÈ¸º¹ ¹× °ªÀÌ ¿Ã¶ó°¡´Â °ª
 
 }
 
-double UC_HealthBar::DecreaseObjectHp(AActor* _Object, double _Damage)
+int  UC_HealthBar::DecreaseObjectHp(AActor* _Object, int  _Damage)
 {
-	//¿©±â¿¡ ¹«¾ğ°¡ ³ÖÀ»·Á°í Çß´Âµ¥ ÇÊ¿ä°¡ ¾ø´Ù.
+	//ì—¬ê¸°ì— ë¬´ì–¸ê°€ ë„£ì„ë ¤ê³  í–ˆëŠ”ë° í•„ìš”ê°€ ì—†ë‹¤.
 
 	CurHealth = CurHealth - _Damage;
 
@@ -47,7 +47,7 @@ void UC_HealthBar::CureStamina()
 	{
 		CurStamina = MaxStatmina;
 		STimer = 0;
-		//Ç® ÃæÀü µÇ¾úÀ»¶§´Â 
+		//í’€ ì¶©ì „ ë˜ì—ˆì„ë•ŒëŠ” 
 	}
 	
 
@@ -57,23 +57,23 @@ void UC_HealthBar::CureStamina()
 
 
 
-void UC_HealthBar::SetCurHealth(double _Num)
+void UC_HealthBar::SetCurHealth(int  _Num)
 {
 	CurHealth = _Num;
 }
 
-void UC_HealthBar::SetStamina(double _Num)
+void UC_HealthBar::SetStamina(int  _Num)
 {
 	CurStamina = _Num;
 }
 
-void UC_HealthBar::SetMaxStamina(double _Num)
+void UC_HealthBar::SetMaxStamina(int  _Num)
 {
 	MaxStatmina = _Num;	
 }
 
 
-void UC_HealthBar::SetMaxHealth(double _Num)
+void UC_HealthBar::SetMaxHealth(int  _Num)
 {
-	MaxHealth = _Num; //Àåºñ¸¦ ÀÔÀ»¶§ ¸¶´Ù °ªÀÌ ´Ã¾ü³ª°Ô ÇÒ »ı°¢ÀÓ 
+	MaxHealth = _Num; //ì¥ë¹„ë¥¼ ì…ì„ë•Œ ë§ˆë‹¤ ê°’ì´ ëŠ˜ì—Šë‚˜ê²Œ í•  ìƒê°ì„ 
 }
