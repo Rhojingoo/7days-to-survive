@@ -56,6 +56,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 		{
 			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 			Controller->SetIsSound(false);
+			return;
 		}
 		FVector MonLocation = Target->GetActorLocation();
 		FVector Distance = MonLocation - SelfLocation;
