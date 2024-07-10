@@ -14,16 +14,17 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 
 	AC_GlobalPlayer* PlayCharacter = MeshComp->GetOwner<AC_GlobalPlayer>();
 
-	int a = 0;
+	
 	if (nullptr == PlayCharacter)
 	{
 		return;
 	}
 
-	//if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
-	//{
-		//return;
-	//}
+	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
+	{
+		return;
+	}
+
 	FHitResult Hit;
 
 	UStaticMeshComponent* ItemMesh=PlayCharacter->GetStaticItemMesh()[1];
