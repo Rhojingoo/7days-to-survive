@@ -23,6 +23,7 @@ enum class MonsterEnum : uint8
 	RangedAttack UMETA(DisplayName = "RangedAttack"),
 	RushWait UMETA(DisplayName = "RushWait"),
 	Rush UMETA(DisplayName = "Rush"),
+	Jump UMETA(DisplayName = "Jump"),
 	End UMETA(DisplayName = "End")
 };
 

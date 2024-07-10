@@ -155,6 +155,9 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
+	UFUNCTION(Reliable, Server)
+	void FireLoop();
+	void FireLoop_Implementation();
 
 	UFUNCTION()
 	void Calstamina();
