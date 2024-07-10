@@ -42,6 +42,7 @@ enum class EStaticItemSlot : uint8
 {
 	RSword,
 	RAxe,
+	RBat,
 	SlotMax
 };
 
