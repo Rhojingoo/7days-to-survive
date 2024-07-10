@@ -33,7 +33,7 @@ void AC_ItemSourceHISMA::BeginPlay()
     Super::BeginPlay();
 
     AActor* GameMode = UGameplayStatics::GetGameMode(GetWorld());
-    SetOwner(GameMode);
+    //SetOwner(GameMode);
 
     HpBarWidget = Cast<UC_HealthBar>(HpBar->GetWidget());
 

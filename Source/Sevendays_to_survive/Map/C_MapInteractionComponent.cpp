@@ -7,6 +7,7 @@
 #include "Map/C_ItemSourceHISMA.h"
 #include "Map/C_MapInteractable.h"
 #include "BuildingSystem/C_BuildingPart.h"
+#include "Map/C_ItemBox.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -113,33 +114,82 @@ void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResu
 	ViewingItemPouch = nullptr;
 }
 
-void UC_MapInteractionComponent::ProcessBuildingPartTraceResult(FHitResult _HitResult, bool _IsHit)
+void UC_MapInteractionComponent::ProcessHpObjectTraceResult(FHitResult _HitResult, bool _IsHit)
 {
 	// 건축물을 보지 않게 되는 경우
 	if (false == _IsHit)
 	{
-		if (true == IsValid(ViewingBuildingPart))
+		if (true == IsValid(ViewingHpObject))
 		{
-			ViewingBuildingPart->HideHpBar();
+			AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
+			if (nullptr != AsBuildingPart)
+			{
+				AsBuildingPart->HideHpBar();
+			}
+
+			AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
+			if (nullptr != AsItemBox)
+			{
+				AsItemBox->HideHpBar();
+			}
+
+			//ViewingHpObject->HideHpBar();
 		}
-		ViewingBuildingPart = nullptr;
+		ViewingHpObject = nullptr;
 		return;
 	}
 
 	// 같은 건축물을 계속 보는 경우
-	if (ViewingBuildingPart == _HitResult.GetActor())
+	if (ViewingHpObject == _HitResult.GetActor())
 	{
-		ViewingBuildingPart->UpdateHpBar();
+		AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
+		if (nullptr != AsBuildingPart)
+		{
+			AsBuildingPart->UpdateHpBar();
+		}
+
+		AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
+		if (nullptr != AsItemBox)
+		{
+			AsItemBox->UpdateHpBar();
+		}
+
+		// ViewingHpObject->UpdateHpBar();
 		return;
 	}
 
 	// 다른 건축물을 보게 되는 경우
-	if (true == IsValid(ViewingBuildingPart))
+	if (true == IsValid(ViewingHpObject))
 	{
-		ViewingBuildingPart->HideHpBar();
+		AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
+		if (nullptr != AsBuildingPart)
+		{
+			AsBuildingPart->HideHpBar();
+		}
+
+		AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
+		if (nullptr != AsItemBox)
+		{
+			AsItemBox->HideHpBar();
+		}
+
+		//ViewingHpObject->HideHpBar();
 	}
-	ViewingBuildingPart = Cast<AC_BuildingPart>(_HitResult.GetActor());
-	ViewingBuildingPart->UpdateHpBar();
+	ViewingHpObject = Cast<AC_BuildingPart>(_HitResult.GetActor());
+	
+	AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
+	if (nullptr != AsBuildingPart)
+	{
+		AsBuildingPart->UpdateHpBar();
+	}
+
+	AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
+	if (nullptr != AsItemBox)
+	{
+		AsItemBox->UpdateHpBar();
+	}
+	
+	//ViewingHpObject->UpdateHpBar();
 }
 
 void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
