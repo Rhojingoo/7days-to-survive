@@ -39,6 +39,12 @@ void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 {
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
+    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+    if (Target->IsValidLowLevel() == false) {
+        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+        return;
+    }
+
     EBossZombieChaseTaskState TaskState = static_cast<EBossZombieChaseTaskState>(GetBlackBoard(&OwnerComp)->GetValueAsInt(TEXT("TaskState")));
 
     if (true == GetBlackBoard(&OwnerComp)->GetValueAsBool(TEXT("IsFirstTick")))

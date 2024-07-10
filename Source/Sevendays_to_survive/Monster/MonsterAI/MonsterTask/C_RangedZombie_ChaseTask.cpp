@@ -40,6 +40,11 @@ void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint
     GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("RangedAttackTimer"), RangedAttackTimer);
 
     AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(GetSelf(&OwnerComp));
+    if (false == RangedZombie->IsValidLowLevel())
+    {
+        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+        return;
+    }
 
     AC_MonsterAIBase* Controller = GetController(&OwnerComp);
     UC_MonsterComponent* MCP = Controller->GetMCP();
