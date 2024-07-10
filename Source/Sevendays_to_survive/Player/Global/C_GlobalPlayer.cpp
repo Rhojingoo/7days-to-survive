@@ -351,7 +351,6 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	}
 
 	AActor* ActorHit = Hit.GetActor();
-
 	if (ActorHit)
 	{
 		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
@@ -360,6 +359,14 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		{
 			//ZombieDieTrace(Zombie);
 			Zombie->SetRagDoll();
+			FTimerHandle ZombieDestory;
+
+			GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+			{
+				Zombie->Destroy();
+				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
+			}),5.0f,false);
+			
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
