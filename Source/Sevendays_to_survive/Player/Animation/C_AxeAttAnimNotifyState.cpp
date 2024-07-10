@@ -57,16 +57,16 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		{
 			//ZombieDieTrace(Zombie);
 			Zombie->SetRagDoll();
-			//FTimerHandle ZombieDestory;
+			FTimerHandle ZombieDestory;
 
-			//GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-			//{
-			//	if (Zombie != nullptr)
-			//	{
-			//		Zombie->Destroy();
-			//	}
-			//	//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
-			//}), 5.0f, false);
+			MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+			{
+				if (Zombie != nullptr)
+				{
+					Zombie->Destroy();
+				}
+				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
+			}), 5.0f, false);
 
 		}
 
