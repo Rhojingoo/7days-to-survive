@@ -362,7 +362,10 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 			GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 			{
-				Zombie->Destroy();
+				if (Zombie != nullptr)
+				{
+					Zombie->Destroy();
+				}
 				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
 			}),5.0f,false);
 			
