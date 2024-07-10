@@ -6,7 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/C_ZombieBase.h"
-
+#include "Map/C_ItemSourceHISMA.h"
 
 void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -69,6 +69,14 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
 			}), 5.0f, false);
 
+		}
+
+		AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
+		
+		if (MapObject)
+		{
+			int ItemHit = Hit.Item;
+			MapObject->Damage(ItemHit, 10, PlayCharacter);
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
