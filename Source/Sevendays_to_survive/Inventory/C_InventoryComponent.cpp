@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Inventory/C_InventoryComponent.h"
 
@@ -46,7 +46,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
         return;
     }
 
-    // ÀÌ¹Ì °¡Áö°í ÀÖ´Â ¾ÆÀÌÅÛÀ» Ãß°¡ÇÏ´Â °æ¿ì
+    // ì´ë¯¸ ê°€ì§€ê³  ìžˆëŠ” ì•„ì´í…œì„ ì¶”ê°€í•˜ëŠ” ê²½ìš°
     if (true == HasItemByObject(_Item))
     {
         int Index = ItemIdToIndex[_Item->Id];
@@ -55,7 +55,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
         return;
     }
 
-    // °¡Áö°í ÀÖÁö ¾ÊÀº ¾ÆÀÌÅÛÀ» Ãß°¡ÇÏ´Â °æ¿ì
+    // ê°€ì§€ê³  ìžˆì§€ ì•Šì€ ì•„ì´í…œì„ ì¶”ê°€í•˜ëŠ” ê²½ìš°
     int Index = FindEmptySlot();
     ItemIdToIndex.Emplace(_Item->Id, Index);
     Inventory[Index].Item = _Item;
