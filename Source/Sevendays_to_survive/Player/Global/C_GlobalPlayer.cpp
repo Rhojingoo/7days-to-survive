@@ -364,6 +364,12 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
 	}
+
+	
+	if (true == IsFireCpp)
+	{
+		GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
+	}
 	//GunRotation.
 }
 
@@ -398,10 +404,14 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-//void AC_GlobalPlayer::GunLineTraceServer_Implementation()
-//{
-//	GunLineTrace();
-//}
+
+void AC_GlobalPlayer::FireLoop_Implementation()
+{
+	if (true == IsFireCpp)
+	{
+		GunLineTrace();
+	}
+}
 
 void AC_GlobalPlayer::Calstamina()
 {

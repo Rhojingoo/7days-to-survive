@@ -22,7 +22,5 @@ protected:
     void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
 
     const float RangedAttackCooldown = 5.0f;
-    float RangedAttackTimer = 0.0f;
-
     const float MeleeAttackDistance = 300.0f;
 };

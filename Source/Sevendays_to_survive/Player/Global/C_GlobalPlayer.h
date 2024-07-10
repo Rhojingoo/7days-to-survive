@@ -155,12 +155,9 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
-
-
-	//UFUNCTION(Reliable, Server)
-	//void GunLineTraceServer();
-	//void GunLineTraceServer_Implementation();
-
+	UFUNCTION(Reliable, Server)
+	void FireLoop();
+	void FireLoop_Implementation();
 
 	UFUNCTION()
 	void Calstamina();
@@ -217,8 +214,8 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
-	//UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	//bool MonsterDie = false;
+	UPROPERTY()
+	FTimerHandle timer;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsHitCpp = false;
@@ -263,4 +260,5 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* hitMontage = nullptr;
+
 };

@@ -202,6 +202,7 @@ void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
 				// 소리를 감지한 위치로 이동
 				//MoveToLocation(Stimulus.StimulusLocation);	
 				BBC->SetValueAsVector(SoundVec, Stimulus.StimulusLocation);
+				BBC->SetValueAsObject(Scream_Zombie, Actor);
 				IsSound = true;
 				UE_LOG(LogTemp, Warning, TEXT("Heard actor: %s at location: %s"), *Actor->GetName(), *Stimulus.StimulusLocation.ToString());
 				break;
