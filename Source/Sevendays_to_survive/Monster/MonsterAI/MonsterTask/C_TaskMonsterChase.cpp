@@ -49,8 +49,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	}
 
 	FVector TargetLocation = Target->GetActorLocation();
-	TargetLocation.Z = 0;
-	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
+	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
 	if (Vec <= MCP->GetData()->GetMonsterRange()) {
@@ -69,7 +68,8 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		}
 	}
 
-	if (Vec <= 1500.f) {
+	//if (Vec <= 1500.f) {
+	if(Vec > 10000.f){
 		MCP->Run(Target->GetActorLocation() - SelfLocation);
 		if (Vec < Minimum_Distance) {
 			GetController(&OwnerComp)->GetMCP()->Attack();
@@ -98,6 +98,10 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		UMonsterDataObject* MonsterData = Controller->GetMCP()->GetData();
 
 		if (NavPath->GetPathCost() < FLT_MAX) {
+			if (SelfLocation.Z + 10.f > TargetLocation.Z) {
+				MCP->Move(TargetLocation - SelfLocation);
+				return;
+			}
 			int a = 0;
 		}
 
