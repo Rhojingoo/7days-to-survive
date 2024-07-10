@@ -144,8 +144,6 @@ void USTSBlueprintFunctionLibrary::ItemTypeCheck(FString _FolderName, EItemType&
 
 void USTSBlueprintFunctionLibrary::ConsumableDataRowSetting(UDataTable* DataTable, EItemType ItemType)
 {
-	ItemNameList.Empty();
-
 	for (size_t i = 0; i < ItemNameList.Num(); i++)
 	{
 		FC_ConsumableRow ConsumableDataTable = FC_ConsumableRow();
@@ -154,14 +152,11 @@ void USTSBlueprintFunctionLibrary::ConsumableDataRowSetting(UDataTable* DataTabl
 		DataTable->AddRow(*ConsumableDataName, ConsumableDataTable);
 	}
 
+	ItemNameList.Empty();
 	DataTable->Modify();
-
-
 }
 void USTSBlueprintFunctionLibrary::MaterialDataRowSetting(UDataTable* DataTable, EItemType ItemType)
 {
-	ItemNameList.Empty();
-
 	for (size_t i = 0; i < ItemNameList.Num(); i++)
 	{
 		FC_MaterialRow MaterialDataTable = FC_MaterialRow();
@@ -171,6 +166,7 @@ void USTSBlueprintFunctionLibrary::MaterialDataRowSetting(UDataTable* DataTable,
 		DataTable->AddRow(*MaterialRowDataName, MaterialDataTable);
 	}
 
+	ItemNameList.Empty();
 	DataTable->Modify();
 
 }

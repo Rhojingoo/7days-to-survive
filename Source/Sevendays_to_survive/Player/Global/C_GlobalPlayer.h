@@ -42,7 +42,7 @@ public:
 
 	FORCEINLINE TArray<UStaticMeshComponent*> GetStaticItemMesh() const
 	{
-		return StaticItemMesh;
+		return StaticItemMeshs;
 	}
 
 	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
@@ -196,7 +196,7 @@ private:
 	UCameraComponent* Cameras = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TArray<UStaticMeshComponent*> StaticItemMesh;
+	TArray<UStaticMeshComponent*> StaticItemMeshs;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMesh;
