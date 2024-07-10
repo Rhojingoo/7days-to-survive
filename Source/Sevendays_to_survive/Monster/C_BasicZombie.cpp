@@ -85,3 +85,10 @@ void AC_BasicZombie::Move(FVector _Location)
 	}
 	Super::Move(_Location);
 }
+
+void AC_BasicZombie::MonsterJump_Implementation()
+{
+	SetState(MonsterEnum::Jump);
+	AnimInstance->ChangeAnimation(MonsterEnum::Jump);
+	Jump();
+}

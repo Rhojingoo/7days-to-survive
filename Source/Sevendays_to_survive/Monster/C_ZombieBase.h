@@ -56,6 +56,9 @@ public:
 	virtual void Attack();
 	virtual void RunAttack();
 	virtual void ShoutAttack();
+	virtual void MonsterJump();
+	void AddLocation(FVector _Location);
+
 
 	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
 	void SetRagDoll();
@@ -81,7 +84,8 @@ public:
 
 	bool IsShout() { return Shout; }
 
-	bool RayTrace();
+	bool BottomRayTrace();
+	bool MiddleRayTrace();
 
 protected:
 	FString MonsterName;
@@ -107,10 +111,7 @@ protected:
 	class UArrowComponent* MiddleArrowComponent;
 
 	UPROPERTY()
-	bool BottomRay;
-
-	UPROPERTY()
-	bool MiddleRay;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 };
 
 

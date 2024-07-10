@@ -9,6 +9,7 @@
 #include "Engine/Engine.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
 #include <Kismet/GameplayStatics.h>
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
 UC_MonsterComponent::UC_MonsterComponent()
@@ -20,6 +21,11 @@ UC_MonsterComponent::UC_MonsterComponent()
 	// ...
 }
 
+
+bool UC_MonsterComponent::IsFalling()
+{
+	return !MonsterPawn->CanJump();
+}
 
 void UC_MonsterComponent::SetData()
 {
@@ -86,6 +92,28 @@ void UC_MonsterComponent::RangedAttack()
 	AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(MonsterPawn);
 	RangedZombie->RangedAttack();
 }
+
+void UC_MonsterComponent::Jump()
+{
+	MonsterPawn->MonsterJump();
+}
+
+void UC_MonsterComponent::AddLocation(FVector _Location)
+{
+	MonsterPawn->AddLocation(_Location);
+}
+
+bool UC_MonsterComponent::JumpCheck()
+{
+	return MonsterPawn->BottomRayTrace();
+}
+
+bool UC_MonsterComponent::WallCheck()
+{
+	return MonsterPawn->MiddleRayTrace();
+}
+
+
 
 UMonsterDataObject* UC_MonsterComponent::GetData()
 {
