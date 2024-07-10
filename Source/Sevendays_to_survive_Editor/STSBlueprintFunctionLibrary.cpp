@@ -80,16 +80,12 @@ void USTSBlueprintFunctionLibrary::ItemDataTableSetting(UDataTable* DataTable, F
 		FString IconPath = FinalPath + FileName + "." + FileName + "'";
 		FileName[0] = TChar<TCHAR>::ToUpper(FileName[0]);
 
-		ItemNameList.Push(FileName);
-
-		ItemNameList[i];
 
 		int a = 0;
 
 		IconPath;
 		FolderName;
 
-		ItemDataTable.Name = FileName;
 
 		UEnum* Enum = StaticEnum<EItemType>();
 
@@ -101,9 +97,21 @@ void USTSBlueprintFunctionLibrary::ItemDataTableSetting(UDataTable* DataTable, F
 
 		UTexture2D* IconTexture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *IconPath));
 
+		ItemDataTable.Name = FileName;
 		ItemDataTable.Type = static_cast<EItemType>(Value);
 		ItemDataTable.Icon = IconTexture;
 
+		//기존에 들어있는 내용은 무시하고 새로운 내용만 추가해줘야 함
+		FString ContextString;
+		FTableRowBase* FoundRow = DataTable->FindRow<FTableRowBase>(*ItemDataTable.Name, ContextString);
+
+		if (nullptr != FoundRow)
+		{
+			continue;
+		}
+		
+		//새로운 내용만 리스트에 추가
+		ItemNameList.Push(FileName);
 
 		DataTable->AddRow(*ItemDataTable.Name, ItemDataTable); // 저 행을 데이터 테이블에 추가
 	}
@@ -133,7 +141,7 @@ void USTSBlueprintFunctionLibrary::ItemTypeCheck(FString _FolderName, EItemType&
 		ItemType = EItemType::Material;
 
 	}
-	else if (TEXT("WeaponRow") == ItemPartName)
+	else if (TEXT("Weapon") == ItemPartName)
 	{
 		ItemType = EItemType::Weapon;
 	}
@@ -144,10 +152,10 @@ void USTSBlueprintFunctionLibrary::ItemTypeCheck(FString _FolderName, EItemType&
 
 void USTSBlueprintFunctionLibrary::ConsumableDataRowSetting(UDataTable* DataTable, EItemType ItemType)
 {
-	ItemNameList.Empty();
-
+	
 	for (size_t i = 0; i < ItemNameList.Num(); i++)
 	{
+
 		FC_ConsumableRow ConsumableDataTable = FC_ConsumableRow();
 
 		FString ConsumableDataName = ItemNameList[i];
@@ -156,11 +164,14 @@ void USTSBlueprintFunctionLibrary::ConsumableDataRowSetting(UDataTable* DataTabl
 
 	DataTable->Modify();
 
+	ItemNameList.Empty();
+
+	int a = 0;
 
 }
+
 void USTSBlueprintFunctionLibrary::MaterialDataRowSetting(UDataTable* DataTable, EItemType ItemType)
 {
-	ItemNameList.Empty();
 
 	for (size_t i = 0; i < ItemNameList.Num(); i++)
 	{
@@ -173,11 +184,12 @@ void USTSBlueprintFunctionLibrary::MaterialDataRowSetting(UDataTable* DataTable,
 
 	DataTable->Modify();
 
+	ItemNameList.Empty();
 }
+
 void USTSBlueprintFunctionLibrary::WeaponDataRowSetting(UDataTable* DataTable, EItemType ItemType)
 {
-	ItemNameList.Empty();
-
+	
 	for (size_t i = 0; i < ItemNameList.Num(); i++)
 	{
 
@@ -189,5 +201,6 @@ void USTSBlueprintFunctionLibrary::WeaponDataRowSetting(UDataTable* DataTable, E
 
 	DataTable->Modify();
 
+	ItemNameList.Empty();
 }
 
