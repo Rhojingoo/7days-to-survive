@@ -6,7 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/C_ZombieBase.h"
-
+#include "Map/C_ItemSourceHISMA.h"
 
 void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -14,16 +14,17 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 
 	AC_GlobalPlayer* PlayCharacter = MeshComp->GetOwner<AC_GlobalPlayer>();
 
-	int a = 0;
+	
 	if (nullptr == PlayCharacter)
 	{
 		return;
 	}
 
-	//if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
-	//{
-		//return;
-	//}
+	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
+	{
+		return;
+	}
+
 	FHitResult Hit;
 
 	UStaticMeshComponent* ItemMesh=PlayCharacter->GetStaticItemMesh()[1];
@@ -57,17 +58,25 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		{
 			//ZombieDieTrace(Zombie);
 			Zombie->SetRagDoll();
-			//FTimerHandle ZombieDestory;
+			FTimerHandle ZombieDestory;
 
-			//GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-			//{
-			//	if (Zombie != nullptr)
-			//	{
-			//		Zombie->Destroy();
-			//	}
-			//	//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
-			//}), 5.0f, false);
+			MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+			{
+				if (Zombie != nullptr)
+				{
+					Zombie->Destroy();
+				}
+				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
+			}), 5.0f, false);
 
+		}
+
+		AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
+		
+		if (MapObject)
+		{
+			int ItemHit = Hit.Item;
+			MapObject->Damage(ItemHit, 10, PlayCharacter);
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
