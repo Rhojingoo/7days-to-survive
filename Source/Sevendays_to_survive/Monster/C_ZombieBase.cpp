@@ -263,7 +263,8 @@ bool AC_ZombieBase::BottomRayTrace()
 		if (MiddleIsHit && HitResult.GetActor())
 		{
 			AActor* HitObject = (HitResult.GetActor());
-			if (HitObject->IsValidLowLevel() == true) {
+			if (HitObject->IsValidLowLevel() == true) 
+			{
 				MiddleIsHit = true;
 			}
 		}

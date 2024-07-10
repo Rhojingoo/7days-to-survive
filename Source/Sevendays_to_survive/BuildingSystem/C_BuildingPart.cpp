@@ -13,8 +13,11 @@ AC_BuildingPart::AC_BuildingPart()
     PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
 
+    SMComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM Component"));
+    SetRootComponent(SMComponent);
+
     HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
-    HpBar->SetupAttachment(GetRootComponent());
+    HpBar->SetupAttachment(SMComponent);
 }
 
 void AC_BuildingPart::BeginPlay()
