@@ -48,6 +48,11 @@ FVector UC_BlackBoardBase::GetSelfLocation(UBehaviorTreeComponent* OwnerComp)
 	return Vec;
 }
 
+FVector UC_BlackBoardBase::GetSelfVelocity(UBehaviorTreeComponent* OwnerComp)
+{
+	return GetSelf(OwnerComp)->GetVelocity();
+}
+
 bool UC_BlackBoardBase::IsPerceptionUpdated(AC_MonsterAIBase* _Controller)
 {
 	if (true == _Controller->GetIsFind()) {

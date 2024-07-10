@@ -31,6 +31,7 @@ public:
 		return MonsterPawn;
 	}
 
+	bool IsFalling();
 
 	void SetData();
 protected:
@@ -50,7 +51,10 @@ public:
 	void RunAttack();
 	void Shout();
 	void RangedAttack();
-
+	void Jump();
+	void AddLocation(FVector _Location);
+	bool JumpCheck();
+	bool WallCheck();
 	class UMonsterDataObject* GetData();
 
 private:

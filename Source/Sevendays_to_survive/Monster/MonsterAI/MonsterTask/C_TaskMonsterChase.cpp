@@ -48,13 +48,42 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
-
 	FVector TargetLocation = Target->GetActorLocation();
-	TargetLocation.Z = 0;
-	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
+	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
-	if (Vec >= 1500.f) {
+	if (Vec <= MCP->GetData()->GetMonsterRange()) {
+		MCP->Move(TargetLocation - SelfLocation);
+		if (MCP->JumpCheck() == true) {
+			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+			return;
+		}
+		if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
+			GetController(&OwnerComp)->GetMCP()->Attack();
+			return;
+		}
+		else {
+			GetController(&OwnerComp)->GetMCP()->RunAttack();
+			return;
+		}
+	}
+
+	//if (Vec <= 1500.f) {
+	if(Vec > 10000.f){
+		MCP->Run(Target->GetActorLocation() - SelfLocation);
+		if (Vec < Minimum_Distance) {
+			GetController(&OwnerComp)->GetMCP()->Attack();
+			return;
+			//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		}
+
+		else if (Vec < MCP->GetData()->GetMonsterRange()) {
+			GetController(&OwnerComp)->GetMCP()->RunAttack();
+			return;
+		}
+		return;
+	}
+	else {
 		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 		if (!NavSystem) {
 			return;
@@ -69,6 +98,10 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		UMonsterDataObject* MonsterData = Controller->GetMCP()->GetData();
 
 		if (NavPath->GetPathCost() < FLT_MAX) {
+			if (SelfLocation.Z + 10.f > TargetLocation.Z) {
+				MCP->Move(TargetLocation - SelfLocation);
+				return;
+			}
 			int a = 0;
 		}
 
@@ -111,20 +144,6 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		else {
 			return;
 		}
-	}
-	else {
-		MCP->Run(Target->GetActorLocation() - SelfLocation);
-		if (Vec < Minimum_Distance) {
-			GetController(&OwnerComp)->GetMCP()->Attack();
-			return;
-			//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		}
-
-		else if (Vec < MCP->GetData()->GetMonsterRange()) {
-			GetController(&OwnerComp)->GetMCP()->RunAttack();
-			return;
-		}
-		return;
 	}
 
 
