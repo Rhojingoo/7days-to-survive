@@ -31,4 +31,7 @@ public:
 	void RunAttack_Implementation();
 	void Run(FVector _Location) override final;
 	void Move(FVector _Location) override final;
+	UFUNCTION(NetMulticast, Reliable)
+	void MonsterJump() override final;
+	void MonsterJump_Implementation();
 };

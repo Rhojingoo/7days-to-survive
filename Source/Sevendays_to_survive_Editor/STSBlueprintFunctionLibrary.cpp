@@ -162,6 +162,7 @@ void USTSBlueprintFunctionLibrary::ConsumableDataRowSetting(UDataTable* DataTabl
 		DataTable->AddRow(*ConsumableDataName, ConsumableDataTable);
 	}
 
+	ItemNameList.Empty();
 	DataTable->Modify();
 
 	ItemNameList.Empty();
@@ -182,6 +183,7 @@ void USTSBlueprintFunctionLibrary::MaterialDataRowSetting(UDataTable* DataTable,
 		DataTable->AddRow(*MaterialRowDataName, MaterialDataTable);
 	}
 
+	ItemNameList.Empty();
 	DataTable->Modify();
 
 	ItemNameList.Empty();

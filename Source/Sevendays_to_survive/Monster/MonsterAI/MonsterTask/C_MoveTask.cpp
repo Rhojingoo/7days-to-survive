@@ -32,15 +32,40 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 
-	if (true == Controller->GetIsFind()) {
+	if (true == Controller->GetIsFind()) 
+	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	SelfLocation.Z = 0;
 	FVector TargetLocation = Controller->GetBlackboardComponent()->GetValueAsVector(*SoundVector);
-	FVector Dist = TargetLocation - SelfLocation;
-	Controller->GetMCP()->Run(Dist);
+	TargetLocation.Z = 0;
+	FVector Dist = TargetLocation - SelfLocation;	
+
+	bool check = Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie);
+	
+	if (Dist.Size() <= AcceptableRadius && Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == false)
+	{
+		Controller->GetBlackboardComponent()->SetValueAsBool(*FollowZombie, true);
+	}
+	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true)
+	{
+		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
+		if (Target == nullptr)
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+			Controller->SetIsSound(false);
+			return;
+		}
+		FVector MonLocation = Target->GetActorLocation();
+		FVector Distance = MonLocation - SelfLocation;
+		Controller->GetMCP()->Run(Distance);
+	}
+	else
+	{
+		Controller->GetMCP()->Run(Dist);
+	}
 	
 
 	//	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());

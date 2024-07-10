@@ -88,8 +88,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 				UStaticMeshComponent* NewSlotMesh = CreateDefaultSubobject<UStaticMeshComponent>(*Name);
 				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
 				NewSlotMesh->SetCollisionProfileName(TEXT("NoCollision"));
-
-				StaticItemMesh.Push(NewSlotMesh);
+				StaticItemMeshs.Push(NewSlotMesh);
 			}
 		}
 		
@@ -351,7 +350,6 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	}
 
 	AActor* ActorHit = Hit.GetActor();
-
 	if (ActorHit)
 	{
 		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
@@ -360,9 +358,26 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		{
 			//ZombieDieTrace(Zombie);
 			Zombie->SetRagDoll();
+			FTimerHandle ZombieDestory;
+
+			GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+			{
+				if (Zombie != nullptr)
+				{
+					Zombie->Destroy();
+				}
+				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
+			}),5.0f,false);
+			
 		}
 
 		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+	}
+
+	
+	if (true == IsFireCpp)
+	{
+		GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
 	}
 	//GunRotation.
 }
@@ -398,10 +413,14 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 	}
 }
 
-//void AC_GlobalPlayer::GunLineTraceServer_Implementation()
-//{
-//	GunLineTrace();
-//}
+
+void AC_GlobalPlayer::FireLoop_Implementation()
+{
+	if (true == IsFireCpp)
+	{
+		GunLineTrace();
+	}
+}
 
 void AC_GlobalPlayer::Calstamina()
 {
@@ -503,7 +522,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	}
 
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
-	if (StaticItemMesh.Num() <= SlotIndex)
+	if (StaticItemMeshs.Num() <= SlotIndex)
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
 		return;
@@ -511,11 +530,12 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 
 	switch (_Slot)
 	{
+	case EStaticItemSlot::RBat:
 	case EStaticItemSlot::RSword:
 		//StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 		{
-			StaticItemMesh[i]->SetStaticMesh(nullptr);
+			StaticItemMeshs[i]->SetStaticMesh(nullptr);
 		}
 
 		PlayerCurState = EWeaponUseState::Sword;
@@ -523,7 +543,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	case EStaticItemSlot::RAxe:
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 		{
-			StaticItemMesh[i]->SetStaticMesh(nullptr);
+			StaticItemMeshs[i]->SetStaticMesh(nullptr);
 		}
 		PlayerCurState = EWeaponUseState::Axe;
 		break;
@@ -534,7 +554,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	}
 
 
-	StaticItemMesh[SlotIndex]->SetStaticMesh(_Mesh);
+	StaticItemMeshs[SlotIndex]->SetStaticMesh(_Mesh);
 }
 
 void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
@@ -555,7 +575,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 	// USkeletalMeshComponent 슬롯 전용
 	for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 	{
-		StaticItemMesh[i]->SetStaticMesh(nullptr);
+		StaticItemMeshs[i]->SetStaticMesh(nullptr);
 	}
 
 	switch (_Slot)
@@ -691,7 +711,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 		// USkeletalMeshComponent 슬롯 전용
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
 		{
-			StaticItemMesh[i]->SetStaticMesh(nullptr);
+			StaticItemMeshs[i]->SetStaticMesh(nullptr);
 		}
 	}
 	

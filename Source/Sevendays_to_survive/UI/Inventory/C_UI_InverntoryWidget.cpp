@@ -50,3 +50,9 @@ void UC_UI_InverntoryWidget::SwitchSlot(int _PrevIndex, int _ChangeIndex)
 {
 	
 }
+
+
+TArray<UWidget*> UC_UI_InverntoryWidget::GetMYSlots()
+{
+	return Slots;
+}
