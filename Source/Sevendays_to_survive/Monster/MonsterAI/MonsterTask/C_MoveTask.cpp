@@ -37,8 +37,8 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 
-	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
-	//SelfLocation.Z = 0;
+	FVector SelfLocation = GetSelfLocation(&OwnerComp);
+	SelfLocation.Z = 0;
 	FVector TargetLocation = Controller->GetBlackboardComponent()->GetValueAsVector(*SoundVector);
 	TargetLocation.Z = 0;
 	FVector Dist = TargetLocation - SelfLocation;	
@@ -47,11 +47,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	
 	if (Dist.Size() <= AcceptableRadius && Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == false)
 	{
-		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);	
-		//return;	
 		Controller->GetBlackboardComponent()->SetValueAsBool(*FollowZombie, true);
-		//Controller->GetBlackboardComponent()->SetValueAsObject(*ScreamZombie, GetSelf(OwnerComp));
-			//GetBlackBoard(&OwnerComp)->SetValueAsObject(*ScreamZombie));
 	}
 	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true)
 	{
