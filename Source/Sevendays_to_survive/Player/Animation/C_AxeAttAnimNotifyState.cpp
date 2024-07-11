@@ -19,13 +19,13 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	{
 		return;
 	}
+	PlayCharacter->AttCalstamina();
 
 	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	PlayCharacter->AttCalstamina();
 	FHitResult Hit;
 
 	UStaticMeshComponent* ItemMesh=PlayCharacter->GetStaticItemMesh()[1];
