@@ -321,6 +321,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		return;
 	}
 
+	if (PlayerCurState == EWeaponUseState::Shotgun)
+	{
+		return;
+	}
+
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
@@ -415,13 +420,14 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	
+	//FRandomStream Stream(FMath::Rand());
+	FRandomStream Random;
 
-	for (size_t i = 0; i < 8; i++)
+	for (size_t i = 0; i < 7; i++)
 	{
-		float X = FMath::FRandRange(Spreed * -1.0f, Spreed);
-		float Y = FMath::FRandRange(Spreed * -1.0f, Spreed);
-		float Z = FMath::FRandRange(Spreed * -1.0f, Spreed);
+		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
+		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
+		float Z = Random.FRandRange(Spreed * -1.0f, Spreed);
 		FVector End = (GunForwardVector * 5000.0f) + GunLocation + FVector(X, Y, Z);
 
 		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
@@ -447,15 +453,11 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					{
 						Zombie->Destroy();
 					}
-					//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
 				}), 5.0f, false);
 
 			}
-
-			//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
 		}
 	}
-	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
 }
 
@@ -815,13 +817,17 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 			return;
 		}
 
-		if (PlayerCurState == EWeaponUseState::Pistol || PlayerCurState == EWeaponUseState::Pistol)
+		switch (PlayerCurState)
 		{
+		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Pistol:
 			GunLineTrace();
-		}
-		else if (PlayerCurState == EWeaponUseState::Shotgun)
-		{
+			break;
+		case EWeaponUseState::Shotgun:
 			ShotGunLineTrace();
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -829,6 +835,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
 {
+	GetWorld()->GetTimerManager().ClearTimer(timer);
 	IsFireCpp = false;
 }
 
