@@ -175,7 +175,7 @@ void UC_MapInteractionComponent::ProcessHpObjectTraceResult(FHitResult _HitResul
 
 		//ViewingHpObject->HideHpBar();
 	}
-	ViewingHpObject = Cast<AC_BuildingPart>(_HitResult.GetActor());
+	ViewingHpObject = _HitResult.GetActor();
 	
 	AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
 	if (nullptr != AsBuildingPart)
