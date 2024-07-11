@@ -52,36 +52,48 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
+
+
 	if (Vec <= MCP->GetData()->GetMonsterRange()) {
-		MCP->Move(TargetLocation - SelfLocation);
-		if (MCP->JumpCheck() == true) {
-			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-			return;
-		}
-		if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
-			GetController(&OwnerComp)->GetMCP()->Attack();
+		if (Vec >= Minimum_Distance) {
+			MCP->Run(TargetLocation - SelfLocation);
+			GetController(&OwnerComp)->GetMCP()->RunAttack();
 			return;
 		}
 		else {
-			GetController(&OwnerComp)->GetMCP()->RunAttack();
+			GetController(&OwnerComp)->GetMCP()->Attack();
+			return;
+		}
+		//if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
+		//	return;
+		//}
+		//else {
+		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
+		//	return;
+		//}
+	}
+
+	if (Vec <= 800.f) {
+		if (MCP->JumpCheck() == true) {
+			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return;
 		}
 	}
 
 	if (Vec <= 1500.f) {
-	//if(Vec > 10000.f){
+		//if(Vec > 10000.f){
 		MCP->Run(Target->GetActorLocation() - SelfLocation);
-		if (Vec < Minimum_Distance) {
-			GetController(&OwnerComp)->GetMCP()->Attack();
-			return;
-			//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		}
+		//if (Vec < Minimum_Distance) {
+		//	GetController(&OwnerComp)->GetMCP()->Attack();
+		//	return;
+		//	//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		//}
 
-		else if (Vec < MCP->GetData()->GetMonsterRange()) {
-			GetController(&OwnerComp)->GetMCP()->RunAttack();
-			return;
-		}
-		return;
+		//else if (Vec < MCP->GetData()->GetMonsterRange()) {
+		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
+		//	return;
+		//}
+		//return;
 	}
 	else {
 		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -102,7 +114,9 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 				MCP->Move(TargetLocation - SelfLocation);
 				return;
 			}
-			int a = 0;
+			if (MCP->BreakCheck() == true) {
+				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+			}
 		}
 
 		if (true == MonsterData->PathIsEmpty())		//path 즉 경로가 비어있으면 일단 경로 찾아서 넣기

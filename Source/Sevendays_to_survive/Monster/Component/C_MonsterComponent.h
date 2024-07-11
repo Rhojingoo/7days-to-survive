@@ -54,6 +54,7 @@ public:
 	void Jump();
 	void AddLocation(FVector _Location);
 	bool JumpCheck();
+	bool BreakCheck();
 	bool WallCheck();
 	class UMonsterDataObject* GetData();
 
