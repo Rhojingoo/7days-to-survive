@@ -207,6 +207,8 @@ void AC_GlobalPlayer::BeginPlay()
 		Maxstamina= PlayerDT.stamina;
 		stamina = PlayerDT.stamina;
 		staminaCalValue = PlayerDT.staminaCalValue;
+		staminaAttCalValue = PlayerDT.staminaAttValue;
+		staminaJumpCalValue = PlayerDT.staminaJumpValue;
 		Hp = PlayerDT.Hp;
 	}
 	
@@ -279,7 +281,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 
 		//AlMostAtt
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
 	else
 	{
@@ -523,7 +525,7 @@ void AC_GlobalPlayer::Calstamina()
 
 void AC_GlobalPlayer::AttCalstamina()
 {
-	if (stamina < staminaAttAndJumpCalValue)
+	if (stamina < staminaAttCalValue)
 	{
 		return;
 	}
@@ -531,7 +533,7 @@ void AC_GlobalPlayer::AttCalstamina()
 	if (CurWeapon == nullptr)
 	{
 	
-		stamina -= staminaAttAndJumpCalValue;
+		stamina -= staminaAttCalValue;
 	}
 
 	
