@@ -74,6 +74,9 @@ public:
 
 	UFUNCTION()
 	void ResetHit();
+
+	UFUNCTION(BlueprintCallable)
+	void AttCalstamina();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -166,8 +169,6 @@ protected:
 	UFUNCTION()
 	void Calstamina();
 
-	UFUNCTION()
-	void AttCalstamina();
 
 	UFUNCTION(BlueprintCallable)
 	void CrouchCpp(const FInputActionValue& Value);
@@ -237,8 +238,10 @@ private:
 	int staminaCalValue = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	int staminaAttAndJumpCalValue = 80;
+	int staminaAttCalValue = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int staminaJumpCalValue = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Hp = 0;

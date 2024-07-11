@@ -44,6 +44,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UC_MonsterComponent* MCP = Controller->GetMCP();
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 	if (Target->IsValidLowLevel() == false) {
+		UE_LOG(LogTemp, Fatal, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
@@ -74,6 +75,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	}
 
 	if (Vec <= 800.f) {
+		MCP->Run(TargetLocation - SelfLocation);				//taskmonsterchase 78줄 하다 정지
 		if (MCP->JumpCheck() == true) {
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return;
@@ -83,6 +85,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	if (Vec <= 1500.f) {
 		//if(Vec > 10000.f){
 		MCP->Run(Target->GetActorLocation() - SelfLocation);
+		return;
 		//if (Vec < Minimum_Distance) {
 		//	GetController(&OwnerComp)->GetMCP()->Attack();
 		//	return;
