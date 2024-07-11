@@ -17,6 +17,8 @@ class SEVENDAYS_TO_SURVIVE_API AC_7Days_Play_GameMode : public AGameMode
 	GENERATED_BODY()
 	
 public:
+	AC_7Days_Play_GameMode();
+
 	void BeginPlay() override;
 
 	void Tick(float _DeltaTime) override;
