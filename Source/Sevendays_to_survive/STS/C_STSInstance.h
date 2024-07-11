@@ -20,6 +20,8 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
+	UC_STSInstance();
+
 	UFUNCTION(BlueprintCallable)
 	class UC_MapDataAsset* GetMapDataAsset();
 
@@ -37,6 +39,10 @@ public:
 
 	FC_UITableRow TitleToGameInfo;
 
+	int GenerateRandomInt(FIntPoint _Range);
+	float GenerateRandomFloat(FVector2D _Range);
+	FVector GenerateRandomVector(FBox _Box);
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
@@ -51,4 +57,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UC_MapDataAsset* MapDataAsset = nullptr;
+
+	FRandomStream RandomStream;
 };
