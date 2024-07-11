@@ -43,8 +43,9 @@ protected:
     const FString ScreamZombie = "ScreamZombie";
     const FString FollowZombie = "FollowZombie";
     const FString IsInit = "IsInit";
-
+    const FString BreakTime = "BreakTime";
     
-
+    const float Minimum_BreakTime = 5.0f;
     const float Minimum_Distance = 100.f;
+    const float Max_Distance = 3000.f;
 };
