@@ -166,6 +166,9 @@ protected:
 	UFUNCTION()
 	void Calstamina();
 
+	UFUNCTION()
+	void AttCalstamina();
+
 	UFUNCTION(BlueprintCallable)
 	void CrouchCpp(const FInputActionValue& Value);
 
@@ -233,6 +236,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int staminaCalValue = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int staminaAttAndJumpCalValue = 80;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Hp = 0;
@@ -268,4 +274,6 @@ private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* hitMontage = nullptr;
 
+	UPROPERTY()
+	FRandomStream Random;
 };
