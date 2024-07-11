@@ -74,6 +74,9 @@ public:
 
 	UFUNCTION()
 	void ResetHit();
+
+	UFUNCTION(BlueprintCallable)
+	void AttCalstamina();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -155,12 +158,17 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void ShotGunLineTrace();
+	void ShotGunLineTrace_Implementation();
+
 	UFUNCTION(Reliable, Server)
 	void FireLoop();
 	void FireLoop_Implementation();
 
 	UFUNCTION()
 	void Calstamina();
+
 
 	UFUNCTION(BlueprintCallable)
 	void CrouchCpp(const FInputActionValue& Value);
@@ -229,6 +237,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int staminaCalValue = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int staminaAttCalValue = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int staminaJumpCalValue = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Hp = 0;
@@ -248,6 +261,9 @@ private:
 	UPROPERTY()
 	float LineTraceValue = 10000.0f;
 
+	UPROPERTY()
+	float Spreed = 500.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	AC_MainPlayerController* PlayerController = nullptr;
 
@@ -261,4 +277,6 @@ private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* hitMontage = nullptr;
 
+	UPROPERTY()
+	FRandomStream Random;
 };

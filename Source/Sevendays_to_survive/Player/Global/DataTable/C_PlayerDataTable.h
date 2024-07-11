@@ -33,6 +33,12 @@ public:
 	int staminaCalValue=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int staminaAttValue = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int staminaJumpValue = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	int Hp=0.0f;
 
 };

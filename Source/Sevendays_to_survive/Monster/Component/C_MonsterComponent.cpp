@@ -108,6 +108,11 @@ bool UC_MonsterComponent::JumpCheck()
 	return MonsterPawn->BottomRayTrace();
 }
 
+bool UC_MonsterComponent::BreakCheck()
+{
+	return MonsterPawn->MiddleRayTrace();
+}
+
 bool UC_MonsterComponent::WallCheck()
 {
 	return MonsterPawn->MiddleRayTrace();

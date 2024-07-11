@@ -207,6 +207,8 @@ void AC_GlobalPlayer::BeginPlay()
 		Maxstamina= PlayerDT.stamina;
 		stamina = PlayerDT.stamina;
 		staminaCalValue = PlayerDT.staminaCalValue;
+		staminaAttCalValue = PlayerDT.staminaAttValue;
+		staminaJumpCalValue = PlayerDT.staminaJumpValue;
 		Hp = PlayerDT.Hp;
 	}
 	
@@ -277,6 +279,9 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
+
+		//AlMostAtt
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
 	else
 	{
@@ -321,6 +326,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		return;
 	}
 
+	if (PlayerCurState == EWeaponUseState::Shotgun)
+	{
+		return;
+	}
+
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
@@ -344,42 +354,105 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
-	if (false == OKAtt)
+	if (true == OKAtt)
 	{
-		return;
-	}
-
-	AActor* ActorHit = Hit.GetActor();
-	if (ActorHit)
-	{
-		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
-		
-		if (Zombie)
+		AActor* ActorHit = Hit.GetActor();
+		if (ActorHit)
 		{
-			//ZombieDieTrace(Zombie);
-			Zombie->SetRagDoll();
-			FTimerHandle ZombieDestory;
-
-			GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 			{
-				if (Zombie != nullptr)
-				{
-					Zombie->Destroy();
-				}
-				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
-			}),5.0f,false);
-			
-		}
+				AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
-		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+				if (Zombie)
+				{
+					Zombie->SetRagDoll();
+					FTimerHandle ZombieDestory;
+
+					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+					{
+						if (Zombie != nullptr)
+						{
+							Zombie->Destroy();
+						}
+					}), 5.0f, false);
+
+				}
+			}
+		}
 	}
 
-	
 	if (true == IsFireCpp)
 	{
 		GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
 	}
 	//GunRotation.
+}
+
+void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
+{
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
+	
+	FHitResult Hit;
+	//ector ShotDirection;
+
+	FVector GunLocation = GunMesh->GetSocketLocation(FName("Muzzle"));
+	FRotator GunRotation = GunMesh->GetSocketRotation(FName("Muzzle"));
+	FVector GunForwardVector = UKismetMathLibrary::GetForwardVector(GunRotation);
+
+	FVector Start = GunLocation;
+
+	TArray<AActor*> Actors;
+
+	Actors.Add(CurWeapon);
+	//FRandomStream Stream(FMath::Rand());
+	
+	for (size_t i = 0; i < 7; i++)
+	{
+		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
+		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
+		float Z = Random.FRandRange(Spreed * -1.0f, Spreed);
+		FVector End = (GunForwardVector * 5000.0f) + GunLocation+FVector(X,Y,Z);
+
+		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	
+		if (true == OKAtt)
+		{
+			AActor* ActorHit = Hit.GetActor();
+			if (ActorHit)
+			{
+				{
+					AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
+
+					if (Zombie)
+					{
+						//ZombieDieTrace(Zombie);
+						Zombie->SetRagDoll();
+						FTimerHandle ZombieDestory;
+
+						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+						{
+							if (Zombie != nullptr)
+							{
+								Zombie->Destroy();
+							}
+						}), 5.0f, false);
+
+					}
+				}
+			}
+		}
+		
+	}
+
 }
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
@@ -450,6 +523,22 @@ void AC_GlobalPlayer::Calstamina()
 	}
 }
 
+void AC_GlobalPlayer::AttCalstamina()
+{
+	if (stamina < staminaAttCalValue)
+	{
+		return;
+	}
+
+	if (CurWeapon == nullptr)
+	{
+	
+		stamina -= staminaAttCalValue;
+	}
+
+	
+}
+
 void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 {
 
@@ -515,6 +604,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	if (nullptr!=CurWeapon)
 	{
 		CurWeapon->Destroy();
+		CurWeapon = nullptr;
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
 			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -599,6 +689,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
 				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
@@ -737,12 +828,26 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		{
 			return;
 		}
-		GunLineTrace();
+
+		switch (PlayerCurState)
+		{
+		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Pistol:
+			GunLineTrace();
+			break;
+		case EWeaponUseState::Shotgun:
+			ShotGunLineTrace();
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
 {
+	GetWorld()->GetTimerManager().ClearTimer(timer);
 	IsFireCpp = false;
 }
 
