@@ -155,6 +155,10 @@ protected:
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void ShotGunLineTrace();
+	void ShotGunLineTrace_Implementation();
+
 	UFUNCTION(Reliable, Server)
 	void FireLoop();
 	void FireLoop_Implementation();
@@ -247,6 +251,9 @@ private:
 
 	UPROPERTY()
 	float LineTraceValue = 10000.0f;
+
+	UPROPERTY()
+	float Spreed = 500.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	AC_MainPlayerController* PlayerController = nullptr;

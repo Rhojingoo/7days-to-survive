@@ -382,6 +382,83 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	//GunRotation.
 }
 
+void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
+{
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+
+	FHitResult Hit;
+	//ector ShotDirection;
+
+	FVector GunLocation = GunMesh->GetSocketLocation(FName("Muzzle"));
+	FRotator GunRotation = GunMesh->GetSocketRotation(FName("Muzzle"));
+	FVector GunForwardVector = UKismetMathLibrary::GetForwardVector(GunRotation);
+
+
+	FVector Start = GunLocation;
+
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(CurWeapon);
+	Params.AddIgnoredActor(this);
+
+	TArray<AActor*> Actors;
+
+	Actors.Add(CurWeapon);
+	
+
+	for (size_t i = 0; i < 8; i++)
+	{
+		float X = FMath::FRandRange(Spreed * -1.0f, Spreed);
+		float Y = FMath::FRandRange(Spreed * -1.0f, Spreed);
+		float Z = FMath::FRandRange(Spreed * -1.0f, Spreed);
+		FVector End = (GunForwardVector * 5000.0f) + GunLocation + FVector(X, Y, Z);
+
+		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+		if (false == OKAtt)
+		{
+			return;
+		}
+
+		AActor* ActorHit = Hit.GetActor();
+		if (ActorHit)
+		{
+			AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
+
+			if (Zombie)
+			{
+				//ZombieDieTrace(Zombie);
+				Zombie->SetRagDoll();
+				FTimerHandle ZombieDestory;
+
+				GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+				{
+					if (Zombie != nullptr)
+					{
+						Zombie->Destroy();
+					}
+					//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
+				}), 5.0f, false);
+
+			}
+
+			//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+		}
+	}
+	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
+
+}
+
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 {
 	PitchCPP += _Pitch;
@@ -737,8 +814,17 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		{
 			return;
 		}
-		GunLineTrace();
+
+		if (PlayerCurState == EWeaponUseState::Pistol || PlayerCurState == EWeaponUseState::Pistol)
+		{
+			GunLineTrace();
+		}
+		else if (PlayerCurState == EWeaponUseState::Shotgun)
+		{
+			ShotGunLineTrace();
+		}
 	}
+
 }
 
 void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
