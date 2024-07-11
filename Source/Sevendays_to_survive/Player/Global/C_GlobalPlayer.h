@@ -237,7 +237,7 @@ private:
 	int staminaCalValue = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	int staminaAttAndJumpCalValue = 20;
+	int staminaAttAndJumpCalValue = 80;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

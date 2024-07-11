@@ -605,6 +605,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	if (nullptr!=CurWeapon)
 	{
 		CurWeapon->Destroy();
+		CurWeapon = nullptr;
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
 			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
