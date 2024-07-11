@@ -52,34 +52,35 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	AActor* ActorHit = Hit.GetActor();
 	if (ActorHit)
 	{
-		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
-
-		if (Zombie)
 		{
-			//ZombieDieTrace(Zombie);
-			Zombie->SetRagDoll();
-			FTimerHandle ZombieDestory;
+			AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
-			MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+			if (Zombie)
 			{
-				if (Zombie != nullptr)
+				//ZombieDieTrace(Zombie);
+				Zombie->SetRagDoll();
+				FTimerHandle ZombieDestory;
+
+				MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 				{
-					Zombie->Destroy();
-				}
-				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
-			}), 5.0f, false);
+					if (Zombie != nullptr)
+					{
+						Zombie->Destroy();
+					}
+				}), 5.0f, false);
 
+			}
 		}
 
-		AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
-		
-		if (MapObject)
 		{
-			int ItemHit = Hit.Item;
-			MapObject->Damage(ItemHit, 10, PlayCharacter);
-		}
+			AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
 
-		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+			if (MapObject)
+			{
+				int ItemHit = Hit.Item;
+				MapObject->Damage(ItemHit, 10, PlayCharacter);
+			}
+		}
 	}
 
 }

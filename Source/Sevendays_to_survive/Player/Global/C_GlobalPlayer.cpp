@@ -352,37 +352,32 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
-	if (false == OKAtt)
+	if (true == OKAtt)
 	{
-		return;
-	}
-
-	AActor* ActorHit = Hit.GetActor();
-	if (ActorHit)
-	{
-		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
-		
-		if (Zombie)
+		AActor* ActorHit = Hit.GetActor();
+		if (ActorHit)
 		{
-			//ZombieDieTrace(Zombie);
-			Zombie->SetRagDoll();
-			FTimerHandle ZombieDestory;
-
-			GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 			{
-				if (Zombie != nullptr)
-				{
-					Zombie->Destroy();
-				}
-				//GetWorld()->GetTimerManager().ClearTimer(ZombieDestory);
-			}),5.0f,false);
-			
-		}
+				AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
-		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *(ActorHit->GetName())));
+				if (Zombie)
+				{
+					Zombie->SetRagDoll();
+					FTimerHandle ZombieDestory;
+
+					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+					{
+						if (Zombie != nullptr)
+						{
+							Zombie->Destroy();
+						}
+					}), 5.0f, false);
+
+				}
+			}
+		}
 	}
 
-	
 	if (true == IsFireCpp)
 	{
 		GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
@@ -432,22 +427,24 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 			AActor* ActorHit = Hit.GetActor();
 			if (ActorHit)
 			{
-				AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
-
-				if (Zombie)
 				{
-					//ZombieDieTrace(Zombie);
-					Zombie->SetRagDoll();
-					FTimerHandle ZombieDestory;
+					AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
-					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+					if (Zombie)
 					{
-						if (Zombie != nullptr)
-						{
-							Zombie->Destroy();
-						}
-					}), 5.0f, false);
+						//ZombieDieTrace(Zombie);
+						Zombie->SetRagDoll();
+						FTimerHandle ZombieDestory;
 
+						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+						{
+							if (Zombie != nullptr)
+							{
+								Zombie->Destroy();
+							}
+						}), 5.0f, false);
+
+					}
 				}
 			}
 		}
