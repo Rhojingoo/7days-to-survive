@@ -277,6 +277,9 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
+
+		//AlMostAtt
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
 	else
 	{
@@ -400,8 +403,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	}
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-
+	
 	FHitResult Hit;
 	//ector ShotDirection;
 
@@ -410,11 +412,6 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	FVector GunForwardVector = UKismetMathLibrary::GetForwardVector(GunRotation);
 
 	FVector Start = GunLocation;
-
-
-	FCollisionQueryParams Params;
-	Params.AddIgnoredActor(CurWeapon);
-	Params.AddIgnoredActor(this);
 
 	TArray<AActor*> Actors;
 
@@ -525,6 +522,22 @@ void AC_GlobalPlayer::Calstamina()
 		}
 		stamina -= staminaCalValue;
 	}
+}
+
+void AC_GlobalPlayer::AttCalstamina()
+{
+	if (stamina < staminaAttAndJumpCalValue)
+	{
+		return;
+	}
+
+	if (CurWeapon == nullptr)
+	{
+	
+		stamina -= staminaAttAndJumpCalValue;
+	}
+
+	
 }
 
 void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
