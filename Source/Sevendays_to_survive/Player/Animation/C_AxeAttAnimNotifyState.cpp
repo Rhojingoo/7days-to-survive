@@ -53,6 +53,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	AActor* ActorHit = Hit.GetActor();
 	if (ActorHit)
 	{
+		UGameplayStatics::ApplyDamage(ActorHit, 10.0f, nullptr, PlayCharacter, nullptr);
 		{
 			AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
