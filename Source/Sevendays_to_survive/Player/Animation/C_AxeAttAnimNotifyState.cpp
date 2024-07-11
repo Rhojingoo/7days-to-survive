@@ -25,6 +25,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		return;
 	}
 
+	PlayCharacter->AttCalstamina();
 	FHitResult Hit;
 
 	UStaticMeshComponent* ItemMesh=PlayCharacter->GetStaticItemMesh()[1];
