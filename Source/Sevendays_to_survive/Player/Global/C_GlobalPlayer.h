@@ -268,4 +268,6 @@ private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* hitMontage = nullptr;
 
+	UPROPERTY()
+	FRandomStream Random;
 };

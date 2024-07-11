@@ -409,7 +409,6 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	FRotator GunRotation = GunMesh->GetSocketRotation(FName("Muzzle"));
 	FVector GunForwardVector = UKismetMathLibrary::GetForwardVector(GunRotation);
 
-
 	FVector Start = GunLocation;
 
 
@@ -421,42 +420,41 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 
 	Actors.Add(CurWeapon);
 	//FRandomStream Stream(FMath::Rand());
-	FRandomStream Random;
-
+	
 	for (size_t i = 0; i < 7; i++)
 	{
 		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Z = Random.FRandRange(Spreed * -1.0f, Spreed);
-		FVector End = (GunForwardVector * 5000.0f) + GunLocation + FVector(X, Y, Z);
+		FVector End = (GunForwardVector * 5000.0f) + GunLocation+FVector(X,Y,Z);
 
 		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
-		if (false == OKAtt)
+	
+		if (true == OKAtt)
 		{
-			return;
-		}
-
-		AActor* ActorHit = Hit.GetActor();
-		if (ActorHit)
-		{
-			AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
-
-			if (Zombie)
+			AActor* ActorHit = Hit.GetActor();
+			if (ActorHit)
 			{
-				//ZombieDieTrace(Zombie);
-				Zombie->SetRagDoll();
-				FTimerHandle ZombieDestory;
+				AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
-				GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+				if (Zombie)
 				{
-					if (Zombie != nullptr)
-					{
-						Zombie->Destroy();
-					}
-				}), 5.0f, false);
+					//ZombieDieTrace(Zombie);
+					Zombie->SetRagDoll();
+					FTimerHandle ZombieDestory;
 
+					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
+					{
+						if (Zombie != nullptr)
+						{
+							Zombie->Destroy();
+						}
+					}), 5.0f, false);
+
+				}
 			}
 		}
+		
 	}
 
 }
