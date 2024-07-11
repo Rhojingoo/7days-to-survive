@@ -6,12 +6,19 @@
 UC_JumpMoveTask::UC_JumpMoveTask()
 {
 	bNotifyTick = true;
+	NodeName = "JumpMoveTask";
 }
 
 EBTNodeResult::Type UC_JumpMoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
-	return EBTNodeResult::Type::InProgress;
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (Controller->GetMCP()->IsFalling() == true) {
+		return EBTNodeResult::Type::InProgress;
+	}
+	else {
+		return EBTNodeResult::Type::Failed;
+	}
 }
 
 void UC_JumpMoveTask::InitTask(UBehaviorTreeComponent* OwnerComp)

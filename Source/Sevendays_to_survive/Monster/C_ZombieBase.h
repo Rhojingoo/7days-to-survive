@@ -89,6 +89,7 @@ public:
 
 protected:
 	FString MonsterName;
+	float LayLength = 100.f;
 
 	class UC_MonsterAnim* AnimInstance;
 

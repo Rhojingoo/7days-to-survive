@@ -100,6 +100,10 @@ public:
 		PathPoints = _Array;
 	}
 
+	void RemovePath() {
+		PathPoints.Empty();
+	}
+
 	int GetPathLength() {
 		return PathPoints.Num();
 	}
