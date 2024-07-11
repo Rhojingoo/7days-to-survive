@@ -32,7 +32,7 @@ void UC_BreakTimeTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UBlackboardComponent* BBC = Controller->GetBlackboardComponent();
-	if (true == GetController(&OwnerComp)->GetMCP()->BreakCheck()) {  // 벽이 있니? 없으면
+	if (false == GetController(&OwnerComp)->GetMCP()->BreakCheck()) {  // 벽이 있니? 없으면
 		FinishLatentTask(OwnerComp, EBTNodeResult::Type::Succeeded);		// 이미 벽이 부서진것이니 그만 때려
 		return;
 	}

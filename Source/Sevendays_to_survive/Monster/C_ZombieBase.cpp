@@ -214,7 +214,7 @@ bool AC_ZombieBase::BottomRayTrace()
 	{
 		FVector Start = BottomArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
@@ -252,7 +252,7 @@ bool AC_ZombieBase::BottomRayTrace()
 	{
 		FVector Start = MiddleArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
@@ -299,7 +299,7 @@ bool AC_ZombieBase::MiddleRayTrace()
 	{
 		FVector Start = BottomArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
@@ -337,7 +337,7 @@ bool AC_ZombieBase::MiddleRayTrace()
 	{
 		FVector Start = MiddleArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
