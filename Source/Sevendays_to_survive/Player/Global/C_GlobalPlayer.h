@@ -154,6 +154,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
 
+	UFUNCTION(BlueprintCallable)
+	void JumpCal(const FInputActionValue& Value);
+
 	UFUNCTION(Reliable, NetMulticast)
 	void GunLineTrace();
 	void GunLineTrace_Implementation();
@@ -263,6 +266,12 @@ private:
 
 	UPROPERTY()
 	float Spreed = 500.0f;
+
+	UPROPERTY()
+	float RifleTime = 0.0f;
+
+	UPROPERTY()
+	float PistolTIme = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	AC_MainPlayerController* PlayerController = nullptr;

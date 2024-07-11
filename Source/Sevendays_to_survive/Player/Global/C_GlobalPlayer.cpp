@@ -136,9 +136,9 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	IsHitCpp = true;
 
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
-		//->OnPlayMontageNotifyEnd(this, &AC_GlobalPlayer::ResetHit);
-	//IsHitCpp = false;
-	//if()
+	
+	Hp -= 5;
+	
 }
 
 void AC_GlobalPlayer::ResetHit()
@@ -250,7 +250,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		// Jumping
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Started, this, &AC_GlobalPlayer::JumpCal);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Canceled, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Jump], ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
@@ -312,6 +312,23 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
+}
+
+void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
+{
+	if (stamina < staminaJumpCalValue)
+	{
+		return;
+	}
+
+	if (true==GetMovementComponent()->IsFalling())
+	{
+		IsRunCpp = false;
+		return;
+	}
+
+	Jump();
+	stamina -= staminaJumpCalValue;
 }
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
@@ -382,7 +399,17 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 	if (true == IsFireCpp)
 	{
-		GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
+		switch (PlayerCurState)
+		{
+		case EWeaponUseState::Rifle:
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
+			break;
+		case EWeaponUseState::Pistol:
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.7f, true);
+			break;
+		default:
+			break;
+		}
 	}
 	//GunRotation.
 }
@@ -497,7 +524,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 
 void AC_GlobalPlayer::Calstamina()
 {
-	
+
 	if (false == IsRunCpp)
 	{
 		if (stamina == Maxstamina)
@@ -508,7 +535,13 @@ void AC_GlobalPlayer::Calstamina()
 	}
 	else if (true==IsRunCpp) // 점프 체크 값 추가로 넣어야함
 	{
-		
+		if (true == GetMovementComponent()->IsFalling())
+		{
+			RunStart_Implementation(0);
+			return;
+		}
+
+
 		if (true == GetCharacterMovement()->bWantsToCrouch)
 		{
 			return;
@@ -561,6 +594,11 @@ void AC_GlobalPlayer::PlayerMeshOption()
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+	if (true == GetMovementComponent()->IsFalling())
+	{
+		IsRunCpp = false;
+		return;
+	}
 
 
 	if (GetCharacterMovement()->Velocity.Length()<=0)
