@@ -1,10 +1,18 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "STS/C_STSInstance.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "UI/C_UITableRow.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "STS/C_STSMacros.h"
+
+UC_STSInstance::UC_STSInstance()
+{
+    RandomStream.GenerateNewSeed();
+}
 
 UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
 {
@@ -65,17 +73,44 @@ FC_WeaponDataTable* UC_STSInstance::GetWeaPonDataTable(FName _Name)
     return Data;
 }
 
+int UC_STSInstance::GenerateRandomInt(FIntPoint _Range)
+{
+    if (_Range.X > _Range.Y)
+    {
+        STS_FATAL("[%s] Can't generate random int. Wrong range was given.", __FUNCTION__);
+        return 0;
+    }
+
+    return RandomStream.RandRange(_Range.X, _Range.Y);
+}
+
+float UC_STSInstance::GenerateRandomFloat(FVector2D _Range)
+{
+    if (_Range.X > _Range.Y)
+    {
+        STS_FATAL("[%s] Can't generate random float. Wrong range was given.", __FUNCTION__);
+        return 0;
+    }
+
+    return RandomStream.FRandRange(_Range.X, _Range.Y);
+}
+
+FVector UC_STSInstance::GenerateRandomVector(FBox _Box)
+{
+    return RandomStream.RandPointInBox(_Box);
+}
+
 TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()
 {
     if (nullptr == DT_UIData)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("°ÔÀÓ ÀÎ½ºÅÏ½ºÀÇ DT_UIDataÀÌ nullptrÀÔ´Ï´Ù."));
+        UE_LOG(LogTemp, Fatal, TEXT("ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ì˜ DT_UIDataì´ nullptrì…ë‹ˆë‹¤."));
     }
-   
+
     TArray<FC_UITableRow*> UIData;
     DT_UIData->GetAllRows(TEXT("GetAllRows"), UIData);
-   
-    TArray<FC_UITableRow> RealData; //¿ä°Å ÀÌÇØ°¡ Àß ¾ÈµÊ
+
+    TArray<FC_UITableRow> RealData; //ìš”ê±° ì´í•´ê°€ ì˜ ì•ˆë¨
     for (FC_UITableRow* DRow : UIData)
     {
         RealData.Add(*DRow);
@@ -105,5 +140,5 @@ void UC_STSInstance::SetPlayerInfo(FString _Name, FString _UserIP)
         UE_LOG(LogTemp, Warning, TEXT("%s"), *Table->UserIp);
         UE_LOG(LogTemp, Warning, TEXT("%s"), *Table->UserName);
     }
-   
+
 }

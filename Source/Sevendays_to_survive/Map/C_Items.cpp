@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_Items.h"
@@ -68,4 +68,18 @@ void UC_Consumable::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     Hp = TypeRow->Hp;
 
     Stamina = TypeRow->Stamina;
+}
+
+void UC_ItemBuildingPart::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
+{
+    Super::Init(_Id, _JoinRows);
+
+    FC_ItemBuildingPartRow* TypeRow = reinterpret_cast<FC_ItemBuildingPartRow*>(_JoinRows[UC_ItemBuildingPart::RowIndex]);
+
+    if (nullptr == TypeRow)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("Row should be a FC_ItemBuildingPartRow type."));
+    }
+
+    MaxHp = TypeRow->MaxHp;
 }
