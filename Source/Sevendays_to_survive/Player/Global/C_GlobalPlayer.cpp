@@ -537,6 +537,7 @@ void AC_GlobalPlayer::Calstamina()
 	{
 		if (true == GetMovementComponent()->IsFalling())
 		{
+			RunStart_Implementation(0);
 			return;
 		}
 
