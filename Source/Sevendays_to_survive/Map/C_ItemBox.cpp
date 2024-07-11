@@ -5,8 +5,11 @@
 
 #include "Net/UnrealNetwork.h"
 #include "STS/C_STSMacros.h"
+#include "STS/C_STSGlobalFunctions.h"
 #include "UI/C_HealthBar.h"
 #include "Kismet/GameplayStatics.h"
+#include "Map/C_ItemPouch.h"
+#include "Map/C_MapDataAsset.h"
 
 // Sets default values
 AC_ItemBox::AC_ItemBox()
@@ -37,6 +40,9 @@ void AC_ItemBox::BeginPlay()
 		return;
 	}
 
+	UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+	ItemPouchClass = MapDataAsset->GetItemPouchClass();
+
 	HideHpBar();
 }
 
@@ -65,7 +71,7 @@ void AC_ItemBox::ReceiveDamage_Implementation(float DamageAmount, FDamageEvent c
 
 	if (Hp <= 0.0f)
 	{
-		// SpawnItems
+		SpawnItems();
 		Destroy();
 	}
 }
@@ -95,4 +101,13 @@ void AC_ItemBox::UpdateHpBar()
 void AC_ItemBox::HideHpBar()
 {
 	HpBarWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void AC_ItemBox::SpawnItems_Implementation()
+{
+	for (TPair<FName, int>& ItemAndCount : DropItems)
+	{
+		AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), GetActorTransform());
+		ItemPouch->SetItemAndCount(ItemAndCount.Key, ItemAndCount.Value);
+	}
 }
