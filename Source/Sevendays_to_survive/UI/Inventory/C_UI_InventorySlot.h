@@ -24,7 +24,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetIcon(const FC_ItemRow& _ItemData);
-	
+	UFUNCTION(BlueprintCallable)
+	void GetItemInfo(const UWidget* _PrevSlot);
+
 	UFUNCTION(BlueprintCallable)
 	UTexture2D* GetIcons(FString _Key);
 
@@ -33,6 +35,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void GetSlotInfo();
+
+
 
 	
 

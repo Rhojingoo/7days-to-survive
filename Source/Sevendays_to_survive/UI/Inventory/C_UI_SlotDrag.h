@@ -34,6 +34,9 @@ public:
 	void CopySlotItemImage(UTexture2D* _Image);
 	
 
+	FString GetItemName();
+
+
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

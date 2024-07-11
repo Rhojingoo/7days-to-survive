@@ -23,6 +23,11 @@ UTexture2D* UC_UI_InventorySlot::GetIcons(FString _Key)
 
 }
 
+void UC_UI_InventorySlot::GetItemInfo(const UWidget* _PrevSlot)
+{
+
+}
+
 void UC_UI_InventorySlot::SetItemNum(int _Num)
 {
 	Num = _Num;

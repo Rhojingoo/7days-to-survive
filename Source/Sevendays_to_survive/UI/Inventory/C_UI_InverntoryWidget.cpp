@@ -41,14 +41,17 @@ void UC_UI_InverntoryWidget::GetDataInventory(FC_ItemAndCount _Inventory)
 
 void UC_UI_InverntoryWidget::SettingSlots(UPanelWidget* _Pannel) // 슬롯 가져오기 
 {
-	Slots = _Pannel->GetAllChildren();
+	
+	//Slots = _Pannel->GetAllChildren();
+	
+
 	
 }
 
 
 void UC_UI_InverntoryWidget::SwitchSlot(int _PrevIndex, int _ChangeIndex)
 {
-	
+	int a = 0;
 }
 
 
