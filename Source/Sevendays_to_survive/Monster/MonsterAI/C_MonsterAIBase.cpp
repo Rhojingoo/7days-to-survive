@@ -70,6 +70,7 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	MCP->SetMonster(Monster);
 	MCP->SetData();
 	MCP->GetData()->SetOriginPos(Monster->GetActorLocation());
+	Monster->SetMCP(MCP);
 	//MCP->SetData();
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
