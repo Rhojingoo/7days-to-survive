@@ -47,7 +47,7 @@ public:
 
 	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
 	{
-		return SkeletalItemMesh;
+		return SkeletalItemMeshs;
 	}
 
 	// ÃÑ °ü·Ã bool ÇÔ¼ö
@@ -213,7 +213,7 @@ private:
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TArray<USkeletalMeshComponent*> SkeletalItemMesh;
+	TArray<USkeletalMeshComponent*> SkeletalItemMeshs;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;

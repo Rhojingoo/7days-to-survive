@@ -103,7 +103,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 				USkeletalMeshComponent* NewSlotMesh = CreateDefaultSubobject<USkeletalMeshComponent>(*Name);
 				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
 				NewSlotMesh->SetCollisionProfileName(TEXT("NoCollision"));
-				SkeletalItemMesh.Push(NewSlotMesh);
+				SkeletalItemMeshs.Push(NewSlotMesh);
 			}
 		}
 	}
@@ -237,6 +237,9 @@ void AC_GlobalPlayer::BeginPlay()
 
 		TSubclassOf<AActor> ShotGun = STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Shotgun, ShotGun);
+
+		TSubclassOf<AActor> Pistol2 = STSInstance->GetWeaPonDataTable(FName("Pistol2"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Pistol2, Pistol2);
 	}
 
 	{
@@ -654,7 +657,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 		CurWeapon = nullptr;
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
-			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			SkeletalItemMeshs[i]->SetSkeletalMesh(nullptr);
 		}
 	}
 
@@ -702,7 +705,7 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
-	if (SkeletalItemMesh.Num() <= SlotIndex)
+	if (SkeletalItemMeshs.Num() <= SlotIndex)
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
 		return;
@@ -739,7 +742,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -769,10 +772,40 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon->Destroy();
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
+		break;
+	case ESkerItemSlot::RPistol2:
+		if (PlayerCurState == EWeaponUseState::Pistol2)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Pistol2))
+		{
+			return;
+		}
+
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol2)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+			CurWeapon = nullptr;
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
+			}
+		}
 
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
@@ -799,9 +832,10 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		if (nullptr != CurWeapon)
 		{
 			CurWeapon->Destroy();
+			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -839,7 +873,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 		// USkeletalMeshComponent 슬롯 전용
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
-			SkeletalItemMesh[i]->SetSkeletalMesh(nullptr);
+			SkeletalItemMeshs[i]->SetSkeletalMesh(nullptr);
 		}
 
 	}
