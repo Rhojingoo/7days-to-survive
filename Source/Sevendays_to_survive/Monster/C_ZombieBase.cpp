@@ -161,8 +161,6 @@ void AC_ZombieBase::RunAttack()
 void AC_ZombieBase::OnAttackNotifyBegin()
 {
 	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
-
-	MakeNoise(1000.f);
 }
 
 void AC_ZombieBase::OnAttackNotifyEnd()
