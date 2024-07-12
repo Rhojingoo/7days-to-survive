@@ -37,18 +37,45 @@ void AC_7Days_Play_GameMode::BeginPlay()
 		return;
 	}
 
-	for (int i = 0; i < ItemBoxCount; ++i)
-	{
-		FVector RandomVec = Inst->GenerateRandomVector(FBox2D{ {-89000, -9000}, {-43800, 34000} });
-		RandomVec.Z = 10000.0f;
+	float AreaWidth = (TotalArea.Max.Y - TotalArea.Min.Y) / ItemBoxSpawnColumnCount;
+	float AreaHeight = (TotalArea.Max.X - TotalArea.Min.X) / ItemBoxSpawnRowCount;
 
-		AC_ItemBox* ItemBox = GetWorld()->SpawnActor<AC_ItemBox>(ItemBoxClass.Get());
-		ItemBox->SetActorLocation(RandomVec);
+	for (int x = 0; x < ItemBoxSpawnRowCount; ++x)
+	{
+		for (int y = 0; y < ItemBoxSpawnColumnCount; ++y)
+		{
+			if (x >= ItemBoxSpawnBorderWidth 
+				&& ItemBoxSpawnRowCount - 1 - x >= ItemBoxSpawnBorderWidth 
+				&& y >= ItemBoxSpawnBorderWidth 
+				&& ItemBoxSpawnColumnCount - 1 - y >= ItemBoxSpawnBorderWidth)
+			{
+				continue;
+			}
+
+			float AreaStartY = TotalArea.Min.Y + y * AreaWidth;
+			float AreaStartX = TotalArea.Min.X + x * AreaHeight;
+
+			FBox2D Area = FBox2D{
+				{AreaStartX, AreaStartY},
+				{AreaStartX + AreaHeight, AreaStartY + AreaWidth}
+			};
+
+			for (int c = 0; c < ItemBoxSpawnCountPerArea; ++c)
+			{
+				FVector RandomVec = Inst->GenerateRandomVector(Area);
+				RandomVec.Z = 10000.0f + c * 1000.0f;
+
+				AC_ItemBox* ItemBox = GetWorld()->SpawnActor<AC_ItemBox>(ItemBoxClass.Get());
+				ItemBox->SetActorLocation(RandomVec);
+			}
+		}
 	}
 }
 
 void AC_7Days_Play_GameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+
 }
 
