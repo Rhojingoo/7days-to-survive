@@ -73,31 +73,33 @@ FC_WeaponDataTable* UC_STSInstance::GetWeaPonDataTable(FName _Name)
     return Data;
 }
 
-int UC_STSInstance::GenerateRandomInt(FIntPoint _Range)
+int UC_STSInstance::GenerateRandomInt(int _Min, int _Max)
 {
-    if (_Range.X > _Range.Y)
+    if (_Min > _Max)
     {
         STS_FATAL("[%s] Can't generate random int. Wrong range was given.", __FUNCTION__);
         return 0;
     }
 
-    return RandomStream.RandRange(_Range.X, _Range.Y);
+    return RandomStream.RandRange(_Min, _Max);
 }
 
-float UC_STSInstance::GenerateRandomFloat(FVector2D _Range)
+float UC_STSInstance::GenerateRandomFloat(float _Min, float _Max)
 {
-    if (_Range.X > _Range.Y)
+    if (_Min > _Max)
     {
         STS_FATAL("[%s] Can't generate random float. Wrong range was given.", __FUNCTION__);
         return 0;
     }
 
-    return RandomStream.FRandRange(_Range.X, _Range.Y);
+    return RandomStream.FRandRange(_Min, _Max);
 }
 
-FVector UC_STSInstance::GenerateRandomVector(FBox _Box)
+FVector UC_STSInstance::GenerateRandomVector(FBox2D _Box)
 {
-    return RandomStream.RandPointInBox(_Box);
+    float X = GenerateRandomFloat(_Box.Min.X, _Box.Max.X);
+    float Y = GenerateRandomFloat(_Box.Min.Y, _Box.Max.Y);
+    return { X, Y, 0.0f };
 }
 
 TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()
