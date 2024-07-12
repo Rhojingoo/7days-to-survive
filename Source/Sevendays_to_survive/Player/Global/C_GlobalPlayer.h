@@ -22,7 +22,7 @@ class UC_MapInteractionComponent;
 class UC_InputActionDatas;
 class AC_EquipWeapon;
 class AC_MainPlayerController;
-class AC_ZombieBase;
+class UTextRenderComponent;
 struct FInputActionValue; // ÀÔ·Â °ª
 
 UCLASS()
@@ -205,6 +205,9 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Cameras = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UTextRenderComponent* NameText = nullptr;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
