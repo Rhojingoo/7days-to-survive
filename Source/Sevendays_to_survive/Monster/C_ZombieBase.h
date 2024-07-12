@@ -87,6 +87,13 @@ public:
 	bool BottomRayTrace();
 	bool MiddleRayTrace();
 
+	void SetMCP(class UC_MonsterComponent* _MCP) {
+		MCP = _MCP;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetHP(double _Damage);
+
 protected:
 	FString MonsterName;
 	float LayLength = 100.f;
@@ -113,6 +120,9 @@ protected:
 
 	UPROPERTY()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+
+	UPROPERTY()
+	UC_MonsterComponent* MCP = nullptr;
 };
 
 
