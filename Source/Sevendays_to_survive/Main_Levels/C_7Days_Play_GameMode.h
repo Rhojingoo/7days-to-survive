@@ -32,5 +32,17 @@ public:
     TSubclassOf<AC_ItemBox> ItemBoxClass = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-    int ItemBoxCount = 100;
+    int ItemBoxSpawnCountPerArea = 2;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int ItemBoxSpawnRowCount = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int ItemBoxSpawnColumnCount = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int ItemBoxSpawnBorderWidth = 2;
+
+    const FVector2D EndingPoint = { -53600.0f, 2430.0f };
+    const FBox2D TotalArea = FBox2D{ {-89000, -43800}, {9000, 34000} };
 };
