@@ -8,22 +8,29 @@
 
 class UTimelineComponent;
 class ALight;
+class AC_ItemBox;
+
 /**
- * 
+ *
  */
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_7Days_Play_GameMode : public AGameMode
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	AC_7Days_Play_GameMode();
+    AC_7Days_Play_GameMode();
 
-	void BeginPlay() override;
+    void BeginPlay() override;
 
-	void Tick(float _DeltaTime) override;
+    void Tick(float _DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool IsServer = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    bool IsServer = false;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    TSubclassOf<AC_ItemBox> ItemBoxClass = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int ItemBoxCount = 100;
 };

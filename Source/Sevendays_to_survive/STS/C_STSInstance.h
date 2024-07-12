@@ -39,9 +39,9 @@ public:
 
 	FC_UITableRow TitleToGameInfo;
 
-	int GenerateRandomInt(FIntPoint _Range);
-	float GenerateRandomFloat(FVector2D _Range);
-	FVector GenerateRandomVector(FBox _Box);
+	int GenerateRandomInt(int _Min, int _Max);
+	float GenerateRandomFloat(float _Min, float _Max);
+	FVector GenerateRandomVector(FBox2D _Box);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
