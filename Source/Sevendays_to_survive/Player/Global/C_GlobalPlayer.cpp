@@ -120,6 +120,8 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 		InputData = ResPath.Object;
 	}
+
+	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 }
 
 void AC_GlobalPlayer::Playerhit(int _Damage)
