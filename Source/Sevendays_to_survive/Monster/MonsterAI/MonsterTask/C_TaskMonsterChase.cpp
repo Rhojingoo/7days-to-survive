@@ -79,10 +79,20 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있다면? 이동해야한다.
 	{
-		TargetLocation = MonsterData->NextPath();
-		FVector CheckDir = (TargetLocation - SelfLocation);
+		FVector TargetNavLocation = MonsterData->NextPath();
+		SelfLocation.Z = 0;
+		FVector CheckDir = (TargetNavLocation - SelfLocation);
 		Controller->GetMCP()->Run(CheckDir);
-		if (10.0f >= CheckDir.Size())
+		//if (Vec <= 500.f) {
+		//	MCP->Run(TargetLocation - SelfLocation);		//taskmonsterchase 78줄 하다 정지
+		//	MonsterData->RemovePath();
+		//	if (MCP->JumpCheck() == true) {
+		//		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		//		return;
+		//	}
+		//	return;
+		//}
+		if (Navi_Minimum >= CheckDir.Size())
 		{
 			MonsterData->PathHeadRemove();
 		}
@@ -132,9 +142,15 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			TargetLocation
 		);
 
+#if WITH_EDITOR
+		if (0 == NavPath->PathPoints.Num()) {
+			int a = 0;
+		}
+#endif
+
 		if (NavPath->GetPathCost() < FLT_MAX) {
 			MonsterData->RemovePath();
-			if (SelfLocation.Z + 10.f > TargetLocation.Z) {
+			if (SelfLocation.Z > TargetLocation.Z + 10.f) {
 				MCP->Run(TargetLocation - SelfLocation);
 				return;
 			}
@@ -156,10 +172,11 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		}
 		if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있지 않다면? 이동해야한다.
 		{
-			TargetLocation = MonsterData->NextPath();
-			FVector CheckDir = (TargetLocation - SelfLocation);
+			FVector TargetNavLocation = MonsterData->NextPath();
+			SelfLocation.Z = 0;
+			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (10.0f >= CheckDir.Size())
+			if (Navi_Minimum >= CheckDir.Size())
 			{
 				MonsterData->PathHeadRemove();
 			}
@@ -178,6 +195,12 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			TargetLocation
 		);
 
+#if WITH_EDITOR
+		if (0 == NavPath->PathPoints.Num()) {
+			int a = 0;
+		}
+#endif
+
 		if (true == MonsterData->PathIsEmpty())		//path 즉 경로가 비어있으면 일단 경로 찾아서 넣기
 		{
 			//UNavigationPath* Path = UNavigationSystemV1::FindPathToLocationSynchronously(GetWorld(), SelfLocation, TargetLocation, GetSelf(&OwnerComp));
@@ -186,10 +209,11 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		}
 		if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있다면? 이동해야한다.
 		{
-			TargetLocation = MonsterData->NextPath();
-			FVector CheckDir = (TargetLocation - SelfLocation);
+			FVector TargetNavLocation = MonsterData->NextPath();
+			SelfLocation.Z = 0;
+			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (10.0f >= CheckDir.Size())
+			if (Navi_Minimum >= CheckDir.Size())
 			{
 				MonsterData->PathHeadRemove();
 			}
