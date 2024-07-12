@@ -13,6 +13,8 @@
 #include "Components/ArrowComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Map/C_MapActor.h"
+#include "..\Monster\Component\C_MonsterComponent.h"
+
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -61,7 +63,6 @@ void AC_ZombieBase::BeginPlay()
 		}
 	}
 }
-
 // Called every frame
 void AC_ZombieBase::Tick(float DeltaTime)
 {
@@ -243,6 +244,9 @@ bool AC_ZombieBase::BottomRayTrace()
 			if (MapActor->IsValidLowLevel() == true) {
 				bottomIsHit = true;
 			}
+			else {
+				bottomIsHit = false;
+			}
 		}
 
 
@@ -280,6 +284,9 @@ bool AC_ZombieBase::BottomRayTrace()
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
 			if (MapActor->IsValidLowLevel() == true) {
 				MiddleIsHit = true;
+			}
+			else {
+				MiddleIsHit = false;
 			}
 		}
 	}
@@ -328,6 +335,9 @@ bool AC_ZombieBase::MiddleRayTrace()
 			if (MapActor->IsValidLowLevel() == true) {
 				bottomIsHit = true;
 			}
+			else {
+				bottomIsHit = false;
+			}
 		}
 
 
@@ -366,6 +376,9 @@ bool AC_ZombieBase::MiddleRayTrace()
 			if (MapActor->IsValidLowLevel() == true) {
 				MiddleIsHit = true;
 			}
+			else {
+				MiddleIsHit = false;
+			}
 		}
 	}
 
@@ -374,5 +387,14 @@ bool AC_ZombieBase::MiddleRayTrace()
 	}
 	else {
 		return false;
+	}
+}
+
+void AC_ZombieBase::SetHP(double _Damage)
+{
+	double* HP = MCP->GetData()->GetHPRef();
+	*HP -= _Damage;
+	if (*HP <= 0) {
+		SetRagDoll();
 	}
 }

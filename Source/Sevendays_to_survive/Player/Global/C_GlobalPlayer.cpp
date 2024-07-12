@@ -22,6 +22,8 @@
 #include "Weapon/C_EquipWeapon.h"
 #include "Weapon/C_GunComponent.h"
 #include "Monster/C_ZombieBase.h"
+#include "Components/TextRenderComponent.h"
+
 
 
 // Sets default values
@@ -60,14 +62,14 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	SpringArm->bEnableCameraRotationLag = true;
 	SpringArm->CameraRotationLagSpeed = 10.0f;
 
-
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("FollowCamera"));
 	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	//Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	
-
+	NameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Name"));
+	NameText->SetupAttachment(GetCapsuleComponent());
+	NameText->SetRelativeLocation(FVector(0.0f, 20.0f, 100.0f));
 	//// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	//Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	//Mesh1P->SetOnlyOwnerSee(true);
@@ -235,6 +237,11 @@ void AC_GlobalPlayer::BeginPlay()
 
 		TSubclassOf<AActor> ShotGun = STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Shotgun, ShotGun);
+	}
+
+	{
+		//NameText->SetRelativeLocation(FVector(0.0f, 20.0f, 100.0f));
+		//UUserWidget* blackLinesWidget = CreateWidget<UUserWidget>(this->GetGameInstance(), blackLinesWidgetClass);
 	}
 }
 
