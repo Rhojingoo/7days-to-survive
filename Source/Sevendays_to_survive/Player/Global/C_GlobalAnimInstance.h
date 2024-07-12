@@ -8,6 +8,9 @@
 #include "C_GlobalAnimInstance.generated.h"
 
 class UAnimMontage;
+class AC_GlobalPlayer;
+class UCharacterMovementComponent;
+
 /**
  * 
  */
@@ -19,6 +22,46 @@ class SEVENDAYS_TO_SURVIVE_API UC_GlobalAnimInstance : public UAnimInstance
 public:
 
 protected:
-
+	void NativeBeginPlay() override;
+	void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 private:
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	AC_GlobalPlayer* Player = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCharacterMovementComponent* GlobalPlayerMoveMent = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsZoomAnim = false;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsFireAnim = false;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsCrouchAnim = false;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsAniRunAnim = false;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsFallAnim = false;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float SpeedAnim = 0.0f;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float ZSpeedAnim = 0.0f;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float AniDirAnim = 0.0f;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float PitchAnim = 0.0f;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float DirAnim = 0.0f;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EWeaponUseState PlayerCurStateAnim = EWeaponUseState::NoWeapon;
+
 };

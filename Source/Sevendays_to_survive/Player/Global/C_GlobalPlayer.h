@@ -50,6 +50,26 @@ public:
 		return SkeletalItemMeshs;
 	}
 
+	FORCEINLINE bool GetAImZoomCpp()
+	{
+		return IsAimCpp;
+	}
+
+	FORCEINLINE bool GetRunCpp()
+	{
+		return IsRunCpp;
+	}
+
+	FORCEINLINE bool GetFireCpp()
+	{
+		return IsFireCpp;
+	}
+
+	FORCEINLINE float GetPitchCPP()
+	{
+		return PitchCPP;
+	}
+
 	// ÃÑ °ü·Ã bool ÇÔ¼ö
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void SetHasRifle(bool bNewHasRifle);
