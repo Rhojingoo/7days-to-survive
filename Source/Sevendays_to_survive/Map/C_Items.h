@@ -5,18 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/Texture2D.h"
+#include "Map/C_MapEnums.h"
 #include "C_Items.generated.h"
-
-UENUM(BlueprintType)
-enum class EItemType : uint8
-{
-    NONE,
-    Material,
-    Weapon,
-    Consumable,
-    BuildingPart,
-    MAX,
-};
 
 USTRUCT(BlueprintType)
 struct SEVENDAYS_TO_SURVIVE_API FC_ItemAndCount
@@ -54,8 +44,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     TMap<FName, int> CraftMaterials;
 
-    /*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    UStaticMesh* Mesh = nullptr;*/
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    int ItemBoxDropWeight = 0;
 
 public:
     UFUNCTION(BlueprintPure)

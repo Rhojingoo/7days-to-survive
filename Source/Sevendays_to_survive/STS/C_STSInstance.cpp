@@ -2,6 +2,7 @@
 
 
 #include "STS/C_STSInstance.h"
+#include "Map/C_MapDataAsset.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "UI/C_UITableRow.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
@@ -12,6 +13,13 @@
 UC_STSInstance::UC_STSInstance()
 {
     RandomStream.GenerateNewSeed();
+}
+
+void UC_STSInstance::Init()
+{
+    Super::Init();
+
+    MapDataAsset->Init();
 }
 
 UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
