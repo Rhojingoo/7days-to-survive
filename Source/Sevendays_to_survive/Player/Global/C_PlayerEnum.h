@@ -32,6 +32,7 @@ enum class EWeaponUseState : uint8
 	NoWeapon,
 	Rifle,
 	Pistol,
+	Pistol2,
 	Shotgun,
 	Sword,
 	Axe
@@ -51,7 +52,9 @@ UENUM(BlueprintType)
 enum class ESkerItemSlot : uint8
 {
 	LRifle,
+	LRifle2,
 	RPistol,
+	RPistol2,
 	LShotgun,
 	SlotMax
 };
