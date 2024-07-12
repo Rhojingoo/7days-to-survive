@@ -25,8 +25,9 @@ public:
 
 
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void Damage(int _Index, int _Damage, AActor* _HitActor);
+	void Damage_Implementation(int _Index, int _Damage, AActor* _HitActor);
 
 	virtual void GainDropItems(AC_MapPlayer* _HitCharacter);
 

@@ -57,7 +57,7 @@ private:
     void ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit);
 
     UFUNCTION(BlueprintCallable)
-    void ProcessBuildingPartTraceResult(FHitResult _HitResult, bool _IsHit);
+    void ProcessHpObjectTraceResult(FHitResult _HitResult, bool _IsHit);
 
 private:
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -80,5 +80,5 @@ private:
     AC_MapInteractable* ViewingItemPouch = nullptr;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    AC_BuildingPart* ViewingBuildingPart = nullptr;
+    AActor* ViewingHpObject = nullptr;
 };

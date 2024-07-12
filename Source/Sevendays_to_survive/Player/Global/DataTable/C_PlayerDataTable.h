@@ -33,6 +33,19 @@ public:
 	int staminaCalValue=0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int staminaAttValue = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	int staminaJumpValue = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float RifleDelayTime  = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float PistolDelayTime = 0.0f;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	int Hp=0.0f;
 
 };

@@ -9,6 +9,8 @@
 #include "Player/Global/C_MapPlayer.h"
 #include "Components/PanelWidget.h"
 
+#include "UI/Inventory/C_UI_SlotDrag.h"
+
 #include "C_UI_InverntoryWidget.generated.h"
 
 class UC_InventoryComponent;
@@ -49,6 +51,9 @@ protected:
 	UFUNCTION(Blueprintcallable)
 	void SwitchSlot(int _PrevIndex, int _ChangeIndex);
 	
+	UFUNCTION(BlueprintCallable)
+	TArray<UWidget*> GetMYSlots();
+
 	
 private:
 	

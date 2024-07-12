@@ -77,3 +77,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Stamina = 0;
 };
+
+USTRUCT(BlueprintType)
+struct SEVENDAYS_TO_SURVIVE_API FC_ItemBuildingPartRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FC_ItemBuildingPartRow() {}
+	~FC_ItemBuildingPartRow() {}
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxHp = 0;
+};

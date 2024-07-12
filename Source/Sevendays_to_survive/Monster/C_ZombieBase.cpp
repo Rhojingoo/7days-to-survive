@@ -12,6 +12,7 @@
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Map/C_MapActor.h"
 
 // Sets default values
 AC_ZombieBase::AC_ZombieBase()
@@ -213,31 +214,45 @@ bool AC_ZombieBase::BottomRayTrace()
 	{
 		FVector Start = BottomArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);  // 충돌 검사에서 현재 캐릭터 무시
-		
+
+		ETraceTypeQuery::TraceTypeQuery1;
 		bottomIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+			GetWorld(),
+			Start,
+			End,
+			ObjectTypes,
+			false, // 복합 콜리전 여부
+			TArray<AActor*>(), // 무시할 액터들
+			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+			HitResult,
+			true // 트레이스를 시각화할지 여부
+		);
 
 		// 디버그 라인 그리기
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1, 0, 1);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
 		if (bottomIsHit && HitResult.GetActor())
 		{
-			AActor* HitObject = (HitResult.GetActor());
-			if (HitObject->IsValidLowLevel() == true) {
+			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
+			if (MapActor->IsValidLowLevel() == true) {
 				bottomIsHit = true;
 			}
 		}
+
+
 	}
 
 
 	{
 		FVector Start = MiddleArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
@@ -262,9 +277,8 @@ bool AC_ZombieBase::BottomRayTrace()
 
 		if (MiddleIsHit && HitResult.GetActor())
 		{
-			AActor* HitObject = (HitResult.GetActor());
-			if (HitObject->IsValidLowLevel() == true) 
-			{
+			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
+			if (MapActor->IsValidLowLevel() == true) {
 				MiddleIsHit = true;
 			}
 		}
@@ -285,52 +299,77 @@ bool AC_ZombieBase::MiddleRayTrace()
 	{
 		FVector Start = BottomArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);  // 충돌 검사에서 현재 캐릭터 무시
 
+		ETraceTypeQuery::TraceTypeQuery1;
 		bottomIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+			GetWorld(),
+			Start,
+			End,
+			ObjectTypes,
+			false, // 복합 콜리전 여부
+			TArray<AActor*>(), // 무시할 액터들
+			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+			HitResult,
+			true // 트레이스를 시각화할지 여부
+		);
 
 		// 디버그 라인 그리기
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1, 0, 1);
-
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
 		if (bottomIsHit && HitResult.GetActor())
 		{
-			AActor* HitObject = (HitResult.GetActor());
-			if (HitObject->IsValidLowLevel() == true) {
+			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
+			if (MapActor->IsValidLowLevel() == true) {
 				bottomIsHit = true;
 			}
 		}
+
+
 	}
 
 
 	{
 		FVector Start = MiddleArrowComponent->GetComponentLocation();  // 레이의 시작점: 캐릭터 위치
 		FVector ForwardVector = GetActorForwardVector();  // 캐릭터의 전방 벡터
-		FVector End = ((ForwardVector * 500.f) + Start);  // 레이의 끝점: 전방 1000 유닛
+		FVector End = ((ForwardVector * LayLength) + Start);  // 레이의 끝점: 전방 1000 유닛
 		FHitResult HitResult;
 
 		FCollisionQueryParams CollisionParams;
 		CollisionParams.AddIgnoredActor(this);  // 충돌 검사에서 현재 캐릭터 무시
 
+		ETraceTypeQuery::TraceTypeQuery1;
 		MiddleIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+			GetWorld(),
+			Start,
+			End,
+			ObjectTypes,
+			false, // 복합 콜리전 여부
+			TArray<AActor*>(), // 무시할 액터들
+			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+			HitResult,
+			true // 트레이스를 시각화할지 여부
+		);
 
 		// 디버그 라인 그리기
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
 		if (MiddleIsHit && HitResult.GetActor())
 		{
-			AActor* HitObject = (HitResult.GetActor());
-			if (HitObject->IsValidLowLevel() == true) {
+			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
+			if (MapActor->IsValidLowLevel() == true) {
 				MiddleIsHit = true;
 			}
 		}
 	}
 
-	if (true == MiddleIsHit && true == bottomIsHit) { 
+	if (true == MiddleIsHit && true == bottomIsHit) {  //바텀만 맞아야 true
 		return true;
 	}
 	else {

@@ -6,15 +6,20 @@
 UC_JumpTask::UC_JumpTask()
 {
 	//bNotifyTick = true;
+	NodeName = "JumpTask";
 }
 
 EBTNodeResult::Type UC_JumpTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-	//Controller->GetBlackboardComponent()->SetValueAsBool(*IsJump, true);
-	Controller->GetMCP()->Jump();
-	return EBTNodeResult::Type::Succeeded;
+	if (true == Controller->GetMCP()->JumpCheck()) {
+		Controller->GetMCP()->Jump();
+		return EBTNodeResult::Type::Succeeded;
+	}
+	else {
+		return EBTNodeResult::Type::Failed;
+	}
 }
 
 void UC_JumpTask::InitTask(UBehaviorTreeComponent* OwnerComp)
