@@ -42,10 +42,10 @@ void AC_ScreamZombie::ShoutAttack_Implementation()
 	}
 	ShoutBegin = true;
 	SetState(MonsterEnum::Shout);
-	//	if (false == AnimInstance->IsPlayMontage())
-	//	{
-	//		AnimInstance->ChangeAnimation(MonsterEnum::Shout);
-	//	}
+		if (false == AnimInstance->IsPlayMontage())
+		{
+			AnimInstance->ChangeAnimation(MonsterEnum::Shout);
+		}
 }
 
 void AC_ScreamZombie::Attack_Implementation()
@@ -97,6 +97,7 @@ void AC_ScreamZombie::Move(FVector _Location)
 void AC_ScreamZombie::OnAttackNotifyBegin()
 {
 	Super::OnAttackNotifyBegin();
+	MakeNoise(1000.f);
 }
 
 void AC_ScreamZombie::OnAttackNotifyEnd()
