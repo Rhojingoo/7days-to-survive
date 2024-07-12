@@ -110,7 +110,7 @@ public:
 
 	void PathHeadRemove() {
 		if (PathIsEmpty()) {
-			UE_LOG(LogTemp, Fatal, TEXT("Index Error"));
+			return;
 		}
 		PathPoints.RemoveAt(0);
 	}
