@@ -24,7 +24,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InverntoryWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	
 
 	
 public:
@@ -39,11 +38,9 @@ protected:
 	
 	
 
-	UFUNCTION(BlueprintCallable)
-	void NativeConstruct() override;
+	//UFUNCTION(BlueprintCallable)
+	//void NativeConstruct() override;
 
-	UFUNCTION(Blueprintcallable)
-	void GetDataInventory(FC_ItemAndCount _Inventory);
 
 	UFUNCTION(Blueprintcallable)
 	void SettingSlots(UPanelWidget* _Pannel);
@@ -53,18 +50,20 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<UWidget*> GetMYSlots();
+	UFUNCTION(BlueprintCallable)
+	UWidget* FindSlotsIndex(FString _SlotName);
+
 
 	
 private:
 	
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	APlayerController* WidgetPlayerCOntorller;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UC_InventoryComponent* WidgetInventory;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_MapPlayer* MapPlayer;
-	
-	TArray<TArray<FC_ItemAndCount>> UIInventory;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UWidget*> Slots;
 };

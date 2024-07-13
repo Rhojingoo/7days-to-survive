@@ -6,14 +6,14 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemRows.h"
+#include "Engine/Texture2D.h"
 #include "UI/Inventory/C_UI_SlotDrag.h"
-
 #include "C_UI_InventorySlot.generated.h"
 
 /**
  * 
  */
-
+//class UTexture2D;
 class UC_UI_SlotDrag;
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_UI_InventorySlot : public UUserWidget
@@ -36,12 +36,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GetSlotInfo();
 
-
+	UFUNCTION(BlueprintCallable)
+	void GetDragItemData(UC_UI_SlotDrag* _DragSlot);
 
 	
 
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<FString,UTexture2D*> ItemIcons;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite , meta = (AllowPrivateAccess = "true"))

@@ -3,6 +3,10 @@
 
 #include "UI/Inventory/C_UI_InventorySlot.h"
 
+
+#include "Kismet/GameplayStatics.h"
+#include "Engine/Texture2D.h"
+
 void UC_UI_InventorySlot::SetIcon(const FC_ItemRow& _ItemData)
 {
 	ItemIcons.Add(_ItemData.Name,_ItemData.Icon);
@@ -33,10 +37,26 @@ void UC_UI_InventorySlot::SetItemNum(int _Num)
 	Num = _Num;
 }
 
+
+
 void UC_UI_InventorySlot::GetSlotInfo()
 {
-	DragSlot->CopySlotName(ItemName);
-	DragSlot->CopySlotItemImage(ItemImage);
+DragSlot->CopySlotName(ItemName);
+DragSlot->CopySlotItemImage(ItemImage);
+
+}
+
+void UC_UI_InventorySlot::GetDragItemData(UC_UI_SlotDrag* _DragSlot)
+{
+	FString CurDragName = _DragSlot->GetItemName();
+	
+	UTexture2D* CuuDragImage = _DragSlot->GetDragItemImage();
+
+	if (CurDragName == "None")
+	{
+		ItemIcons.Add(CurDragName, CuuDragImage);
+	}
+	
 
 }
 
