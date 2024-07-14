@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FindPanelIndex();
 
+	UFUNCTION(BlueprintCallable)
+	void SetSlotIndex(int _Index);
+
 	
 
 

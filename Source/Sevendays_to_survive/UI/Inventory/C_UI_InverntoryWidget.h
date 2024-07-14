@@ -10,7 +10,8 @@
 #include "Components/PanelWidget.h"
 
 #include "UI/Inventory/C_UI_SlotDrag.h"
-#include "UI/Inventory/C_UI_SlotDrag.h"
+#include "UI/Inventory/C_UI_InventorySlot.h"
+#include"C_UI_InventorySlot.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
 
@@ -58,6 +59,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex);
 
+	
+	
 
 	
 private:
@@ -70,6 +73,8 @@ private:
 	AC_MapPlayer* MapPlayer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UWidget*> Slots;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<UC_UI_InventorySlot*> CastSlots;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidget* Prevslot;

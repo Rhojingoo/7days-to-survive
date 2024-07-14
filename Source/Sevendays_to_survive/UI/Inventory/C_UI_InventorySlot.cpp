@@ -68,3 +68,8 @@ void UC_UI_InventorySlot::FindPanelIndex() //슬롯 자신의 인덱스를 가�
 	CurSlotIndex = ParentPanel->GetChildIndex(this); //내 인덱스는 내가 가지고 있다. 
 }
 
+void UC_UI_InventorySlot::SetSlotIndex(int _Index)
+{
+	CurSlotIndex = _Index;
+}
+
