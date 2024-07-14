@@ -43,6 +43,9 @@ public:
 	float GenerateRandomFloat(float _Min, float _Max);
 	FVector GenerateRandomVector(FBox2D _Box);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	FVector Goal_Pos;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
