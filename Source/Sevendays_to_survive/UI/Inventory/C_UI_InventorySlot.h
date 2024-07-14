@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GetDragItemData(UC_UI_SlotDrag* _DragSlot);
 
+	UFUNCTION(BlueprintCallable)
+	void FindPanelIndex();
+
 	
 
 
@@ -57,6 +60,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Num;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int CurSlotIndex;
 	
 
 	

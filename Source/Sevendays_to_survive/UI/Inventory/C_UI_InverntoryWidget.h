@@ -10,10 +10,12 @@
 #include "Components/PanelWidget.h"
 
 #include "UI/Inventory/C_UI_SlotDrag.h"
+#include "UI/Inventory/C_UI_SlotDrag.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
 
 class UC_InventoryComponent;
+class UC_UI_SlotDrag;
 
 /**
  * 
@@ -52,6 +54,9 @@ protected:
 	TArray<UWidget*> GetMYSlots();
 	UFUNCTION(BlueprintCallable)
 	UWidget* FindSlotsIndex(FString _SlotName);
+	
+	UFUNCTION(BlueprintCallable)
+	void CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex);
 
 
 	
@@ -63,7 +68,13 @@ private:
 	UC_InventoryComponent* WidgetInventory;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_MapPlayer* MapPlayer;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UWidget*> Slots;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UWidget* Prevslot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_UI_SlotDrag* CurDrageSlot;
+
+	
 };

@@ -30,6 +30,12 @@ void UC_UI_InverntoryWidget::SwitchSlot(int _PrevIndex, int _ChangeIndex)
 	int a = 0;
 }
 
+void UC_UI_InverntoryWidget::CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex)
+{
+	FString nextSlotName = Slots[_nextindex]->GetName();
+	_DrageSlot->GetItemName();
+	//DropOn 했을대 Slot 의 인덱스를 반환하는것도 괜찮을 듯 한데 
+}
 
 TArray<UWidget*> UC_UI_InverntoryWidget::GetMYSlots()
 {
@@ -44,7 +50,7 @@ UWidget* UC_UI_InverntoryWidget::FindSlotsIndex(FString _SlotName)
 		
 		if (Slots[i]->GetName() == _SlotName)
 		{
-			return Slots[i];
+			return Slots[i]; //해당 슬롯이 나온다. 그러면 이 슬롯을채크한다. 
 		}
 	}
 
