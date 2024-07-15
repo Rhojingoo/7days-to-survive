@@ -27,6 +27,9 @@ public:
 	const UC_Item* FindItem(FName _Id);
 
 	UFUNCTION(BlueprintCallable)
+	TArray<const UC_Item*> GetItemArray() const;
+
+	UFUNCTION(BlueprintCallable)
 	TArray<FC_ItemAndCount> GetItemSourceDropItems(FName _Id);
 
 	UFUNCTION(BlueprintCallable)
@@ -56,6 +59,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TMap<FName, UC_Item*> Items;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TArray<const UC_Item*> ItemArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;

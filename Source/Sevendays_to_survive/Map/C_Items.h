@@ -45,7 +45,7 @@ public:
     TMap<FName, int> CraftMaterials;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    int ItemBoxDropWeight = 0;
+    int ItemBoxDropProb = 0;
 
 public:
     UFUNCTION(BlueprintPure)

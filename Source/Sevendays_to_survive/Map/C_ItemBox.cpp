@@ -46,12 +46,6 @@ void AC_ItemBox::BeginPlay()
 
 	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked< UC_STSInstance>();
 
-	FName MaterialId = MapDataAsset->GetRandomDropItemOfType(EItemType::Material);
-	DropItems.Emplace(MaterialId, Inst->GenerateRandomInt(10, 20));
-
-	FName ConsumableId = MapDataAsset->GetRandomDropItemOfType(EItemType::Consumable);
-	DropItems.Emplace(ConsumableId, Inst->GenerateRandomInt(1, 3));
-
 	HideHpBar();
 }
 
@@ -114,6 +108,14 @@ void AC_ItemBox::HideHpBar()
 
 void AC_ItemBox::SpawnItems_Implementation()
 {
+
+	FName MaterialId = MapDataAsset->GetRandomDropItemOfType(EItemType::Material);
+	DropItems.Emplace(MaterialId, Inst->GenerateRandomInt(10, 20));
+
+	FName ConsumableId = MapDataAsset->GetRandomDropItemOfType(EItemType::Consumable);
+	DropItems.Emplace(ConsumableId, Inst->GenerateRandomInt(1, 3));
+
+
 	for (TPair<FName, int>& ItemAndCount : DropItems)
 	{
 		AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), GetActorTransform());

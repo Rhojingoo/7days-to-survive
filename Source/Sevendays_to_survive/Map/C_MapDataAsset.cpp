@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_MapDataAsset.h"
@@ -12,7 +12,7 @@ TArray<FC_BuildingPartTableRow> UC_MapDataAsset::GetBuildPartData()
 {
     if (nullptr == BuildPartTable)
     {
-        UE_LOG(LogTemp, Fatal, TEXT("°ÔÀÓ ÀÎ½ºÅÏ½ºÀÇ BuildPartTableÀÌ nullptrÀÔ´Ï´Ù."));
+        UE_LOG(LogTemp, Fatal, TEXT("ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ì˜ BuildPartTableì´ nullptrì…ë‹ˆë‹¤."));
     }
 
     TArray<FC_BuildingPartTableRow*> Data;
@@ -71,7 +71,7 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
         return nullptr;
     }
 
-    // µ¥ÀÌÅÍ Å×ÀÌºíÀÇ ÇàÀ» UC_Item ¿ÀºêÁ§Æ®·Î º¯È¯ÇØ¼­ ÀúÀåÇÑ´Ù.
+    // ë°ì´í„° í…Œì´ë¸”ì˜ í–‰ì„ UC_Item ì˜¤ë¸Œì íŠ¸ë¡œ ë³€í™˜í•´ì„œ ì €ì¥í•œë‹¤.
 
     EItemType ItemType = ItemRow->Type;
 
@@ -110,6 +110,11 @@ const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
     Items.Emplace(_Id, FoundItem);
 
     return FoundItem;
+}
+
+TArray<const UC_Item*> UC_MapDataAsset::GetItemArray() const
+{
+    return ItemArray;
 }
 
 FC_ItemSourceTableRow* UC_MapDataAsset::FindItemSourceRow(FName _Id)
