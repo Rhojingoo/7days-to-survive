@@ -299,6 +299,8 @@ private:
 	UPROPERTY()
 	float RifleRange = 0.0f;
 
+	UPROPERTY()
+	int Maxmagazinecapacity=0;
 
 	UPROPERTY()
 	int Pistolmagazinecapacity = 0;

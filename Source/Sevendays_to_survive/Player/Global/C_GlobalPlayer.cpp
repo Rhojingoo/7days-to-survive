@@ -386,7 +386,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FVector GunForwardVector =  UKismetMathLibrary::GetForwardVector(GunRotation);
 	
 	FVector Start = GunLocation;
-	FVector End = (GunForwardVector * 10000.0F) + GunLocation;
+	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(CurWeapon);
@@ -479,7 +479,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Z = Random.FRandRange(Spreed * -1.0f, Spreed);
-		FVector End = (GunForwardVector * 5000.0F) + GunLocation+FVector(X,Y,Z);
+		FVector End = (GunForwardVector * LineTraceRange) + GunLocation+FVector(X,Y,Z);
 
 		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	
@@ -776,6 +776,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
 		LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RRifle2:
 		if (PlayerCurState == EWeaponUseState::Rifle2)
@@ -807,6 +808,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
 		LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RPistol:
 		if (PlayerCurState == EWeaponUseState::Pistol)
@@ -838,6 +840,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RPistol2:
 		if (PlayerCurState == EWeaponUseState::Pistol2)
@@ -869,6 +872,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
 		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RShotgun:
 
@@ -903,6 +907,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
 		LineTracemagazinecapacity = ShotGunmagazinecapacity;
+		LineTraceRange = ShotGunRange;
 		break;
 	case ESkerItemSlot::SlotMax:
 		break;
