@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EndingPoint/C_EndingPoint.h"
 #include "Sevendays_to_survive.h"
