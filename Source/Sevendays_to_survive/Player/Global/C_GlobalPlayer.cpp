@@ -362,7 +362,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	}
 
 	CurWeapon->PlayGunAnimation(PlayerCurState);
-	//LineTracemagazinecapacity -= 1;
+	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -451,7 +451,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	}
 
 	CurWeapon->PlayGunAnimation(PlayerCurState);
-	
+	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -548,6 +548,12 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireLoop_Implementation()
 {
+	if (LineTracemagazinecapacity == 0)
+	{
+		IsFireCpp = false;
+		return;
+	}
+
 	if (true == IsFireCpp)
 	{
 		GunLineTrace();
