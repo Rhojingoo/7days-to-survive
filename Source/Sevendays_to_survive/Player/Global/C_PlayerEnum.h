@@ -51,11 +51,11 @@ enum class EStaticItemSlot : uint8
 UENUM(BlueprintType)
 enum class ESkerItemSlot : uint8
 {
-	LRifle,
-	LRifle2,
+	RRifle,
+	RRifle2,
 	RPistol,
 	RPistol2,
-	LShotgun,
+	RShotgun,
 	SlotMax
 };
 /**
