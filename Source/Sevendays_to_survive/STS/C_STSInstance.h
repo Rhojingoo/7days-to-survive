@@ -52,10 +52,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int DayCount;
 
+	// UI를 띄우기 위해 계산하는 시간 
+	// ★★★12기준으로 밤낮 변경★★★
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int Time;
 
-
+	// 실제 인게임에서 UI시간
+	//  ★★★ 06시 ~ 17시 == 낮,  18시 ~ 05시 == 밤  ★★★
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
+	int GameUI_Time;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
