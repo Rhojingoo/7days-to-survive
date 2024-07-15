@@ -22,6 +22,9 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSInstance : public UGameInstance
 public:
 	UC_STSInstance();
 
+	// BeginPlay ¿ªÇÒ
+	void Init() override;
+
 	UFUNCTION(BlueprintCallable)
 	class UC_MapDataAsset* GetMapDataAsset();
 
