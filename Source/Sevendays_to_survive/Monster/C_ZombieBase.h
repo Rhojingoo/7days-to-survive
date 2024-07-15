@@ -21,7 +21,7 @@ enum class MonsterEnum : uint8
 	Dead UMETA(DisplayName = "Dead"),
 	Run UMETA(DisplayName = "Run"),
 	RangedAttack UMETA(DisplayName = "RangedAttack"),
-	RushWait UMETA(DisplayName = "RushWait"),
+	Faint UMETA(DisplayName = "Faint"),
 	Rush UMETA(DisplayName = "Rush"),
 	Jump UMETA(DisplayName = "Jump"),
 	End UMETA(DisplayName = "End")
