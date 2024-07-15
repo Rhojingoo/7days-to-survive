@@ -50,10 +50,10 @@ public:
 	bool IsDay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
-	bool DayCount;
+	int DayCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
-	bool Time;
+	int Time;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
