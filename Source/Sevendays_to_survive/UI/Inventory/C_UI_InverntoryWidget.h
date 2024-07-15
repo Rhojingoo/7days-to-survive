@@ -48,8 +48,8 @@ protected:
 	UFUNCTION(Blueprintcallable)
 	void SettingSlots(UPanelWidget* _Pannel);
 
-	//UFUNCTION(Blueprintcallable)
-	//void SwitchSlot(UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot);
+	UFUNCTION(Blueprintcallable)
+	void SwitchSlot(UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot);
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<UWidget*> GetMYSlots();
