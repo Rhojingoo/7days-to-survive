@@ -70,6 +70,7 @@ void AC_RangedZombie::OnRangedAttackNotifyBegin()
     FVector SpawnRotation = FVector::ForwardVector;
 
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
+    Bullet->SetSpawner(this);
 
     if (nullptr == Bullet)
     {
