@@ -14,70 +14,36 @@ UC_RangedZombie_ChaseTask::UC_RangedZombie_ChaseTask()
     bNotifyTick = true;
 }
 
-EBTNodeResult::Type UC_RangedZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+bool UC_RangedZombie_ChaseTask::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
 {
-    Super::ExecuteTask(OwnerComp, NodeMemory);
     AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-    if (!IsValid(Controller)) {
-        UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
-        return EBTNodeResult::Failed;
-    }
-    if (Controller->GetIsFind()) {
-        return EBTNodeResult::InProgress;
-    }
+    UC_MonsterComponent* MCP = Controller->GetMCP();
+    UMonsterDataObject* MonsterData = MCP->GetData();
+    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 
-    else {
-        return EBTNodeResult::Failed;
-    }
-}
-
-void UC_RangedZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
-{
-    Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+    FVector TargetLocation = Target->GetActorLocation();
+    FVector SelfLocation = GetSelfLocation(&OwnerComp);
+    TargetLocation.Z = 0.0f;
+    SelfLocation.Z = 0.0f;
+    float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
     float RangedAttackTimer = GetBlackBoard(&OwnerComp)->GetValueAsFloat(TEXT("RangedAttackTimer"));
     RangedAttackTimer -= DeltaSeconds;
     GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("RangedAttackTimer"), RangedAttackTimer);
 
-    AC_RangedZombie* RangedZombie = Cast<AC_RangedZombie>(GetSelf(&OwnerComp));
-    if (false == RangedZombie->IsValidLowLevel())
-    {
-        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-        return;
-    }
+    if (Vec <= MCP->GetData()->GetMonsterRange()
+        && RangedAttackTimer <= 0.0f) {
+        MonsterData->RemovePath();
 
-    AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-    UC_MonsterComponent* MCP = Controller->GetMCP();
-    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-    if (Target->IsValidLowLevel() == false) {
-        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-    }
-
-
-    FVector TargetLocation = Target->GetActorLocation();
-    TargetLocation.Z = 0;
-
-    FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
-
-    float Vec = FVector::Dist(SelfLocation, TargetLocation);
-
-    // 근거리 공격
-    if (Vec < MeleeAttackDistance && false == RangedZombie->IsRangedAttacking()) {
-        GetController(&OwnerComp)->GetMCP()->Attack();
-    }
-    // 원거리 공격
-    else if (Vec < MCP->GetData()->GetMonsterRange() && RangedAttackTimer <= 0.0f) {
         FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(SelfLocation, TargetLocation);
-        RangedZombie->SetActorRotation(Rotator);
+        GetSelf(&OwnerComp)->SetActorRotation(Rotator);
 
         GetController(&OwnerComp)->GetMCP()->RangedAttack();
         GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("RangedAttackTimer"), RangedAttackCooldown);
-        return;
-    }
 
-    if (false == RangedZombie->IsRangedAttacking())
-    {
-        MCP->Run(Target->GetActorLocation() - SelfLocation);
+        return true;
     }
-    return;
+    else {
+        return false;
+    }
 }
