@@ -232,6 +232,9 @@ void AC_GlobalPlayer::BeginPlay()
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Rifle, M4);
 
+		TSubclassOf<AActor> Rifle2 = STSInstance->GetWeaPonDataTable(FName("Rifle2"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Rifle2, Rifle2);
+
 		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
 
@@ -751,6 +754,37 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
+		//PlayerCurState = EWeaponUseState::Rifle;
+		break;
+	case ESkerItemSlot::RRifle2:
+		if (PlayerCurState == EWeaponUseState::Rifle2)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Rifle2))
+		{
+			return;
+		}
+
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+			CurWeapon = nullptr;
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
+			}
+		}
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
 		//PlayerCurState = EWeaponUseState::Rifle;
 		break;
 	case ESkerItemSlot::RPistol:

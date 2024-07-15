@@ -49,6 +49,9 @@ public:
 	void AttachRilfe(AC_GlobalPlayer* TargetCharacter);
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void AttachRilfe2(AC_GlobalPlayer* TargetCharacter);
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void AttachPistol1(AC_GlobalPlayer* TargetCharacter);
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")

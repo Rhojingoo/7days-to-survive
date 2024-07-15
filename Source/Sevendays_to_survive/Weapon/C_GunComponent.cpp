@@ -53,6 +53,28 @@ void UC_GunComponent::AttachRilfe(AC_GlobalPlayer* TargetCharacter)
 	//}
 }
 
+void UC_GunComponent::AttachRilfe2(AC_GlobalPlayer* TargetCharacter)
+{
+	Character = TargetCharacter;
+
+	// Check that the character is valid, and has no rifle yet
+	if (Character == nullptr /*|| Character->GetHasRifle()*/)
+	{
+		return;
+	}
+	Character->SetPlayerCurState(EWeaponUseState::Rifle2);
+	// Attach the weapon to the First Person Character
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() == nullptr)
+	{
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->SetSkinnedAsset(GetSkinnedAsset());
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)], AttachmentRules, FName(TEXT("LRifle2")));
+
+
+	}
+}
+
 void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
 {
 	Character = TargetCharacter;
