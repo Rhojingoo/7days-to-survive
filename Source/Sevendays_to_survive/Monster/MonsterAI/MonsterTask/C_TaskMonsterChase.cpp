@@ -8,6 +8,7 @@
 #include "Monster/MonsterData/MonsterDataRow.h"
 #include <NavigationSystem.h>
 #include "NavigationPath.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 
 UC_TaskMonsterChase::UC_TaskMonsterChase()
 {
@@ -137,6 +138,9 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 		if (NavPath->GetPathCost() < FLT_MAX) {
 			MonsterData->RemovePath();
+			UObject* Object = Controller->GetBlackboardComponent()->GetValueAsObject(*TargetActor);
+			AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Object);
+			FVector Location = Player->GetComponentLocation();
 			if (SelfLocation.Z > TargetLocation.Z + 10.f) {
 				MCP->Run(TargetLocation - SelfLocation);
 				return;

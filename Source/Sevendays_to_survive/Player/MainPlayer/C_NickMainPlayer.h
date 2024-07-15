@@ -16,6 +16,7 @@ class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_MapPlayer
 {
 	GENERATED_BODY()
 public:
+	AC_NickMainPlayer();
 
 	FVector GetComponentLocation();
 protected:

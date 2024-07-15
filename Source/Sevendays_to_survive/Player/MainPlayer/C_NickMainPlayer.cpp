@@ -15,6 +15,12 @@
 
 
 
+AC_NickMainPlayer::AC_NickMainPlayer()
+{
+	LocationComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("LocationComponent"));
+	LocationComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+}
+
 FVector AC_NickMainPlayer::GetComponentLocation()
 {
 	FVector Location = LocationComponent->GetComponentLocation();
@@ -30,8 +36,7 @@ void AC_NickMainPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	LocationComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("LocationComponent"));
-	LocationComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
