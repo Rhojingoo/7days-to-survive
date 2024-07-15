@@ -13,7 +13,7 @@ public class Sevendays_to_survive : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule", "Landscape", "UMG",
         "NavigationSystem", "Niagara" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Niagara" });
 
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, ""));
 
