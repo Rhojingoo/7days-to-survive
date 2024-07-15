@@ -26,10 +26,10 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 	// Attach the weapon to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->GetSkinnedAsset() == nullptr)
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->GetSkinnedAsset() == nullptr)
 	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)], AttachmentRules, FName(TEXT("LRifle")));
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->SetSkinnedAsset(GetSkinnedAsset());
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)], AttachmentRules, FName(TEXT("LRifle")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
 		Character->SetHasRifle(true);
@@ -113,10 +113,10 @@ void UC_GunComponent::AttachShotGun(AC_GlobalPlayer* TargetCharacter)
 	// Attach the weapon to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->GetSkinnedAsset() == nullptr)
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->GetSkinnedAsset() == nullptr)
 	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->SetSkinnedAsset(GetSkinnedAsset());
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
 		Character->SetHasRifle(true);
