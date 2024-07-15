@@ -13,7 +13,7 @@ UC_GunComponent::UC_GunComponent()
 	//MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
 }
 
-void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
+void UC_GunComponent::AttachRilfe(AC_GlobalPlayer* TargetCharacter)
 {
 	Character = TargetCharacter;
 
@@ -31,8 +31,7 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->SetSkinnedAsset(GetSkinnedAsset());
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)], AttachmentRules, FName(TEXT("LRifle")));
 
-		// switch bHasRifle so the animation blueprint can switch to another animation set
-		Character->SetHasRifle(true);
+	
 	}
 
 	
@@ -54,6 +53,28 @@ void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* TargetCharacter)
 	//}
 }
 
+void UC_GunComponent::AttachRilfe2(AC_GlobalPlayer* TargetCharacter)
+{
+	Character = TargetCharacter;
+
+	// Check that the character is valid, and has no rifle yet
+	if (Character == nullptr /*|| Character->GetHasRifle()*/)
+	{
+		return;
+	}
+	Character->SetPlayerCurState(EWeaponUseState::Rifle2);
+	// Attach the weapon to the First Person Character
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() == nullptr)
+	{
+		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->SetSkinnedAsset(GetSkinnedAsset());
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)], AttachmentRules, FName(TEXT("LRifle2")));
+
+
+	}
+}
+
 void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
 {
 	Character = TargetCharacter;
@@ -72,8 +93,7 @@ void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
 		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SetSkinnedAsset(GetSkinnedAsset());
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)], AttachmentRules, FName(TEXT("RPistol")));
 
-		// switch bHasRifle so the animation blueprint can switch to another animation set
-		Character->SetHasRifle(true);
+		
 	}
 }
 
@@ -96,7 +116,6 @@ void UC_GunComponent::AttachPistol2(AC_GlobalPlayer* TargetCharacter)
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol2)], AttachmentRules, FName(TEXT("RPistol2")));
 
 		// switch bHasRifle so the animation blueprint can switch to another animation set
-		Character->SetHasRifle(true);
 	}
 }
 
@@ -118,7 +137,5 @@ void UC_GunComponent::AttachShotGun(AC_GlobalPlayer* TargetCharacter)
 		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->SetSkinnedAsset(GetSkinnedAsset());
 		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
 
-		// switch bHasRifle so the animation blueprint can switch to another animation set
-		Character->SetHasRifle(true);
 	}
 }

@@ -232,6 +232,9 @@ void AC_GlobalPlayer::BeginPlay()
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Rifle, M4);
 
+		TSubclassOf<AActor> Rifle2 = STSInstance->GetWeaPonDataTable(FName("Rifle2"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Rifle2, Rifle2);
+
 		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
 
@@ -345,20 +348,24 @@ void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
-	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
-	{
-		return;
-	}
-
 	if (nullptr == CurWeapon)
 	{
 		return;
 	}
 
+	CurWeapon->PlayGunAnimation(PlayerCurState);
+
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
+
 	if (PlayerCurState == EWeaponUseState::Shotgun)
 	{
 		return;
 	}
+
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
@@ -414,9 +421,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		switch (PlayerCurState)
 		{
 		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Rifle2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
 			break;
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Pistol2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.7f, true);
 			break;
 		default:
@@ -428,15 +437,18 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	CurWeapon->PlayGunAnimation(PlayerCurState);
+	
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	if (nullptr == CurWeapon)
-	{
-		return;
-	}
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	
@@ -748,7 +760,38 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this);
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
+		//PlayerCurState = EWeaponUseState::Rifle;
+		break;
+	case ESkerItemSlot::RRifle2:
+		if (PlayerCurState == EWeaponUseState::Rifle2)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Rifle2))
+		{
+			return;
+		}
+
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+			CurWeapon = nullptr;
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
+			}
+		}
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
 		//PlayerCurState = EWeaponUseState::Rifle;
 		break;
 	case ESkerItemSlot::RPistol:
@@ -807,9 +850,9 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			}
 		}
 
-		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
 		break;
 	case ESkerItemSlot::RShotgun:
 
@@ -914,6 +957,8 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		{
 		case EWeaponUseState::Rifle:
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Rifle2:
+		case EWeaponUseState::Pistol2:
 			GunLineTrace();
 			break;
 		case EWeaponUseState::Shotgun:

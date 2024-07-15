@@ -6,6 +6,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/Global/DataTable/C_WeaponDataTable.h"
+#include "STS/C_STSInstance.h"
 
 // Sets default values
 AC_EquipWeapon::AC_EquipWeapon()
@@ -27,11 +29,40 @@ AC_EquipWeapon::AC_EquipWeapon()
 	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
+void AC_EquipWeapon::PlayGunAnimation_Implementation(const EWeaponUseState _CurWeapon)
+{
+	switch (_CurWeapon)
+	{
+	case EWeaponUseState::Rifle2:
+		SkeletalMesh->PlayAnimation(WeaponAnimation[_CurWeapon],false);
+		break;
+	case EWeaponUseState::Pistol2:
+		SkeletalMesh->PlayAnimation(WeaponAnimation[_CurWeapon], false);
+		break;
+	case EWeaponUseState::Shotgun:
+		SkeletalMesh->PlayAnimation(WeaponAnimation[_CurWeapon], false);
+		break;
+	default:
+		break;
+	}
+}
+
+
+
 // Called when the game starts or when spawned
 void AC_EquipWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+	UAnimationAsset* Rifle2 = STSInstance->GetWeaPonDataTable("Rifle2")->WeaponAnimToPlay;
+	WeaponAnimation.Add(EWeaponUseState::Rifle2, Rifle2);
+
+	UAnimationAsset* Pistol2 = STSInstance->GetWeaPonDataTable("Pistol2")->WeaponAnimToPlay;
+	WeaponAnimation.Add(EWeaponUseState::Pistol2, Pistol2);
+
+	UAnimationAsset* Shotgun = STSInstance->GetWeaPonDataTable("ShotGun")->WeaponAnimToPlay;
+	WeaponAnimation.Add(EWeaponUseState::Shotgun, Shotgun);
 
 }
 

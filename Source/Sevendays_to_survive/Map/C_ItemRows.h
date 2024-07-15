@@ -30,6 +30,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<FName, int> CraftMaterials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int DropWeight = 0;
 };
 
 USTRUCT(BlueprintType)

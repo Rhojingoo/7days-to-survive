@@ -10,6 +10,7 @@
 
 class UC_HealthBar;
 class AC_ItemPouch;
+class UC_MapDataAsset;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_ItemBox : public AC_MapActor
@@ -68,8 +69,7 @@ private:
     void SpawnItems();
     void SpawnItems_Implementation();
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-    TMap<FName, int> DropItems;
+    UC_MapDataAsset* MapDataAsset = nullptr;
 
     TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;
 };
