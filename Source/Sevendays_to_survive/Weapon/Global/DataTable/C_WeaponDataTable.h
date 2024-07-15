@@ -29,9 +29,11 @@ public:
 	float Damage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	int MagagineSize = 0;
+	int MagagineSize = 0; // ¿Á¿Â¿¸
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	TSubclassOf<AActor> Equip;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UAnimationAsset* WeaponAnimToPlay = nullptr;
 };

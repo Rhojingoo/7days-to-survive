@@ -10,10 +10,13 @@
 #include "Components/PanelWidget.h"
 
 #include "UI/Inventory/C_UI_SlotDrag.h"
+#include "UI/Inventory/C_UI_InventorySlot.h"
+#include"C_UI_InventorySlot.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
 
 class UC_InventoryComponent;
+class UC_UI_SlotDrag;
 
 /**
  * 
@@ -24,7 +27,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InverntoryWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	
 
 	
 public:
@@ -39,32 +41,45 @@ protected:
 	
 	
 
-	UFUNCTION(BlueprintCallable)
-	void NativeConstruct() override;
+	//UFUNCTION(BlueprintCallable)
+	//void NativeConstruct() override;
 
-	UFUNCTION(Blueprintcallable)
-	void GetDataInventory(FC_ItemAndCount _Inventory);
 
 	UFUNCTION(Blueprintcallable)
 	void SettingSlots(UPanelWidget* _Pannel);
 
 	UFUNCTION(Blueprintcallable)
-	void SwitchSlot(int _PrevIndex, int _ChangeIndex);
+	void SwitchSlot(UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot);
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<UWidget*> GetMYSlots();
+	UFUNCTION(BlueprintCallable)
+	UWidget* FindSlotsIndex(FString _SlotName);
+	
+	UFUNCTION(BlueprintCallable)
+	void CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex);
+
+	
+	
 
 	
 private:
 	
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	APlayerController* WidgetPlayerCOntorller;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UC_InventoryComponent* WidgetInventory;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_MapPlayer* MapPlayer;
-	
-	TArray<TArray<FC_ItemAndCount>> UIInventory;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UWidget*> Slots;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<UC_UI_InventorySlot*> CastSlots;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UWidget* Prevslot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_UI_SlotDrag* CurDrageSlot;
+
+	
 };

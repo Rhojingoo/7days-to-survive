@@ -6,6 +6,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/Global/DataTable/C_WeaponDataTable.h"
+#include "STS/C_STSInstance.h"
 
 // Sets default values
 AC_EquipWeapon::AC_EquipWeapon()
@@ -27,11 +29,18 @@ AC_EquipWeapon::AC_EquipWeapon()
 	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 }
 
+void AC_EquipWeapon::PlayGunAnimation()
+{
+
+}
+
 // Called when the game starts or when spawned
 void AC_EquipWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+	//WeaponData = STSInstance->GetWeaPonDataTable("M4");
 
 }
 

@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-
-
 #include"C_UI_SlotDrag.generated.h"
 
 
@@ -14,6 +12,8 @@
  * 
  */
 
+
+class UTexture2D;
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_UI_SlotDrag : public UUserWidget
 {
@@ -30,12 +30,14 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CopySlotName(const FString& _Name);
+	/*UFUNCTION(BlueprintImplementableEvent)*/
 	UFUNCTION(BlueprintImplementableEvent)
 	void CopySlotItemImage(UTexture2D* _Image);
 	
 
 	FString GetItemName();
-
+	
+	UTexture2D* GetDragItemImage();
 
 private:
 
@@ -44,6 +46,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* ItemImage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidget* CurWidget;
 
 };
