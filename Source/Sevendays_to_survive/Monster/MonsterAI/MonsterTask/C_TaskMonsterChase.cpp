@@ -49,33 +49,14 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
+	if (true == MonsterRangeTask(OwnerComp)) {
+		return;
+	}
+
+	UMonsterDataObject* MonsterData = MCP->GetData();
 	FVector TargetLocation = Target->GetActorLocation();
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
-
-
-	UMonsterDataObject* MonsterData = MCP->GetData();
-
-	if (Vec <= MCP->GetData()->GetMonsterRange()) {
-		MonsterData->RemovePath();
-		if (Vec >= Minimum_Distance) {
-			MCP->Run(TargetLocation - SelfLocation);
-			Controller->MoveToActor(Target);			//이게 ai move to이고, 엄청 가까울 때만 작동하게 해서 최대한 줄여봤음
-			GetController(&OwnerComp)->GetMCP()->RunAttack();
-			return;
-		}
-		else {
-			GetController(&OwnerComp)->GetMCP()->Attack();
-			return;
-		}
-		//if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
-		//	return;
-		//}
-		//else {
-		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
-		//	return;
-		//}
-	}
 
 	if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있다면? 이동해야한다.
 	{
@@ -231,6 +212,48 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	return;
 	/*------------------------------------------------------------------------------------------*/
 
+}
+
+bool UC_TaskMonsterChase::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp)
+{
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	UC_MonsterComponent* MCP = Controller->GetMCP();
+	UMonsterDataObject* MonsterData = MCP->GetData();
+
+	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	if (Target->IsValidLowLevel() == false) {
+		UE_LOG(LogTemp, Fatal, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return true;
+	}
+
+	FVector TargetLocation = Target->GetActorLocation();
+	FVector SelfLocation = GetSelfLocation(&OwnerComp);
+	float Vec = FVector::Dist(SelfLocation, TargetLocation);
+
+	if (Vec <= MCP->GetData()->GetMonsterRange()) {
+		MonsterData->RemovePath();
+		if (Vec >= Minimum_Distance) {
+			MCP->Run(TargetLocation - SelfLocation);
+			Controller->MoveToActor(Target);			//이게 ai move to이고, 엄청 가까울 때만 작동하게 해서 최대한 줄여봤음
+			GetController(&OwnerComp)->GetMCP()->RunAttack();
+			return true;
+		}
+		else {
+			GetController(&OwnerComp)->GetMCP()->Attack();
+			return true;
+		}
+		//if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
+		//	return;
+		//}
+		//else {
+		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
+		//	return;
+		//}
+	}
+	else {
+		return false;
+	}
 }
 
 
