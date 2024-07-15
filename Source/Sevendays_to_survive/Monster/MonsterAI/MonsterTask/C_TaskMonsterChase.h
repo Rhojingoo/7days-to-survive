@@ -23,7 +23,7 @@ protected:
 
     void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
 
-    virtual bool MonsterRangeTask(UBehaviorTreeComponent& OwnerComp);
+    virtual bool MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
 private:
 
 };
