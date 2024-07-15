@@ -26,6 +26,9 @@ public:
 	EWeaponUseState WeaponType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float BulletRange = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float Damage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")

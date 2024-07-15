@@ -285,7 +285,29 @@ private:
 	float MinCalPithchCPP = -30.0f;
 
 	UPROPERTY()
-	float LineTraceValue = 10000.0f;
+	float LineTraceRange = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int LineTracemagazinecapacity = 0;
+
+	UPROPERTY()
+	float PistolRange = 0.0f;
+
+	UPROPERTY()
+	float ShotGunRange = 0.0f;
+
+	UPROPERTY()
+	float RifleRange = 0.0f;
+
+
+	UPROPERTY()
+	int Pistolmagazinecapacity = 0;
+
+	UPROPERTY()
+	int ShotGunmagazinecapacity = 0;
+
+	UPROPERTY()
+	int Riflemagazinecapacity = 0;
 
 	UPROPERTY()
 	float Spreed = 500.0f;
