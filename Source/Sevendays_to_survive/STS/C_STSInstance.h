@@ -46,19 +46,22 @@ public:
 	float GenerateRandomFloat(float _Min, float _Max);
 	FVector GenerateRandomVector(FBox2D _Box);
 
+public:
+	// 인게임 밤낮 구분변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	bool IsDay;
 
+	// 인게임 날자카운트
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int DayCount;
 
-	// UI를 띄우기 위해 계산하는 시간 
-	// ★★★12기준으로 밤낮 변경★★★
+	// 시간UI를 띄우기 위해 계산하는 시간 
+	// ★★★12기준으로 시간적용(밤낮 변경)★★★
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int Time;
 
 	// 실제 인게임에서 UI시간
-	//  ★★★ 06시 ~ 17시 == 낮,  18시 ~ 05시 == 밤  ★★★
+	// ★★★ 06시 ~ 17시 == 낮,  18시 ~ 05시 == 밤  ★★★
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int GameUI_Time;
 
