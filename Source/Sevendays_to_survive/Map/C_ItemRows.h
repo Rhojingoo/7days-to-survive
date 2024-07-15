@@ -32,7 +32,7 @@ public:
 	TMap<FName, int> CraftMaterials;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int ItemBoxDropProb = 0;
+	int DropWeight = 0;
 };
 
 USTRUCT(BlueprintType)

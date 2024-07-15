@@ -12,9 +12,9 @@
 #include "STS/C_STSInstance.h"
 #include "STS/C_STSMacros.h"
 
-void UC_MapDataAsset::Init()
+void UC_MapDataAsset::Init(UC_STSInstance* _Inst)
 {
-    Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+    Inst = _Inst;
 
     Type_To_AccDropIds.Emplace(EItemType::Material);
     Type_To_AccDropIds.Emplace(EItemType::Consumable);
@@ -73,6 +73,11 @@ void UC_MapDataAsset::Init()
         }
 
         Items.Emplace(RowName, FoundItem);
+
+        if (EItemType::BuildingPart == ItemType)
+        {
+            continue;
+        }
 
         int PrevAcc = 0;
         if (false == Type_To_AccDropWeights[ItemType].IsEmpty())
@@ -176,7 +181,7 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetRandomDropItems()
         }
     }
 
-    return TArray<FC_ItemAndCount>();
+    return Result;
 }
 
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
@@ -202,6 +207,18 @@ FC_ItemSourceTableRow* UC_MapDataAsset::FindItemSourceRow(FName _Id)
 
 int UC_MapDataAsset::BisectRight(TArray<int>& _Arr, int _Value)
 {
+    // 0 3 1 2 0 Weights
+    // 0 3 4 6 6 AccWeights
+    /*
+    * Rand -> Index
+    * 0 -> 1
+    * 1 -> 1
+    * 2 -> 1
+    * 3 -> 2
+    * 4 -> 3
+    * 5 -> 3
+    */
+
     int L = 0;
     int R = _Arr.Num() - 1;
 
@@ -209,19 +226,15 @@ int UC_MapDataAsset::BisectRight(TArray<int>& _Arr, int _Value)
     {
         int M = (L + R) / 2;
 
-        if (_Arr[M] == _Value)
+        if (_Value < _Arr[M])
         {
-            return M;
+            R = M;
         }
-        else if (_Arr[M] > _Value)
+        else
         {
-            R = M - 1;
-        }
-        else if (_Arr[M] < _Value)
-        {
-            L = M;
+            L = M + 1;
         }
     }
 
-    return L;
+    return R;
 }

@@ -19,7 +19,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
-	void Init();
+	void Init(UC_STSInstance* _Inst);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<FC_BuildingPartTableRow> GetBuildPartData();

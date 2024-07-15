@@ -19,7 +19,7 @@ void UC_STSInstance::Init()
 {
     Super::Init();
 
-    MapDataAsset->Init();
+    MapDataAsset->Init(this);
 }
 
 UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
