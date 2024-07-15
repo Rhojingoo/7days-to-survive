@@ -11,14 +11,36 @@ AC_BossZombie::AC_BossZombie()
     SetName("BossZombie");
 }
 
-void AC_BossZombie::RushWait_Implementation()
+void AC_BossZombie::Attack_Implementation()
+{
+    if (nullptr == AnimInstance) {
+        return;
+    }
+    SetState(MonsterEnum::Idle);
+    if (false == AnimInstance->IsPlayMontage()) {
+        AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+    }
+}
+
+void AC_BossZombie::RunAttack_Implementation()
+{
+    if (nullptr == AnimInstance) {
+        return;
+    }
+    SetState(MonsterEnum::Run);
+    if (false == AnimInstance->IsPlayMontage()) {
+        AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+    }
+}
+
+void AC_BossZombie::Faint_Implementation()
 {
     if (nullptr == AnimInstance) {
         return;
     }
 
-    SetState(MonsterEnum::RushWait);
-    AnimInstance->ChangeAnimation(MonsterEnum::RushWait);
+    SetState(MonsterEnum::Faint);
+    AnimInstance->ChangeAnimation(MonsterEnum::Faint);
 }
 
 void AC_BossZombie::Rush_Implementation()
@@ -54,6 +76,11 @@ void AC_BossZombie::ApplyRushSpeed()
 void AC_BossZombie::ApplyRunSpeed()
 {
     GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+}
+
+void AC_BossZombie::ApplyFaintSpeed()
+{
+    GetCharacterMovement()->MaxWalkSpeed = 0.0f;
 }
 
 void AC_BossZombie::AttackCollisionOn()

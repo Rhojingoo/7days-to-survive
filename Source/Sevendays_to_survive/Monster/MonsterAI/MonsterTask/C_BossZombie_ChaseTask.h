@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Monster/MonsterAI/MonsterTask/C_BlackBoardBase.h"
+#include "Monster/MonsterAI/MonsterTask/C_TaskMonsterChase.h"
 #include "C_BossZombie_ChaseTask.generated.h"
 
 class AC_BossZombie;
@@ -13,11 +13,11 @@ enum class EBossZombieChaseTaskState : uint8
 {
     Run,
     Rush,
-    RushWait
+    Faint
 };
 
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UC_BossZombie_ChaseTask : public UC_BlackBoardBase
+class SEVENDAYS_TO_SURVIVE_API UC_BossZombie_ChaseTask : public UC_TaskMonsterChase
 {
 	GENERATED_BODY()
 	
@@ -26,23 +26,19 @@ private:
 public:
     UC_BossZombie_ChaseTask();
 protected:
-    virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+    bool MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds) override;
+    bool MonsterRangeTaskOnRun(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
+    bool MonsterRangeTaskOnRush(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
+    bool MonsterRangeTaskOnFaint(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
 
-    void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
+    EBossZombieChaseTaskState GetState(UBehaviorTreeComponent& OwnerComp);
+    void SetState(UBehaviorTreeComponent& OwnerComp, EBossZombieChaseTaskState _State);
 
-    void OnRunStart(UBehaviorTreeComponent& OwnerComp);
-    void OnRunTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
-    void OnRunEnd(UBehaviorTreeComponent* OwnerComp);
+    float GetTimer(UBehaviorTreeComponent& OwnerComp);
+    void SetTimer(UBehaviorTreeComponent& OwnerComp, float _Time);
+    void AddTimer(UBehaviorTreeComponent& OwnerComp, float _AddTime);
 
-    void OnRushStart(UBehaviorTreeComponent& OwnerComp);
-    void OnRushTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
-    void OnRushEnd(UBehaviorTreeComponent* OwnerComp);
-    
-    void OnRushWaitStart(UBehaviorTreeComponent& OwnerComp);
-    void OnRushWaitTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds);
-    void OnRushWaitEnd(UBehaviorTreeComponent* OwnerComp);
-
-    const float RunTime = 5.0f;
+    const float RushCoolDown = 10.0f;
     const float RushTime = 3.0f;
-    const float RushWaitTime = 6.0f;
+    const float FaintTime = 6.0f;
 };

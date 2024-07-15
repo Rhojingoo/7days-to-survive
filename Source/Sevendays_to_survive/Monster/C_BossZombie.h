@@ -18,18 +18,27 @@ public:
 	AC_BossZombie();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void RushWait();
-	void RushWait_Implementation();
+	void Attack() override final;
+	void Attack_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void RunAttack() override final;
+	void RunAttack_Implementation();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void Rush();
 	void Rush_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Faint();
+	void Faint_Implementation();
 
 	bool IsBlocked() const;
 	void ConsumeIsBlocked();
 
 	void ApplyRushSpeed();
 	void ApplyRunSpeed();
+	void ApplyFaintSpeed();
 
 	void AttackCollisionOn();
 	void AttackCollisionOff();
