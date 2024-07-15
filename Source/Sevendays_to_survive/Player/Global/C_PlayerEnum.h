@@ -31,6 +31,7 @@ enum class EWeaponUseState : uint8
 {
 	NoWeapon,
 	Rifle,
+	Rifle2,
 	Pistol,
 	Pistol2,
 	Shotgun,

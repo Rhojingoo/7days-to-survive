@@ -414,9 +414,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		switch (PlayerCurState)
 		{
 		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Rifle2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
 			break;
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Pistol2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.7f, true);
 			break;
 		default:
@@ -748,7 +750,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this);
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
 		//PlayerCurState = EWeaponUseState::Rifle;
 		break;
 	case ESkerItemSlot::RPistol:
@@ -807,9 +809,9 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			}
 		}
 
-		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
 		break;
 	case ESkerItemSlot::RShotgun:
 
@@ -914,6 +916,8 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		{
 		case EWeaponUseState::Rifle:
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Rifle2:
+		case EWeaponUseState::Pistol2:
 			GunLineTrace();
 			break;
 		case EWeaponUseState::Shotgun:
