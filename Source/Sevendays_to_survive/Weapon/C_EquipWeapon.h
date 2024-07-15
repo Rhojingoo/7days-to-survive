@@ -27,8 +27,13 @@ public:
 		return SkeletalMesh;
 	}
 
-	UFUNCTION()
-	void PlayGunAnimation();
+	UFUNCTION(Reliable, NetMulticast)
+	void PlayGunAnimation(const EWeaponUseState _CurWeaon);
+	void PlayGunAnimation_Implementation(const EWeaponUseState _CurWeaon);
+
+	UFUNCTION(Reliable, Server)
+	void PlayGunAnimationServer(const EWeaponUseState _CurWeaon);
+	void PlayGunAnimationServer_Implementation(const EWeaponUseState _CurWeaon);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,6 +51,6 @@ private:
 	UCameraComponent* Cameras = nullptr;
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TMap<ESkerItemSlot, UAnimationAsset*> WeaponAnimation;
+	TMap<EWeaponUseState, UAnimationAsset*> WeaponAnimation;
 };
 

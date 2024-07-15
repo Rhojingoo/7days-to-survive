@@ -363,6 +363,8 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		return;
 	}
 
+	CurWeapon->PlayGunAnimationServer(PlayerCurState);
+
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
