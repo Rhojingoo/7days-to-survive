@@ -49,7 +49,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
-	if (true == MonsterRangeTask(OwnerComp)) {
+	if (true == MonsterRangeTask(OwnerComp, DeltaSeconds)) {
 		return;
 	}
 
@@ -214,7 +214,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 }
 
-bool UC_TaskMonsterChase::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp)
+bool UC_TaskMonsterChase::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
 {
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 	UC_MonsterComponent* MCP = Controller->GetMCP();

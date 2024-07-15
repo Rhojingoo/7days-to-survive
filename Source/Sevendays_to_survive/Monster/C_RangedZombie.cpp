@@ -51,7 +51,7 @@ void AC_RangedZombie::RangedAttack_Implementation()
 
     SetState(MonsterEnum::Idle);
     if (false == AnimInstance->IsPlayMontage()) {
-        AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+        AnimInstance->ChangeAnimation(MonsterEnum::RangedAttack);
     }
 }
 
