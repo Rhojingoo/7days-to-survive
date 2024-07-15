@@ -437,15 +437,18 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	CurWeapon->PlayGunAnimation(PlayerCurState);
+	
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	if (nullptr == CurWeapon)
-	{
-		return;
-	}
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	
