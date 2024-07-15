@@ -14,178 +14,156 @@ UC_BossZombie_ChaseTask::UC_BossZombie_ChaseTask()
     bNotifyTick = true;
 }
 
-EBTNodeResult::Type UC_BossZombie_ChaseTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+bool UC_BossZombie_ChaseTask::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
 {
-    Super::ExecuteTask(OwnerComp, NodeMemory);
+    EBossZombieChaseTaskState State = GetState(OwnerComp);
+    if (State == EBossZombieChaseTaskState::Run)
+    {
+        return MonsterRangeTaskOnRun(OwnerComp, DeltaSeconds);
+    }
+    else if (State == EBossZombieChaseTaskState::Rush)
+    {
+        return MonsterRangeTaskOnRush(OwnerComp, DeltaSeconds);
+    }
+    else if (State == EBossZombieChaseTaskState::Faint)
+    {
+        return MonsterRangeTaskOnFaint(OwnerComp, DeltaSeconds);
+    }
+    return false;
+}
 
+bool UC_BossZombie_ChaseTask::MonsterRangeTaskOnRun(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
+{
     AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+    UC_MonsterComponent* MCP = Controller->GetMCP();
+    UMonsterDataObject* MonsterData = MCP->GetData();
     AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-    if (Target->IsValidLowLevel() == false) {
-        return EBTNodeResult::Failed;
-    }
-    if (!IsValid(Controller)) {
-        UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
-        return EBTNodeResult::Failed;
-    }
-    if (Controller->GetIsFind()) {
-        return EBTNodeResult::InProgress;
-    }
-    else {
-        return EBTNodeResult::Failed;
-    }
-}
 
-void UC_BossZombie_ChaseTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
-{
-    Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+    FVector TargetLocation = Target->GetActorLocation();
+    FVector SelfLocation = GetSelfLocation(&OwnerComp);
+    TargetLocation.Z = 0.0f;
+    SelfLocation.Z = 0.0f;
+    float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
-    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-    if (Target->IsValidLowLevel() == false) {
-        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-        return;
-    }
+    AddTimer(OwnerComp, -DeltaSeconds);
+    float Timer = GetTimer(OwnerComp);
 
-    EBossZombieChaseTaskState TaskState = static_cast<EBossZombieChaseTaskState>(GetBlackBoard(&OwnerComp)->GetValueAsInt(TEXT("TaskState")));
-
-    if (true == GetBlackBoard(&OwnerComp)->GetValueAsBool(TEXT("IsFirstTick")))
+    // 1. 공격 범위 안에 있으면 일반 공격
+    if (Vec <= MCP->GetData()->GetMonsterRange())
     {
-        switch (TaskState)
-        {
-        case EBossZombieChaseTaskState::Run:
-            OnRunStart(OwnerComp);
-            break;
-        case EBossZombieChaseTaskState::Rush:
-            OnRushStart(OwnerComp);
-            break;
-        case EBossZombieChaseTaskState::RushWait:
-            OnRushWaitStart(OwnerComp);
-            break;
-        default:
-            break;
+        MonsterData->RemovePath();
+
+        if (Vec >= Minimum_Distance) {
+            MCP->Run(TargetLocation - SelfLocation);
+            Controller->MoveToActor(Target);
+            GetController(&OwnerComp)->GetMCP()->RunAttack();
         }
+        else {
+            GetController(&OwnerComp)->GetMCP()->Attack();
+        }
+
+        return true;
     }
-    else
+
+    // 2. 막혀 있거나, 너무 멀거나, 돌진 쿨이 돌지 않았으면 돌진하지 않는다.
+    if (true == MCP->BreakCheck() || true == MCP->JumpCheck() || Vec > 3000.0f || Timer > 0.0f)
     {
-        switch (TaskState)
-        {
-        case EBossZombieChaseTaskState::Run:
-            OnRunTick(OwnerComp, DeltaSeconds);
-            break;
-        case EBossZombieChaseTaskState::Rush:
-            OnRushTick(OwnerComp, DeltaSeconds);
-            break;
-        case EBossZombieChaseTaskState::RushWait:
-            OnRushWaitTick(OwnerComp, DeltaSeconds);
-            break;
-        default:
-            break;
-        }
+        return false;
     }
 
+    // 4. 그 외의 경우 돌진
+    SetState(OwnerComp, EBossZombieChaseTaskState::Rush);
+
+    AC_BossZombie* Boss = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
+    Boss->Rush();
+    Boss->ApplyRushSpeed();
+    Boss->AttackCollisionOn();
+    SetTimer(OwnerComp, RushTime);
+    return true;
 }
 
-void UC_BossZombie_ChaseTask::OnRunStart(UBehaviorTreeComponent& OwnerComp)
+bool UC_BossZombie_ChaseTask::MonsterRangeTaskOnRush(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
+    AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+    UC_MonsterComponent* MCP = Controller->GetMCP();
+    UMonsterDataObject* MonsterData = MCP->GetData();
     AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 
-    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
-    BossZombieLocation2D.Z = 0;
+    FVector TargetLocation = Target->GetActorLocation();
+    FVector SelfLocation = GetSelfLocation(&OwnerComp);
+    TargetLocation.Z = 0.0f;
+    SelfLocation.Z = 0.0f;
 
-    FVector TargetLocation2D = Target->GetActorLocation();
-    TargetLocation2D.Z = 0;
+    AddTimer(OwnerComp, -DeltaSeconds);
+    AC_BossZombie* Boss = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
+    Boss->AddMovementInput(TargetLocation - SelfLocation);
 
-    BossZombie->Run(TargetLocation2D - BossZombieLocation2D);
-    BossZombie->ApplyRunSpeed();
+    // 1. 부딪힌 경우 돌진 중지
+    if (true == MCP->BreakCheck() || true == MCP->JumpCheck())
+    {
+        Boss->Faint();
+        Boss->ApplyFaintSpeed();
+        SetTimer(OwnerComp, FaintTime);
+        SetState(OwnerComp, EBossZombieChaseTaskState::Faint);
+        Boss->AttackCollisionOff();
+        return true;
+    }
 
-    GetBlackBoard(&OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), false);
+    // 2. 돌진 시간이 다 된 경우 돌진 중지
+    if (GetTimer(OwnerComp) <= 0.0f)
+    {
+        Boss->Faint();
+        Boss->ApplyFaintSpeed();
+        SetTimer(OwnerComp, FaintTime);
+        SetState(OwnerComp, EBossZombieChaseTaskState::Faint);
+        Boss->AttackCollisionOff();
+        return true;
+    }
 
-    FTimerHandle UnusedHandle;
-    FTimerDelegate Delegate;
-    Delegate.BindUObject(this, &UC_BossZombie_ChaseTask::OnRunEnd, &OwnerComp);
-    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, Delegate, RunTime, false);
+    return true;
 }
 
-void UC_BossZombie_ChaseTask::OnRunTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
+bool UC_BossZombie_ChaseTask::MonsterRangeTaskOnFaint(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
-    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+    AddTimer(OwnerComp, -DeltaSeconds);
+    AC_BossZombie* Boss = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
 
-    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
-    BossZombieLocation2D.Z = 0;
+    // 기절 시간이 다 된 경우 다시 추격
+    if (GetTimer(OwnerComp) <= 0.0f)
+    {
+        Boss->ApplyRunSpeed();
+        SetTimer(OwnerComp, RushCoolDown);
+        SetState(OwnerComp, EBossZombieChaseTaskState::Run);
+        return true;
+    }
 
-    FVector TargetLocation2D = Target->GetActorLocation();
-    TargetLocation2D.Z = 0;
-
-    BossZombie->AddMovementInput(TargetLocation2D - BossZombieLocation2D);
+    return true;
 }
 
-void UC_BossZombie_ChaseTask::OnRunEnd(UBehaviorTreeComponent* OwnerComp)
+EBossZombieChaseTaskState UC_BossZombie_ChaseTask::GetState(UBehaviorTreeComponent& OwnerComp)
 {
-    GetBlackBoard(OwnerComp)->SetValueAsInt(TEXT("TaskState"), static_cast<int>(EBossZombieChaseTaskState::Rush));
-    GetBlackBoard(OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), true);
+    int State = GetBlackBoard(&OwnerComp)->GetValueAsInt(TEXT("TaskState"));
+    return static_cast<EBossZombieChaseTaskState>(State);
 }
 
-void UC_BossZombie_ChaseTask::OnRushStart(UBehaviorTreeComponent& OwnerComp)
+void UC_BossZombie_ChaseTask::SetState(UBehaviorTreeComponent& OwnerComp, EBossZombieChaseTaskState _State)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
-    AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
-
-    FVector BossZombieLocation2D = BossZombie->GetActorLocation();
-    BossZombieLocation2D.Z = 0;
-
-    FVector RushTargetLocation2D = Target->GetActorLocation();
-    RushTargetLocation2D.Z = 0;
-
-    GetBlackBoard(&OwnerComp)->SetValueAsVector(TEXT("RushDirection"), RushTargetLocation2D - BossZombieLocation2D);
-
-    BossZombie->Rush();
-    BossZombie->ApplyRushSpeed();
-    BossZombie->AttackCollisionOn();
-
-    GetBlackBoard(&OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), false);
-
-    FTimerHandle UnusedHandle;
-    FTimerDelegate Delegate;
-    Delegate.BindUObject(this, &UC_BossZombie_ChaseTask::OnRushEnd, &OwnerComp);
-    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, Delegate, RushTime, false);
+    int State = static_cast<int>(_State);
+    GetBlackBoard(&OwnerComp)->SetValueAsInt(TEXT("TaskState"), State);
 }
 
-void UC_BossZombie_ChaseTask::OnRushTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
+float UC_BossZombie_ChaseTask::GetTimer(UBehaviorTreeComponent& OwnerComp)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
-    FVector RushDirection = GetBlackBoard(&OwnerComp)->GetValueAsVector(TEXT("RushDirection"));
-
-    BossZombie->AddMovementInput(RushDirection);
+    return GetBlackBoard(&OwnerComp)->GetValueAsFloat(TEXT("Timer"));
 }
 
-void UC_BossZombie_ChaseTask::OnRushEnd(UBehaviorTreeComponent* OwnerComp)
+void UC_BossZombie_ChaseTask::SetTimer(UBehaviorTreeComponent& OwnerComp, float _Time)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(OwnerComp));
-    GetBlackBoard(OwnerComp)->SetValueAsInt(TEXT("TaskState"), static_cast<int>(EBossZombieChaseTaskState::RushWait));
-    GetBlackBoard(OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), true);
-    BossZombie->AttackCollisionOff();
+    GetBlackBoard(&OwnerComp)->SetValueAsFloat(TEXT("Timer"), _Time);
 }
 
-void UC_BossZombie_ChaseTask::OnRushWaitStart(UBehaviorTreeComponent& OwnerComp)
+void UC_BossZombie_ChaseTask::AddTimer(UBehaviorTreeComponent& OwnerComp, float _AddTime)
 {
-    AC_BossZombie* BossZombie = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
-    BossZombie->RushWait();
-
-    GetBlackBoard(&OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), false);
-
-    FTimerHandle UnusedHandle;
-    FTimerDelegate Delegate;
-    Delegate.BindUObject(this, &UC_BossZombie_ChaseTask::OnRushWaitEnd, &OwnerComp);
-    BossZombie->GetWorldTimerManager().SetTimer(UnusedHandle, Delegate, RushWaitTime, false);
-}
-
-void UC_BossZombie_ChaseTask::OnRushWaitTick(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
-{
-}
-
-void UC_BossZombie_ChaseTask::OnRushWaitEnd(UBehaviorTreeComponent* OwnerComp)
-{
-    GetBlackBoard(OwnerComp)->SetValueAsInt(TEXT("TaskState"), static_cast<int>(EBossZombieChaseTaskState::Run));
-    GetBlackBoard(OwnerComp)->SetValueAsBool(TEXT("IsFirstTick"), true);
+    float Timer = GetTimer(OwnerComp);
+    SetTimer(OwnerComp, Timer + _AddTime);
 }
