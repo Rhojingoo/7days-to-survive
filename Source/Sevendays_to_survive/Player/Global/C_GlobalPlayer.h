@@ -7,6 +7,7 @@
 #include "Player/Global/DataTable/C_PlayerDataTable.h" // 데이터 테이블
 #include "Net/UnrealNetwork.h" // 서버 네트워크
 #include "Player/Global/C_PlayerEnum.h"
+#include "NiagaraComponent.h"
 #include "C_GlobalPlayer.generated.h"
 
 class USpringArmComponent; // 스프링 암
@@ -24,6 +25,7 @@ class AC_EquipWeapon;
 class AC_MainPlayerController;
 class UTextRenderComponent;
 struct FInputActionValue; // 입력 값
+class UNiagaraComponent; // 이펙트 == 나이아가라
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_GlobalPlayer : public ACharacter
@@ -231,6 +233,9 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, int> magazinecapacity;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;

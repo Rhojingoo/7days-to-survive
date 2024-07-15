@@ -33,6 +33,9 @@ AC_ZombieBase::AC_ZombieBase()
 	MiddleArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("MiddleArrowComponent"));
 	MiddleArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
 
+	LocationComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("LocationComponent"));
+	LocationComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldStatic));
 }
 

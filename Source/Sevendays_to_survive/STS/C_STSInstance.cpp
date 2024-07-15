@@ -9,6 +9,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
+#include "Map/C_MonsterSpawnPoint.h"
 
 UC_STSInstance::UC_STSInstance()
 {
@@ -108,6 +109,18 @@ FVector UC_STSInstance::GenerateRandomVector(FBox2D _Box)
     float X = GenerateRandomFloat(_Box.Min.X, _Box.Max.X);
     float Y = GenerateRandomFloat(_Box.Min.Y, _Box.Max.Y);
     return { X, Y, 0.0f };
+}
+
+void UC_STSInstance::SetSpawnMonster()
+{
+    for (int i = 0; i < SpawnArray.Num(); ++i) {
+        SpawnArray[i]->SetSpawn(true);
+    }
+}
+
+void UC_STSInstance::AddSpawnPoint(AC_MonsterSpawnPoint* _Point)
+{
+    SpawnArray.Add(_Point);
 }
 
 TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()
