@@ -65,6 +65,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int GameUI_Time;
 
+	UFUNCTION(BlueprintCallable)
+	void SetSpawnMonster();
+	void AddSpawnPoint(class AC_MonsterSpawnPoint* _Point);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<AC_MonsterSpawnPoint*> SpawnArray;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
@@ -81,4 +88,6 @@ private:
 	UC_MapDataAsset* MapDataAsset = nullptr;
 
 	FRandomStream RandomStream;
+
+	
 };

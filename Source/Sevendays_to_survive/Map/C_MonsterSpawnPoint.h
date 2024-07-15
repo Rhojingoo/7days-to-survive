@@ -24,12 +24,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void MonsterSpawn(float DeltaTime);
-
+	void SetSpawn(bool _IsSpawn);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> SpawnMonster;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float SpawnTime = 4.0f;
+	float SpawnTime = 1.0f;
 
 	float CoolTime = 0.0f;
+
+	bool CanSpawn = false;
 };
