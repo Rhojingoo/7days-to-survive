@@ -73,11 +73,17 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		//	}
 		//	return;
 		//}
-		if (Navi_Minimum >= CheckDir.Size())
+		bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+		if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 		{
-			MonsterData->PathHeadRemove();
+			Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+			return;
 		}
-		return;
+		else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+			Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
+			MonsterData->PathHeadRemove();
+			return;
+		}
 	}
 
 	if (Vec <= 800.f) {
@@ -157,9 +163,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			SelfLocation.Z = 0;
 			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (Navi_Minimum >= CheckDir.Size())
+			bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+			if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 			{
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+				return;
+			}
+			else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
 				MonsterData->PathHeadRemove();
+				return;
 			}
 		}
 	}
@@ -194,9 +207,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			SelfLocation.Z = 0;
 			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (Navi_Minimum >= CheckDir.Size())
+			bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+			if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 			{
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+				return;
+			}
+			else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
 				MonsterData->PathHeadRemove();
+				return;
 			}
 			return;
 		}
