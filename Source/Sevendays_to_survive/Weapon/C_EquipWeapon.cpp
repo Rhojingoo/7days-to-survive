@@ -47,10 +47,7 @@ void AC_EquipWeapon::PlayGunAnimation_Implementation(const EWeaponUseState _CurW
 	}
 }
 
-void AC_EquipWeapon::PlayGunAnimationServer_Implementation(const EWeaponUseState _CurWeaon)
-{
-	PlayGunAnimation(_CurWeaon);
-}
+
 
 // Called when the game starts or when spawned
 void AC_EquipWeapon::BeginPlay()

@@ -31,9 +31,6 @@ public:
 	void PlayGunAnimation(const EWeaponUseState _CurWeaon);
 	void PlayGunAnimation_Implementation(const EWeaponUseState _CurWeaon);
 
-	UFUNCTION(Reliable, Server)
-	void PlayGunAnimationServer(const EWeaponUseState _CurWeaon);
-	void PlayGunAnimationServer_Implementation(const EWeaponUseState _CurWeaon);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

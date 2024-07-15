@@ -348,22 +348,24 @@ void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	CurWeapon->PlayGunAnimation(PlayerCurState);
+
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	if (nullptr == CurWeapon)
-	{
-		return;
-	}
 
 	if (PlayerCurState == EWeaponUseState::Shotgun)
 	{
 		return;
 	}
 
-	CurWeapon->PlayGunAnimationServer(PlayerCurState);
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
