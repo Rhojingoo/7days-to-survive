@@ -216,6 +216,10 @@ void AC_GlobalPlayer::BeginPlay()
 		Hp = PlayerDT.Hp;
 	}
 	
+
+	{
+		BulletHoleEffect = BulletDT.BulletHole;
+	}
 	//Add Input Mapping Context
 	PlayerController = Cast<AC_MainPlayerController>(Controller);
 	if (PlayerController)
@@ -420,9 +424,14 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 					}), 5.0f, false);
 
 				}
+				else
+				{
+					CreateBulletHole(Hit);
+				}
 			}
 		}
 	}
+	
 
 	if (true == IsFireCpp)
 	{
@@ -558,6 +567,11 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 	{
 		GunLineTrace();
 	}
+}
+
+void AC_GlobalPlayer::CreateBulletHole_Implementation(FHitResult _Hit)
+{
+	UGameplayStatics::SpawnDecalAtLocation(this, BulletHoleEffect, FVector(1.0f, 10.0f, 10.0f), _Hit.Location, _Hit.ImpactNormal.Rotation(), 5.0f);
 }
 
 void AC_GlobalPlayer::Calstamina()

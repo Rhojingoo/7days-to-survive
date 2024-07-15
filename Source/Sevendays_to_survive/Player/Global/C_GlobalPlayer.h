@@ -191,6 +191,10 @@ protected:
 	void FireLoop();
 	void FireLoop_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateBulletHole(FHitResult _Hit);
+	void CreateBulletHole_Implementation(FHitResult _Hit);
+
 	UFUNCTION()
 	void Calstamina();
 
@@ -340,4 +344,7 @@ private:
 
 	UPROPERTY()
 	FRandomStream Random;
+
+	UPROPERTY()
+	UMaterialInterface* BulletHoleEffect = nullptr;
 };

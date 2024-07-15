@@ -73,7 +73,7 @@ struct FC_BulletValue : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TSubclassOf<AActor> BulletClass1;
+	UMaterialInterface* BulletHole;
 };
 
 USTRUCT(BlueprintType)
