@@ -47,7 +47,7 @@ public:
 
 	FORCEINLINE TArray<USkeletalMeshComponent*> GetSkeletalItemMesh() const
 	{
-		return SkeletalItemMeshs;
+		return SkeletalItemMeshes;
 	}
 
 	FORCEINLINE bool GetAImZoomCpp()
@@ -233,7 +233,7 @@ private:
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	TArray<USkeletalMeshComponent*> SkeletalItemMeshs;
+	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext = nullptr;

@@ -103,7 +103,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 				USkeletalMeshComponent* NewSlotMesh = CreateDefaultSubobject<USkeletalMeshComponent>(*Name);
 				NewSlotMesh->SetupAttachment(GetMesh(), *Name);
 				NewSlotMesh->SetCollisionProfileName(TEXT("NoCollision"));
-				SkeletalItemMeshs.Push(NewSlotMesh);
+				SkeletalItemMeshes.Push(NewSlotMesh);
 			}
 		}
 	}
@@ -657,7 +657,7 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 		CurWeapon = nullptr;
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
-			SkeletalItemMeshs[i]->SetSkeletalMesh(nullptr);
+			SkeletalItemMeshes[i]->SetSkeletalMesh(nullptr);
 		}
 	}
 
@@ -705,7 +705,7 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 {
 	uint8 SlotIndex = static_cast<uint8>(_Slot);
-	if (SkeletalItemMeshs.Num() <= SlotIndex)
+	if (SkeletalItemMeshes.Num() <= SlotIndex)
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (ItemMeshs.Num() <= static_cast<uint8>(_Slot))"), __FUNCTION__, __LINE__);
 		return;
@@ -720,7 +720,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 	switch (_Slot)
 	{
-	case ESkerItemSlot::LRifle:
+	case ESkerItemSlot::RRifle:
 		if (PlayerCurState == EWeaponUseState::Rifle)
 		{
 			return;
@@ -731,7 +731,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			return;
 		}
 
-		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LRifle)]->GetSkinnedAsset() != nullptr)
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->GetSkinnedAsset() != nullptr)
 		{
 			return;
 		}
@@ -742,7 +742,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -772,7 +772,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon->Destroy();
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -803,7 +803,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -811,7 +811,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		break;
-	case ESkerItemSlot::LShotgun:
+	case ESkerItemSlot::RShotgun:
 
 		//ShotGun
 		if (PlayerCurState == EWeaponUseState::Shotgun)
@@ -824,7 +824,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			return;
 		}
 
-		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::LShotgun)]->GetSkinnedAsset() != nullptr)
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->GetSkinnedAsset() != nullptr)
 		{
 			return;
 		}
@@ -835,7 +835,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			CurWeapon = nullptr;
 			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 			{
-				SkeletalItemMeshs[i]->SetSkinnedAsset(nullptr);
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
 			}
 		}
 
@@ -873,7 +873,7 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 		// USkeletalMeshComponent 슬롯 전용
 		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
 		{
-			SkeletalItemMeshs[i]->SetSkeletalMesh(nullptr);
+			SkeletalItemMeshes[i]->SetSkeletalMesh(nullptr);
 		}
 
 	}
