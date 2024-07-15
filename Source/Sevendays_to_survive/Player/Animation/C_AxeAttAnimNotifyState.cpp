@@ -60,8 +60,8 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			if (Zombie)
 			{
 				//ZombieDieTrace(Zombie);
-				Zombie->SetRagDoll();
-				FTimerHandle ZombieDestory;
+				Zombie->SetHP(20.0f);
+				/*FTimerHandle ZombieDestory;
 
 				MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 				{
@@ -69,7 +69,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 					{
 						Zombie->Destroy();
 					}
-				}), 5.0f, false);
+				}), 5.0f, false);*/
 
 			}
 		}

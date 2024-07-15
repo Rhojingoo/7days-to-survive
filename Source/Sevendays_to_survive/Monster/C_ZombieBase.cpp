@@ -112,6 +112,12 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 			ActorController->UnPossess();
 			ActorController->Destroy();
 		}
+		FTimerHandle ZombieDestory;
+
+		GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([&]()
+			{
+				this->Destroy();
+			}), 5.0f, false);
 	}
 }
 
