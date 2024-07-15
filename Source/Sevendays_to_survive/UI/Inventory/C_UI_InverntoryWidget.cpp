@@ -46,10 +46,10 @@ void UC_UI_InverntoryWidget::SettingSlots(UPanelWidget* _Pannel) // 슬롯 가�
 }
 
 
-//void UC_UI_InverntoryWidget::SwitchSlot((UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot))
-//{
-//	//_PrevInd
-//}
+void UC_UI_InverntoryWidget::SwitchSlot(UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot)
+{
+	//_PreSlot->GetIndex
+}
 
 void UC_UI_InverntoryWidget::CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex)
 {
