@@ -235,6 +235,9 @@ private:
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, int> magazinecapacity;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
