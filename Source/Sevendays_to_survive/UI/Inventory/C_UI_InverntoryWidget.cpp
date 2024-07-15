@@ -36,9 +36,7 @@ void UC_UI_InverntoryWidget::SettingSlots(UPanelWidget* _Pannel) // 슬롯 가�
 			return;
 		}
 	
-		//if(Slots[i] != )
-		//CastSlots[i] = Cast<UC_UI_InventorySlot>(Slots[i]);
-		//CastSlots[i]->SetSlotIndex(i);
+		
 
 	}
 
@@ -48,10 +46,10 @@ void UC_UI_InverntoryWidget::SettingSlots(UPanelWidget* _Pannel) // 슬롯 가�
 }
 
 
-void UC_UI_InverntoryWidget::SwitchSlot(int _PrevIndex, int _ChangeIndex)
-{
-	int a = 0;
-}
+//void UC_UI_InverntoryWidget::SwitchSlot((UC_UI_InventorySlot* _PreSlot, UC_UI_InventorySlot* _CurSlot))
+//{
+//	//_PrevInd
+//}
 
 void UC_UI_InverntoryWidget::CheckSlot(UC_UI_SlotDrag* _DrageSlot, int _nextindex)
 {
