@@ -162,6 +162,12 @@ void AC_ZombieBase::AddLocation(FVector _Location)
 	AddMovementInput(_Location);
 }
 
+FVector AC_ZombieBase::GetComponentLocation()
+{
+	FVector Location = LocationComponent->GetComponentLocation();
+	return Location;
+}
+
 void AC_ZombieBase::RunAttack()
 {
 	SetState(MonsterEnum::RunAttack);

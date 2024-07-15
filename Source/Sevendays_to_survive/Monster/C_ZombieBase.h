@@ -58,6 +58,7 @@ public:
 	virtual void ShoutAttack();
 	virtual void MonsterJump();
 	void AddLocation(FVector _Location);
+	FVector GetComponentLocation();
 
 
 	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)

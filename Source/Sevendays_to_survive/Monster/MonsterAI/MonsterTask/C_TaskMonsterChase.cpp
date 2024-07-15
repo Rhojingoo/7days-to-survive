@@ -140,7 +140,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			MonsterData->RemovePath();
 			UObject* Object = Controller->GetBlackboardComponent()->GetValueAsObject(*TargetActor);
 			AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Object);
-			FVector Location = Player->GetComponentLocation();
+			FVector TargetLocation = Player->GetComponentLocation();
 			if (SelfLocation.Z > TargetLocation.Z + 10.f) {
 				MCP->Run(TargetLocation - SelfLocation);
 				return;
