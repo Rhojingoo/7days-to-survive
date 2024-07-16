@@ -107,10 +107,10 @@ void AC_EquipWeapon::BeginPlay()
 		ShotSounds.Add(EWeaponUseState::Pistol, PistolSound);
 
 		UParticleSystem* RifleEffect = STSInstance->GetWeaPonDataTable("M4")->NoAnimationParticle;
-		ShotEffects.Add(EWeaponUseState::Pistol, PistolEffect);
+		ShotEffects.Add(EWeaponUseState::Rifle, RifleEffect);
 
 		USoundBase* RifleSound = STSInstance->GetWeaPonDataTable("M4")->NoAnimationSound;
-		ShotSounds.Add(EWeaponUseState::Pistol, PistolSound);
+		ShotSounds.Add(EWeaponUseState::Rifle, RifleSound);
 		//ShotEffect= STSInstance->GetWeaPonDataTable("M4")->We
 	}
 }
