@@ -6,6 +6,7 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "C_AxeAttAnimNotifyState.generated.h"
 
+class AC_GlobalPlayer;
 /**
  * 
  */
@@ -17,4 +18,8 @@ public:
 	void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
 	void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+
+	UFUNCTION(Reliable, NetMulticast)
+	void HitSoundPlay(FHitResult _Hit,AC_GlobalPlayer* _Player) const;
+	void HitSoundPlay_Implementation(FHitResult _Hit, AC_GlobalPlayer* _Player) const;
 };
