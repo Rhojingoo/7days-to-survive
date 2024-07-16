@@ -10,6 +10,7 @@
 class UC_GunComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UParticleSystem;
 struct FC_WeaponDataTable;
 
 UCLASS()
@@ -31,6 +32,10 @@ public:
 	void PlayGunAnimation(const EWeaponUseState _CurWeaon);
 	void PlayGunAnimation_Implementation(const EWeaponUseState _CurWeaon);
 
+	UFUNCTION(Reliable, NetMulticast)
+	void GunParticleAndSound(const EWeaponUseState _CurWeaon);
+	void GunParticleAndSound_Implementation(const EWeaponUseState _CurWeaon);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -49,5 +54,11 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponUseState, UAnimationAsset*> WeaponAnimation;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap <EWeaponUseState,UParticleSystem*> ShotEffects;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap <EWeaponUseState,USoundBase*> ShotSounds;
 };
 

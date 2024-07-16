@@ -39,4 +39,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	UAnimationAsset* WeaponAnimToPlay = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UParticleSystem* NoAnimationParticle = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	USoundBase* NoAnimationSound = nullptr;
 };

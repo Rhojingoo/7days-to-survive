@@ -368,7 +368,19 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		return;
 	}
 
-	CurWeapon->PlayGunAnimation(PlayerCurState);
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+	case EWeaponUseState::Pistol:
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
+	case EWeaponUseState::Rifle2:
+	case EWeaponUseState::Pistol2:
+		CurWeapon->PlayGunAnimation(PlayerCurState);
+		break;
+	default:
+		break;
+	}
 	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
@@ -507,8 +519,9 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					if (Zombie)
 					{
 						//ZombieDieTrace(Zombie);
-						Zombie->SetRagDoll();
-						FTimerHandle ZombieDestory;
+						CreateZombieBlood(Hit);
+						Zombie->SetHP(5.0f);
+						/*FTimerHandle ZombieDestory;
 
 						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 						{
@@ -516,8 +529,12 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 							{
 								Zombie->Destroy();
 							}
-						}), 5.0f, false);
+						}), 5.0f, false);*/
 
+					}
+					else
+					{
+						CreateBulletHole(Hit);
 					}
 				}
 			}

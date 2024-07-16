@@ -22,7 +22,8 @@
 				"Engine",
 				"CoreUObject",
 				"UMG",
-				"AnimGraphRuntime"
+				"AnimGraphRuntime",
+				"MetasoundEngine"
 			]
 		}
 	],
