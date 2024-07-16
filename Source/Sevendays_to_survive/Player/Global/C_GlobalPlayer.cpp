@@ -170,9 +170,17 @@ void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+	if (nullptr == STSInstance)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%S(%u)> if (STSInstance == 0)"), __FUNCTION__, __LINE__);
+		return;
+	}
+
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;
 	BulletDT = STSInstance->GetPlayerDataTable()->BulletValue;
+	AttWeaponSound = STSInstance->GetPlayerDataTable()->SoundValue;
 
 	Tags.Add(TEXT("Player"));
 
@@ -217,10 +225,18 @@ void AC_GlobalPlayer::BeginPlay()
 		Hp = PlayerDT.Hp;
 	}
 	
-
+	// 총알 관련 이펙트
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
 		ZombieHitEffect = BulletDT.ZombieHitBlood;
+	}
+
+	// 근접 무기 사운드
+	{
+		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[0]);
+		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[1]);
+		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[2]);
+		WeaponSounds.Add(EStaticItemSlot::SlotMax, AttWeaponSound.AttSound[3]);
 	}
 
 	//Add Input Mapping Context

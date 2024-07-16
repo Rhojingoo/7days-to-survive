@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Monster/C_ZombieBase.h"
 #include "Map/C_ItemSourceHISMA.h"
+#include "Player/Global/C_PlayerEnum.h"
 
 void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -20,7 +21,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		return;
 	}
 	PlayCharacter->AttCalstamina();
-
+	UGameplayStatics::SpawnSoundAtLocation(PlayCharacter, PlayCharacter->GetWeaponSounds()[EStaticItemSlot::SlotMax], PlayCharacter->GetActorLocation());
 	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
 	{
 		return;
@@ -61,6 +62,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			{
 				//ZombieDieTrace(Zombie);
 				Zombie->SetHP(20.0f);
+				HitSoundPlay(Hit, PlayCharacter);
 				/*FTimerHandle ZombieDestory;
 
 				MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -95,4 +97,9 @@ void UC_AxeAttAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAni
 void UC_AxeAttAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
+}
+
+void UC_AxeAttAnimNotifyState::HitSoundPlay_Implementation(FHitResult _Hit, AC_GlobalPlayer* _Player) const
+{
+	UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), _Player->GetWeaponSounds()[EStaticItemSlot::RSword], _Hit.ImpactPoint);
 }

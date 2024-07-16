@@ -52,6 +52,11 @@ public:
 		return SkeletalItemMeshes;
 	}
 
+	FORCEINLINE TMap<EStaticItemSlot, USoundBase*> GetWeaponSounds() const
+	{
+		return WeaponSounds;
+	}
+
 	FORCEINLINE bool GetAImZoomCpp()
 	{
 		return IsAimCpp;
@@ -229,6 +234,7 @@ private:
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
 	FC_BulletValue BulletDT;
+	FC_meleeweaponSound AttWeaponSound;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
@@ -244,6 +250,9 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<ESkerItemSlot, int> magazinecapacity;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<EStaticItemSlot, USoundBase*> WeaponSounds;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;
