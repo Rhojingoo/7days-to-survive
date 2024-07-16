@@ -8,8 +8,8 @@
 
 class AC_ItemSourceHISMA;
 class AC_MapInteractable;
-class AC_BuildingPart;
 class AC_MapPlayer;
+class AC_MapDamageTaker;
 class UCameraComponent;
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -80,5 +80,5 @@ private:
     AC_MapInteractable* ViewingItemPouch = nullptr;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    AActor* ViewingHpObject = nullptr;
+    AC_MapDamageTaker* ViewingDamageTaker = nullptr;
 };
