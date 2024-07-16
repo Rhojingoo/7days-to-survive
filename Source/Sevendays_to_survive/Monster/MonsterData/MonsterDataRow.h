@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Sound/SoundWave.h"
 #include "MonsterDataRow.generated.h"
 
 /**
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<uint8, class UAnimMontage* > AnimMontages;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<uint8, class USoundWave* > SoundFile;
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//double PatrolTime = 0.0f;
 
