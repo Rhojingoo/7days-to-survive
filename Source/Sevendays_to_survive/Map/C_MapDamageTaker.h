@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HideHpBar();
 
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHp(int _MaxHp);
+
 protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void ReceiveDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);

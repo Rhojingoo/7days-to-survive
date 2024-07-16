@@ -23,6 +23,7 @@ void AC_MapDamageTaker::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(AC_MapDamageTaker, MaxHp);
 	DOREPLIFETIME(AC_MapDamageTaker, Hp);
 }
 
@@ -83,6 +84,12 @@ void AC_MapDamageTaker::UpdateHpBar()
 void AC_MapDamageTaker::HideHpBar()
 {
 	HpBarWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void AC_MapDamageTaker::SetMaxHp(int _MaxHp)
+{
+	MaxHp = _MaxHp;
+	Hp = MaxHp;
 }
 
 void AC_MapDamageTaker::ReceiveDamage_Implementation(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

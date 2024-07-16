@@ -211,12 +211,13 @@ void UC_BuildingComponent::PlaceBuildPart()
 		return;
 	}
 
-	SpawnBuildPart(HoldingBuildingPart->ActorClass, BuildTransform);
+	SpawnBuildPart(HoldingBuildingPart->ActorClass, BuildTransform, HoldingBuildingPart->MaxHp);
 }
 
-void UC_BuildingComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
+void UC_BuildingComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform, int _MaxHp)
 {
-	AActor* BuildPartActor = GetWorld()->SpawnActor<AActor>(_ActorClass, _SpawnTransform);
+	AC_BuildingPart* BuildPartActor = GetWorld()->SpawnActor<AC_BuildingPart>(_ActorClass, _SpawnTransform);
+	BuildPartActor->SetMaxHp(_MaxHp);
 	BuildPartActor->SetActorEnableCollision(true);
 }
 
