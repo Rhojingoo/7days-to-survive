@@ -6,7 +6,7 @@
 
 AC_ZombieMan::AC_ZombieMan()
 {
-	SetName("BaseZombie");
+	SetName("ZombieMan");
 }
 
 void AC_ZombieMan::BeginPlay()
