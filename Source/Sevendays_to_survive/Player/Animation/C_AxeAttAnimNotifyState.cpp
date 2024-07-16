@@ -21,7 +21,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		return;
 	}
 	PlayCharacter->AttCalstamina();
-	UGameplayStatics::SpawnSoundAtLocation(PlayCharacter, PlayCharacter->GetWeaponSounds()[EStaticItemSlot::SlotMax], PlayCharacter->GetActorLocation());
+	//UGameplayStatics::SpawnSoundAtLocation(PlayCharacter, PlayCharacter->GetWeaponSounds()[EStaticItemSlot::SlotMax], PlayCharacter->GetActorLocation());
 	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
 	{
 		return;
@@ -61,8 +61,10 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			if (Zombie)
 			{
 				//ZombieDieTrace(Zombie);
+				PlayCharacter->WeaponSwingSound(Hit, true);
 				Zombie->SetHP(20.0f);
-				HitSoundPlay(Hit, PlayCharacter);
+				
+				
 				/*FTimerHandle ZombieDestory;
 
 				MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -82,7 +84,9 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			if (MapObject)
 			{
 				int ItemHit = Hit.Item;
+				PlayCharacter->WeaponSwingSound(Hit, false);
 				MapObject->Damage(ItemHit, 10, PlayCharacter);
+				
 			}
 		}
 	}
@@ -99,7 +103,4 @@ void UC_AxeAttAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 }
 
-void UC_AxeAttAnimNotifyState::HitSoundPlay_Implementation(FHitResult _Hit, AC_GlobalPlayer* _Player) const
-{
-	UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), _Player->GetWeaponSounds()[EStaticItemSlot::RSword], _Hit.ImpactPoint);
-}
+

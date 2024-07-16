@@ -151,6 +151,43 @@ void AC_GlobalPlayer::ResetHit()
 	IsHitCpp = false;
 }
 
+void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const bool _IsZombie)
+{
+	if (true == WeaponSounds.IsEmpty())
+	{
+		return;
+	}
+
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::NoWeapon:
+		break;
+	case EWeaponUseState::bat:
+		break;
+	case EWeaponUseState::Sword:
+		if (true == _IsZombie)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RSword], _Hit.ImpactPoint);
+		}
+		else
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RBat], _Hit.ImpactPoint);
+		}
+		break;
+	case EWeaponUseState::Axe:
+		if (true == _IsZombie)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RSword], _Hit.ImpactPoint);
+		}
+		else
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RBat], _Hit.ImpactPoint);
+		}
+		break;
+	default:
+		break;
+	}
+}
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -234,8 +271,8 @@ void AC_GlobalPlayer::BeginPlay()
 	// 근접 무기 사운드
 	{
 		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[0]);
-		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[1]);
-		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[2]);
+		WeaponSounds.Add(EStaticItemSlot::RAxe, AttWeaponSound.AttSound[1]);
+		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[2]);
 		WeaponSounds.Add(EStaticItemSlot::SlotMax, AttWeaponSound.AttSound[3]);
 	}
 

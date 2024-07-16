@@ -36,7 +36,8 @@ enum class EWeaponUseState : uint8
 	Pistol2,
 	Shotgun,
 	Sword,
-	Axe
+	Axe,
+	bat
 };
 
 
