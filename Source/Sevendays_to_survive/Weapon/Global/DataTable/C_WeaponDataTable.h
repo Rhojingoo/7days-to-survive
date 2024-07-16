@@ -26,12 +26,23 @@ public:
 	EWeaponUseState WeaponType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	float BulletRange = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float Damage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	int MagagineSize = 0;
+	int MagagineSize = 0; // ¿Á¿Â¿¸
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	TSubclassOf<AActor> Equip;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UAnimationAsset* WeaponAnimToPlay = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UParticleSystem* NoAnimationParticle = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	USoundBase* NoAnimationSound = nullptr;
 };

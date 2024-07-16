@@ -15,7 +15,10 @@ UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_MapPlayer
 {
 	GENERATED_BODY()
+public:
+	AC_NickMainPlayer();
 
+	FVector GetComponentLocation();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -29,4 +32,7 @@ protected:
 private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* MontageToPlay;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* LocationComponent;
 };

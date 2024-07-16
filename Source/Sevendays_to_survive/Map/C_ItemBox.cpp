@@ -5,6 +5,7 @@
 
 #include "Net/UnrealNetwork.h"
 #include "STS/C_STSMacros.h"
+#include "STS/C_STSInstance.h"
 #include "STS/C_STSGlobalFunctions.h"
 #include "UI/C_HealthBar.h"
 #include "Kismet/GameplayStatics.h"
@@ -40,8 +41,10 @@ void AC_ItemBox::BeginPlay()
 		return;
 	}
 
-	UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+	MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
 	ItemPouchClass = MapDataAsset->GetItemPouchClass();
+
+	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked< UC_STSInstance>();
 
 	HideHpBar();
 }
@@ -105,9 +108,11 @@ void AC_ItemBox::HideHpBar()
 
 void AC_ItemBox::SpawnItems_Implementation()
 {
-	for (TPair<FName, int>& ItemAndCount : DropItems)
+	TArray<FC_ItemAndCount> DropItems = MapDataAsset->GetRandomDropItems();
+
+	for (FC_ItemAndCount& ItemAndCount : DropItems)
 	{
 		AC_ItemPouch* ItemPouch = GetWorld()->SpawnActor<AC_ItemPouch>(ItemPouchClass.Get(), GetActorTransform());
-		ItemPouch->SetItemAndCount(ItemAndCount.Key, ItemAndCount.Value);
+		ItemPouch->SetItemAndCount(ItemAndCount.Item->Id, ItemAndCount.Count);
 	}
 }

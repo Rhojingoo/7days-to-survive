@@ -28,6 +28,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     bool IsServer = false;
 
+    void EndingCheck();
+
+private:
+    void SpawnItemBoxes();
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     TSubclassOf<AC_ItemBox> ItemBoxClass = nullptr;
 

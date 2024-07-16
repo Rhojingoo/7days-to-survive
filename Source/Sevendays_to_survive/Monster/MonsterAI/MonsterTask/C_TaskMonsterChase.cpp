@@ -8,6 +8,7 @@
 #include "Monster/MonsterData/MonsterDataRow.h"
 #include <NavigationSystem.h>
 #include "NavigationPath.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 
 UC_TaskMonsterChase::UC_TaskMonsterChase()
 {
@@ -49,33 +50,14 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
+	if (true == MonsterRangeTask(OwnerComp, DeltaSeconds)) {
+		return;
+	}
+
+	UMonsterDataObject* MonsterData = MCP->GetData();
 	FVector TargetLocation = Target->GetActorLocation();
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
-
-
-	UMonsterDataObject* MonsterData = MCP->GetData();
-
-	if (Vec <= MCP->GetData()->GetMonsterRange()) {
-		MonsterData->RemovePath();
-		if (Vec >= Minimum_Distance) {
-			MCP->Run(TargetLocation - SelfLocation);
-			Controller->MoveToActor(Target);			//이게 ai move to이고, 엄청 가까울 때만 작동하게 해서 최대한 줄여봤음
-			GetController(&OwnerComp)->GetMCP()->RunAttack();
-			return;
-		}
-		else {
-			GetController(&OwnerComp)->GetMCP()->Attack();
-			return;
-		}
-		//if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
-		//	return;
-		//}
-		//else {
-		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
-		//	return;
-		//}
-	}
 
 	if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있다면? 이동해야한다.
 	{
@@ -92,11 +74,17 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		//	}
 		//	return;
 		//}
-		if (Navi_Minimum >= CheckDir.Size())
+		bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+		if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 		{
-			MonsterData->PathHeadRemove();
+			Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+			return;
 		}
-		return;
+		else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+			Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
+			MonsterData->PathHeadRemove();
+			return;
+		}
 	}
 
 	if (Vec <= 800.f) {
@@ -150,8 +138,11 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 		if (NavPath->GetPathCost() < FLT_MAX) {
 			MonsterData->RemovePath();
-			if (SelfLocation.Z > TargetLocation.Z + 10.f) {
-				MCP->Run(TargetLocation - SelfLocation);
+			UObject* Object = Controller->GetBlackboardComponent()->GetValueAsObject(*TargetActor);
+			AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Object);
+			FVector TargetLocation_p = Player->GetComponentLocation();
+			if (SelfLocation.Z > TargetLocation_p.Z + 10.f) {
+				MCP->Run(TargetLocation_p - SelfLocation);
 				return;
 			}
 			if (MCP->BreakCheck() == true) {
@@ -176,9 +167,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			SelfLocation.Z = 0;
 			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (Navi_Minimum >= CheckDir.Size())
+			bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+			if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 			{
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+				return;
+			}
+			else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
 				MonsterData->PathHeadRemove();
+				return;
 			}
 		}
 	}
@@ -213,9 +211,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			SelfLocation.Z = 0;
 			FVector CheckDir = (TargetNavLocation - SelfLocation);
 			Controller->GetMCP()->Run(CheckDir);
-			if (Navi_Minimum >= CheckDir.Size())
+			bool NeviCheck = Controller->GetBlackboardComponent()->GetValueAsBool(*NextNavi);
+			if (NeviCheck == NextNaviPath && Navi_Minimum >= CheckDir.Size())
 			{
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, PrevNaviPath);
+				return;
+			}
+			else if (NeviCheck == PrevNaviPath && Navi_Minimum <= CheckDir.Size()) {
+				Controller->GetBlackboardComponent()->SetValueAsBool(*NextNavi, NextNaviPath);
 				MonsterData->PathHeadRemove();
+				return;
 			}
 			return;
 		}
@@ -231,6 +236,48 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	return;
 	/*------------------------------------------------------------------------------------------*/
 
+}
+
+bool UC_TaskMonsterChase::MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds)
+{
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	UC_MonsterComponent* MCP = Controller->GetMCP();
+	UMonsterDataObject* MonsterData = MCP->GetData();
+
+	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	if (Target->IsValidLowLevel() == false) {
+		UE_LOG(LogTemp, Fatal, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return true;
+	}
+
+	FVector TargetLocation = Target->GetActorLocation();
+	FVector SelfLocation = GetSelfLocation(&OwnerComp);
+	float Vec = FVector::Dist(SelfLocation, TargetLocation);
+
+	if (Vec <= MCP->GetData()->GetMonsterRange()) {
+		MonsterData->RemovePath();
+		if (Vec >= Minimum_Distance) {
+			MCP->Run(TargetLocation - SelfLocation);
+			Controller->MoveToActor(Target);			//이게 ai move to이고, 엄청 가까울 때만 작동하게 해서 최대한 줄여봤음
+			GetController(&OwnerComp)->GetMCP()->RunAttack();
+			return true;
+		}
+		else {
+			GetController(&OwnerComp)->GetMCP()->Attack();
+			return true;
+		}
+		//if (10.f > GetSelfVelocity(&OwnerComp).Size()) {
+		//	return;
+		//}
+		//else {
+		//	GetController(&OwnerComp)->GetMCP()->RunAttack();
+		//	return;
+		//}
+	}
+	else {
+		return false;
+	}
 }
 
 

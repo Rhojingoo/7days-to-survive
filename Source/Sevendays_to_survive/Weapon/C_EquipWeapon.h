@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_EquipWeapon.generated.h"
 
 class UC_GunComponent;
 class USpringArmComponent;
 class UCameraComponent;
+class UParticleSystem;
+struct FC_WeaponDataTable;
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_EquipWeapon : public AActor
@@ -24,12 +27,21 @@ public:
 	{
 		return SkeletalMesh;
 	}
+
+	UFUNCTION(Reliable, NetMulticast)
+	void PlayGunAnimation(const EWeaponUseState _CurWeaon);
+	void PlayGunAnimation_Implementation(const EWeaponUseState _CurWeaon);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void GunParticleAndSound(const EWeaponUseState _CurWeaon);
+	void GunParticleAndSound_Implementation(const EWeaponUseState _CurWeaon);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-private:	
+private:
 	// Called every frame
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UC_GunComponent* SkeletalMesh = nullptr;
@@ -39,5 +51,14 @@ private:
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Cameras = nullptr;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap<EWeaponUseState, UAnimationAsset*> WeaponAnimation;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap <EWeaponUseState,UParticleSystem*> ShotEffects;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TMap <EWeaponUseState,USoundBase*> ShotSounds;
 };
 

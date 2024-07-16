@@ -23,6 +23,8 @@ class UC_InputActionDatas;
 class AC_EquipWeapon;
 class AC_MainPlayerController;
 class UTextRenderComponent;
+class UNiagaraComponent; // 이펙트 == 나이아가라
+class UNiagaraSystem;
 struct FInputActionValue; // 입력 값
 
 UCLASS()
@@ -189,6 +191,14 @@ protected:
 	void FireLoop();
 	void FireLoop_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateBulletHole(FHitResult _Hit);
+	void CreateBulletHole_Implementation(FHitResult _Hit);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateZombieBlood(FHitResult _Hit);
+	void CreateZombieBlood_Implementation(FHitResult _Hit);
+
 	UFUNCTION()
 	void Calstamina();
 
@@ -231,6 +241,9 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> StaticItemMeshs;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, int> magazinecapacity;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;
@@ -285,7 +298,31 @@ private:
 	float MinCalPithchCPP = -30.0f;
 
 	UPROPERTY()
-	float LineTraceValue = 10000.0f;
+	float LineTraceRange = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int LineTracemagazinecapacity = 0;
+
+	UPROPERTY()
+	float PistolRange = 0.0f;
+
+	UPROPERTY()
+	float ShotGunRange = 0.0f;
+
+	UPROPERTY()
+	float RifleRange = 0.0f;
+
+	UPROPERTY()
+	int Maxmagazinecapacity=0;
+
+	UPROPERTY()
+	int Pistolmagazinecapacity = 0;
+
+	UPROPERTY()
+	int ShotGunmagazinecapacity = 0;
+
+	UPROPERTY()
+	int Riflemagazinecapacity = 0;
 
 	UPROPERTY()
 	float Spreed = 500.0f;
@@ -311,4 +348,10 @@ private:
 
 	UPROPERTY()
 	FRandomStream Random;
+
+	UPROPERTY()
+	UMaterialInterface* BulletHoleEffect = nullptr;
+
+	UPROPERTY()
+	UNiagaraSystem* ZombieHitEffect = nullptr;
 };

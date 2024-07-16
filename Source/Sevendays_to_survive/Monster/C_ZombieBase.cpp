@@ -33,6 +33,9 @@ AC_ZombieBase::AC_ZombieBase()
 	MiddleArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("MiddleArrowComponent"));
 	MiddleArrowComponent->SetupAttachment(RootComponent); // RootComponent에 부착
 
+	LocationComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("LocationComponent"));
+	LocationComponent->SetupAttachment(RootComponent); // RootComponent에 부착
+
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldStatic));
 }
 
@@ -112,6 +115,12 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 			ActorController->UnPossess();
 			ActorController->Destroy();
 		}
+		FTimerHandle ZombieDestory;
+
+		GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([&]()
+			{
+				this->Destroy();
+			}), 5.0f, false);
 	}
 }
 
@@ -151,6 +160,12 @@ void AC_ZombieBase::MonsterJump()
 void AC_ZombieBase::AddLocation(FVector _Location)
 {
 	AddMovementInput(_Location);
+}
+
+FVector AC_ZombieBase::GetComponentLocation()
+{
+	FVector Location = LocationComponent->GetComponentLocation();
+	return Location;
 }
 
 void AC_ZombieBase::RunAttack()

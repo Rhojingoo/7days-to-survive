@@ -21,7 +21,7 @@ enum class MonsterEnum : uint8
 	Dead UMETA(DisplayName = "Dead"),
 	Run UMETA(DisplayName = "Run"),
 	RangedAttack UMETA(DisplayName = "RangedAttack"),
-	RushWait UMETA(DisplayName = "RushWait"),
+	Faint UMETA(DisplayName = "Faint"),
 	Rush UMETA(DisplayName = "Rush"),
 	Jump UMETA(DisplayName = "Jump"),
 	End UMETA(DisplayName = "End")
@@ -58,6 +58,7 @@ public:
 	virtual void ShoutAttack();
 	virtual void MonsterJump();
 	void AddLocation(FVector _Location);
+	FVector GetComponentLocation();
 
 
 	UFUNCTION(BlueprintCallable,NetMulticast, Reliable)
@@ -117,6 +118,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UArrowComponent* MiddleArrowComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UArrowComponent* LocationComponent;
 
 	UPROPERTY()
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;

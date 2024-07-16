@@ -94,24 +94,32 @@ void UC_MapInteractionComponent::ProcessItemSourceTraceResult(FHitResult _HitRes
 
 void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit)
 {
-	if (true == _IsHit)
+	// 아이템 파우치를 보지 않게 되는 경우
+	if (false == _IsHit)
 	{
-		AC_MapInteractable* ItemPouch = Cast<AC_MapInteractable>(_HitResult.GetActor());
-		if (false == IsValid(ItemPouch))
+		if (true == IsValid(ViewingItemPouch))
 		{
-			STS_FATAL("[%s] Given actor is not map interactable or invalid.", __FUNCTION__);
+			ViewingItemPouch->HideInteractionWidget();
 		}
-		ViewingItemPouch = ItemPouch;
+
+		ViewingItemPouch = nullptr;
+		return;
+	}
+
+	// 같은 아이템 파우치를 계속 보는 경우
+	if (ViewingItemPouch == _HitResult.GetActor())
+	{
 		ViewingItemPouch->ShowInteractionWidget();
 		return;
 	}
 
+	// 다른 아이템 파우치를 보게 되는 경우
 	if (true == IsValid(ViewingItemPouch))
 	{
 		ViewingItemPouch->HideInteractionWidget();
 	}
-
-	ViewingItemPouch = nullptr;
+	ViewingItemPouch = Cast<AC_MapInteractable>(_HitResult.GetActor());
+	ViewingItemPouch->ShowInteractionWidget();
 }
 
 void UC_MapInteractionComponent::ProcessHpObjectTraceResult(FHitResult _HitResult, bool _IsHit)

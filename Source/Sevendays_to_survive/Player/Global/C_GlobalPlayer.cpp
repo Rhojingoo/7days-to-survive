@@ -23,7 +23,8 @@
 #include "Weapon/C_GunComponent.h"
 #include "Monster/C_ZombieBase.h"
 #include "Components/TextRenderComponent.h"
-
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -216,6 +217,12 @@ void AC_GlobalPlayer::BeginPlay()
 		Hp = PlayerDT.Hp;
 	}
 	
+
+	{
+		BulletHoleEffect = BulletDT.BulletHole;
+		ZombieHitEffect = BulletDT.ZombieHitBlood;
+	}
+
 	//Add Input Mapping Context
 	PlayerController = Cast<AC_MainPlayerController>(Controller);
 	if (PlayerController)
@@ -232,6 +239,9 @@ void AC_GlobalPlayer::BeginPlay()
 		TSubclassOf<AActor> M4= STSInstance->GetWeaPonDataTable(FName("M4"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Rifle, M4);
 
+		TSubclassOf<AActor> Rifle2 = STSInstance->GetWeaPonDataTable(FName("Rifle2"))->Equip;
+		GunWeapon.Add(EWeaponUseState::Rifle2, Rifle2);
+
 		TSubclassOf<AActor> Pistol1 = STSInstance->GetWeaPonDataTable(FName("Pistol1"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol, Pistol1);
 
@@ -240,6 +250,14 @@ void AC_GlobalPlayer::BeginPlay()
 
 		TSubclassOf<AActor> Pistol2 = STSInstance->GetWeaPonDataTable(FName("Pistol2"))->Equip;
 		GunWeapon.Add(EWeaponUseState::Pistol2, Pistol2);
+
+		PistolRange= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->BulletRange;
+		ShotGunRange= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->BulletRange;
+		RifleRange= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->BulletRange;
+
+		Pistolmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->MagagineSize;
+		ShotGunmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->MagagineSize;
+		Riflemagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->MagagineSize;
 	}
 
 	{
@@ -345,21 +363,37 @@ void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::GunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+	case EWeaponUseState::Pistol:
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
+	case EWeaponUseState::Rifle2:
+	case EWeaponUseState::Pistol2:
+		CurWeapon->PlayGunAnimation(PlayerCurState);
+		break;
+	default:
+		break;
+	}
+	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	if (nullptr == CurWeapon)
-	{
-		return;
-	}
 
 	if (PlayerCurState == EWeaponUseState::Shotgun)
 	{
 		return;
 	}
 
+	
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
@@ -371,7 +405,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FVector GunForwardVector =  UKismetMathLibrary::GetForwardVector(GunRotation);
 	
 	FVector Start = GunLocation;
-	FVector End = (GunForwardVector * LineTraceValue) + GunLocation;
+	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(CurWeapon);
@@ -393,8 +427,9 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 				if (Zombie)
 				{
-					Zombie->SetRagDoll();
-					FTimerHandle ZombieDestory;
+					CreateZombieBlood(Hit);
+					Zombie->SetHP(5.0f);
+				/*	FTimerHandle ZombieDestory;
 
 					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 					{
@@ -402,21 +437,28 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 						{
 							Zombie->Destroy();
 						}
-					}), 5.0f, false);
+					}), 5.0f, false);*/
 
+				}
+				else
+				{
+					CreateBulletHole(Hit);
 				}
 			}
 		}
 	}
+	
 
 	if (true == IsFireCpp)
 	{
 		switch (PlayerCurState)
 		{
 		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Rifle2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.15f, true);
 			break;
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Pistol2:
 			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::FireLoop, 0.7f, true);
 			break;
 		default:
@@ -428,15 +470,18 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 {
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	CurWeapon->PlayGunAnimation(PlayerCurState);
+	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
 	}
 
-	if (nullptr == CurWeapon)
-	{
-		return;
-	}
 
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
 	
@@ -459,7 +504,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Z = Random.FRandRange(Spreed * -1.0f, Spreed);
-		FVector End = (GunForwardVector * 5000.0f) + GunLocation+FVector(X,Y,Z);
+		FVector End = (GunForwardVector * LineTraceRange) + GunLocation+FVector(X,Y,Z);
 
 		bool OKAtt = UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	
@@ -528,10 +573,27 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireLoop_Implementation()
 {
+	if (LineTracemagazinecapacity == 0)
+	{
+		IsFireCpp = false;
+		return;
+	}
+
 	if (true == IsFireCpp)
 	{
 		GunLineTrace();
 	}
+}
+
+void AC_GlobalPlayer::CreateBulletHole_Implementation(FHitResult _Hit)
+{
+	UGameplayStatics::SpawnDecalAtLocation(this, BulletHoleEffect, FVector(1.0f, 10.0f, 10.0f), _Hit.Location, _Hit.ImpactNormal.Rotation(), 5.0f);
+}
+
+void AC_GlobalPlayer::CreateZombieBlood_Implementation(FHitResult _Hit)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ZombieHitEffect, _Hit.ImpactPoint, FRotator(0.0f,0.0f,0.0f), FVector(1.0f,1.0f,1.0f), true, true, ENCPoolMethod::None, true);
+
 }
 
 void AC_GlobalPlayer::Calstamina()
@@ -748,8 +810,41 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this);
-		//PlayerCurState = EWeaponUseState::Rifle;
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
+		LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceRange = RifleRange;
+		break;
+	case ESkerItemSlot::RRifle2:
+		if (PlayerCurState == EWeaponUseState::Rifle2)
+		{
+			return;
+		}
+
+		if (false == GunWeapon.Contains(EWeaponUseState::Rifle2))
+		{
+			return;
+		}
+
+		if (GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() != nullptr)
+		{
+			return;
+		}
+
+		if (nullptr != CurWeapon)
+		{
+			CurWeapon->Destroy();
+			CurWeapon = nullptr;
+			for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+			{
+				SkeletalItemMeshes[i]->SetSkinnedAsset(nullptr);
+			}
+		}
+
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
+
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
+		LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RPistol:
 		if (PlayerCurState == EWeaponUseState::Pistol)
@@ -780,6 +875,8 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
+		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RPistol2:
 		if (PlayerCurState == EWeaponUseState::Pistol2)
@@ -807,9 +904,11 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 			}
 		}
 
-		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
+		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
+		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RShotgun:
 
@@ -843,6 +942,8 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
+		LineTracemagazinecapacity = ShotGunmagazinecapacity;
+		LineTraceRange = ShotGunRange;
 		break;
 	case ESkerItemSlot::SlotMax:
 		break;
@@ -897,6 +998,11 @@ void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 
 void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 {
+	if (LineTracemagazinecapacity == 0)
+	{
+		return;
+	}
+
 	if (true == IsAimCpp)
 	{
 		IsFireCpp = true;
@@ -913,7 +1019,12 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		switch (PlayerCurState)
 		{
 		case EWeaponUseState::Rifle:
+		case EWeaponUseState::Rifle2:
+			LineTraceRange = RifleRange;
+			GunLineTrace();
+			break;
 		case EWeaponUseState::Pistol:
+		case EWeaponUseState::Pistol2:
 			GunLineTrace();
 			break;
 		case EWeaponUseState::Shotgun:

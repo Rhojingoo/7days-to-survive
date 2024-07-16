@@ -11,6 +11,7 @@ AC_ZombieBullet::AC_ZombieBullet()
 
     CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
     CollisionComponent->InitSphereRadius(15.0f);
+    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     SetRootComponent(CollisionComponent);
 
     SMComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SMComponent"));
@@ -40,6 +41,12 @@ void AC_ZombieBullet::Tick(float DeltaTime)
 float AC_ZombieBullet::GetInitialSpeed() const
 {
     return ProjectileMovementComponent->InitialSpeed;
+}
+
+void AC_ZombieBullet::SetSpawner(AActor* _Actor)
+{
+    Spawner = _Actor;
+    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
 void AC_ZombieBullet::SetDirection(const FVector& ShootDirection)

@@ -26,6 +26,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	float GetInitialSpeed() const;
+	void SetSpawner(AActor* _Actor);
 
 	// Sphere collision component.
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
@@ -40,4 +41,7 @@ public:
 
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void SetDirection(const FVector& ShootDirection);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AActor* Spawner = nullptr;
 };

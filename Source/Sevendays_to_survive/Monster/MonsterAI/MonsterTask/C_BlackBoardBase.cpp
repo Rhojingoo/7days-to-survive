@@ -44,7 +44,7 @@ FVector UC_BlackBoardBase::GetSelfLocationNoneZ(UBehaviorTreeComponent* OwnerCom
 
 FVector UC_BlackBoardBase::GetSelfLocation(UBehaviorTreeComponent* OwnerComp)
 {
-	FVector Vec = GetSelf(OwnerComp)->GetActorLocation();
+	FVector Vec = GetSelf(OwnerComp)->GetComponentLocation();
 	return Vec;
 }
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/DataTable.h"
+#include "NiagaraSystem.h"
 #include "C_PlayerDataTable.generated.h"
 
 /**
@@ -73,7 +74,10 @@ struct FC_BulletValue : public FTableRowBase
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TSubclassOf<AActor> BulletClass1;
+	UMaterialInterface* BulletHole=nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UNiagaraSystem* ZombieHitBlood = nullptr;
 };
 
 USTRUCT(BlueprintType)

@@ -3,24 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Monster/MonsterAI/MonsterTask/C_BlackBoardBase.h"
+#include "Monster/MonsterAI/MonsterTask/C_TaskMonsterChase.h"
 #include "C_RangedZombie_ChaseTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UC_RangedZombie_ChaseTask : public UC_BlackBoardBase
+class SEVENDAYS_TO_SURVIVE_API UC_RangedZombie_ChaseTask : public UC_TaskMonsterChase
 {
 	GENERATED_BODY()
 	
 public:
     UC_RangedZombie_ChaseTask();
-protected:
-    virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-    void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
+private:
+    bool MonsterRangeTask(UBehaviorTreeComponent& OwnerComp, float DeltaSeconds) override;
 
     const float RangedAttackCooldown = 5.0f;
-    const float MeleeAttackDistance = 300.0f;
 };
