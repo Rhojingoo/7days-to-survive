@@ -7,7 +7,6 @@
 #include "Player/Global/DataTable/C_PlayerDataTable.h" // 데이터 테이블
 #include "Net/UnrealNetwork.h" // 서버 네트워크
 #include "Player/Global/C_PlayerEnum.h"
-#include "NiagaraComponent.h"
 #include "C_GlobalPlayer.generated.h"
 
 class USpringArmComponent; // 스프링 암
@@ -24,8 +23,9 @@ class UC_InputActionDatas;
 class AC_EquipWeapon;
 class AC_MainPlayerController;
 class UTextRenderComponent;
-struct FInputActionValue; // 입력 값
 class UNiagaraComponent; // 이펙트 == 나이아가라
+class UNiagaraSystem;
+struct FInputActionValue; // 입력 값
 
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_GlobalPlayer : public ACharacter
@@ -195,6 +195,10 @@ protected:
 	void CreateBulletHole(FHitResult _Hit);
 	void CreateBulletHole_Implementation(FHitResult _Hit);
 
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateZombieBlood(FHitResult _Hit);
+	void CreateZombieBlood_Implementation(FHitResult _Hit);
+
 	UFUNCTION()
 	void Calstamina();
 
@@ -347,4 +351,7 @@ private:
 
 	UPROPERTY()
 	UMaterialInterface* BulletHoleEffect = nullptr;
+
+	UPROPERTY()
+	UNiagaraSystem* ZombieHitEffect = nullptr;
 };

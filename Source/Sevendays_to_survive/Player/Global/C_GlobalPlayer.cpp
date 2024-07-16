@@ -23,7 +23,8 @@
 #include "Weapon/C_GunComponent.h"
 #include "Monster/C_ZombieBase.h"
 #include "Components/TextRenderComponent.h"
-
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -219,7 +220,9 @@ void AC_GlobalPlayer::BeginPlay()
 
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
+		ZombieHitEffect = BulletDT.ZombieHitBlood;
 	}
+
 	//Add Input Mapping Context
 	PlayerController = Cast<AC_MainPlayerController>(Controller);
 	if (PlayerController)
@@ -412,8 +415,9 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 				if (Zombie)
 				{
-					Zombie->SetRagDoll();
-					FTimerHandle ZombieDestory;
+					CreateZombieBlood(Hit);
+					Zombie->SetHP(5.0f);
+				/*	FTimerHandle ZombieDestory;
 
 					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 					{
@@ -421,7 +425,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 						{
 							Zombie->Destroy();
 						}
-					}), 5.0f, false);
+					}), 5.0f, false);*/
 
 				}
 				else
@@ -572,6 +576,12 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 void AC_GlobalPlayer::CreateBulletHole_Implementation(FHitResult _Hit)
 {
 	UGameplayStatics::SpawnDecalAtLocation(this, BulletHoleEffect, FVector(1.0f, 10.0f, 10.0f), _Hit.Location, _Hit.ImpactNormal.Rotation(), 5.0f);
+}
+
+void AC_GlobalPlayer::CreateZombieBlood_Implementation(FHitResult _Hit)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ZombieHitEffect, _Hit.ImpactPoint, FRotator(0.0f,0.0f,0.0f), FVector(1.0f,1.0f,1.0f), true, true, ENCPoolMethod::None, true);
+
 }
 
 void AC_GlobalPlayer::Calstamina()
