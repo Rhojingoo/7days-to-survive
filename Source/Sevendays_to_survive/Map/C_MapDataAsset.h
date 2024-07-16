@@ -35,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<FC_ItemAndCount> GetRandomDropItems();
 
+	UFUNCTION(BlueprintCallable)
+	int GetItemBoxMaxHp() const;
+
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
 
@@ -42,6 +45,9 @@ private:
 
 private:
 	UC_STSInstance* Inst = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	int ItemBoxMaxHp = 20;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ItemSourceTable = nullptr;

@@ -19,6 +19,8 @@ void AC_ItemBox::BeginPlay()
 
 	MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
 	ItemPouchClass = MapDataAsset->GetItemPouchClass();
+
+	SetMaxHp(MapDataAsset->GetItemBoxMaxHp());
 }
 
 // Called every frame

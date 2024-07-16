@@ -167,6 +167,11 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetRandomDropItems()
     return Result;
 }
 
+int UC_MapDataAsset::GetItemBoxMaxHp() const
+{
+    return ItemBoxMaxHp;
+}
+
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
 {
     if (true == Items.Contains(_Id))
