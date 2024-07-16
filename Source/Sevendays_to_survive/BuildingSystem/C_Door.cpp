@@ -29,7 +29,12 @@ void AC_Door::BeginPlay()
 {
 	Super::BeginPlay();
 
+	DoorForward = GetActorRightVector();
+	DoorRight = -GetActorForwardVector();
 	SpawnLocation = GetActorLocation();
+	SpawnRotation = GetActorRotation();
+	FBoxSphereBounds Bounds = SMComponent->GetStaticMesh()->GetBounds();
+	BoxExtent = Bounds.BoxExtent;
 }
 
 void AC_Door::Tick(float DeltaSeconds)
@@ -57,10 +62,10 @@ void AC_Door::Tick(float DeltaSeconds)
 		}
 	}
 
-	double X = FMath::Cos(FMath::DegreesToRadians(Theta));
-	double Y = FMath::Sin(FMath::DegreesToRadians(Theta));
-	SetActorRelativeRotation(FRotator(0.0, Theta, 0.0));
-	SetActorLocation(SpawnLocation + FVector(X, Y, 0.0));
+	double FCoeff = (BoxExtent.X + RotAxisRadius) * FMath::Sin(FMath::DegreesToRadians(Theta));
+	double RCoeff = (BoxExtent.X + RotAxisRadius) * (1.0 - FMath::Cos(FMath::DegreesToRadians(Theta)));
+	SetActorRotation(SpawnRotation + FRotator(0.0, Theta, 0.0));
+	SetActorLocation(SpawnLocation + FCoeff * DoorForward + RCoeff * DoorRight);
 }
 
 void AC_Door::Open()

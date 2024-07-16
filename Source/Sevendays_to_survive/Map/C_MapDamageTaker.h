@@ -47,10 +47,10 @@ protected:
 
 	virtual void PreDestroy() {};
 
-private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* SMComponent = nullptr;
 
+private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* HpBar = nullptr;
 
