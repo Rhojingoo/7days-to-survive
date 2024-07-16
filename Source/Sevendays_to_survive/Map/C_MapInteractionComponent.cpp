@@ -6,8 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Map/C_MapInteractable.h"
-#include "BuildingSystem/C_BuildingPart.h"
-#include "Map/C_ItemBox.h"
+#include "Map/C_MapDamageTaker.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
@@ -127,77 +126,28 @@ void UC_MapInteractionComponent::ProcessHpObjectTraceResult(FHitResult _HitResul
 	// 건축물을 보지 않게 되는 경우
 	if (false == _IsHit)
 	{
-		if (true == IsValid(ViewingHpObject))
+		if (true == IsValid(ViewingDamageTaker))
 		{
-			AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
-			if (nullptr != AsBuildingPart)
-			{
-				AsBuildingPart->HideHpBar();
-			}
-
-			AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
-			if (nullptr != AsItemBox)
-			{
-				AsItemBox->HideHpBar();
-			}
-
-			//ViewingHpObject->HideHpBar();
+			ViewingDamageTaker->HideHpBar();
 		}
-		ViewingHpObject = nullptr;
+		ViewingDamageTaker = nullptr;
 		return;
 	}
 
 	// 같은 건축물을 계속 보는 경우
-	if (ViewingHpObject == _HitResult.GetActor())
+	if (ViewingDamageTaker == _HitResult.GetActor())
 	{
-		AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
-		if (nullptr != AsBuildingPart)
-		{
-			AsBuildingPart->UpdateHpBar();
-		}
-
-		AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
-		if (nullptr != AsItemBox)
-		{
-			AsItemBox->UpdateHpBar();
-		}
-
-		// ViewingHpObject->UpdateHpBar();
+		ViewingDamageTaker->UpdateHpBar();
 		return;
 	}
 
 	// 다른 건축물을 보게 되는 경우
-	if (true == IsValid(ViewingHpObject))
+	if (true == IsValid(ViewingDamageTaker))
 	{
-		AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
-		if (nullptr != AsBuildingPart)
-		{
-			AsBuildingPart->HideHpBar();
-		}
-
-		AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
-		if (nullptr != AsItemBox)
-		{
-			AsItemBox->HideHpBar();
-		}
-
-		//ViewingHpObject->HideHpBar();
+		ViewingDamageTaker->HideHpBar();
 	}
-	ViewingHpObject = _HitResult.GetActor();
-	
-	AC_BuildingPart* AsBuildingPart = Cast<AC_BuildingPart>(ViewingHpObject);
-	if (nullptr != AsBuildingPart)
-	{
-		AsBuildingPart->UpdateHpBar();
-	}
-
-	AC_ItemBox* AsItemBox = Cast<AC_ItemBox>(ViewingHpObject);
-	if (nullptr != AsItemBox)
-	{
-		AsItemBox->UpdateHpBar();
-	}
-	
-	//ViewingHpObject->UpdateHpBar();
+	ViewingDamageTaker = Cast<AC_MapDamageTaker>(_HitResult.GetActor());
+	ViewingDamageTaker->UpdateHpBar();
 }
 
 void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
