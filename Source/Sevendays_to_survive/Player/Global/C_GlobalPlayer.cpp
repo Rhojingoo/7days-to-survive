@@ -368,7 +368,19 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		return;
 	}
 
-	CurWeapon->PlayGunAnimation(PlayerCurState);
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+	case EWeaponUseState::Pistol:
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
+	case EWeaponUseState::Rifle2:
+	case EWeaponUseState::Pistol2:
+		CurWeapon->PlayGunAnimation(PlayerCurState);
+		break;
+	default:
+		break;
+	}
 	LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
