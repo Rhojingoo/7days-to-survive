@@ -60,8 +60,8 @@ void AC_EquipWeapon::GunParticleAndSound_Implementation(const EWeaponUseState _C
 			return;
 		}
 		
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ShotEffects[_CurWeaon], GunLocation);
 		UGameplayStatics::SpawnSoundAtLocation(this, ShotSounds[_CurWeaon], GunLocation);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ShotEffects[_CurWeaon], GunLocation);
 		break;
 	case EWeaponUseState::Rifle:
 		if (false == ShotEffects.Contains(_CurWeaon))
@@ -69,8 +69,8 @@ void AC_EquipWeapon::GunParticleAndSound_Implementation(const EWeaponUseState _C
 			return;
 		}
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ShotEffects[_CurWeaon], GunLocation);
 		UGameplayStatics::SpawnSoundAtLocation(this, ShotSounds[_CurWeaon], GunLocation);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ShotEffects[_CurWeaon], GunLocation);
 		break;
 	default:
 		break;
