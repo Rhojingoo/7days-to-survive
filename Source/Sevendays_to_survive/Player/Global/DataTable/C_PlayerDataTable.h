@@ -81,6 +81,17 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FC_meleeweaponSound : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	TArray<USoundBase*> AttSound;
+};
+
+USTRUCT(BlueprintType)
 struct FC_PlayerDataTable : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -97,4 +108,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	FC_BulletValue BulletValue;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	FC_meleeweaponSound SoundValue;
 };

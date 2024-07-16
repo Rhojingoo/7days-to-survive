@@ -52,6 +52,11 @@ public:
 		return SkeletalItemMeshes;
 	}
 
+	FORCEINLINE TMap<EStaticItemSlot, USoundBase*> GetWeaponSounds() const
+	{
+		return WeaponSounds;
+	}
+
 	FORCEINLINE bool GetAImZoomCpp()
 	{
 		return IsAimCpp;
@@ -99,6 +104,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AttCalstamina();
+
+	UFUNCTION(BlueprintCallable,Reliable, NetMulticast)
+	void WeaponSwingSound(FHitResult _Hit, const bool _IsZombie);
+	void WeaponSwingSound_Implementation(FHitResult _Hit, const bool _IsZombie);
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -229,6 +238,7 @@ private:
 	FC_PlayerCommonValue PlayerDT;
 	FC_CameraValue CameraDT;
 	FC_BulletValue BulletDT;
+	FC_meleeweaponSound AttWeaponSound;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm = nullptr;
@@ -244,6 +254,9 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<ESkerItemSlot, int> magazinecapacity;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<EStaticItemSlot, USoundBase*> WeaponSounds;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<USkeletalMeshComponent*> SkeletalItemMeshes;

@@ -7,150 +7,267 @@
 #include "Map/C_ItemSourceHISMA.h"
 #include "Map/C_MapInteractable.h"
 #include "Map/C_MapDamageTaker.h"
+#include "BuildingSystem/C_Door.h"
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
 
 UC_MapInteractionComponent::UC_MapInteractionComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UC_MapInteractionComponent::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	Owner = GetOwner<AC_MapPlayer>();
-	CameraComponent = Owner->GetComponentByClass<UCameraComponent>();
+    Owner = GetOwner<AC_MapPlayer>();
+    CameraComponent = Owner->GetComponentByClass<UCameraComponent>();
+
+    IsInteractingMap.Emplace(EMapInteractionTarget::ItemSource, false);
+    IsInteractingMap.Emplace(EMapInteractionTarget::MapDamageTaker, false);
+    IsInteractingMap.Emplace(EMapInteractionTarget::ItemPouch, false);
+    IsInteractingMap.Emplace(EMapInteractionTarget::Door, false);
 }
 
 void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+    if (false == IsOwnerLocallyControlled())
+    {
+        return;
+    }
+
+    ResetIsInteractingMap();
+
+    TArray<FHitResult> OutHits;
+
+    bool IsHit = UKismetSystemLibrary::BoxTraceMulti(
+        GetWorld(),
+        GetTraceStartPoint(),
+        GetTraceEndPoint(),
+        BoxHalfSize,
+        FRotator::ZeroRotator,
+        UEngineTypes::ConvertToTraceType(ECC_Visibility),
+        false,
+        TArray{ GetOwner() },
+        EDrawDebugTrace::None,
+        OutHits,
+        true
+    );
+
+    for (FHitResult& OutHit : OutHits)
+    {
+        if (true == OutHit.GetActor()->IsA<AC_ItemSourceHISMA>())
+        {
+            IsInteractingMap[EMapInteractionTarget::ItemSource] = true;
+            ViewItemSource(Cast<AC_ItemSourceHISMA>(OutHit.GetActor()), OutHit.Item);
+        }
+        if (true == OutHit.GetActor()->IsA<AC_MapDamageTaker>())
+        {
+            IsInteractingMap[EMapInteractionTarget::MapDamageTaker] = true;
+            ViewMapDamageTaker(Cast<AC_MapDamageTaker>(OutHit.GetActor()));
+        }
+        if (true == OutHit.GetActor()->IsA<AC_MapInteractable>())
+        {
+            IsInteractingMap[EMapInteractionTarget::ItemPouch] = true;
+            ViewItemPouch(Cast<AC_MapInteractable>(OutHit.GetActor()));
+        }
+        if (true == OutHit.GetActor()->IsA<AC_Door>())
+        {
+            IsInteractingMap[EMapInteractionTarget::Door] = true;
+            ViewDoor(Cast<AC_Door>(OutHit.GetActor()));
+        }
+    }
+
+    for (auto& Pair : IsInteractingMap)
+    {
+        if (false == Pair.Value)
+        {
+            switch (Pair.Key)
+            {
+            case EMapInteractionTarget::ItemSource:
+                UnviewItemSource();
+                break;
+            case EMapInteractionTarget::MapDamageTaker:
+                UnviewMapDamageTaker();
+                break;
+            case EMapInteractionTarget::ItemPouch:
+                UnviewItemPouch();
+                break;
+            case EMapInteractionTarget::Door:
+                UnviewDoor();
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 bool UC_MapInteractionComponent::IsServer() const
 {
-	return UKismetSystemLibrary::IsServer(GetWorld());
+    return UKismetSystemLibrary::IsServer(GetWorld());
 }
 
 bool UC_MapInteractionComponent::IsOwnerLocallyControlled() const
 {
-	return Owner->IsLocallyControlled();
+    return Owner->IsLocallyControlled();
 }
 
-FVector UC_MapInteractionComponent::GetHpBarTraceStartPoint() const
+FVector UC_MapInteractionComponent::GetTraceStartPoint() const
 {
-	FVector CameraLocation = CameraComponent->GetComponentLocation();
-	FVector CameraForward = CameraComponent->GetForwardVector();
-	return CameraLocation + CameraForward * HpBarTraceStartRange;
+    FVector CameraLocation = CameraComponent->GetComponentLocation();
+    FVector CameraForward = CameraComponent->GetForwardVector();
+    return CameraLocation + CameraForward * TraceStartRange;
 }
 
-FVector UC_MapInteractionComponent::GetHpBarTraceEndPoint() const
+FVector UC_MapInteractionComponent::GetTraceEndPoint() const
 {
-	FVector CameraLocation = CameraComponent->GetComponentLocation();
-	FVector CameraForward = CameraComponent->GetForwardVector();
-	return CameraLocation + CameraForward * HpBarTraceEndRange;
+    FVector CameraLocation = CameraComponent->GetComponentLocation();
+    FVector CameraForward = CameraComponent->GetForwardVector();
+    return CameraLocation + CameraForward * TraceEndRange;
 }
 
 FRotator UC_MapInteractionComponent::GetCameraRotation() const
 {
-	return CameraComponent->GetComponentRotation();
+    return CameraComponent->GetComponentRotation();
 }
 
-void UC_MapInteractionComponent::ProcessMapDamageableActorTraceResult(FHitResult _HitResult, bool _IsHit)
+void UC_MapInteractionComponent::OnMapInteractionKeyDown()
 {
+    if (true == IsValid(ViewingItemPouch))
+    {
+        ViewingItemPouch->MapInteract();
+        return;
+    }
+
+    if (true == IsValid(ViewingDoor))
+    {
+        ViewingDoor->MapInteract();
+        return;
+    }
 }
 
-void UC_MapInteractionComponent::ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit)
+void UC_MapInteractionComponent::ResetIsInteractingMap()
 {
-	// 아이템 소스를 보지 않게 되는 경우
-	if (false == _IsHit)
-	{
-		if (true == IsValid(ViewingItemSource))
-		{
-			ViewingItemSource->HideHpBar();
-		}
-		ViewingItemSource = nullptr;
-		return;
-	}
-
-	// 같은 아이템 소스를 계속 보는 경우
-	if (ViewingItemSource == _HitResult.GetActor())
-	{
-		ViewingItemSource->UpdateHpBar(_HitResult.Item);
-		return;
-	}
-
-	// 다른 아이템 소스를 보게 되는 경우
-	if (true == IsValid(ViewingItemSource))
-	{
-		ViewingItemSource->HideHpBar();
-	}
-	ViewingItemSource = Cast<AC_ItemSourceHISMA>(_HitResult.GetActor());
-	ViewingItemSource->UpdateHpBar(_HitResult.Item);
-}
-
-void UC_MapInteractionComponent::ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit)
-{
-	// 아이템 파우치를 보지 않게 되는 경우
-	if (false == _IsHit)
-	{
-		if (true == IsValid(ViewingItemPouch))
-		{
-			ViewingItemPouch->HideInteractionWidget();
-		}
-
-		ViewingItemPouch = nullptr;
-		return;
-	}
-
-	// 같은 아이템 파우치를 계속 보는 경우
-	if (ViewingItemPouch == _HitResult.GetActor())
-	{
-		ViewingItemPouch->ShowInteractionWidget();
-		return;
-	}
-
-	// 다른 아이템 파우치를 보게 되는 경우
-	if (true == IsValid(ViewingItemPouch))
-	{
-		ViewingItemPouch->HideInteractionWidget();
-	}
-	ViewingItemPouch = Cast<AC_MapInteractable>(_HitResult.GetActor());
-	ViewingItemPouch->ShowInteractionWidget();
-}
-
-void UC_MapInteractionComponent::ProcessHpObjectTraceResult(FHitResult _HitResult, bool _IsHit)
-{
-	// 건축물을 보지 않게 되는 경우
-	if (false == _IsHit)
-	{
-		if (true == IsValid(ViewingDamageTaker))
-		{
-			ViewingDamageTaker->HideHpBar();
-		}
-		ViewingDamageTaker = nullptr;
-		return;
-	}
-
-	// 같은 건축물을 계속 보는 경우
-	if (ViewingDamageTaker == _HitResult.GetActor())
-	{
-		ViewingDamageTaker->UpdateHpBar();
-		return;
-	}
-
-	// 다른 건축물을 보게 되는 경우
-	if (true == IsValid(ViewingDamageTaker))
-	{
-		ViewingDamageTaker->HideHpBar();
-	}
-	ViewingDamageTaker = Cast<AC_MapDamageTaker>(_HitResult.GetActor());
-	ViewingDamageTaker->UpdateHpBar();
+    for (TPair<EMapInteractionTarget, bool>& Pair : IsInteractingMap)
+    {
+        IsInteractingMap[Pair.Key] = false;
+    }
 }
 
 void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
 {
-	_Actor->Destroy();
+    _Actor->Destroy();
+}
+
+void UC_MapInteractionComponent::ViewItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index)
+{
+    // 같은 아이템 소스를 계속 보는 경우
+    if (ViewingItemSource == _ItemSource)
+    {
+        ViewingItemSource->UpdateHpBar(_Index);
+        return;
+    }
+
+    // 다른 아이템 소스를 보게 되는 경우
+    if (true == IsValid(ViewingItemSource))
+    {
+        ViewingItemSource->HideHpBar();
+    }
+    ViewingItemSource = _ItemSource;
+    ViewingItemSource->UpdateHpBar(_Index);
+}
+
+void UC_MapInteractionComponent::ViewMapDamageTaker(AC_MapDamageTaker* _DamageTaker)
+{
+    // 같은 건축물을 계속 보는 경우
+    if (ViewingDamageTaker == _DamageTaker)
+    {
+        ViewingDamageTaker->UpdateHpBar();
+        return;
+    }
+
+    // 다른 건축물을 보게 되는 경우
+    if (true == IsValid(ViewingDamageTaker))
+    {
+        ViewingDamageTaker->HideHpBar();
+    }
+    ViewingDamageTaker = _DamageTaker;
+    ViewingDamageTaker->UpdateHpBar();
+}
+
+void UC_MapInteractionComponent::ViewItemPouch(AC_MapInteractable* _MapInteractable)
+{
+    // 같은 아이템 파우치를 계속 보는 경우
+    if (ViewingItemPouch == _MapInteractable)
+    {
+        ViewingItemPouch->ShowInteractionWidget();
+        return;
+    }
+
+    // 다른 아이템 파우치를 보게 되는 경우
+    if (true == IsValid(ViewingItemPouch))
+    {
+        ViewingItemPouch->HideInteractionWidget();
+    }
+    ViewingItemPouch = _MapInteractable;
+    ViewingItemPouch->ShowInteractionWidget();
+}
+
+void UC_MapInteractionComponent::ViewDoor(AC_Door* _Door)
+{
+    // 같은 문을 계속 보는 경우
+    if (ViewingDoor == _Door)
+    {
+        //ViewingDoor->ShowInteractionWidget();
+        return;
+    }
+
+    // 다른 문을 보게 되는 경우
+    if (true == IsValid(ViewingDoor))
+    {
+        //ViewingDoor->HideInteractionWidget();
+    }
+    ViewingDoor = _Door;
+}
+
+void UC_MapInteractionComponent::UnviewItemSource()
+{
+    if (true == IsValid(ViewingItemSource))
+    {
+        ViewingItemSource->HideHpBar();
+    }
+    ViewingItemSource = nullptr;
+}
+
+void UC_MapInteractionComponent::UnviewMapDamageTaker()
+{
+    if (true == IsValid(ViewingDamageTaker))
+    {
+        ViewingDamageTaker->HideHpBar();
+    }
+    ViewingDamageTaker = nullptr;
+}
+
+void UC_MapInteractionComponent::UnviewItemPouch()
+{
+    if (true == IsValid(ViewingItemPouch))
+    {
+        ViewingItemPouch->HideInteractionWidget();
+    }
+
+    ViewingItemPouch = nullptr;
+}
+
+void UC_MapInteractionComponent::UnviewDoor()
+{
+    if (true == IsValid(ViewingDoor))
+    {
+        //ViewingDoor->HideInteractionWidget();
+    }
+
+    ViewingDoor = nullptr;
 }

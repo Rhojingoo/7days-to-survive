@@ -10,7 +10,16 @@ class AC_ItemSourceHISMA;
 class AC_MapInteractable;
 class AC_MapPlayer;
 class AC_MapDamageTaker;
+class AC_Door;
 class UCameraComponent;
+
+enum class EMapInteractionTarget : uint8
+{
+    ItemSource,
+    MapDamageTaker,
+    ItemPouch,
+    Door,
+};
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SEVENDAYS_TO_SURVIVE_API UC_MapInteractionComponent : public UActorComponent
@@ -39,36 +48,26 @@ private:
     bool IsOwnerLocallyControlled() const;
 
     UFUNCTION(BlueprintPure)
-    FVector GetHpBarTraceStartPoint() const;
+    FVector GetTraceStartPoint() const;
 
     UFUNCTION(BlueprintPure)
-    FVector GetHpBarTraceEndPoint() const;
+    FVector GetTraceEndPoint() const;
 
     UFUNCTION(BlueprintPure)
     FRotator GetCameraRotation() const;
 
     UFUNCTION(BlueprintCallable)
-    void ProcessMapDamageableActorTraceResult(FHitResult _HitResult, bool _IsHit);
-
-    UFUNCTION(BlueprintCallable)
-    void ProcessItemSourceTraceResult(FHitResult _HitResult, bool _IsHit);
-
-    UFUNCTION(BlueprintCallable)
-    void ProcessItemPouchTraceResult(FHitResult _HitResult, bool _IsHit);
-
-    UFUNCTION(BlueprintCallable)
-    void ProcessHpObjectTraceResult(FHitResult _HitResult, bool _IsHit);
+    void OnMapInteractionKeyDown();
 
 private:
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    float HpBarTraceStartRange = 400.0f;
+    float TraceStartRange = 200.0f;
 
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    float HpBarTraceEndRange = 800.0f;
-
+    float TraceEndRange = 800.0f;
 
     UPROPERTY(Category = "HpBar", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    FVector HpBarLineTraceBoxSize = {100.0f, 100.0f, 100.0f};
+    FVector BoxHalfSize = { 50.0f, 50.0f, 50.0f };
 
     AC_MapPlayer* Owner = nullptr;
     UCameraComponent* CameraComponent = nullptr;
@@ -81,4 +80,22 @@ private:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     AC_MapDamageTaker* ViewingDamageTaker = nullptr;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    AC_Door* ViewingDoor = nullptr;
+
+private:
+    void ViewItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index);
+    void ViewMapDamageTaker(AC_MapDamageTaker* _DamageTaker);
+    void ViewItemPouch(AC_MapInteractable* _MapInteractable);
+    void ViewDoor(AC_Door* _DamageTaker);
+
+    void UnviewItemSource();
+    void UnviewMapDamageTaker();
+    void UnviewItemPouch();
+    void UnviewDoor();
+
+    void ResetIsInteractingMap();
+
+    TMap<EMapInteractionTarget, bool> IsInteractingMap;
 };
