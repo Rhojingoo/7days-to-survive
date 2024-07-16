@@ -83,4 +83,7 @@ void UC_ItemBuildingPart::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     }
 
     MaxHp = TypeRow->MaxHp;
+    Mesh = TypeRow->Mesh;
+    ActorClass = TypeRow->ActorClass;
+    TraceType = TypeRow->TraceType;
 }

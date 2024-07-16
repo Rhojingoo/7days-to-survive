@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BuildingSystem/C_BuildingComponent.h"
 
@@ -9,10 +9,10 @@
 #include "BuildingSystem/C_BuildingPreview.h"
 #include "BuildingSystem/C_BuildingPart.h"
 #include "BuildingSystem/C_BuildingPartInterface.h"
-#include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "BuildingSystem/C_BuildingPart.h"
+#include "Map/C_Items.h"
 #include "Landscape.h"
-#include "STS/C_STSInstance.h"
+#include "STS/C_STSGlobalFunctions.h"
 #include "Map/C_MapDataAsset.h"
 #include "Player/Global/C_GlobalPlayer.h"
 
@@ -27,10 +27,6 @@ void UC_BuildingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-	UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
-	BuildPartData = MapDataAsset->GetBuildPartData();
-
 	PreviewActor = GetWorld()->SpawnActor<AC_BuildingPreview>(PreviewActorClass);
 	PreviewActor->SetOwner(GetOwner());
 	SetPreviewMesh(nullptr);
@@ -43,7 +39,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (false == BuildMode)
+	if (false == IsBuilding())
 	{
 		return;
 	}
@@ -58,7 +54,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		GetWorld(),
 		TraceStart,
 		TraceEnd,
-		BuildPartData[BuildPartIndex].TraceType,
+		HoldingBuildingPart->TraceType,
 		false,
 		ActorsToIgnore,
 		EDrawDebugTrace::None,
@@ -66,7 +62,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		true
 	);
 
-	// ·¹ÀÌ°¡ ÀûÁßÇÏÁö ¾ÊÀº °æ¿ì
+	// ë ˆì´ê°€ ì ì¤‘í•˜ì§€ ì•Šì€ ê²½ìš°
 	if (false == IsLineTraceHit)
 	{
 		BuildTransform.SetLocation(TraceEnd);
@@ -75,8 +71,8 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		return;
 	}
 
-	// ·¹ÀÌ°¡ ¼ÒÄÏ¿¡ ÀûÁßÇÑ °æ¿ì¿¡ ´ëÇÑ Ã³¸®
-	// - °¡Àå ¸Ö¸® ÀÖ´Â ¼ÒÄÏÀ» ±âÁØÀ¸·Î Æ®·£½ºÆû °áÁ¤
+	// ë ˆì´ê°€ ì†Œì¼“ì— ì ì¤‘í•œ ê²½ìš°ì— ëŒ€í•œ ì²˜ë¦¬
+	// - ê°€ì¥ ë©€ë¦¬ ìˆëŠ” ì†Œì¼“ì„ ê¸°ì¤€ìœ¼ë¡œ íŠ¸ëœìŠ¤í¼ ê²°ì •
 	bool SocketHit = false;
 	float MaxDistance = 0.0f;
 	for (FHitResult& OutHit : OutHits)
@@ -100,12 +96,12 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 		if (true == HasPreviewCollision())
 		{
-			// Ãæµ¹ÀÌ ÀÖ´Â °æ¿ì
+			// ì¶©ëŒì´ ìˆëŠ” ê²½ìš°
 			SetCanBuild(false);
 		}
 		else
 		{
-			// Ãæµ¹ÀÌ ¾ø´Â °æ¿ì
+			// ì¶©ëŒì´ ì—†ëŠ” ê²½ìš°
 			SetCanBuild(true);
 		}
 	}
@@ -115,7 +111,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		return;
 	}
 
-	// ·¹ÀÌ°¡ ÀûÁßÇÑ °æ¿ì¿¡ ´ëÇÑ Ã³¸®
+	// ë ˆì´ê°€ ì ì¤‘í•œ ê²½ìš°ì— ëŒ€í•œ ì²˜ë¦¬
 	bool IsLandHit = false;
 	FHitResult* OutHit = nullptr;
 	for (FHitResult& Hit : OutHits)
@@ -130,12 +126,12 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	if (true == IsLandHit)
 	{
-		// ±×¶ó¿îµå ¾÷ Ã³¸®
+		// ê·¸ë¼ìš´ë“œ ì—… ì²˜ë¦¬
 		FVector Location = GetLocationOnTerrain(OutHit->ImpactPoint, OutHit->Normal);
 		BuildTransform.SetLocation(Location);
 		RefreshPreviewTransform();
 
-		// Ãæµ¹¸éÀÇ °æ»ç°¡ ±ŞÇÏ¸é ¼³Ä¡ÇÒ ¼ö ¾ø´Ù.
+		// ì¶©ëŒë©´ì˜ ê²½ì‚¬ê°€ ê¸‰í•˜ë©´ ì„¤ì¹˜í•  ìˆ˜ ì—†ë‹¤.
 		if (false == CheckBuildAngle(OutHit->Normal))
 		{
 			SetCanBuild(false);
@@ -148,16 +144,21 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		BuildTransform.SetLocation(OutHit->ImpactPoint);
 	}
 
-	// ¶¥À» Á¦¿ÜÇÑ ¾×ÅÍ¿Í Ãæµ¹ÀÌ ÀÖ´Â °æ¿ì
+	// ë•…ì„ ì œì™¸í•œ ì•¡í„°ì™€ ì¶©ëŒì´ ìˆëŠ” ê²½ìš°
 	if (true == HasPreviewCollision())
 	{
 		SetCanBuild(false);
 	}
-	// ¶¥À» Á¦¿ÜÇÑ ¾×ÅÍ¿Í Ãæµ¹ÀÌ ¾ø´Â °æ¿ì
+	// ë•…ì„ ì œì™¸í•œ ì•¡í„°ì™€ ì¶©ëŒì´ ì—†ëŠ” ê²½ìš°
 	else
 	{
 		SetCanBuild(true);
 	}
+}
+
+bool UC_BuildingComponent::IsBuilding() const
+{
+	return nullptr != HoldingBuildingPart;
 }
 
 FVector UC_BuildingComponent::GetLineTraceStartPoint()
@@ -174,29 +175,43 @@ FVector UC_BuildingComponent::GetLineTraceEndPoint()
 	return Point + EndPointOffset * Forward;
 }
 
-void UC_BuildingComponent::ToggleBuildMode()
-{
-	BuildMode = !BuildMode;
+//void UC_BuildingComponent::ToggleBuildMode()
+//{
+//	BuildMode = !BuildMode;
+//
+//	if (true == BuildMode)
+//	{
+//		SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
+//	}
+//	else
+//	{
+//		CanBuild = false;
+//		SetPreviewMesh(nullptr);
+//	}
+//}
 
-	if (true == BuildMode)
+void UC_BuildingComponent::HoldBuildingPart(FName _BuildingPartId)
+{
+	if (true == _BuildingPartId.IsNone())
 	{
-		SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
+		HoldingBuildingPart = nullptr;
+		SetPreviewMesh(nullptr);
 	}
 	else
 	{
-		CanBuild = false;
-		SetPreviewMesh(nullptr);
+		HoldingBuildingPart = Cast<UC_ItemBuildingPart>(UC_STSGlobalFunctions::GetMapDataAsset()->FindItem(_BuildingPartId));
+		SetPreviewMesh(HoldingBuildingPart->Mesh);
 	}
 }
 
 void UC_BuildingComponent::PlaceBuildPart()
 {
-	if (!BuildMode || !CanBuild)
+	if (false == IsBuilding() || !CanBuild)
 	{
 		return;
 	}
 
-	SpawnBuildPart(BuildPartData[BuildPartIndex].Actor, BuildTransform);
+	SpawnBuildPart(HoldingBuildingPart->ActorClass, BuildTransform);
 }
 
 void UC_BuildingComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform)
@@ -209,20 +224,6 @@ void UC_BuildingComponent::RotatePreview()
 {
 	FRotator NewRotator = UKismetMathLibrary::ComposeRotators(BuildTransform.Rotator(), FRotator(0.0, 5.0, 0.0));
 	BuildTransform.SetRotation(UKismetMathLibrary::Conv_RotatorToQuaternion(NewRotator));
-}
-
-void UC_BuildingComponent::IncBuildPartIndex()
-{
-	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex + 1, 0, BuildPartData.Num() - 1);
-
-	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
-}
-
-void UC_BuildingComponent::DecBuildPartIndex()
-{
-	BuildPartIndex = UKismetMathLibrary::Clamp(BuildPartIndex - 1, 0, BuildPartData.Num() - 1);
-
-	SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
 }
 
 void UC_BuildingComponent::SetCanBuild(bool _CanBuild)
@@ -274,7 +275,7 @@ void UC_BuildingComponent::SetPreviewMesh(UStaticMesh* _Mesh)
 		{
 			MeshName = _Mesh->GetName();
 		}
-		UE_LOG(LogTemp, Fatal, TEXT("ÇÁ¸®ºä ¸Ş½Ã ¼¼ÆÃ¿¡ ½ÇÆĞÇß½À´Ï´Ù. ¸Ş½Ã: %s"), *MeshName);
+		UE_LOG(LogTemp, Fatal, TEXT("í”„ë¦¬ë·° ë©”ì‹œ ì„¸íŒ…ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ë©”ì‹œ: %s"), *MeshName);
 	}
 }
 
