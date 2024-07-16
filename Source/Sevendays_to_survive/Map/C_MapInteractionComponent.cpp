@@ -64,17 +64,17 @@ void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
             IsInteractingMap[EMapInteractionTarget::ItemSource] = true;
             ViewItemSource(Cast<AC_ItemSourceHISMA>(OutHit.GetActor()), OutHit.Item);
         }
-        else if (true == OutHit.GetActor()->IsA<AC_MapDamageTaker>())
+        if (true == OutHit.GetActor()->IsA<AC_MapDamageTaker>())
         {
             IsInteractingMap[EMapInteractionTarget::MapDamageTaker] = true;
             ViewMapDamageTaker(Cast<AC_MapDamageTaker>(OutHit.GetActor()));
         }
-        else if (true == OutHit.GetActor()->IsA<AC_MapInteractable>())
+        if (true == OutHit.GetActor()->IsA<AC_MapInteractable>())
         {
             IsInteractingMap[EMapInteractionTarget::ItemPouch] = true;
             ViewItemPouch(Cast<AC_MapInteractable>(OutHit.GetActor()));
         }
-        else if (true == OutHit.GetActor()->IsA<AC_Door>())
+        if (true == OutHit.GetActor()->IsA<AC_Door>())
         {
             IsInteractingMap[EMapInteractionTarget::Door] = true;
             ViewDoor(Cast<AC_Door>(OutHit.GetActor()));

@@ -6,6 +6,14 @@
 #include "BuildingSystem/C_BuildingPart.h"
 #include "C_Door.generated.h"
 
+enum class EDoorState : uint8
+{
+	Opened,
+	Closed,
+	Opening,
+	Closing,
+};
+
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_Door : public AC_BuildingPart
 {
@@ -17,16 +25,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MapInteract();
 
+protected:
+	UFUNCTION(BlueprintCallable)
+	void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void Tick(float DeltaSeconds) override;
+
+private:
 	UFUNCTION(BlueprintCallable)
 	void Open();
 
 	UFUNCTION(BlueprintCallable)
 	void Close();
 
-	UFUNCTION(BlueprintCallable)
-	bool IsOpen() const;
-private:
-	bool IsOpenValue = false;
+	FVector SpawnLocation;
+
+	EDoorState DoorState = EDoorState::Closed;
+	float Theta = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float OpenTime = 0.5f;
 };
 
 	
