@@ -5,7 +5,6 @@
 
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "BuildingSystem/C_BuildingPartTableRow.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Map/C_ItemRows.h"
 #include "Map/C_Items.h"
@@ -65,6 +64,9 @@ void UC_MapDataAsset::Init(UC_STSInstance* _Inst)
         }
         case EItemType::BuildingPart:
         {
+            FC_ItemBuildingPartRow* TypeRow = BuildingPartTable->FindRow<FC_ItemBuildingPartRow>(RowName, ContextString);
+            FoundItem = NewObject<UC_ItemBuildingPart>();
+            FoundItem->Init(RowName, { ItemRow, TypeRow });
             break;
         }
         default:
@@ -87,25 +89,6 @@ void UC_MapDataAsset::Init(UC_STSInstance* _Inst)
         Type_To_AccDropWeights[ItemType].Add(PrevAcc + FoundItem->DropWeight);
         Type_To_AccDropIds[ItemType].Add(RowName);
     }
-}
-
-TArray<FC_BuildingPartTableRow> UC_MapDataAsset::GetBuildPartData()
-{
-    if (nullptr == BuildPartTable)
-    {
-        UE_LOG(LogTemp, Fatal, TEXT("게임 인스턴스의 BuildPartTable이 nullptr입니다."));
-    }
-
-    TArray<FC_BuildingPartTableRow*> Data;
-    FString ContextString;
-    BuildPartTable->GetAllRows(ContextString, Data);
-
-    TArray<FC_BuildingPartTableRow> Ret;
-    for (FC_BuildingPartTableRow* Row : Data)
-    {
-        Ret.Add(*Row);
-    }
-    return Ret;
 }
 
 int UC_MapDataAsset::GetItemSourceMaxHp(FName _Id)
@@ -182,6 +165,11 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetRandomDropItems()
     }
 
     return Result;
+}
+
+int UC_MapDataAsset::GetItemBoxMaxHp() const
+{
+    return ItemBoxMaxHp;
 }
 
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)

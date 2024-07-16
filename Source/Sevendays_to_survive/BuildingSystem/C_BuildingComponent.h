@@ -8,6 +8,9 @@
 #include "Delegates/Delegate.h"
 #include "C_BuildingComponent.generated.h"
 
+class AC_BuildingPreview;
+class UC_ItemBuildingPart;
+
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SEVENDAYS_TO_SURVIVE_API UC_BuildingComponent : public UActorComponent
 {
@@ -21,31 +24,27 @@ protected:
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	bool IsBuilding() const;
 private:
 	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent = nullptr;
 
 	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AC_BuildingPreview> PreviewActorClass;
+	TSubclassOf<AC_BuildingPreview> PreviewActorClass;
 
 	UPROPERTY(Category = "Preview", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AC_BuildingPreview* PreviewActor = nullptr;
 
 private:
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	const UC_ItemBuildingPart* HoldingBuildingPart = nullptr;
+
+	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FTransform BuildTransform;
 
 	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool CanBuild = false;
 
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool BuildMode = false;
-
-	UPROPERTY(Category = "Variable", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int BuildPartIndex = 0;
-
-protected:
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float StartPointOffset = 300.0f;
 
@@ -59,9 +58,6 @@ protected:
 	UMaterial* RedMaterial = nullptr;
 
 	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<struct FC_BuildingPartTableRow> BuildPartData;
-
-	UPROPERTY(Category = "Constant", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float MaxBuildableAngle = 30.0f;
 
 private:
@@ -71,17 +67,12 @@ private:
 	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceEndPoint();
 
+	// 손에 건축물을 들고 있어라
 	UFUNCTION(BlueprintCallable)
-	void ToggleBuildMode();
+	void HoldBuildingPart(FName _BuildingPartId);
 
 	UFUNCTION(BlueprintCallable)
 	void PlaceBuildPart();
-
-	UFUNCTION(BlueprintCallable)
-	void IncBuildPartIndex();
-
-	UFUNCTION(BlueprintCallable)
-	void DecBuildPartIndex();
 
 	UFUNCTION(BlueprintCallable)
 	void RotatePreview();
@@ -105,7 +96,7 @@ private:
 	// RPC
 
 	UFUNCTION(Server, Reliable)
-	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+	void SpawnBuildPart(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform, int _MaxHp);
 
-	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform);
+	void SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform, int _MaxHp);
 };

@@ -7,7 +7,6 @@
 #include "Map/C_MapEnums.h"
 #include "C_MapDataAsset.generated.h"
 
-struct FC_BuildingPartTableRow;
 struct FC_ItemSourceTableRow;
 class UC_STSInstance;
 class UC_Item;
@@ -20,9 +19,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 
 public:
 	void Init(UC_STSInstance* _Inst);
-
-	UFUNCTION(BlueprintCallable)
-	TArray<FC_BuildingPartTableRow> GetBuildPartData();
 
 	UFUNCTION(BlueprintCallable)
 	int GetItemSourceMaxHp(FName _Id);
@@ -39,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<FC_ItemAndCount> GetRandomDropItems();
 
+	UFUNCTION(BlueprintCallable)
+	int GetItemBoxMaxHp() const;
+
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
 
@@ -48,7 +47,7 @@ private:
 	UC_STSInstance* Inst = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* BuildPartTable;
+	int ItemBoxMaxHp = 20;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ItemSourceTable = nullptr;
@@ -64,6 +63,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ConsumableTable = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* BuildingPartTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TMap<FName, UC_Item*> Items;
