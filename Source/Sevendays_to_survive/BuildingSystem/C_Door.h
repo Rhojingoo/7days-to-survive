@@ -39,13 +39,20 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Close();
 
+	FVector DoorForward;
+	FVector DoorRight;
 	FVector SpawnLocation;
+	FRotator SpawnRotation;
+	FVector BoxExtent;
 
 	EDoorState DoorState = EDoorState::Closed;
 	float Theta = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float OpenTime = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	double RotAxisRadius = 5.0;
 };
 
 	
