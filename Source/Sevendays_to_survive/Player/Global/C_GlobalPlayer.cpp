@@ -519,8 +519,9 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					if (Zombie)
 					{
 						//ZombieDieTrace(Zombie);
-						Zombie->SetRagDoll();
-						FTimerHandle ZombieDestory;
+						CreateZombieBlood(Hit);
+						Zombie->SetHP(5.0f);
+						/*FTimerHandle ZombieDestory;
 
 						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
 						{
@@ -528,8 +529,12 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 							{
 								Zombie->Destroy();
 							}
-						}), 5.0f, false);
+						}), 5.0f, false);*/
 
+					}
+					else
+					{
+						CreateBulletHole(Hit);
 					}
 				}
 			}
