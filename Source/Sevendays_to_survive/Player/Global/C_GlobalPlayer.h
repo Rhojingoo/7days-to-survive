@@ -104,6 +104,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AttCalstamina();
+
+	UFUNCTION(BlueprintCallable,Reliable, NetMulticast)
+	void WeaponSwingSound(FHitResult _Hit, const bool _IsZombie);
+	void WeaponSwingSound_Implementation(FHitResult _Hit, const bool _IsZombie);
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
