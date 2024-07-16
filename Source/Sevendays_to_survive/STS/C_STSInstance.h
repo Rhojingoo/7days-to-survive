@@ -65,6 +65,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
 	int GameUI_Time;
 
+	// 인게임에서 엔딩 알림
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DauorNight", meta = (AllowPrivateAccess = "true"))
+	bool Game_End;
+
+
 	UFUNCTION(BlueprintCallable)
 	void SetSpawnMonster();
 	void AddSpawnPoint(class AC_MonsterSpawnPoint* _Point);

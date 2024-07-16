@@ -40,7 +40,18 @@ void AC_7Days_Play_GameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	EndingCheck();
+}
 
+void AC_7Days_Play_GameMode::EndingCheck()
+{
+	UC_STSInstance* Inst = GetGameInstance<UC_STSInstance>();
+	if (nullptr == Inst)
+	{
+		return;
+	}
+
+	Inst;
 }
 
 void AC_7Days_Play_GameMode::SpawnItemBoxes()

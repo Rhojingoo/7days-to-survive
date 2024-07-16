@@ -28,6 +28,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     bool IsServer = false;
 
+    void EndingCheck();
+
 private:
     void SpawnItemBoxes();
 
