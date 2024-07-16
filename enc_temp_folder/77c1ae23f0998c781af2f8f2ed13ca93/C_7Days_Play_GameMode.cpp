@@ -55,7 +55,8 @@ void AC_7Days_Play_GameMode::EndingCheck()
 	{
 		return;
 	}
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("7Days_Ending_Level"));
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("7Days_Map"));
+
 }
 
 void AC_7Days_Play_GameMode::SpawnItemBoxes()
