@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSInstance.h"
+#include "STS/C_STSGlobalFunctions.h"
 #include "Map/C_MapDataAsset.h"
 #include "Map/C_ItemSourceTableRow.h"
 #include "Map/C_Items.h"
@@ -121,10 +122,11 @@ void AC_ItemSourceHISMA::GainDropItems(AC_MapPlayer* _HitCharacter)
         STS_FATAL("[%s] InventoryComponent is NULL.", __FUNCTION__);
     }
 
-    for (FC_ItemAndCount& DropItem : DropItems)
+    for (TPair<FName, int>& DropItem : DropItems)
     {
-        InventoryComponent->AddItem(DropItem.Item, DropItem.Count);
-        STS_LOG("got %d %ss.", DropItem.Count, *DropItem.Item->Name);
+        const UC_Item* Item = UC_STSGlobalFunctions::FindItem(DropItem.Key);
+        InventoryComponent->AddItem(Item, DropItem.Value);
+        STS_LOG("got %d %ss.", DropItem.Value, *Item->Name);
     }
 }
 
