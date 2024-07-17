@@ -9,7 +9,7 @@
 class UAnimMontage;
 //class UC_GlobalAnimInstance;
 /**
- * 
+ *
  */
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_MapPlayer
@@ -29,10 +29,16 @@ protected:
 	// 입력 콜백 처리
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+	AActor* SpawnMapCamera(const FTransform& _Transform);
 private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* MontageToPlay;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UArrowComponent* LocationComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> MapCameraComponent;
 };
