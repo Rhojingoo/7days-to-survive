@@ -61,7 +61,14 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 			if (Zombie)
 			{
 				//ZombieDieTrace(Zombie);
-				PlayCharacter->WeaponSwingSound(Hit, true);
+				if (PlayCharacter->GetPlayerCurState() == EWeaponUseState::bat)
+				{
+					PlayCharacter->WeaponSwingSound(Hit, false);
+				}
+				else
+				{
+					PlayCharacter->WeaponSwingSound(Hit, true);
+				}
 				Zombie->SetHP(20.0f);
 
 
