@@ -84,7 +84,7 @@ void AC_ItemSourceHISMA::Damage_Implementation(int _Index, int _Damage, AActor* 
 
     // 아이템 획득
     AC_MapPlayer* ItemGainer = Cast<AC_MapPlayer>(_HitActor);
-    if (nullptr != ItemGainer)
+    if (nullptr != ItemGainer && ItemGainer->IsLocallyControlled())
     {
         GainDropItems(ItemGainer);
     }
