@@ -6,9 +6,10 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TileView.h"
 #include "Components/Image.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "UI/Inventory/Remake/C_UI_InventorySlot.h"
-
 #include "C_UI_QuickSlot.generated.h"
+
 
 
 UCLASS()
@@ -24,6 +25,8 @@ public:
 	UFUNCTION(Blueprintcallable)
 	void TileViewInitialze(UTileView* _Tileview, int _InitCount);
 
+	//UFUNCTION(Blueprintcallable)
+	//FString GetWeaponName(EWeaponUseState* _Type);
 private:
 	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UC_UI_InventorySlot*> QuickSlotDataArray;

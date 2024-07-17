@@ -13,4 +13,12 @@ void UC_UI_QuickSlot::TileViewInitialze(UTileView* _Tileview, int _InitCount)
 		_Tileview->AddItem(Object);
 	}
 }
+/*
+FString UC_UI_QuickSlot::GetWeaponName(EWeaponUseState* _Type)
+{
+	FString changeName;
+	//changeName = EnumToString(EWeaponUseState::Axe);
+	return "None";
+}
+*/
 
