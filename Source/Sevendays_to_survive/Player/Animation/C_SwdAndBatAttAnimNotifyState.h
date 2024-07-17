@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
-#include "GlobalAnimNotifyState.generated.h"
+#include "C_SwdAndBatAttAnimNotifyState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SEVENDAYS_TO_SURVIVE_API UGlobalAnimNotifyState : public UAnimNotifyState
+class SEVENDAYS_TO_SURVIVE_API UC_SwdAndBatAttAnimNotifyState : public UAnimNotifyState
 {
 	GENERATED_BODY()
 public:
