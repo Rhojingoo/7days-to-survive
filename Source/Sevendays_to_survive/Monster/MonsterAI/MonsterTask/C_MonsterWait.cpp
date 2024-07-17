@@ -26,7 +26,8 @@ EBTNodeResult::Type UC_MonsterWait::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (true == IsPerceptionUpdated(Controller)) {
 		return EBTNodeResult::Succeeded;
 	}
-	GetSelf(&OwnerComp)->SetState(MonsterEnum::Idle);
+	//GetSelf(&OwnerComp)->SetState(MonsterEnum::Idle);
+	GetSelf(&OwnerComp)->Idle();
 	return EBTNodeResult::InProgress;
 }
 
