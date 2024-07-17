@@ -21,7 +21,11 @@ public:
 	void BeginPlay() override final;
 	void Tick(float _DeltaTime) override final;
 	void SetName(FString _Name) override final;
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Idle() override final;
+	void Idle_Implementation();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void Attack() override final;
 	void Attack_Implementation();

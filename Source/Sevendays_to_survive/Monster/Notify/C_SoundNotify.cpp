@@ -5,6 +5,9 @@
 #include "STS/C_STSInstance.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
 #include "Monster/C_ZombieBase.h"
+#include "Monster/C_MonsterAnim.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 UC_SoundNotify::UC_SoundNotify()
@@ -14,28 +17,40 @@ UC_SoundNotify::UC_SoundNotify()
 
 void UC_SoundNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-    AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
-    if (Zombie)
-    {
-        UC_STSInstance* Inst = Cast<UC_STSInstance>(Zombie->GetGameInstance());
-        MonsterName = Zombie->GetName();
-        FMonsterDataRow* Row = Inst->GetMonsterData(*(MonsterName));
+	Super::Notify(MeshComp, Animation);
 
-        if (Row)
-        {
-            uint8 MonsterState = static_cast<uint8>(Zombie->GetState());
-            if (USoundWave** SoundWavePtr = Row->SoundFile.Find(MonsterState))
-            {
-                if (*SoundWavePtr)
-                {
-                    UGameplayStatics::PlaySoundAtLocation(MeshComp->GetWorld(), *SoundWavePtr, MeshComp->GetComponentLocation());
-                }
-            }
-            else
-            {
-                Super::Notify(MeshComp, Animation); // Fallback to the parent class implementation
-            }
-        }
-    }
+	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
+	if (nullptr == Zombie)
+	{
+		return;
+	}
 
+	UC_STSInstance* Inst = Cast<UC_STSInstance>(Zombie->GetGameInstance());
+
+	FString MonsterName = Zombie->GetName();
+
+	FMonsterDataRow* Row = Inst->GetMonsterData(*(MonsterName));
+	if (nullptr == Row)
+	{
+		return;
+	}
+
+	uint8 MonsterStateKey = 0;
+
+	UC_MonsterAnim* MonsterAnimInstance = Cast<UC_MonsterAnim>(MeshComp->GetAnimInstance());
+
+	MonsterStateKey = MonsterAnimInstance->GetAnimMontageKey();
+
+	USoundWave** SoundWavePtr = Row->SoundFile.Find(MonsterStateKey);
+  	if (nullptr != SoundWavePtr)
+	{
+		if (nullptr == *SoundWavePtr)
+		{
+			return;
+		}
+
+		Zombie->AudioComponent->SetSound(*SoundWavePtr);
+		Zombie->AudioComponent->Play();
+		//UGameplayStatics::PlaySoundAtLocation(MeshComp->GetWorld(), *SoundWavePtr, MeshComp->GetComponentLocation());
+	}
 }
