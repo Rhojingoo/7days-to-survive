@@ -1,11 +1,24 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/Inventory/C_UI_InventorySlot.h"
-
+#include "UI/Inventory/Remake/C_UI_InventorySlot.h"
 #include "Components/PanelWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Texture2D.h"
+
+void UC_UI_InventorySlot::Init(UInvenItemData* _Data)
+{
+	if (_Data == nullptr)
+	{
+		return;
+	}
+
+	Data = _Data;
+	//ItemIconImage = Cast<UImage>(GetWidgetFromName(TEXT("Icon"));
+	//ItemCountWidget = Cast<UTextBlock>(GetWidgetFromName(TEXT("ItemCount"));
+}
+
+
 
 void UC_UI_InventorySlot::SetIcon(const FC_ItemRow& _ItemData)
 {

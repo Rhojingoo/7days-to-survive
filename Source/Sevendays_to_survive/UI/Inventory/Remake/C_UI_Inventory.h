@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/ListView.h"
+#include "Components/TileView.h"
+#include "Components/TextBlock.h"
+
 #include "C_UI_Inventory.generated.h"
+
 
 UCLASS(Blueprintable , BlueprintType)
 class  UInvenItemData : public UObject
@@ -19,6 +22,8 @@ public:
 
 	UPROPERTY(Category = "Item", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Count = 0;
+
+	
 
 	void Copy(UInvenItemData* _Data)
 	{
@@ -34,8 +39,23 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_Inventory : public UUserWidget
 {
 	GENERATED_BODY()
 
-	//UFUNCTION(BlueprintCallable)
-	//void TileViewInitialze(UTileView* _TileView, int _InitCount);
+public:
+	UFUNCTION(BlueprintCallable)
+	void TileViewInitialze(UTileView* _TileView, int _InitCount);
+	UFUNCTION(BlueprintCallable)
+	void PushItemToIndex(UInvenItemData* _Item, int _SlotIndex);
+	UFUNCTION(BlueprintCallable)
+	void SlotAdd(UWidget* _Widget, UObject* _Data);
+	UFUNCTION(BlueprintCallable)
+	int NullSlotIndex();
 
-	
+private:
+	UPROPERTY()
+	TArray<UInvenItemData*> ItemDataArray;
+	UPROPERTY()
+	UTextBlock* ItemCountWidget = nullptr;
+
+	UInvenItemData* Data;
 };
+
+

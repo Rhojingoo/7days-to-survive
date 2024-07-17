@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/C_ItemRows.h"
 #include "Engine/Texture2D.h"
+#include "Components/Image.h"
+#include "UI/Inventory/Remake/C_UI_Inventory.h"
 #include "UI/Inventory/C_UI_SlotDrag.h"
 #include "C_UI_InventorySlot.generated.h"
 
@@ -21,7 +23,10 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventorySlot : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	
+	UFUNCTION(BlueprintCallable)
+	void Init(UInvenItemData* _Data);
+
+
 	UFUNCTION(BlueprintCallable)
 	void SetIcon(const FC_ItemRow& _ItemData);
 	UFUNCTION(BlueprintCallable)
@@ -52,8 +57,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<FString,UTexture2D*> ItemIcons;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite , meta = (AllowPrivateAccess = "true"))
-	UTexture2D* ItemImage;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FString ItemName;
 
@@ -65,7 +69,16 @@ private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int CurSlotIndex;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite , meta = (AllowPrivateAccess = "true"))
+	UTexture2D* ItemImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UImage* ItemIconImage;
+	UPROPERTY()
+	UTextBlock* ItemCountWidget = nullptr;
+
+	UInvenItemData* Data;
 
 	
 };
