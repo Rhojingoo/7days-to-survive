@@ -76,6 +76,7 @@ bool UC_BossZombie_ChaseTask::MonsterRangeTaskOnRun(UBehaviorTreeComponent& Owne
 
     AC_BossZombie* Boss = Cast<AC_BossZombie>(GetSelf(&OwnerComp));
     Boss->Rush();
+    Boss->PlayRushSound();
     Boss->ApplyRushSpeed();
     Boss->AttackCollisionOn();
     SetTimer(OwnerComp, RushTime);
