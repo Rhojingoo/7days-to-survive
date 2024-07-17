@@ -107,3 +107,11 @@ void AC_BossZombie::AttackCollisionOff()
 {
     AttackComponent->SetCollisionProfileName("NoCollision");
 }
+
+void AC_BossZombie::MontageStop()
+{
+    UAnimMontage* Montage = AnimInstance->GetCurrentActiveMontage();
+    if (nullptr != Montage) {
+    AnimInstance->Montage_Stop(0.0f, Montage);
+    }
+}

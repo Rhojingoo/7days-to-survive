@@ -47,6 +47,8 @@ public:
 	void AttackCollisionOn();
 	void AttackCollisionOff();
 
+	void MontageStop();
+
 private:
 	void SetName(FString _Name) override;
 
