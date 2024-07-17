@@ -3,7 +3,6 @@
 
 #include "UI/C_UI_InGameHUD.h"
 #include "UI/C_UITableRow.h"
-#include "UI/Inventory/C_UI_InventoryCore.h"
 #include "STS/C_STSMacros.h"
 #include "STS/C_STSInstance.h"
 #include "Blueprint/WidgetTree.h"
@@ -26,12 +25,6 @@ void AC_UI_InGameHUD::DrawHUD()
   //     Canvas->DrawItem(TileItem);
   // }
 }
-UC_UI_InverntoryWidget* AC_UI_InGameHUD::GetInventoryWidget()
-{
-    UC_UI_InventoryCore* InventoryCore = Cast<UC_UI_InventoryCore>(Widgets[EUIType::Inventory]);
-    return InventoryCore->InventoryWidget;
-}
-
 void AC_UI_InGameHUD::BeginPlay()
 {
     Super::BeginPlay();

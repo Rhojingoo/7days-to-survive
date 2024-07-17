@@ -10,8 +10,7 @@
 #include "Components/PanelWidget.h"
 
 #include "UI/Inventory/C_UI_SlotDrag.h"
-#include "UI/Inventory/C_UI_InventorySlot.h"
-#include"C_UI_InventorySlot.h"
+#include "UI/Inventory/Remake/C_UI_InventorySlot.h"
 
 #include "C_UI_InverntoryWidget.generated.h"
 
@@ -26,7 +25,6 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InverntoryWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
 
 	
 public:

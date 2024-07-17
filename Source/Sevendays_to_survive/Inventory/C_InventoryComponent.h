@@ -79,6 +79,12 @@ public:
     UFUNCTION(BlueprintPure)
     bool IsCraftable(FName _Id) const;
 
+    UFUNCTION(BlueprintCallable)
+    void ToggleUI();
+
+    UFUNCTION(BlueprintCallable)
+    void SetUIActive(bool _Activeness);
+
 private:
     UFUNCTION(Server, Reliable)
     void SpawnItem(FTransform _SpawnTransform, FName _Id, int _Count);

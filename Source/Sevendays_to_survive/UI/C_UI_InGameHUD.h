@@ -9,8 +9,6 @@
 #include "UI/C_UITableRow.h"
 #include "C_UI_InGameHUD.generated.h"
 
-class UC_UI_InverntoryWidget;
-
 /**
  * 
  */
@@ -51,8 +49,6 @@ public:
 	{
 		return ++CurZOrder;
 	}
-
-	UC_UI_InverntoryWidget* GetInventoryWidget();
 
 protected:
 	void BeginPlay() override;
