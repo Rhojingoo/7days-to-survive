@@ -23,7 +23,10 @@ public:
 	void Tick(float _DeltaTime) override final;
 
 	void SetName(FString _Name) override final;
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Idle() override final;
+	void Idle_Implementation();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void ShoutAttack() override final;

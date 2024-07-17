@@ -73,7 +73,10 @@ void AC_ZombieBase::BeginPlay()
 		}
 	}
 
-	AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+	if (HasAuthority())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+	}
 }
 // Called every frame
 void AC_ZombieBase::Tick(float DeltaTime)

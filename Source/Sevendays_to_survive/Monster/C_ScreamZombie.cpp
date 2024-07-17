@@ -25,13 +25,19 @@ void AC_ScreamZombie::SetName(FString _Name)
 	MonsterName = _Name;
 }
 
-void AC_ScreamZombie::Idle()
+void AC_ScreamZombie::Idle_Implementation()
 {
-	if (nullptr == AnimInstance) 
+	if (nullptr == AnimInstance)
 	{
 		return;
 	}
-	Super::Idle();
+
+	SetState(MonsterEnum::Idle);
+
+	if (false == AnimInstance->IsPlayMontage())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+	}
 }
 
 void AC_ScreamZombie::ShoutAttack_Implementation()
@@ -42,21 +48,21 @@ void AC_ScreamZombie::ShoutAttack_Implementation()
 	}
 	ShoutBegin = true;
 	SetState(MonsterEnum::Shout);
-		if (false == AnimInstance->IsPlayMontage())
-		{
-			AnimInstance->ChangeAnimation(MonsterEnum::Shout);
-		}
+	if (false == AnimInstance->IsPlayMontage())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Shout);
+	}
 }
 
 void AC_ScreamZombie::Attack_Implementation()
 {
-	if (nullptr == AnimInstance) 
+	if (nullptr == AnimInstance)
 	{
 		return;
 	}
 	//Super::Attack();
 	SetState(MonsterEnum::Idle);
-	if (false == AnimInstance->IsPlayMontage()) 
+	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Attack);
 	}
@@ -64,13 +70,13 @@ void AC_ScreamZombie::Attack_Implementation()
 
 void AC_ScreamZombie::RunAttack_Implementation()
 {
-	if (nullptr == AnimInstance) 
+	if (nullptr == AnimInstance)
 	{
 		return;
 	}
 	SetState(MonsterEnum::Run);
 
-	if (false == AnimInstance->IsPlayMontage()) 
+	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
 	}
@@ -78,7 +84,7 @@ void AC_ScreamZombie::RunAttack_Implementation()
 
 void AC_ScreamZombie::Run(FVector _Location)
 {
-	if (nullptr == AnimInstance) 
+	if (nullptr == AnimInstance)
 	{
 		return;
 	}
@@ -87,7 +93,7 @@ void AC_ScreamZombie::Run(FVector _Location)
 
 void AC_ScreamZombie::Move(FVector _Location)
 {
-	if (nullptr == AnimInstance) 
+	if (nullptr == AnimInstance)
 	{
 		return;
 	}
