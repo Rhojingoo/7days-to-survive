@@ -272,9 +272,7 @@ void AC_GlobalPlayer::BeginPlay()
 	// 근접 무기 사운드
 	{
 		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[0]);
-		WeaponSounds.Add(EStaticItemSlot::RAxe, AttWeaponSound.AttSound[1]);
-		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[2]);
-		WeaponSounds.Add(EStaticItemSlot::SlotMax, AttWeaponSound.AttSound[3]);
+		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[1]);
 	}
 
 	//Add Input Mapping Context
