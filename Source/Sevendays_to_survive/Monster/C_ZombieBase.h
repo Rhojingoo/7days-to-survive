@@ -25,7 +25,8 @@ enum class MonsterEnum : uint8
 	Faint UMETA(DisplayName = "Faint"),
 	Rush UMETA(DisplayName = "Rush"),
 	Jump UMETA(DisplayName = "Jump"),
-	End UMETA(DisplayName = "End")
+	End UMETA(DisplayName = "End"),
+	Find UMETA(DisplayName = "Find")
 };
 
 UCLASS()
@@ -99,6 +100,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetHP(double _Damage);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void PlayFindSound();
+	void PlayFindSound_Implementation();
+
 protected:
 	FString MonsterName;
 	float LayLength = 100.f;
@@ -131,6 +136,10 @@ protected:
 
 	UPROPERTY()
 	UC_MonsterComponent* MCP = nullptr;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void PlayDeadSound(USkeletalMeshComponent* _Mesh);
+	void PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh);
 };
 
 

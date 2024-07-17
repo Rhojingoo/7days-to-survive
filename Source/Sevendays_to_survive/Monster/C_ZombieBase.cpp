@@ -14,6 +14,7 @@
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Map/C_MapActor.h"
 #include "..\Monster\Component\C_MonsterComponent.h"
 
@@ -112,6 +113,8 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 
 		// Optionally disable animation
 		MyMesh->bPauseAnims = true;
+
+		PlayDeadSound(MyMesh);
 
 		UCapsuleComponent* Capsule = GetCapsuleComponent();
 		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -417,5 +420,34 @@ void AC_ZombieBase::SetHP(double _Damage)
 	*HP -= _Damage;
 	if (*HP <= 0) {
 		SetRagDoll();
+	}
+}
+
+void AC_ZombieBase::PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh)
+{
+	UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+	FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterName);
+	if (nullptr != Row)
+	{
+		USoundWave** SoundWavePtr = Row->SoundFile.Find(7);
+		if (nullptr != SoundWavePtr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(_Mesh->GetWorld(), *SoundWavePtr, _Mesh->GetComponentLocation());
+		}
+	}
+}
+
+void AC_ZombieBase::PlayFindSound_Implementation()
+{
+	UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+	FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterName);
+	if (nullptr != Row)
+	{
+		USoundWave** SoundWavePtr = Row->SoundFile.Find(14);
+		if (nullptr != SoundWavePtr)
+		{
+			AudioComponent->SetSound(*SoundWavePtr);
+			AudioComponent->Play();
+		}
 	}
 }
