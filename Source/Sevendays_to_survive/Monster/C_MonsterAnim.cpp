@@ -53,6 +53,7 @@ void UC_MonsterAnim::ChangeAnimation(uint8 Key)
 		return;
 	}
 
+	AnimMontageKey = Key;
 	UAnimMontage* PrevMon = GetCurrentActiveMontage();
 
 	if (PrevMon != Mon)
