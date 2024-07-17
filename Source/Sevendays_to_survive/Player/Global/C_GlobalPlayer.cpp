@@ -443,13 +443,17 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
 	FHitResult Hit;
-	//ector ShotDirection;
+
 
 	FVector GunLocation = GunMesh->GetSocketLocation(FName("Muzzle"));
 	FRotator GunRotation = GunMesh->GetSocketRotation(FName("Muzzle"));
 	FVector GunForwardVector =  UKismetMathLibrary::GetForwardVector(GunRotation);
 	
+	FireInfo Bullet;
+	/*Infos.Add(Info);*/
+
 	FVector Start = GunLocation;
+	Bullet.Start = Start;
 	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 
 	FCollisionQueryParams Params;
