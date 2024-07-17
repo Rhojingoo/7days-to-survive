@@ -223,6 +223,9 @@ protected:
 	void CrouchCpp(const FInputActionValue& Value);
 
 
+	UFUNCTION()
+	void SpawnBulletMove(float _DeltaTime);
+
 
 
 
