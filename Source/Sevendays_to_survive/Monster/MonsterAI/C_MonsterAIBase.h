@@ -60,6 +60,8 @@ public:
 		IsFind = true;
 	}
 
+	void IsFindOff();
+
 	class AC_ZombieBase* GetMonster() {
 		return Monster;
 	}
