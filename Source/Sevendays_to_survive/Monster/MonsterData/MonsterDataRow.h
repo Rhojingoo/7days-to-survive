@@ -104,6 +104,10 @@ public:
 		PathPoints = _Array;
 	}
 
+	TArray<FVector>& GetPath() {
+		return PathPoints;
+	}
+
 	void RemovePath() {
 		PathPoints.Empty();
 	}
