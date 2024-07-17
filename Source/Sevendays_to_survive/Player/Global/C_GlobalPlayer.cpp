@@ -163,6 +163,14 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 	case EWeaponUseState::NoWeapon:
 		break;
 	case EWeaponUseState::bat:
+		if (true == _IsZombie)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RBat], _Hit.ImpactPoint);
+		}
+		else
+		{
+			UGameplayStatics::SpawnSoundAtLocation(_Hit.GetActor(), WeaponSounds[EStaticItemSlot::RBat], _Hit.ImpactPoint);
+		}
 		break;
 	case EWeaponUseState::Sword:
 		if (true == _IsZombie)
@@ -791,6 +799,13 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 	switch (_Slot)
 	{
 	case EStaticItemSlot::RBat:
+		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
+		{
+			StaticItemMeshs[i]->SetStaticMesh(nullptr);
+		}
+
+		PlayerCurState = EWeaponUseState::bat;
+		break;
 	case EStaticItemSlot::RSword:
 		//StaticItemMesh[static_cast<uint8>(EStaticItemSlot::RAxe)]->SetStaticMesh(nullptr);
 		for (size_t i = 0; i < static_cast<size_t>(EStaticItemSlot::SlotMax); i++)
@@ -1101,14 +1116,4 @@ void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
 	IsFireCpp = false;
 }
 
-
-void AC_GlobalPlayer::SetHasRifle(bool bNewHasRifle)
-{
-	bHasRifle = bNewHasRifle;
-}
-
-bool AC_GlobalPlayer::GetHasRifle()
-{
-	return bHasRifle;
-}
 

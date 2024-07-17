@@ -77,13 +77,6 @@ public:
 		return PitchCPP;
 	}
 
-	// ÃÑ °ü·Ã bool ÇÔ¼ö
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void SetHasRifle(bool bNewHasRifle);
-
-	/** Getter for the bool */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	bool GetHasRifle();
 	//------------------------------------------------
 
 	EWeaponUseState GetPlayerCurState()
