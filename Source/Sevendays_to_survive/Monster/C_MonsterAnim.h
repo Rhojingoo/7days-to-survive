@@ -44,11 +44,17 @@ public:
 
 	bool IsPlayMontage();
 
+	uint8 GetAnimMontageKey()
+	{
+		return AnimMontageKey;
+	}
+
 protected:
 
 	// void Init(TArray<TPair<FString, class UAnimMontage*>>);
 
 private:
+	uint8 AnimMontageKey;
 	// 해쉬맵입니다.
 	// C++로 치면 unordered_map
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

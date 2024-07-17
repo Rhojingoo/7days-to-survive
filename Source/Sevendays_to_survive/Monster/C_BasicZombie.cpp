@@ -25,12 +25,26 @@ void AC_BasicZombie::SetName(FString _Name)
 	MonsterName = _Name;
 }
 
-void AC_BasicZombie::Idle()
+//void AC_BasicZombie::Idle()
+//{
+//	if (nullptr == AnimInstance) {
+//		return;
+//	}
+//	Super::Idle();
+//}
+
+void AC_BasicZombie::Idle_Implementation()
 {
 	if (nullptr == AnimInstance) {
 		return;
 	}
-	Super::Idle();
+
+	SetState(MonsterEnum::Idle);
+
+	if (false == AnimInstance->IsPlayMontage())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+	}
 }
 
 void AC_BasicZombie::Attack_Implementation()

@@ -24,14 +24,28 @@ void AC_ZombieMan::SetName(FString _Name)
 	MonsterName = _Name;
 }
 
-void AC_ZombieMan::Idle()
+//void AC_ZombieMan::Idle()
+//{
+//	if (nullptr == AnimInstance) 
+//	{
+//		return;
+//	}
+//
+//	Super::Idle();
+//}
+
+void AC_ZombieMan::Idle_Implementation()
 {
-	if (nullptr == AnimInstance) 
-	{
+	if (nullptr == AnimInstance) {
 		return;
 	}
 
-	Super::Idle();
+	SetState(MonsterEnum::Idle);
+
+	if (false == AnimInstance->IsPlayMontage())
+	{
+		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+	}
 }
 
 //void AC_ZombieMan::Attack()

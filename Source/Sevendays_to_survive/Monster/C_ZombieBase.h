@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Sound/SoundWave.h"
 #include "Perception/AISense_Hearing.h"
 #include "C_ZombieBase.generated.h"
 
@@ -80,6 +81,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Collision(AActor* _Actor);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* AudioComponent;
 
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
 

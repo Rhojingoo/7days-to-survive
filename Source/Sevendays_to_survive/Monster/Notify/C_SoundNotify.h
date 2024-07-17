@@ -18,10 +18,4 @@ public:
 	UC_SoundNotify();
 
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USoundWave* SoundFile;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString MonsterName;
 };
