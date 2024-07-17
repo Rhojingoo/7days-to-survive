@@ -317,6 +317,7 @@ void AC_GlobalPlayer::BeginPlay()
 void AC_GlobalPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	SpawnBulletMove(DeltaTime);
 	Calstamina();
 }
 
@@ -718,6 +719,41 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 	{
 		Crouch();
 	}
+}
+
+void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
+{
+	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
+	{
+		return;
+	}
+
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	if(true==BulletInfos.IsEmpty())
+	{
+		return;
+	}
+
+	if (false == IsFireCpp)
+	{
+		return;
+	}
+	
+	for (size_t i = 0; i < BulletInfos.Num(); i++)
+	{
+		if (nullptr == BulletInfos[i].FireEffect)
+		{
+			return;
+		}
+		BulletInfos[i].FireEffect->SetActorLocation(BulletInfos[i].Start);
+		BulletInfos[i].FireEffect->SetActorLocation(BulletInfos[i].End);
+		//BulletInfos[i].FireEffect->SetActorLocation(GetActorLocation() + (BulletInfos[i].End.Normalize() * _DeltaTime * BulletInfos[i].BulletSpeed));
+	}
+
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()
