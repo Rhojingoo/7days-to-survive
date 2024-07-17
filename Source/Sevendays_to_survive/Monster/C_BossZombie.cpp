@@ -5,6 +5,9 @@
 #include "Monster/C_MonsterAnim.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/AudioComponent.h"
+#include "MonsterData/MonsterDataRow.h"
+#include "STS/C_STSInstance.h"
 
 AC_BossZombie::AC_BossZombie()
 {
@@ -113,5 +116,20 @@ void AC_BossZombie::MontageStop()
     UAnimMontage* Montage = AnimInstance->GetCurrentActiveMontage();
     if (nullptr != Montage) {
     AnimInstance->Montage_Stop(0.0f, Montage);
+    }
+}
+
+void AC_BossZombie::PlayRushSound_Implementation()
+{
+    UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+    FMonsterDataRow* Row = Inst->GetMonsterData(*MonsterName);
+    if (nullptr != Row)
+    {
+        USoundWave** SoundWavePtr = Row->SoundFile.Find(11);
+        if (nullptr != SoundWavePtr)
+        {
+            AudioComponent->SetSound(*SoundWavePtr);
+            AudioComponent->Play();
+        }
     }
 }

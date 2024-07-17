@@ -49,6 +49,10 @@ public:
 
 	void MontageStop();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void PlayRushSound();
+	void PlayRushSound_Implementation();
+
 private:
 	void SetName(FString _Name) override;
 
