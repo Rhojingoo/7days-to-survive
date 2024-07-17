@@ -101,6 +101,10 @@ public:
 	UFUNCTION(BlueprintCallable,Reliable, NetMulticast)
 	void WeaponSwingSound(FHitResult _Hit, const bool _IsZombie);
 	void WeaponSwingSound_Implementation(FHitResult _Hit, const bool _IsZombie);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateZombieBlood(FHitResult _Hit);
+	void CreateZombieBlood_Implementation(FHitResult _Hit);
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -197,9 +201,6 @@ protected:
 	void CreateBulletHole(FHitResult _Hit);
 	void CreateBulletHole_Implementation(FHitResult _Hit);
 
-	UFUNCTION(Reliable, NetMulticast)
-	void CreateZombieBlood(FHitResult _Hit);
-	void CreateZombieBlood_Implementation(FHitResult _Hit);
 
 	UFUNCTION()
 	void Calstamina();

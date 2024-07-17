@@ -63,6 +63,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 				//ZombieDieTrace(Zombie);
 				PlayCharacter->WeaponSwingSound(Hit, true);
 				Zombie->SetHP(20.0f);
+				PlayCharacter->CreateZombieBlood(Hit);
 				
 				
 				/*FTimerHandle ZombieDestory;

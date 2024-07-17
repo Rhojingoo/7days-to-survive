@@ -68,6 +68,7 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 				else
 				{
 					PlayCharacter->WeaponSwingSound(Hit, true);
+					PlayCharacter->CreateZombieBlood(Hit);
 				}
 				Zombie->SetHP(20.0f);
 
