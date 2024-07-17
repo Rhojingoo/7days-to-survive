@@ -82,6 +82,28 @@ FC_WeaponDataTable* UC_STSInstance::GetWeaPonDataTable(FName _Name)
     return Data;
 }
 
+TMap<FName, FUIWidgetDataRow*> UC_STSInstance::GetUIWidgetDataMap()
+{
+    TMap<FName, FUIWidgetDataRow*> Result;
+
+    if (nullptr == WidgetDataTable)
+    {
+        STS_FATAL("[%s] WidgetDataTable is null.", __FUNCTION__);
+        return Result;
+    }
+
+    TArray<FName> RowNames = WidgetDataTable->GetRowNames();
+    TArray<FUIWidgetDataRow*> WidgetDatas;
+    WidgetDataTable->GetAllRows(TEXT(""), WidgetDatas);
+
+    for (size_t i = 0; i < WidgetDatas.Num(); ++i)
+    {
+        Result.Emplace(RowNames[i], WidgetDatas[i]);
+    }
+
+    return Result;
+}
+
 int UC_STSInstance::GenerateRandomInt(int _Min, int _Max)
 {
     if (_Min > _Max)

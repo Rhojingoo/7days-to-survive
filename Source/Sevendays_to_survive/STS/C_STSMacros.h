@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 /**
 * Display 모드로 UE_LOG를 띄웁니다. 접속자 이름을 표시합니다.
 * [주의] Kismet/GameplayStatics.h를 include해야 사용할 수 있습니다.

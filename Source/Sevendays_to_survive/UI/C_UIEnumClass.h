@@ -12,10 +12,17 @@
 
 
 UENUM(BlueprintType)
-enum class UIType : uint8
+enum class EUIType : uint8
 {
 	MainUi,
 	Inventory,
-	
+	Minimap,
 };
 
+UENUM(BlueprintType)
+enum class EUIInputMode : uint8
+{
+	None,
+	Game,
+	UIOnly
+};

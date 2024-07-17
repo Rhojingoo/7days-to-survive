@@ -40,6 +40,8 @@ public:
 
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
+	TMap<FName, FUIWidgetDataRow*> GetUIWidgetDataMap();
+
 	FC_UITableRow TitleToGameInfo;
 
 	int GenerateRandomInt(int _Min, int _Max);
@@ -98,5 +100,6 @@ private:
 
 	FRandomStream RandomStream;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WidgetDataTable = nullptr;
 };

@@ -9,6 +9,7 @@
 class UTimelineComponent;
 class ALight;
 class AC_MapPlayer;
+class AC_InGameHUD;
 class UC_BuildingComponent;
 class UC_InventoryComponent;
 class UC_MapInteractionComponent;
@@ -43,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static const UC_Item* FindItem(FName _Id);
+
+	UFUNCTION(BlueprintPure)
+	static AC_UI_InGameHUD* GetInGameHUD();
 
 private:
 	
