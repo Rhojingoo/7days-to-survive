@@ -658,7 +658,7 @@ void AC_GlobalPlayer::CreateBulletHole_Implementation(FHitResult _Hit)
 
 void AC_GlobalPlayer::CreateZombieBlood_Implementation(FHitResult _Hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ZombieHitEffect, _Hit.ImpactPoint, FRotator(0.0f,0.0f,0.0f), FVector(1.0f,1.0f,1.0f), true, true, ENCPoolMethod::None, true);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ZombieHitEffect, _Hit.ImpactPoint, FRotator(0.0f,0.0f,0.0f), FVector(1.0f,1.0f,1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 
 }
 
