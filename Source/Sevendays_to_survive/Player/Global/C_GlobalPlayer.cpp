@@ -1109,6 +1109,7 @@ void AC_GlobalPlayer::FireEnd_Implementation(const FInputActionValue& Value)
 {
 	GetWorld()->GetTimerManager().ClearTimer(timer);
 	IsFireCpp = false;
+	BulletInfos.Empty();
 }
 
 
