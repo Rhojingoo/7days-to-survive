@@ -10,6 +10,7 @@
 #include "Components/Image.h"
 #include "UI/Inventory/Remake/C_UI_Inventory.h"
 #include "UI/Inventory/C_UI_SlotDrag.h"
+
 #include "C_UI_InventorySlot.generated.h"
 
 /**
