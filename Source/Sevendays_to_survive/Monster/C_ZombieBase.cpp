@@ -6,6 +6,8 @@
 #include "C_MonsterAnim.h"
 #include "MonsterData/MonsterDataRow.h"
 #include "STS/C_STSInstance.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundWave.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -22,6 +24,10 @@ AC_ZombieBase::AC_ZombieBase()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bAutoActivate = false;
 
 	AttackComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	AttackComponent->SetupAttachment(GetMesh());
@@ -65,6 +71,8 @@ void AC_ZombieBase::BeginPlay()
 			AnimInstance->PushAnimation(Montage.Key, Montage.Value);
 		}
 	}
+
+	AnimInstance->ChangeAnimation(MonsterEnum::Idle);
 }
 // Called every frame
 void AC_ZombieBase::Tick(float DeltaTime)

@@ -49,6 +49,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	int Hp=0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	UNiagaraSystem* PlayerHitBlood = nullptr;
+
 };
 
 

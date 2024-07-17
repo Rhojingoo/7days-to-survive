@@ -62,7 +62,7 @@ AActor* AC_NickMainPlayer::SpawnMapCamera(const FTransform& _Transform)
 		if (nullptr == Camera) {
 			UE_LOG(LogTemp, Fatal, TEXT(""));
 		}
-		FAttachmentTransformRules AttachRule(EAttachmentRule::KeepRelative, true);
+		FAttachmentTransformRules AttachRule(EAttachmentRule::KeepRelative, EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, true);
 		Camera->AttachToComponent(GetCapsuleComponent(), AttachRule);
 		return Camera;
 	}
