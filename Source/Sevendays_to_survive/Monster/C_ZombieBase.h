@@ -104,6 +104,7 @@ public:
 	void PlayFindSound();
 	void PlayFindSound_Implementation();
 
+
 protected:
 	FString MonsterName;
 	float LayLength = 100.f;

@@ -146,7 +146,8 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	float Distance = FVector::Dist(TargetLocation, SelfLocation);
 
 	/*if (Player->GetDead() == true) {
-
+	Controller->IsFindOff();
+	return;
 	}*/		//플레이어가 죽었을 때 실행되어야 하는 로직
 
 	if (Target->IsValidLowLevel() == false) {

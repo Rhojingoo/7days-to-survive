@@ -171,6 +171,8 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 			//UAISense_Hearing
 			if (Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>() && Stimulus.WasSuccessfullySensed())
 			{
+				//AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Actor);
+				//Player->isdead == true return;
 				BBC->SetValueAsObject(EnemyKeyId, Actor);
 				IsFind = true;
 
@@ -220,6 +222,15 @@ void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
 void AC_MonsterAIBase::OffHearingUpdated(AActor* _ForgotActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Forgot sound of actor: %s"), *_ForgotActor->GetName());
+}
+
+void AC_MonsterAIBase::IsFindOff()
+{
+	BBC->SetValueAsObject(EnemyKeyId, nullptr);
+	BBC->SetValueAsObject(Scream_Zombie, nullptr);
+	IsFind = false;
+	IsSound = false;
+	APC->SetSenseEnabled(UAISense_Sight::StaticClass(), true);
 }
 
 UC_MonsterComponent* AC_MonsterAIBase::GetMCP()
