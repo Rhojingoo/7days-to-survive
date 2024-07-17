@@ -9,7 +9,8 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "Player/Input/C_InputActionDatas.h"
 #include "Components/ArrowComponent.h"
-
+#include <Kismet/GameplayStatics.h>
+#include "Components/CapsuleComponent.h"
 
 
 
@@ -48,6 +49,23 @@ void AC_NickMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	
+
+}
+
+AActor* AC_NickMainPlayer::SpawnMapCamera(const FTransform& _Transform)
+{
+	if (MapCameraComponent == nullptr) {
+		UE_LOG(LogTemp, Fatal, TEXT(""));
+	}
+	if (GetController() == UGameplayStatics::GetPlayerController(GetWorld(), 0)) {
+		AActor* Camera = GetWorld()->SpawnActor(MapCameraComponent, &_Transform);
+		if (nullptr == Camera) {
+			UE_LOG(LogTemp, Fatal, TEXT(""));
+		}
+		FAttachmentTransformRules AttachRule(EAttachmentRule::KeepRelative, true);
+		Camera->AttachToComponent(GetCapsuleComponent(), AttachRule);
+		return Camera;
+	}
+	return nullptr;
 }
 
