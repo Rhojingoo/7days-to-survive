@@ -11,6 +11,7 @@
 #include "Map/C_ItemPouch.h"
 #include "Map/C_MapDataAsset.h"
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
+#include "UI/C_UI_InGameHUD.h"
 
 UC_InventoryComponent::UC_InventoryComponent()
 {
@@ -27,8 +28,8 @@ void UC_InventoryComponent::BeginPlay()
     UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
     ItemPouchClass = MapDataAsset->GetItemPouchClass();
 
+    InventoryWidget = UC_STSGlobalFunctions::GetInGameHUD()->GetInventoryWidget();
     Inventory.SetNum(Size);
-    SetUIActive(false);
 }
 
 void UC_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -271,30 +272,6 @@ bool UC_InventoryComponent::IsCraftable(FName _Id) const
     }
 
     return true;
-}
-
-void UC_InventoryComponent::ToggleUI()
-{
-    SetUIActive(!UIActiveness);
-}
-
-void UC_InventoryComponent::SetUIActive(bool _Activeness)
-{
-    UIActiveness = _Activeness;
-
-    if (true == UIActiveness)
-    {
-        if (false == GetOwner<ACharacter>()->IsLocallyControlled())
-        {
-            return;
-        }
-
-        InventoryWidget->SetVisibility(ESlateVisibility::Visible);
-    }
-    else
-    {
-        InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
-    }
 }
 
 int UC_InventoryComponent::FindEmptySlot() const
