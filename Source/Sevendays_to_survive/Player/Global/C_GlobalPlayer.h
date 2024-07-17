@@ -9,6 +9,18 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "C_GlobalPlayer.generated.h"
 
+
+USTRUCT()
+struct FireInfo
+{
+	GENERATED_BODY()
+public:
+	FVector Start = FVector::ZeroVector;
+	AActor* FireEffect = nullptr;
+	float Time = 0.0f;
+	float BulletSpeed = 0.0f;
+};
+
 class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
@@ -367,4 +379,7 @@ private:
 
 	UPROPERTY()
 	UNiagaraSystem* thisHitBlood = nullptr;
+
+	UPROPERTY()
+	TArray<FireInfo> BulletInfos;
 };

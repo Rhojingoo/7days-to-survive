@@ -11,6 +11,21 @@ AC_BossZombie::AC_BossZombie()
     SetName("BossZombie");
 }
 
+void AC_BossZombie::Idle_Implementation()
+{
+    if (nullptr == AnimInstance) 
+    {
+        return;
+    }
+
+    SetState(MonsterEnum::Idle);
+
+    if (false == AnimInstance->IsPlayMontage())
+    {
+        AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+    }
+}
+
 void AC_BossZombie::Attack_Implementation()
 {
     if (nullptr == AnimInstance) {
