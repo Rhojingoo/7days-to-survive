@@ -143,7 +143,7 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	IsHitCpp = true;
 	
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
-	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	Hp -= 5;
 	
 }
@@ -270,6 +270,7 @@ void AC_GlobalPlayer::BeginPlay()
 		staminaAttCalValue = PlayerDT.staminaAttValue;
 		staminaJumpCalValue = PlayerDT.staminaJumpValue;
 		Hp = PlayerDT.Hp;
+		thisHitBlood = PlayerDT.PlayerHitBlood;
 	}
 	
 	// 총알 관련 이펙트

@@ -364,4 +364,7 @@ private:
 
 	UPROPERTY()
 	UNiagaraSystem* ZombieHitEffect = nullptr;
+
+	UPROPERTY()
+	UNiagaraSystem* thisHitBlood = nullptr;
 };
