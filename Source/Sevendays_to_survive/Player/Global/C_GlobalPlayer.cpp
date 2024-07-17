@@ -265,6 +265,8 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
 		ZombieHitEffect = BulletDT.ZombieHitBlood;
+		BulletEffectActor = BulletDT.BulletEffect;
+		
 	}
 
 	// 근접 무기 사운드
@@ -455,6 +457,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FVector Start = GunLocation;
 	Bullet.Start = Start;
 	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
+	Bullet.End = End;
+	
+	Bullet.FireEffect = GetWorld()->SpawnActor<AActor>(BulletEffectActor);
+
+	BulletInfos.Add(Bullet);
 
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(CurWeapon);
