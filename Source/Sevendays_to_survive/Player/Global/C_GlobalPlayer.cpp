@@ -134,12 +134,14 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 		return;
 	}
 
+	
+
 	if (true == IsHitCpp)
 	{
 		return;
 	}
 	IsHitCpp = true;
-
+	
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	
 	Hp -= 5;
@@ -285,7 +287,7 @@ void AC_GlobalPlayer::BeginPlay()
 	}
 
 	//Add Input Mapping Context
-	PlayerController = Cast<AC_MainPlayerController>(Controller);
+	PlayerController = Cast<AC_MainPlayerController>(GetController());
 	if (PlayerController)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -321,10 +323,7 @@ void AC_GlobalPlayer::BeginPlay()
 		Riflemagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->MagagineSize;
 	}
 
-	{
-		//NameText->SetRelativeLocation(FVector(0.0f, 20.0f, 100.0f));
-		//UUserWidget* blackLinesWidget = CreateWidget<UUserWidget>(this->GetGameInstance(), blackLinesWidgetClass);
-	}
+	
 }
 
 // Called every frame
