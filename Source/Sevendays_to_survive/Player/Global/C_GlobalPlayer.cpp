@@ -152,8 +152,6 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 
 	switch (PlayerCurState)
 	{
-	case EWeaponUseState::NoWeapon:
-		break;
 	case EWeaponUseState::bat:
 		if (true == _IsZombie)
 		{
