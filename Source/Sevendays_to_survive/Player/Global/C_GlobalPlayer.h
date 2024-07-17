@@ -16,9 +16,10 @@ struct FireInfo
 	GENERATED_BODY()
 public:
 	FVector Start = FVector::ZeroVector;
+	FVector End = FVector::ZeroVector;
 	AActor* FireEffect = nullptr;
-	float Time = 0.0f;
-	float BulletSpeed = 0.0f;
+	float Time = 3.0f;
+	float BulletSpeed = 10000.0f;
 };
 
 class USpringArmComponent; // 스프링 암
@@ -382,4 +383,7 @@ private:
 
 	UPROPERTY()
 	TArray<FireInfo> BulletInfos;
+
+	UPROPERTY()
+	TSubclassOf<AActor> BulletEffectActor;
 };
