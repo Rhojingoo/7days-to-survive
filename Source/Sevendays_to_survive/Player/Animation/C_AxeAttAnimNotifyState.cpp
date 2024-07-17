@@ -21,7 +21,6 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		return;
 	}
 	PlayCharacter->AttCalstamina();
-	//UGameplayStatics::SpawnSoundAtLocation(PlayCharacter, PlayCharacter->GetWeaponSounds()[EStaticItemSlot::SlotMax], PlayCharacter->GetActorLocation());
 	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
 	{
 		return;

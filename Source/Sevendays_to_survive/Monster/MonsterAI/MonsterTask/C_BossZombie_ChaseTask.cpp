@@ -134,6 +134,7 @@ bool UC_BossZombie_ChaseTask::MonsterRangeTaskOnFaint(UBehaviorTreeComponent& Ow
         Boss->ApplyRunSpeed();
         SetTimer(OwnerComp, RushCoolDown);
         SetState(OwnerComp, EBossZombieChaseTaskState::Run);
+        Boss->MontageStop();
         return true;
     }
 

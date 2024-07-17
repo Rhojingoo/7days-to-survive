@@ -35,8 +35,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	PlayerMeshOption();
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	//PlayerDT = STSInstance->GetPlayerDataTable();
-	// Don't rotate when the controller rotates. Let that just affect the camera.
+	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
@@ -71,15 +70,6 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	NameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Name"));
 	NameText->SetupAttachment(GetCapsuleComponent());
 	NameText->SetRelativeLocation(FVector(0.0f, 20.0f, 100.0f));
-	//// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
-	//Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	//Mesh1P->SetOnlyOwnerSee(true);
-	//Mesh1P->SetupAttachment(Camera);
-	//Mesh1P->bCastDynamicShadow = false;
-	//Mesh1P->CastShadow = false;
-	////Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
-	//Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
-
 	
 	{
 		{
@@ -162,8 +152,6 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 
 	switch (PlayerCurState)
 	{
-	case EWeaponUseState::NoWeapon:
-		break;
 	case EWeaponUseState::bat:
 		if (true == _IsZombie)
 		{
@@ -282,9 +270,7 @@ void AC_GlobalPlayer::BeginPlay()
 	// 근접 무기 사운드
 	{
 		WeaponSounds.Add(EStaticItemSlot::RSword, AttWeaponSound.AttSound[0]);
-		WeaponSounds.Add(EStaticItemSlot::RAxe, AttWeaponSound.AttSound[1]);
-		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[2]);
-		WeaponSounds.Add(EStaticItemSlot::SlotMax, AttWeaponSound.AttSound[3]);
+		WeaponSounds.Add(EStaticItemSlot::RBat, AttWeaponSound.AttSound[1]);
 	}
 
 	//Add Input Mapping Context
@@ -295,8 +281,6 @@ void AC_GlobalPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
-
-		PlayerController->SetViewTarget(this);
 	}
 
 	{

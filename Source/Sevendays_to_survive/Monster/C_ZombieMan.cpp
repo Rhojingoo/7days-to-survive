@@ -36,7 +36,8 @@ void AC_ZombieMan::SetName(FString _Name)
 
 void AC_ZombieMan::Idle_Implementation()
 {
-	if (nullptr == AnimInstance) {
+	if (nullptr == AnimInstance) 
+	{
 		return;
 	}
 

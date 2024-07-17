@@ -16,6 +16,11 @@ class SEVENDAYS_TO_SURVIVE_API UC_TaskMonsterChase : public UC_BlackBoardBase
     GENERATED_BODY()
 public:
     UC_TaskMonsterChase();
+
+    bool SetPath(FVector _MyLocation, FVector _TargetLocation, class UMonsterDataObject* _Data, UBlackboardComponent* _BBC);
+    bool NaviMove(UMonsterDataObject* _Data, UBlackboardComponent* _BBC, AAIController* _Controller, UBehaviorTreeComponent& OwnerComp, float _TargetDistance);
+    bool MonsterAttack(UMonsterDataObject* _Data, AAIController* _Controller, float _Distance);
+
 protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 

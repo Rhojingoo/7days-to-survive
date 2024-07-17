@@ -11,6 +11,21 @@ AC_BossZombie::AC_BossZombie()
     SetName("BossZombie");
 }
 
+void AC_BossZombie::Idle_Implementation()
+{
+    if (nullptr == AnimInstance) 
+    {
+        return;
+    }
+
+    SetState(MonsterEnum::Idle);
+
+    if (false == AnimInstance->IsPlayMontage())
+    {
+        AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+    }
+}
+
 void AC_BossZombie::Attack_Implementation()
 {
     if (nullptr == AnimInstance) {
@@ -91,4 +106,12 @@ void AC_BossZombie::AttackCollisionOn()
 void AC_BossZombie::AttackCollisionOff()
 {
     AttackComponent->SetCollisionProfileName("NoCollision");
+}
+
+void AC_BossZombie::MontageStop()
+{
+    UAnimMontage* Montage = AnimInstance->GetCurrentActiveMontage();
+    if (nullptr != Montage) {
+    AnimInstance->Montage_Stop(0.0f, Montage);
+    }
 }
