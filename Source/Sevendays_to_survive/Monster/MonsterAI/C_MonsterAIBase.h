@@ -76,9 +76,6 @@ public:
 
 	class UAISenseConfig_Hearing* GetHearingConfig() { return HearingConfig; }
 
-
-
-
 private:
 	UPROPERTY()
 	float AISightRadius = 1000.f;

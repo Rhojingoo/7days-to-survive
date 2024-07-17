@@ -11,8 +11,10 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Player/MainPlayer/C_NickMainPlayer.h"
+#include "STS/C_STSInstance.h"
 #include "Monster/Component/C_MonsterComponent.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
+#include "Components/AudioComponent.h"
 
 AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 	: Super(_ObjectInitializer)
@@ -171,6 +173,9 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 			{
 				BBC->SetValueAsObject(EnemyKeyId, Actor);
 				IsFind = true;
+
+				Monster->PlayFindSound();
+
 				APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);
 				break;
 			}
