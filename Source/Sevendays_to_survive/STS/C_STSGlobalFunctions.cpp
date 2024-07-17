@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "STS/C_STSGlobalFunctions.h"
@@ -13,6 +13,7 @@
 #include "Map/C_MapInteractionComponent.h"
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
+#include "UI/C_UI_InGameHUD.h"
 
 
 UC_BuildingComponent* UC_STSGlobalFunctions::GetBuildingComponent()
@@ -68,4 +69,10 @@ void UC_STSGlobalFunctions::Day_And_Night_Cycle(ALight* _DirectionLight)
 const UC_Item* UC_STSGlobalFunctions::FindItem(FName _Id)
 {
     return GetMapDataAsset()->FindItem(_Id);
+}
+
+AC_UI_InGameHUD* UC_STSGlobalFunctions::GetInGameHUD()
+{
+    UWorld* World = GEngine->GameViewport->GetWorld();
+    return Cast<AC_UI_InGameHUD>(UGameplayStatics::GetPlayerController(World, 0)->GetHUD());
 }

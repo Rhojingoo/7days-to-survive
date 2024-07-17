@@ -64,7 +64,7 @@ private:
 	TMap<int, int> HpMap;
 
 	// Drop items.
-	TArray<FC_ItemAndCount> DropItems;
+	TMap<FName, int> DropItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Id", meta = (AllowPrivateAccess = "true"))
 	FName Id;

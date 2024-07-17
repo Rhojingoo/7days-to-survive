@@ -26,8 +26,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const UC_Item* FindItem(FName _Id);
 
-	UFUNCTION(BlueprintCallable)
-	TArray<FC_ItemAndCount> GetItemSourceDropItems(FName _Id);
+	TMap<FName, int> GetItemSourceDropItems(FName _Id);
 
 	UFUNCTION(BlueprintCallable)
 	TSubclassOf<AC_ItemPouch> GetItemPouchClass() const;

@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/C_UIEnumClass.h"
 #include "C_UI_Context.generated.h"
 
+class AC_UI_InGameHUD;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SEVENDAYS_TO_SURVIVE_API UC_UI_Context : public UActorComponent
@@ -18,10 +20,10 @@ public:
 	UC_UI_Context();
 
 	UFUNCTION(BlueprintCallable)
-	void UIVisibilitySwitch(/*UIEnum타입 추가*/);
+	void UIVisibilitySwitch(EUIType _Type);
 
 	UFUNCTION(BlueprintCallable)
-	void UIVisibilityOn();
+	void UIVisibilityOn(EUIType _Type);
 
 protected:
 	// Called when the game starts
@@ -31,5 +33,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	AC_UI_InGameHUD* InGameHUD = nullptr;
 };
