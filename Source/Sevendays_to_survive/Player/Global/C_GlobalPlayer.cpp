@@ -460,7 +460,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		break;
 	case EWeaponUseState::Rifle2:
 		--magazinecapacity[ESkerItemSlot::RRifle2];
-		CurWeapon->GunParticleAndSound(PlayerCurState);
+		CurWeapon->PlayGunAnimation(PlayerCurState);
 		break;
 	case EWeaponUseState::Pistol2:
 		--magazinecapacity[ESkerItemSlot::RPistol2];
@@ -829,6 +829,15 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 		Bullet->InitialLifeSpan = BulletInfos[i].Time;
 	}
 	BulletInfos.Empty();
+}
+
+void AC_GlobalPlayer::Reload()
+{
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()
