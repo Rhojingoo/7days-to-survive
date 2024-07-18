@@ -189,6 +189,11 @@ int UC_InventoryComponent::GetCount(int _Index) const
 
 int UC_InventoryComponent::GetCountByItemId(FName _Id) const
 {
+    if (false == ItemIdToIndex.Contains(_Id))
+    {
+        return 0;
+    }
+
     int Index = ItemIdToIndex[_Id];
     return GetCount(Index);
 }
