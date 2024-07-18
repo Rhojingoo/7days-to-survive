@@ -25,7 +25,7 @@
 #include "Components/TextRenderComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
@@ -265,7 +265,6 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
 		ZombieHitEffect = BulletDT.ZombieHitBlood;
-		BulletEffectNia = BulletDT.BulletEffect;
 		
 	}
 
@@ -460,8 +459,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 	Bullet.End = End;
 	Bullet.BulletRotation = GunRotation;
-	Bullet.FireEffect = BulletEffectNia;
-
+	Bullet.BulletActor = BulletDT.BulletActor;
 	BulletInfos.Add(Bullet);
 
 	FCollisionQueryParams Params;
@@ -745,13 +743,14 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 	
 	for (size_t i = 0; i < BulletInfos.Num(); i++)
 	{
-		if (nullptr == BulletInfos[i].FireEffect)
+		if (nullptr == BulletInfos[i].BulletActor)
 		{
 			return;
 		}
-		UNiagaraComponent* Bullet=UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, BulletInfos[i].FireEffect, BulletInfos[i].Start, BulletInfos[i].BulletRotation, FVector(10.0f, 10.0f, 10.0f), true, true, ENCPoolMethod::None, false);
-		Bullet->Activate();
-		Bullet->SetVectorParameter(FName("End"), BulletInfos[i].End);
+		AActor* test = GetWorld()->SpawnActor<AActor>(BulletInfos[i].BulletActor);
+		test->SetActorRotation(BulletInfos[i].BulletRotation);
+		test->SetActorLocation(BulletInfos[i].Start);
+		test->GetComponentByClass<UProjectileMovementComponent>()->Velocity= BulletInfos[i].End- BulletInfos[i].Start;
 	}
 	BulletInfos.Empty();
 }

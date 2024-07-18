@@ -18,7 +18,7 @@ public:
 	FVector Start = FVector::ZeroVector;
 	FVector End = FVector::ZeroVector;
 	FRotator BulletRotation = FRotator::ZeroRotator;
-	UNiagaraSystem* FireEffect = nullptr;
+	TSubclassOf<AActor> BulletActor = nullptr;
 	float Time = 3.0f;
 	//float BulletSpeed = 10000.0f;
 };
@@ -393,6 +393,4 @@ private:
 	UPROPERTY()
 	TArray<FireInfo> BulletInfos;
 
-	UPROPERTY()
-	UNiagaraSystem* BulletEffectNia=nullptr;
 };
