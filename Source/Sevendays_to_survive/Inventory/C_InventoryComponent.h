@@ -88,15 +88,10 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     int Size = 32;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    UC_UI_InverntoryWidget* InventoryWidget = nullptr;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-    bool UIActiveness = false;
-
 private:
     bool IsValidSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
+    UC_UI_InverntoryWidget* GetInventoryWidget();
 private:
     int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;

@@ -46,4 +46,7 @@ public:
 	class UBoxComponent* BoxComponent;
 
 	FVector GetRandomPointInBox() const;
+
+	UFUNCTION(BlueprintCallable)
+	void ReduceSpawnArea(FVector2D _ReduceValue);
 };

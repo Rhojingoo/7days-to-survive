@@ -14,6 +14,7 @@ class UC_BuildingComponent;
 class UC_InventoryComponent;
 class UC_MapInteractionComponent;
 class UC_MapDataAsset;
+class UC_UI_InventoryCore;
 
 /**
  * 
@@ -47,6 +48,9 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	static AC_UI_InGameHUD* GetInGameHUD();
+
+	UFUNCTION(BlueprintPure)
+	static UC_UI_InventoryCore* GetInventoryCore();
 
 private:
 	
