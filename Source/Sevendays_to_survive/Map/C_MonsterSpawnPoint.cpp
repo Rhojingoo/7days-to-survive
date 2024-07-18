@@ -12,16 +12,22 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(RootComponent);
+	//BoxComponent->SetCollisionProfileName("NoCollision");
 }
 
 // Called when the game starts or when spawned
 void AC_MonsterSpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
+
 	if (true == HasAuthority()) {
 		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
 		Inst->AddSpawnPoint(this);
 	}
+
+	SetSpawn(true);
 }
 
 // Called every frame
@@ -42,6 +48,7 @@ void AC_MonsterSpawnPoint::MonsterSpawn(float DeltaTime)
 		FTransform Transform;
 		Transform.SetScale3D({ 1.0f, 1.0f,1.0f });
 		Transform.SetLocation(GetRandomPointInBox());
+		ReduceSpawnArea({ 20.0f, 20.0f });
 		FActorSpawnParameters SpawnInfo;
 		GetWorld()->SpawnActor<AC_ZombieBase>(SpawnZombie, Transform, SpawnInfo);
 		CoolTime = 0.0f;
@@ -66,6 +73,7 @@ UClass* AC_MonsterSpawnPoint::ZombieClass()
 
 FVector AC_MonsterSpawnPoint::GetRandomPointInBox() const
 {
+	int a = 0;
 	if (BoxComponent)
 	{
 		FVector Origin;
@@ -83,3 +91,12 @@ FVector AC_MonsterSpawnPoint::GetRandomPointInBox() const
 	return FVector::ZeroVector;
 }
 
+void AC_MonsterSpawnPoint::ReduceSpawnArea(FVector2D _ReduceValue)
+{
+	FVector BoxExtent = BoxComponent->GetScaledBoxExtent();
+
+	BoxExtent.X -= _ReduceValue.X;
+	BoxExtent.Y -= _ReduceValue.Y;
+
+	BoxComponent->SetWorldScale3D(BoxExtent);
+}
