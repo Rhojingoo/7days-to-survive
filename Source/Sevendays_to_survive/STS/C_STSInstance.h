@@ -9,6 +9,7 @@
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
+struct FC_PlayerSpawnData;
 struct FC_WeaponDataTable;
 struct FC_UITableRow;
 /**
@@ -37,6 +38,7 @@ public:
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
 	FC_PlayerDataTable* GetPlayerDataTable();
+	FC_PlayerSpawnData* GetPlayerSpawnDataTable();
 
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
@@ -94,9 +96,13 @@ public:
 	TArray<AActor*> PlayerArray;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* PlayerDataTable;
+	UDataTable* PlayerDataTable=nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* WeaponDataTable;
+	UDataTable* PlayerSpawnDataTable=nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WeaponDataTable=nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
