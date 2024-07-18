@@ -17,9 +17,10 @@ struct FireInfo
 public:
 	FVector Start = FVector::ZeroVector;
 	FVector End = FVector::ZeroVector;
-	AActor* FireEffect = nullptr;
+	FRotator BulletRotation = FRotator::ZeroRotator;
+	UNiagaraSystem* FireEffect = nullptr;
 	float Time = 3.0f;
-	float BulletSpeed = 10000.0f;
+	//float BulletSpeed = 10000.0f;
 };
 
 class USpringArmComponent; // 스프링 암
@@ -88,6 +89,11 @@ public:
 	FORCEINLINE float GetPitchCPP()
 	{
 		return PitchCPP;
+	}
+
+	FORCEINLINE bool GetIsPlayerDieCpp()
+	{
+		return IsPlayerDieCpp;
 	}
 
 	//------------------------------------------------
@@ -284,7 +290,7 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
-	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated,VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsPlayerDieCpp = false;
 
 	UPROPERTY()
@@ -388,5 +394,5 @@ private:
 	TArray<FireInfo> BulletInfos;
 
 	UPROPERTY()
-	TSubclassOf<AActor> BulletEffectActor;
+	UNiagaraSystem* BulletEffectNia=nullptr;
 };

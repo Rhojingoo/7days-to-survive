@@ -197,7 +197,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
-	//DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 }
 
 // Called when the game starts or when spawned
@@ -265,7 +265,7 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
 		ZombieHitEffect = BulletDT.ZombieHitBlood;
-		BulletEffectActor = BulletDT.BulletEffect;
+		BulletEffectNia = BulletDT.BulletEffect;
 		
 	}
 
@@ -459,8 +459,8 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	Bullet.Start = Start;
 	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 	Bullet.End = End;
-	
-	Bullet.FireEffect = GetWorld()->SpawnActor<AActor>(BulletEffectActor);
+	Bullet.BulletRotation = GunRotation;
+	Bullet.FireEffect = BulletEffectNia;
 
 	BulletInfos.Add(Bullet);
 
@@ -471,7 +471,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::None, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
 	if (true == OKAtt)
@@ -749,11 +749,11 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 		{
 			return;
 		}
-		BulletInfos[i].FireEffect->SetActorLocation(BulletInfos[i].Start);
-		BulletInfos[i].FireEffect->SetActorLocation(BulletInfos[i].End);
-		//BulletInfos[i].FireEffect->SetActorLocation(GetActorLocation() + (BulletInfos[i].End.Normalize() * _DeltaTime * BulletInfos[i].BulletSpeed));
+		UNiagaraComponent* Bullet=UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, BulletInfos[i].FireEffect, BulletInfos[i].Start, BulletInfos[i].BulletRotation, FVector(10.0f, 10.0f, 10.0f), true, true, ENCPoolMethod::None, false);
+		Bullet->Activate();
+		Bullet->SetVectorParameter(FName("End"), BulletInfos[i].End);
 	}
-
+	BulletInfos.Empty();
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()

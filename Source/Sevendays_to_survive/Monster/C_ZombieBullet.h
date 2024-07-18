@@ -39,9 +39,16 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* AudioComponent;
+
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void SetDirection(const FVector& ShootDirection);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AActor* Spawner = nullptr;
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void SetHitSound();
+	void SetHitSound_Implementation();
 };
