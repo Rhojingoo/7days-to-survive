@@ -83,7 +83,7 @@ public:
 	UNiagaraSystem* ZombieHitBlood = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TSubclassOf<AActor> BulletEffect = nullptr;
+	UNiagaraSystem* BulletEffect = nullptr;
 };
 
 USTRUCT(BlueprintType)

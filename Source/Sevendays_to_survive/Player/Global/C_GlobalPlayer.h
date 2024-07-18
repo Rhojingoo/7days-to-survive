@@ -17,9 +17,10 @@ struct FireInfo
 public:
 	FVector Start = FVector::ZeroVector;
 	FVector End = FVector::ZeroVector;
-	AActor* FireEffect = nullptr;
+	FRotator BulletRotation = FRotator::ZeroRotator;
+	UNiagaraSystem* FireEffect = nullptr;
 	float Time = 3.0f;
-	float BulletSpeed = 10000.0f;
+	//float BulletSpeed = 10000.0f;
 };
 
 class USpringArmComponent; // 스프링 암
@@ -388,5 +389,5 @@ private:
 	TArray<FireInfo> BulletInfos;
 
 	UPROPERTY()
-	TSubclassOf<AActor> BulletEffectActor;
+	UNiagaraSystem* BulletEffectNia=nullptr;
 };
