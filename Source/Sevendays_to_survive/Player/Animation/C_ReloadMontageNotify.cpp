@@ -23,5 +23,44 @@ void UC_ReloadMontageNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 		return;
 	}
 
-	PlayCharacter->ResetHit();
+	switch (PlayCharacter->GetPlayerCurState())
+	{
+	case EWeaponUseState::Rifle:
+		if (PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RRifle] != 0)
+		{
+			return;
+		}
+		PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RRifle]= PlayCharacter->GetRiflemagazinecapacity();
+		break;
+	case EWeaponUseState::Rifle2:
+		if (PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RRifle2] != 0)
+		{
+			return;
+		}
+		PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RRifle2] = PlayCharacter->GetRiflemagazinecapacity();
+		break;
+	case EWeaponUseState::Pistol:
+		if (PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RPistol] != 0)
+		{
+			return;
+		}
+		PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RPistol] = PlayCharacter->GetPistolmagazinecapacity();
+		break;
+	case EWeaponUseState::Pistol2:
+		if (PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RPistol2] != 0)
+		{
+			return;
+		}
+		PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RPistol2] = PlayCharacter->GetPistolmagazinecapacity();
+		break;
+	case EWeaponUseState::Shotgun:
+		if (PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RShotgun] != 0)
+		{
+			return;
+		}
+		PlayCharacter->Getmagazinecapacity()[ESkerItemSlot::RShotgun] = PlayCharacter->GetShotGunmagazinecapacity();
+		break;
+	default:
+		break;
+	}
 }
