@@ -20,6 +20,9 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventoryCore : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	UFUNCTION(BlueprintCallable)
+	void Refresh();
+
 	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
 	UC_UI_InventoryIcon* GetInventoryIcon();
 
@@ -31,7 +34,4 @@ public:
 
 	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
 	UC_UI_InventoryTip* GetInventoryTip();
-
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_UI_InverntoryWidget* InventoryWidget = nullptr;*/
 };

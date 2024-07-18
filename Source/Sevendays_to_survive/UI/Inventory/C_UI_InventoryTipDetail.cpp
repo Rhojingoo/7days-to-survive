@@ -45,3 +45,13 @@ void UC_UI_InventoryTipDetail::Refresh(const UC_Item* _Item)
         GetCraftButton()->SetIsEnabled(false);
     }
 }
+
+void UC_UI_InventoryTipDetail::RefreshCurItem()
+{
+    if (nullptr == Item)
+    {
+        return;
+    }
+
+    Refresh(Item);
+}

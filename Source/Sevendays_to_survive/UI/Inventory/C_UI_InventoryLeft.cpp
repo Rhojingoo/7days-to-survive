@@ -28,6 +28,11 @@ void UC_UI_InventoryLeft::Refresh(int _Page)
     }
 }
 
+void UC_UI_InventoryLeft::RefreshCurPage()
+{
+    Refresh(CurPage);
+}
+
 void UC_UI_InventoryLeft::IncPage()
 {
     UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();

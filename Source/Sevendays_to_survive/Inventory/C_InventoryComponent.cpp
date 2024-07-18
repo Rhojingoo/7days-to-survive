@@ -39,19 +39,21 @@ void UC_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 {
-    if (true == IsFull())
-    {
-        SpawnItem(GetItemSpawnTransform(), _Item->Id, _Count);
-        STS_LOG("[DebugOnly] [%s] Inventory is full. Failed to add {Item: %s, Count: %d}.", __FUNCTION__, *_Item->Name, _Count);
-        return;
-    }
-
     // 이미 가지고 있는 아이템을 추가하는 경우
     if (true == HasItemByObject(_Item))
     {
         int Index = ItemIdToIndex[_Item->Id];
         Inventory[Index].Count += _Count;
         GetInventoryWidget()->SetNumber(Index, Inventory[Index].Count);
+        RefreshInventoryCore();
+        return;
+    }
+
+    // 인벤토리가 꽉 차 있는 경우
+    if (true == IsFull())
+    {
+        SpawnItem(GetItemSpawnTransform(), _Item->Id, _Count);
+        STS_LOG("[DebugOnly] [%s] Inventory is full. Failed to add {Item: %s, Count: %d}.", __FUNCTION__, *_Item->Name, _Count);
         return;
     }
 
@@ -63,6 +65,8 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 
     GetInventoryWidget()->SetIcon(Index, _Item->Icon);
     GetInventoryWidget()->SetNumber(Index, _Count);
+    RefreshInventoryCore();
+
     ++UsingSize;
 }
 
@@ -115,6 +119,8 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
 
         GetInventoryWidget()->SetIcon(_Index, nullptr);
         GetInventoryWidget()->SetNumber(_Index, 0);
+        RefreshInventoryCore();
+
         --UsingSize;
         return;
     }
@@ -122,6 +128,7 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item->Id, _Count);
     ItemAndCount.Count -= _Count;
     GetInventoryWidget()->SetNumber(_Index, ItemAndCount.Count);
+    RefreshInventoryCore();
 }
 
 void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
@@ -133,6 +140,7 @@ void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
     }
 
     Inventory[_Index].Count += _Count;
+    RefreshInventoryCore();
 }
 
 void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
@@ -151,15 +159,18 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
 
         return;
     }
+    
     if (Inventory[_Index].Count == _Count)
     {
         ItemIdToIndex.Remove(Inventory[_Index].Item->Id);
         Inventory[_Index].Item = nullptr;
-        Inventory[_Index].Count = 0;
+        GetInventoryWidget()->SetIcon(_Index, nullptr);
         --UsingSize;
     }
 
     Inventory[_Index].Count -= _Count;
+    GetInventoryWidget()->SetNumber(_Index, Inventory[_Index].Count);
+    RefreshInventoryCore();
 }
 
 bool UC_InventoryComponent::HasItemByObject(const UC_Item* _Item) const
@@ -344,6 +355,11 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
 UC_UI_InverntoryWidget* UC_InventoryComponent::GetInventoryWidget()
 {
     return UC_STSGlobalFunctions::GetInventoryCore()->GetInventoryWidget();
+}
+
+void UC_InventoryComponent::RefreshInventoryCore()
+{
+    UC_STSGlobalFunctions::GetInventoryCore()->Refresh();
 }
 
 void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count)

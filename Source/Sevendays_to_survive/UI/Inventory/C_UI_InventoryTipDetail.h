@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Refresh(const UC_Item* _Item);
 
+	UFUNCTION(BlueprintCallable)
+	void RefreshCurItem();
+
 	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
 	UImage* GetItemImage();
 

@@ -22,6 +22,9 @@ public:
 	void Refresh(int _Page);
 
 	UFUNCTION(BlueprintCallable)
+	void RefreshCurPage();
+
+	UFUNCTION(BlueprintCallable)
 	void IncPage();
 
 	UFUNCTION(BlueprintCallable)
