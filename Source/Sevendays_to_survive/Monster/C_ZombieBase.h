@@ -105,6 +105,9 @@ public:
 	void PlayFindSound_Implementation();
 
 
+	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	void ForceFindTargetActor(AActor* _Actor);
+
 protected:
 	FString MonsterName;
 	float LayLength = 100.f;
@@ -141,6 +144,7 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void PlayDeadSound(USkeletalMeshComponent* _Mesh);
 	void PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh);
+
 };
 
 

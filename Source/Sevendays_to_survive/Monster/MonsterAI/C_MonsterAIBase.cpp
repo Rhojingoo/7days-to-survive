@@ -127,9 +127,9 @@ void AC_MonsterAIBase::BeginPlay()
 	{
 		UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, SightConfig->GetSenseImplementation(), GetPawn());
 		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnSightUpdated);
-		APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffSightUpdated);
+		//APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffSightUpdated);
 		APC->OnPerceptionUpdated.AddDynamic(this, &AC_MonsterAIBase::OnHearingUpdated);
-		APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffHearingUpdated);
+		//APC->OnTargetPerceptionForgotten.AddDynamic(this, &AC_MonsterAIBase::OffHearingUpdated);
 
 		APC->Activate();
 	}
@@ -171,11 +171,11 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 			//UAISense_Hearing
 			if (Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>() && Stimulus.WasSuccessfullySensed())
 			{
-				//AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Actor);
-				//Player->isdead == true return;
-				BBC->SetValueAsObject(EnemyKeyId, Actor);
-				IsFind = true;
-
+				AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Actor);
+				if (true == Player->GetIsPlayerDieCpp()) {
+					return;
+				}
+				SetTargetActor(Actor);
 				Monster->PlayFindSound();
 
 				APC->SetSenseEnabled(UAISense_Sight::StaticClass(), false);
@@ -183,19 +183,15 @@ void AC_MonsterAIBase::OnSightUpdated(const TArray<AActor*>& _UpdateActors)
 			}
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("OnSight"));
 }
 
-void AC_MonsterAIBase::OffSightUpdated(AActor* _ForgotActor)
-{
-	UE_LOG(LogTemp, Warning, TEXT("OffSight"));
-}
+//void AC_MonsterAIBase::OffSightUpdated(AActor* _ForgotActor)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("OffSight"));
+//}
 
 void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
 {
-	if (_UpdateActors.Num() < 1) {
-		UE_LOG(LogTemp, Warning, TEXT("NO One"));
-	}
 
 	for (AActor* Actor : _UpdateActors)
 	{
@@ -219,10 +215,10 @@ void AC_MonsterAIBase::OnHearingUpdated(const TArray<AActor*>& _UpdateActors)
 	}
 }
 
-void AC_MonsterAIBase::OffHearingUpdated(AActor* _ForgotActor)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Forgot sound of actor: %s"), *_ForgotActor->GetName());
-}
+//void AC_MonsterAIBase::OffHearingUpdated(AActor* _ForgotActor)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Forgot sound of actor: %s"), *_ForgotActor->GetName());
+//}
 
 void AC_MonsterAIBase::IsFindOff()
 {
@@ -236,4 +232,10 @@ void AC_MonsterAIBase::IsFindOff()
 UC_MonsterComponent* AC_MonsterAIBase::GetMCP()
 {
 	return MCP;
+}
+
+void AC_MonsterAIBase::SetTargetActor(AActor* _Actor)
+{
+	BBC->SetValueAsObject(EnemyKeyId, _Actor);
+	IsFind = true;
 }
