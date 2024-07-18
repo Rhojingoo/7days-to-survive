@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AnimNotifies/AnimNotify_PlayMontageNotify.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_ReloadMontageNotify.generated.h"
 
 /**
