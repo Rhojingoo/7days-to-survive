@@ -22,3 +22,22 @@ FString UC_UI_QuickSlot::GetWeaponName(EWeaponUseState* _Type)
 }
 */
 
+void UC_UI_QuickSlot::SettingItemData(FString _Name)
+{
+	//_Name :: EnumType::
+
+	int a = 0;
+}
+
+void UC_UI_QuickSlot::UPdateQuickSlot()
+{
+	int a = 0;
+}
+
+void UC_UI_QuickSlot::QuickSlotAdd(UWidget* _Widget, FC_ItemRow& _Data)
+{
+	UC_UI_InventorySlot* SlotWidget = Cast<UC_UI_InventorySlot>(_Widget);
+
+	SlotWidget->GetIcons(_Data.Name);
+}
+

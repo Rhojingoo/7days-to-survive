@@ -1,19 +1,18 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+
 #include"C_UI_SlotDrag.generated.h"
 
 
 /**
  * 
  */
+class UC_UI_InventorySlot;
 
-
-class UTexture2D;
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_UI_SlotDrag : public UUserWidget
 {
@@ -33,20 +32,28 @@ public:
 	/*UFUNCTION(BlueprintImplementableEvent)*/
 	UFUNCTION(BlueprintImplementableEvent)
 	void CopySlotItemImage(UTexture2D* _Image);
-	
 
+	UFUNCTION(BlueprintCallable)
+	void SetCurSlot(UC_UI_InventorySlot* _Slots);
+	UFUNCTION(BlueprintCallable)
+	UC_UI_InventorySlot* GetCurSlot();
+	UFUNCTION()
 	FString GetItemName();
-	
+	UFUNCTION()
 	UTexture2D* GetDragItemImage();
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_UI_InventorySlot* CurSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FString Itemname;
 
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* ItemImage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidget* CurWidget;
+	
 
 };
