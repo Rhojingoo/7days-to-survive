@@ -6,9 +6,11 @@
 #include "Engine/GameInstance.h"
 #include "UI/C_UITableRow.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
+struct FC_PlayerSpawnData;
 struct FC_WeaponDataTable;
 struct FC_UITableRow;
 /**
@@ -37,6 +39,7 @@ public:
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
 	FC_PlayerDataTable* GetPlayerDataTable();
+	FC_PlayerSpawnData* GetPlayerSpawnDataTable();
 
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
@@ -48,6 +51,14 @@ public:
 	float GenerateRandomFloat(float _Min, float _Max);
 	FVector GenerateRandomVector(FBox2D _Box);
 
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerMesh(EPlayerMesh _Mesh);
+	UFUNCTION()
+	TArray<EPlayerMesh> GetPlayerMesh()
+	{
+		return PlayerMeshs;
+	}
 public:
 	// ¿Œ∞‘¿” π„≥∑ ±∏∫–∫Øºˆ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
@@ -94,9 +105,13 @@ public:
 	TArray<AActor*> PlayerArray;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* PlayerDataTable;
+	UDataTable* PlayerDataTable=nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* WeaponDataTable;
+	UDataTable* PlayerSpawnDataTable=nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WeaponDataTable=nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
@@ -111,4 +126,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UDataTable* WidgetDataTable = nullptr;
+
+	UPROPERTY()
+	TArray<EPlayerMesh> PlayerMeshs;
 };

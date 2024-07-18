@@ -11,6 +11,7 @@
 #include "STS/C_STSMacros.h"
 #include "Map/C_MonsterSpawnPoint.h"
 #include "Monster/C_ZombieBase.h"
+#include "Player/Global/DataTable/C_PlayerSpawnData.h"
 
 UC_STSInstance::UC_STSInstance()
 {
@@ -55,6 +56,24 @@ FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
     }
 
     FC_PlayerDataTable* Data = PlayerDataTable->FindRow<FC_PlayerDataTable>(TEXT("Player"), nullptr);
+
+    if (nullptr == Data)
+    {
+        UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+        return nullptr;
+    }
+
+    return Data;
+}
+
+FC_PlayerSpawnData* UC_STSInstance::GetPlayerSpawnDataTable()
+{
+    if (nullptr == PlayerSpawnDataTable)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerSpawnDataTable)"), __FUNCTION__, __LINE__);
+    }
+
+    FC_PlayerSpawnData* Data = PlayerSpawnDataTable->FindRow<FC_PlayerSpawnData>(TEXT("PlayerBegin"), nullptr);
 
     if (nullptr == Data)
     {
@@ -132,6 +151,11 @@ FVector UC_STSInstance::GenerateRandomVector(FBox2D _Box)
     float X = GenerateRandomFloat(_Box.Min.X, _Box.Max.X);
     float Y = GenerateRandomFloat(_Box.Min.Y, _Box.Max.Y);
     return { X, Y, 0.0f };
+}
+
+void UC_STSInstance::SetPlayerMesh(EPlayerMesh _Mesh)
+{
+    PlayerMeshs.Add(_Mesh);
 }
 
 void UC_STSInstance::SetSpawnMonster()
