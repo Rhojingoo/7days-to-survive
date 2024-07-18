@@ -7,7 +7,7 @@
 #include "UI/Inventory/C_UI_CraftItemButton.h"
 #include "Kismet/KismetMathLibrary.h"
 
-void UC_UI_InventoryLeft::RefreshCraftItemList(int _Page)
+void UC_UI_InventoryLeft::Refresh(int _Page)
 {
     UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
     TArray<FName> ItemIds = MapDataAsset->GetCraftItems(_Page, PageSize);
@@ -32,12 +32,12 @@ void UC_UI_InventoryLeft::IncPage()
 {
     UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
     CurPage = UKismetMathLibrary::Clamp(CurPage + 1, 0, MapDataAsset->GetCraftListMaxPage(PageSize));
-    RefreshCraftItemList(CurPage);
+    Refresh(CurPage);
 }
 
 void UC_UI_InventoryLeft::DecPage()
 {
     UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
     CurPage = UKismetMathLibrary::Clamp(CurPage - 1, 0, MapDataAsset->GetCraftListMaxPage(PageSize));
-    RefreshCraftItemList(CurPage);
+    Refresh(CurPage);
 }

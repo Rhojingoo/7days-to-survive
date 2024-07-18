@@ -19,7 +19,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventoryLeft : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void RefreshCraftItemList(int _Page);
+	void Refresh(int _Page);
 
 	UFUNCTION(BlueprintCallable)
 	void IncPage();
