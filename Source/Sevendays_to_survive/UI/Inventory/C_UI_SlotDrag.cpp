@@ -10,3 +10,14 @@ FString UC_UI_SlotDrag::GetItemName()
 {
 	return Itemname;
 }
+
+
+void UC_UI_SlotDrag::SetCurSlot(UC_UI_InventorySlot* _Slots)
+{
+	CurSlot = _Slots;
+}
+
+UC_UI_InventorySlot* UC_UI_SlotDrag::GetCurSlot()
+{
+	return CurSlot;
+}
