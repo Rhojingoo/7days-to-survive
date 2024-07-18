@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
 #include "Map/C_MonsterSpawnPoint.h"
+#include "Monster/C_ZombieBase.h"
 
 UC_STSInstance::UC_STSInstance()
 {
@@ -143,6 +144,25 @@ void UC_STSInstance::SetSpawnMonster()
 void UC_STSInstance::AddSpawnPoint(AC_MonsterSpawnPoint* _Point)
 {
     SpawnArray.Add(_Point);
+}
+
+void UC_STSInstance::SetZombieTarget()
+{
+    int Max = PlayerArray.Num();
+    for (int i = 0; i < ZombieArray.Num(); ++i) {
+        int RandomInt = GenerateRandomInt(0, Max);
+        ZombieArray[i]->ForceFindTargetActor(PlayerArray[RandomInt]);
+    }
+}
+
+void UC_STSInstance::AddZombieArray(AC_ZombieBase* _Zombie)
+{
+    ZombieArray.Add(_Zombie);
+}
+
+void UC_STSInstance::AddPlayerArray(AActor* _Actor)
+{
+    PlayerArray.Add(_Actor);
 }
 
 TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()
