@@ -26,12 +26,24 @@ public:
 	void MonsterSpawn(float DeltaTime);
 	void SetSpawn(bool _IsSpawn);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> SpawnMonster;
+	TSubclassOf<AActor> SpawnZombie;
+	
+	UFUNCTION(BlueprintCallable)
+	UClass* ZombieClass();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnTime = 1.0f;
 
+	UPROPERTY()
 	float CoolTime = 0.0f;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float TotalSpawnTime = 20.f;
+
 	bool CanSpawn = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UBoxComponent* BoxComponent;
+
+	FVector GetRandomPointInBox() const;
 };
