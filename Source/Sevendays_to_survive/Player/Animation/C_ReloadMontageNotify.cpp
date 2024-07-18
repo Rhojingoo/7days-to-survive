@@ -8,7 +8,7 @@ UC_ReloadMontageNotify::UC_ReloadMontageNotify()
 {
 #if WITH_EDITORONLY_DATA
 	NotifyColor = FColor(200, 0, 0, 255);
-	NotifyName = TEXT("Hit_End");
+	NotifyName = TEXT("Reload_End");
 #endif // WITH_EDITORONLY_DATA
 }
 

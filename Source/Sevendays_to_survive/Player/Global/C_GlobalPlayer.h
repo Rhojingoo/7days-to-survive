@@ -256,7 +256,8 @@ protected:
 	UFUNCTION()
 	void SpawnBulletMove(float _DeltaTime);
 
-
+	UFUNCTION()
+	void Reload();
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
