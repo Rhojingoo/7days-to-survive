@@ -197,7 +197,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
-	//DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 }
 
 // Called when the game starts or when spawned

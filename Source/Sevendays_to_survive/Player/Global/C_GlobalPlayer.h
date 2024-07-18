@@ -91,6 +91,11 @@ public:
 		return PitchCPP;
 	}
 
+	FORCEINLINE bool GetIsPlayerDieCpp()
+	{
+		return IsPlayerDieCpp;
+	}
+
 	//------------------------------------------------
 
 	EWeaponUseState GetPlayerCurState()
@@ -285,7 +290,7 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
-	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated,VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsPlayerDieCpp = false;
 
 	UPROPERTY()
