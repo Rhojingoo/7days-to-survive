@@ -20,22 +20,28 @@ class SEVENDAYS_TO_SURVIVE_API UC_MapDataAsset : public UPrimaryDataAsset
 public:
 	void Init(UC_STSInstance* _Inst);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	int GetItemSourceMaxHp(FName _Id);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	const UC_Item* FindItem(FName _Id);
 
 	TMap<FName, int> GetItemSourceDropItems(FName _Id);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	TSubclassOf<AC_ItemPouch> GetItemPouchClass() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	TArray<FC_ItemAndCount> GetRandomDropItems();
 
 	UFUNCTION(BlueprintCallable)
 	int GetItemBoxMaxHp() const;
+
+	UFUNCTION(BlueprintPure)
+	TArray<FName> GetCraftItems(int _Page, int _PageSize);
+
+	UFUNCTION(BlueprintPure)
+	int GetCraftListMaxPage(int _PageSize);
 
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
@@ -68,6 +74,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TMap<FName, UC_Item*> Items;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TArray<FName> CraftItems;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;

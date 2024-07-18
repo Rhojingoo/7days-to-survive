@@ -76,6 +76,11 @@ void UC_MapDataAsset::Init(UC_STSInstance* _Inst)
 
         Items.Emplace(RowName, FoundItem);
 
+        if (false == FoundItem->CraftMaterials.IsEmpty())
+        {
+            CraftItems.Add(FoundItem->Id);
+        }
+
         if (EItemType::BuildingPart == ItemType)
         {
             continue;
@@ -142,7 +147,7 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetRandomDropItems()
             int RandomInt = Inst->GenerateRandomInt(0, TotalAcc - 1);
             int Index = BisectRight(AccDropWeights, RandomInt);
             FName Id = Type_To_AccDropIds[Type][Index];
-            
+
             FC_ItemAndCount ItemAndCount;
             ItemAndCount.Item = FindItem(Id);
             ItemAndCount.Count = Inst->GenerateRandomInt(Type_To_DropItemMinCount[Type], Type_To_DropItemMaxCount[Type]);
@@ -157,6 +162,39 @@ TArray<FC_ItemAndCount> UC_MapDataAsset::GetRandomDropItems()
 int UC_MapDataAsset::GetItemBoxMaxHp() const
 {
     return ItemBoxMaxHp;
+}
+
+TArray<FName> UC_MapDataAsset::GetCraftItems(int _Page, int _PageSize)
+{
+    TArray<FName> Result;
+
+    int Page = _Page;
+    int MaxPage = GetCraftListMaxPage(_PageSize);
+
+    if (Page < 0)
+    {
+        Page = 0;
+    }
+
+    if (Page > MaxPage)
+    {
+        Page = MaxPage;
+    }
+
+    int Start = Page * _PageSize;
+    int End = FMath::Min<int>({ Start + _PageSize - 1, CraftItems.Num() - 1 });
+
+    for (int i = Start; i <= End; ++i)
+    {
+        Result.Add(CraftItems[i]);
+    }
+
+    return Result;
+}
+
+int UC_MapDataAsset::GetCraftListMaxPage(int _PageSize)
+{
+    return (CraftItems.Num() - 1) / _PageSize;
 }
 
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)

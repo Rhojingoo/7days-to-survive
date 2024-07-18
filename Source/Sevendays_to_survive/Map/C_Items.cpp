@@ -19,6 +19,7 @@ void UC_Item::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     Type = Row->Type;
     Icon = Row->Icon;
     DropWeight = Row->DropWeight;
+    CraftMaterials = Row->CraftMaterials;
 }
 
 bool UC_Item::IsCraftable() const
