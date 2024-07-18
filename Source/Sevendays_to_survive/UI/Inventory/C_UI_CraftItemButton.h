@@ -4,20 +4,39 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Map/C_Items.h"
+#include "Components/Image.h"
+#include "Components/TextBlock.h"
+#include "Components/Button.h"
 #include "C_UI_CraftItemButton.generated.h"
 
+class UC_Item;
+
 /**
- * 
+ *
  */
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_UI_CraftItemButton : public UUserWidget
 {
 	GENERATED_BODY()
-	
-public:
-	UFUNCTION(BlueprintImplementableEvent)
-	void SetItemIcon(UTexture2D* _Icon);
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void SetItemName(const FString& _Name);
+public:
+	UFUNCTION(BlueprintCallable)
+	void Refresh(const UC_Item* _Item);
+
+	UFUNCTION(BlueprintPure)
+	const UC_Item* GetItem();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	const UC_Item* Item = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UImage* Image = nullptr; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UTextBlock* TextBlock = nullptr; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UButton* Button = nullptr;
 };

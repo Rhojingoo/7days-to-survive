@@ -19,8 +19,7 @@ void UC_UI_InventoryLeft::RefreshCraftItemList(int _Page)
             const UC_Item* Item = MapDataAsset->FindItem(ItemIds[i]);
 
             CraftItemButtons[i]->SetVisibility(ESlateVisibility::Visible);
-            CraftItemButtons[i]->SetItemIcon(Item->Icon);
-            CraftItemButtons[i]->SetItemName(Item->Name);
+            CraftItemButtons[i]->Refresh(Item);
         }
         else
         {
