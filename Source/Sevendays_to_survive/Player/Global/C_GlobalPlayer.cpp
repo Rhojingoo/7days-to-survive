@@ -451,17 +451,25 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	switch (PlayerCurState)
 	{
 	case EWeaponUseState::Rifle:
+		--magazinecapacity[ESkerItemSlot::RRifle];
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
 	case EWeaponUseState::Pistol:
+		--magazinecapacity[ESkerItemSlot::RPistol];
 		CurWeapon->GunParticleAndSound(PlayerCurState);
 		break;
 	case EWeaponUseState::Rifle2:
+		--magazinecapacity[ESkerItemSlot::RRifle2];
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
 	case EWeaponUseState::Pistol2:
+		--magazinecapacity[ESkerItemSlot::RPistol2];
 		CurWeapon->PlayGunAnimation(PlayerCurState);
 		break;
 	default:
 		break;
 	}
-	LineTracemagazinecapacity -= 1;
+	//LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -666,11 +674,45 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireLoop_Implementation()
 {
-	if (LineTracemagazinecapacity == 0)
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol:
+		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Rifle2:
+		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol2:
+		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	default:
+		break;
+	}
+
+	/*if (LineTracemagazinecapacity == 0)
 	{
 		IsFireCpp = false;
 		return;
-	}
+	}*/
 
 	if (true == IsFireCpp)
 	{
@@ -1135,10 +1177,45 @@ void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 
 void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 {
-	if (LineTracemagazinecapacity == 0)
+
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol:
+		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Rifle2:
+		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol2:
+		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
+		{
+			return;
+		}
+	case EWeaponUseState::Sword:
+		if (magazinecapacity[ESkerItemSlot::RShotgun] == 0)
+		{
+			return;
+		}
+		break;
+	default:
+		break;
+	}
+	/*if (LineTracemagazinecapacity == 0)
 	{
 		return;
-	}
+	}*/
 
 	if (true == IsAimCpp)
 	{

@@ -29,7 +29,7 @@ void UC_GunComponent::AttachRilfe(AC_GlobalPlayer* TargetCharacter)
 	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->GetSkinnedAsset() == nullptr)
 	{
 		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)], AttachmentRules, FName(TEXT("LRifle")));
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)], AttachmentRules, FName(TEXT("RRifle")));
 
 	
 	}
@@ -69,7 +69,7 @@ void UC_GunComponent::AttachRilfe2(AC_GlobalPlayer* TargetCharacter)
 	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() == nullptr)
 	{
 		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)], AttachmentRules, FName(TEXT("LRifle2")));
+		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)], AttachmentRules, FName(TEXT("RRifle2")));
 
 
 	}
