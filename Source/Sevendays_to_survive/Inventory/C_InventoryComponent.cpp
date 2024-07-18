@@ -153,6 +153,7 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
     }
     if (Inventory[_Index].Count == _Count)
     {
+        ItemIdToIndex.Remove(Inventory[_Index].Item->Id);
         Inventory[_Index].Item = nullptr;
         Inventory[_Index].Count = 0;
         --UsingSize;
