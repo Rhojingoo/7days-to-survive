@@ -76,6 +76,7 @@ void AC_ZombieBase::BeginPlay()
 	if (HasAuthority())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+		Inst->AddZombieArray(this);
 	}
 }
 // Called every frame
