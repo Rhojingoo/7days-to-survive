@@ -76,6 +76,7 @@ void AC_ZombieBase::BeginPlay()
 	if (HasAuthority())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+		Inst->AddZombieArray(this);
 	}
 }
 // Called every frame
@@ -453,4 +454,10 @@ void AC_ZombieBase::PlayFindSound_Implementation()
 			AudioComponent->Play();
 		}
 	}
+}
+
+void AC_ZombieBase::ForceFindTargetActor(AActor* _Actor)
+{
+	AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(GetController());
+	AIController->SetTargetActor(_Actor);
 }

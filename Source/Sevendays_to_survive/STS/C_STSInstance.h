@@ -80,9 +80,18 @@ public:
 	void SetSpawnMonster();
 	void AddSpawnPoint(class AC_MonsterSpawnPoint* _Point);
 
+	void SetZombieTarget();
+	void AddZombieArray(class AC_ZombieBase* _Zombie);
+
+	void AddPlayerArray(AActor* _Actor);
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<AC_MonsterSpawnPoint*> SpawnArray;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<AC_ZombieBase*> ZombieArray;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<AActor*> PlayerArray;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* PlayerDataTable;
