@@ -307,8 +307,41 @@ void AC_GlobalPlayer::BeginPlay()
 		Pistolmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->MagagineSize;
 		ShotGunmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->MagagineSize;
 		Riflemagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->MagagineSize;
+
 	}
 
+	{
+		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+		{
+			switch (static_cast<ESkerItemSlot>(i))
+			{
+			case ESkerItemSlot::RRifle:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Riflemagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i),STSInstance->GetWeaPonDataTable(FName("M4"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RRifle2:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Riflemagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Rifle2"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RPistol:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Pistolmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Pistol1"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RPistol2:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Pistolmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Pistol2"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RShotgun:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), ShotGunmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Shotgun"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::SlotMax:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	
 }
 

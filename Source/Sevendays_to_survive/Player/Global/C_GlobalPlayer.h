@@ -272,6 +272,9 @@ private:
 	TMap<ESkerItemSlot, int> magazinecapacity;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, UAnimMontage*> ReloadMontages;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EStaticItemSlot, USoundBase*> WeaponSounds;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
