@@ -11,7 +11,7 @@
 #include "Components/ArrowComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "Components/CapsuleComponent.h"
-
+#include "STS/C_STSInstance.h"
 
 
 
@@ -37,7 +37,10 @@ void AC_NickMainPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void AC_NickMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
+	if (true == HasAuthority()) {
+		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+		Inst->AddPlayerArray(this);
+	}
 }
 
 void AC_NickMainPlayer::Tick(float DeltaTime)
