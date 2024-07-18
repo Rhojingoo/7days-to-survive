@@ -24,25 +24,25 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSGlobalFunctions : public UBlueprintFunction
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = "Content")
+	UFUNCTION(BlueprintPure, Category = "Content")
 	static UC_BuildingComponent* GetBuildingComponent();
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
+	UFUNCTION(BlueprintPure, Category = "Content")
 	static UC_InventoryComponent* GetInventoryComponent();
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
+	UFUNCTION(BlueprintPure, Category = "Content")
 	static UC_MapInteractionComponent* GetMapInteractionComponent();
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
+	UFUNCTION(BlueprintPure, Category = "Content")
 	static AC_MapPlayer* GetMapPlayerCharacter();
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
+	UFUNCTION(BlueprintPure, Category = "Content")
 	static UC_MapDataAsset* GetMapDataAsset();
 
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static void Day_And_Night_Cycle(ALight* _DirectionLight);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	static const UC_Item* FindItem(FName _Id);
 
 	UFUNCTION(BlueprintPure)
