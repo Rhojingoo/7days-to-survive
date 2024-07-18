@@ -7,6 +7,9 @@
 #include "C_UI_InventoryCore.generated.h"
 
 class UC_UI_InverntoryWidget;
+class UC_UI_InventoryIcon;
+class UC_UI_InventoryLeft;
+class UC_UI_InventoryTip;
 
 /**
  * 
@@ -17,6 +20,18 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventoryCore : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_UI_InverntoryWidget* InventoryWidget = nullptr;
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UC_UI_InventoryIcon* GetInventoryIcon();
+
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UC_UI_InverntoryWidget* GetInventoryWidget();
+
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UC_UI_InventoryLeft* GetInventoryLeft();
+
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UC_UI_InventoryTip* GetInventoryTip();
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_UI_InverntoryWidget* InventoryWidget = nullptr;*/
 };
