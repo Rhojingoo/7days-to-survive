@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
+#include "Components/Button.h"
 #include "C_UI_InventoryTipDetail.generated.h"
 
 class UC_Item;
@@ -25,6 +26,12 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
 	UImage* GetItemImage();
 
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UButton* GetCraftButton();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UC_UI_MaterialInfoBox*> MaterialInfoBoxes;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	const UC_Item* Item = nullptr;
 };
