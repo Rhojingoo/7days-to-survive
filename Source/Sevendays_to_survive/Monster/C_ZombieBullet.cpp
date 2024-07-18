@@ -2,6 +2,7 @@
 
 
 #include "Monster/C_ZombieBullet.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AC_ZombieBullet::AC_ZombieBullet()
@@ -22,6 +23,10 @@ AC_ZombieBullet::AC_ZombieBullet()
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     ProjectileMovementComponent->ProjectileGravityScale = 1.0f;
+
+    AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+    AudioComponent->SetupAttachment(RootComponent);
+    AudioComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -54,3 +59,7 @@ void AC_ZombieBullet::SetDirection(const FVector& ShootDirection)
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
+void AC_ZombieBullet::SetHitSound_Implementation()
+{
+    AudioComponent->Play();
+}
