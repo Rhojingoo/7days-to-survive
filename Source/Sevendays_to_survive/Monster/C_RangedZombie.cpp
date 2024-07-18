@@ -19,6 +19,21 @@ AC_RangedZombie::AC_RangedZombie()
     SpitTransformComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Spit Transform Component"));
 }
 
+void AC_RangedZombie::Idle_Implementation()
+{
+    if (nullptr == AnimInstance)
+    {
+        return;
+    }
+
+    SetState(MonsterEnum::Idle);
+
+    if (false == AnimInstance->IsPlayMontage())
+    {
+        AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+    }
+}
+
 void AC_RangedZombie::Attack_Implementation()
 {
     if (nullptr == AnimInstance) {
@@ -50,9 +65,8 @@ void AC_RangedZombie::RangedAttack_Implementation()
     IsRangedAttackingValue = true;
 
     SetState(MonsterEnum::Idle);
-    if (false == AnimInstance->IsPlayMontage()) {
+
         AnimInstance->ChangeAnimation(MonsterEnum::RangedAttack);
-    }
 }
 
 void AC_RangedZombie::OnRangedAttackNotifyBegin()

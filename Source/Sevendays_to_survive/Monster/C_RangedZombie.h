@@ -20,6 +20,10 @@ public:
 	AC_RangedZombie();
 
 	UFUNCTION(NetMulticast, Reliable)
+	void Idle();
+	void Idle_Implementation();
+
+	UFUNCTION(NetMulticast, Reliable)
 	void Attack() override final;
 	void Attack_Implementation();
 
