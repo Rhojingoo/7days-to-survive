@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "UI/C_UITableRow.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_STSInstance.generated.h"
 
 struct FC_PlayerDataTable;
@@ -50,6 +51,14 @@ public:
 	float GenerateRandomFloat(float _Min, float _Max);
 	FVector GenerateRandomVector(FBox2D _Box);
 
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerMesh(EPlayerMesh _Mesh);
+	UFUNCTION()
+	TArray<EPlayerMesh> GetPlayerMesh()
+	{
+		return PlayerMeshs;
+	}
 public:
 	// ¿Œ∞‘¿” π„≥∑ ±∏∫–∫Øºˆ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
@@ -117,4 +126,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UDataTable* WidgetDataTable = nullptr;
+
+	UPROPERTY()
+	TArray<EPlayerMesh> PlayerMeshs;
 };

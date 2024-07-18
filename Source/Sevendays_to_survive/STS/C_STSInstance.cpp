@@ -153,6 +153,11 @@ FVector UC_STSInstance::GenerateRandomVector(FBox2D _Box)
     return { X, Y, 0.0f };
 }
 
+void UC_STSInstance::SetPlayerMesh(EPlayerMesh _Mesh)
+{
+    PlayerMeshs.Add(_Mesh);
+}
+
 void UC_STSInstance::SetSpawnMonster()
 {
     for (int i = 0; i < SpawnArray.Num(); ++i) {
