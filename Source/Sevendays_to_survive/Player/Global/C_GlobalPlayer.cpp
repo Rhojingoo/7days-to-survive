@@ -469,7 +469,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::None, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
 	if (true == OKAtt)
@@ -747,10 +747,11 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 		{
 			return;
 		}
-		AActor* test = GetWorld()->SpawnActor<AActor>(BulletInfos[i].BulletActor);
-		test->SetActorRotation(BulletInfos[i].BulletRotation);
-		test->SetActorLocation(BulletInfos[i].Start);
-		test->GetComponentByClass<UProjectileMovementComponent>()->Velocity= BulletInfos[i].End- BulletInfos[i].Start;
+		AActor* Bullet = GetWorld()->SpawnActor<AActor>(BulletInfos[i].BulletActor);
+		Bullet->SetActorRotation(BulletInfos[i].BulletRotation);
+		Bullet->SetActorLocation(BulletInfos[i].Start);
+		Bullet->GetComponentByClass<UProjectileMovementComponent>()->Velocity= BulletInfos[i].End- BulletInfos[i].Start;
+		Bullet->InitialLifeSpan = BulletInfos[i].Time;
 	}
 	BulletInfos.Empty();
 }
