@@ -21,7 +21,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RefreshCraftItemList(int _Page);
 
+	UFUNCTION(BlueprintCallable)
+	void IncPage();
+
+	UFUNCTION(BlueprintCallable)
+	void DecPage();
+
 private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int CurPage = 0;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int PageSize = 12;
 

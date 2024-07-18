@@ -5,6 +5,7 @@
 #include "Map/C_MapDataAsset.h"
 #include "Map/C_Items.h"
 #include "UI/Inventory/C_UI_CraftItemButton.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UC_UI_InventoryLeft::RefreshCraftItemList(int _Page)
 {
@@ -26,4 +27,18 @@ void UC_UI_InventoryLeft::RefreshCraftItemList(int _Page)
             CraftItemButtons[i]->SetVisibility(ESlateVisibility::Hidden);
         }
     }
+}
+
+void UC_UI_InventoryLeft::IncPage()
+{
+    UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+    CurPage = UKismetMathLibrary::Clamp(CurPage + 1, 0, MapDataAsset->GetCraftListMaxPage(PageSize));
+    RefreshCraftItemList(CurPage);
+}
+
+void UC_UI_InventoryLeft::DecPage()
+{
+    UC_MapDataAsset* MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+    CurPage = UKismetMathLibrary::Clamp(CurPage - 1, 0, MapDataAsset->GetCraftListMaxPage(PageSize));
+    RefreshCraftItemList(CurPage);
 }

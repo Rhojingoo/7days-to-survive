@@ -169,7 +169,7 @@ TArray<FName> UC_MapDataAsset::GetCraftItems(int _Page, int _PageSize)
     TArray<FName> Result;
 
     int Page = _Page;
-    int MaxPage = (CraftItems.Num() - 1) / _PageSize;
+    int MaxPage = GetCraftListMaxPage(_PageSize);
 
     if (Page < 0)
     {
@@ -190,6 +190,11 @@ TArray<FName> UC_MapDataAsset::GetCraftItems(int _Page, int _PageSize)
     }
 
     return Result;
+}
+
+int UC_MapDataAsset::GetCraftListMaxPage(int _PageSize)
+{
+    return (CraftItems.Num() - 1) / _PageSize;
 }
 
 const UC_Item* UC_MapDataAsset::FindItem(FName _Id)
