@@ -14,6 +14,7 @@
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
 #include "UI/C_UI_InGameHUD.h"
+#include "UI/Inventory/C_UI_InventoryCore.h"
 
 
 UC_BuildingComponent* UC_STSGlobalFunctions::GetBuildingComponent()
@@ -75,4 +76,10 @@ AC_UI_InGameHUD* UC_STSGlobalFunctions::GetInGameHUD()
 {
     UWorld* World = GEngine->GameViewport->GetWorld();
     return Cast<AC_UI_InGameHUD>(UGameplayStatics::GetPlayerController(World, 0)->GetHUD());
+}
+
+UC_UI_InventoryCore* UC_STSGlobalFunctions::GetInventoryCore()
+{
+    AC_UI_InGameHUD* InGameHUD = GetInGameHUD();
+    return InGameHUD->GetInventoryCore();
 }

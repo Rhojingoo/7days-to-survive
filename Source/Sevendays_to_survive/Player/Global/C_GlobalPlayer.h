@@ -18,7 +18,7 @@ public:
 	FVector Start = FVector::ZeroVector;
 	FVector End = FVector::ZeroVector;
 	FRotator BulletRotation = FRotator::ZeroRotator;
-	UNiagaraSystem* FireEffect = nullptr;
+	TSubclassOf<AActor> BulletActor = nullptr;
 	float Time = 3.0f;
 	//float BulletSpeed = 10000.0f;
 };
@@ -96,6 +96,22 @@ public:
 		return IsPlayerDieCpp;
 	}
 
+
+	FORCEINLINE int GetPistolmagazinecapacity() const
+	{
+		return Pistolmagazinecapacity;
+	}
+
+	FORCEINLINE int GetShotGunmagazinecapacity() const
+	{
+		return ShotGunmagazinecapacity;
+	}
+
+	FORCEINLINE int GetRiflemagazinecapacity() const
+	{
+		return Riflemagazinecapacity;
+	}
+
 	//------------------------------------------------
 
 	EWeaponUseState GetPlayerCurState()
@@ -124,6 +140,14 @@ public:
 	UFUNCTION(Reliable, NetMulticast)
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
+
+	UFUNCTION()
+	FORCEINLINE TMap<ESkerItemSlot, int> Getmagazinecapacity()
+	{
+		return magazinecapacity;
+	}
+
+
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -232,7 +256,8 @@ protected:
 	UFUNCTION()
 	void SpawnBulletMove(float _DeltaTime);
 
-
+	UFUNCTION()
+	void Reload();
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
@@ -270,6 +295,9 @@ private:
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<ESkerItemSlot, int> magazinecapacity;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, UAnimMontage*> ReloadMontages;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EStaticItemSlot, USoundBase*> WeaponSounds;
@@ -393,6 +421,4 @@ private:
 	UPROPERTY()
 	TArray<FireInfo> BulletInfos;
 
-	UPROPERTY()
-	UNiagaraSystem* BulletEffectNia=nullptr;
 };

@@ -10,6 +10,7 @@
 #include "Map/C_Items.h"
 #include "Map/C_ItemPouch.h"
 #include "Map/C_MapDataAsset.h"
+#include "UI/Inventory/C_UI_InventoryCore.h"
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
 #include "UI/C_UI_InGameHUD.h"
 
@@ -27,8 +28,6 @@ void UC_InventoryComponent::BeginPlay()
     UC_STSInstance* Inst = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
     UC_MapDataAsset* MapDataAsset = Inst->GetMapDataAsset();
     ItemPouchClass = MapDataAsset->GetItemPouchClass();
-
-    InventoryWidget = UC_STSGlobalFunctions::GetInGameHUD()->GetInventoryWidget();
     Inventory.SetNum(Size);
 }
 
@@ -52,7 +51,7 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     {
         int Index = ItemIdToIndex[_Item->Id];
         Inventory[Index].Count += _Count;
-        InventoryWidget->SetNumber(Index, Inventory[Index].Count);
+        GetInventoryWidget()->SetNumber(Index, Inventory[Index].Count);
         return;
     }
 
@@ -62,8 +61,8 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     Inventory[Index].Item = _Item;
     Inventory[Index].Count = _Count;
 
-    InventoryWidget->SetIcon(Index, _Item->Icon);
-    InventoryWidget->SetNumber(Index, _Count);
+    GetInventoryWidget()->SetIcon(Index, _Item->Icon);
+    GetInventoryWidget()->SetNumber(Index, _Count);
     ++UsingSize;
 }
 
@@ -114,15 +113,15 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
         ItemIdToIndex.Remove(ItemAndCount.Item->Id);
         ItemAndCount = NullItem;
 
-        InventoryWidget->SetIcon(_Index, nullptr);
-        InventoryWidget->SetNumber(_Index, 0);
+        GetInventoryWidget()->SetIcon(_Index, nullptr);
+        GetInventoryWidget()->SetNumber(_Index, 0);
         --UsingSize;
         return;
     }
 
     SpawnItem(GetItemSpawnTransform(), ItemAndCount.Item->Id, _Count);
     ItemAndCount.Count -= _Count;
-    InventoryWidget->SetNumber(_Index, ItemAndCount.Count);
+    GetInventoryWidget()->SetNumber(_Index, ItemAndCount.Count);
 }
 
 void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
@@ -155,6 +154,7 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
     if (Inventory[_Index].Count == _Count)
     {
         Inventory[_Index].Item = nullptr;
+        Inventory[_Index].Count = 0;
         --UsingSize;
     }
 
@@ -190,6 +190,11 @@ int UC_InventoryComponent::GetCount(int _Index) const
 
 int UC_InventoryComponent::GetCountByItemId(FName _Id) const
 {
+    if (false == ItemIdToIndex.Contains(_Id))
+    {
+        return 0;
+    }
+
     int Index = ItemIdToIndex[_Id];
     return GetCount(Index);
 }
@@ -333,6 +338,11 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
     SpawnTransform.SetLocation(SpawnLocation);
 
     return SpawnTransform;
+}
+
+UC_UI_InverntoryWidget* UC_InventoryComponent::GetInventoryWidget()
+{
+    return UC_STSGlobalFunctions::GetInventoryCore()->GetInventoryWidget();
 }
 
 void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count)

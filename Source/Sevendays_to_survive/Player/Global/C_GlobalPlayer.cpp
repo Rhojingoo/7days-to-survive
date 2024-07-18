@@ -25,7 +25,7 @@
 #include "Components/TextRenderComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
@@ -265,7 +265,6 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		BulletHoleEffect = BulletDT.BulletHole;
 		ZombieHitEffect = BulletDT.ZombieHitBlood;
-		BulletEffectNia = BulletDT.BulletEffect;
 		
 	}
 
@@ -308,8 +307,41 @@ void AC_GlobalPlayer::BeginPlay()
 		Pistolmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->MagagineSize;
 		ShotGunmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->MagagineSize;
 		Riflemagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->MagagineSize;
+
 	}
 
+	{
+		for (size_t i = 0; i < static_cast<size_t>(ESkerItemSlot::SlotMax); i++)
+		{
+			switch (static_cast<ESkerItemSlot>(i))
+			{
+			case ESkerItemSlot::RRifle:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Riflemagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i),STSInstance->GetWeaPonDataTable(FName("M4"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RRifle2:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Riflemagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Rifle2"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RPistol:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Pistolmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Pistol1"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RPistol2:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), Pistolmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Pistol2"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::RShotgun:
+				magazinecapacity.Add(static_cast<ESkerItemSlot>(i), ShotGunmagazinecapacity);
+				ReloadMontages.Add(static_cast<ESkerItemSlot>(i), STSInstance->GetWeaPonDataTable(FName("Shotgun"))->ReloadAniMontage);
+				break;
+			case ESkerItemSlot::SlotMax:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	
 }
 
@@ -419,17 +451,25 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	switch (PlayerCurState)
 	{
 	case EWeaponUseState::Rifle:
+		--magazinecapacity[ESkerItemSlot::RRifle];
+		CurWeapon->GunParticleAndSound(PlayerCurState);
+		break;
 	case EWeaponUseState::Pistol:
+		--magazinecapacity[ESkerItemSlot::RPistol];
 		CurWeapon->GunParticleAndSound(PlayerCurState);
 		break;
 	case EWeaponUseState::Rifle2:
+		--magazinecapacity[ESkerItemSlot::RRifle2];
+		CurWeapon->PlayGunAnimation(PlayerCurState);
+		break;
 	case EWeaponUseState::Pistol2:
+		--magazinecapacity[ESkerItemSlot::RPistol2];
 		CurWeapon->PlayGunAnimation(PlayerCurState);
 		break;
 	default:
 		break;
 	}
-	LineTracemagazinecapacity -= 1;
+	//LineTracemagazinecapacity -= 1;
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -460,8 +500,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	FVector End = (GunForwardVector * LineTraceRange) + GunLocation;
 	Bullet.End = End;
 	Bullet.BulletRotation = GunRotation;
-	Bullet.FireEffect = BulletEffectNia;
-
+	Bullet.BulletActor = BulletDT.BulletActor;
 	BulletInfos.Add(Bullet);
 
 	FCollisionQueryParams Params;
@@ -471,7 +510,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	TArray<AActor*> Actors;
 
 	Actors.Add(CurWeapon);
-	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::None, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	bool OKAtt=UKismetSystemLibrary::LineTraceSingle(CurWeapon, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 	//GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Visibility, TraceParameters);
 
 	if (true == OKAtt)
@@ -635,11 +674,45 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireLoop_Implementation()
 {
-	if (LineTracemagazinecapacity == 0)
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol:
+		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Rifle2:
+		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol2:
+		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
+		{
+			IsFireCpp = false;
+			return;
+		}
+		break;
+	default:
+		break;
+	}
+
+	/*if (LineTracemagazinecapacity == 0)
 	{
 		IsFireCpp = false;
 		return;
-	}
+	}*/
 
 	if (true == IsFireCpp)
 	{
@@ -745,15 +818,26 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 	
 	for (size_t i = 0; i < BulletInfos.Num(); i++)
 	{
-		if (nullptr == BulletInfos[i].FireEffect)
+		if (nullptr == BulletInfos[i].BulletActor)
 		{
 			return;
 		}
-		UNiagaraComponent* Bullet=UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, BulletInfos[i].FireEffect, BulletInfos[i].Start, BulletInfos[i].BulletRotation, FVector(10.0f, 10.0f, 10.0f), true, true, ENCPoolMethod::None, false);
-		Bullet->Activate();
-		Bullet->SetVectorParameter(FName("End"), BulletInfos[i].End);
+		AActor* Bullet = GetWorld()->SpawnActor<AActor>(BulletInfos[i].BulletActor);
+		Bullet->SetActorRotation(BulletInfos[i].BulletRotation);
+		Bullet->SetActorLocation(BulletInfos[i].Start);
+		Bullet->GetComponentByClass<UProjectileMovementComponent>()->Velocity= BulletInfos[i].End- BulletInfos[i].Start;
+		Bullet->InitialLifeSpan = BulletInfos[i].Time;
 	}
 	BulletInfos.Empty();
+}
+
+void AC_GlobalPlayer::Reload()
+{
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()
@@ -1102,10 +1186,45 @@ void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 
 void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 {
-	if (LineTracemagazinecapacity == 0)
+
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol:
+		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Rifle2:
+		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
+		{
+			return;
+		}
+		break;
+	case EWeaponUseState::Pistol2:
+		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
+		{
+			return;
+		}
+	case EWeaponUseState::Sword:
+		if (magazinecapacity[ESkerItemSlot::RShotgun] == 0)
+		{
+			return;
+		}
+		break;
+	default:
+		break;
+	}
+	/*if (LineTracemagazinecapacity == 0)
 	{
 		return;
-	}
+	}*/
 
 	if (true == IsAimCpp)
 	{

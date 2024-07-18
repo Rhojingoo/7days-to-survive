@@ -29,14 +29,14 @@ public:
 	UFUNCTION()
 	void OnSightUpdated(const TArray<AActor*> &_UpdateActors);
 
-	UFUNCTION()
-	void OffSightUpdated(AActor* _ForgotActor);
+	/*UFUNCTION()
+	void OffSightUpdated(AActor* _ForgotActor);*/
 
 	UFUNCTION()
 	void OnHearingUpdated(const TArray<AActor*>& _UpdateActors);
 
-	UFUNCTION()
-	void OffHearingUpdated(AActor* _ForgotActor);
+	//UFUNCTION()
+	//void OffHearingUpdated(AActor* _ForgotActor);
 
 	UFUNCTION()
 	bool GetIsFind() {
@@ -77,6 +77,8 @@ public:
 	class UAIPerceptionComponent* GetAPC() { return APC; }
 
 	class UAISenseConfig_Hearing* GetHearingConfig() { return HearingConfig; }
+
+	void SetTargetActor(AActor* _Actor);
 
 private:
 	UPROPERTY()

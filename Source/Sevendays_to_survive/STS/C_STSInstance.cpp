@@ -10,6 +10,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "STS/C_STSMacros.h"
 #include "Map/C_MonsterSpawnPoint.h"
+#include "Monster/C_ZombieBase.h"
+#include "Player/Global/DataTable/C_PlayerSpawnData.h"
 
 UC_STSInstance::UC_STSInstance()
 {
@@ -54,6 +56,24 @@ FC_PlayerDataTable* UC_STSInstance::GetPlayerDataTable()
     }
 
     FC_PlayerDataTable* Data = PlayerDataTable->FindRow<FC_PlayerDataTable>(TEXT("Player"), nullptr);
+
+    if (nullptr == Data)
+    {
+        UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+        return nullptr;
+    }
+
+    return Data;
+}
+
+FC_PlayerSpawnData* UC_STSInstance::GetPlayerSpawnDataTable()
+{
+    if (nullptr == PlayerSpawnDataTable)
+    {
+        UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerSpawnDataTable)"), __FUNCTION__, __LINE__);
+    }
+
+    FC_PlayerSpawnData* Data = PlayerSpawnDataTable->FindRow<FC_PlayerSpawnData>(TEXT("PlayerBegin"), nullptr);
 
     if (nullptr == Data)
     {
@@ -133,6 +153,11 @@ FVector UC_STSInstance::GenerateRandomVector(FBox2D _Box)
     return { X, Y, 0.0f };
 }
 
+void UC_STSInstance::SetPlayerMesh(EPlayerMesh _Mesh)
+{
+    PlayerMeshs.Add(_Mesh);
+}
+
 void UC_STSInstance::SetSpawnMonster()
 {
     for (int i = 0; i < SpawnArray.Num(); ++i) {
@@ -143,6 +168,25 @@ void UC_STSInstance::SetSpawnMonster()
 void UC_STSInstance::AddSpawnPoint(AC_MonsterSpawnPoint* _Point)
 {
     SpawnArray.Add(_Point);
+}
+
+void UC_STSInstance::SetZombieTarget()
+{
+    int Max = PlayerArray.Num();
+    for (int i = 0; i < ZombieArray.Num(); ++i) {
+        int RandomInt = GenerateRandomInt(0, Max);
+        ZombieArray[i]->ForceFindTargetActor(PlayerArray[RandomInt]);
+    }
+}
+
+void UC_STSInstance::AddZombieArray(AC_ZombieBase* _Zombie)
+{
+    ZombieArray.Add(_Zombie);
+}
+
+void UC_STSInstance::AddPlayerArray(AActor* _Actor)
+{
+    PlayerArray.Add(_Actor);
 }
 
 TArray<FC_UITableRow> UC_STSInstance::GetPlayerInfoData()

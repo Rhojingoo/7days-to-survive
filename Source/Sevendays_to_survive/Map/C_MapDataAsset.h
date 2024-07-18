@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	TArray<FName> GetCraftItems(int _Page, int _PageSize);
 
+	UFUNCTION(BlueprintPure)
+	int GetCraftListMaxPage(int _PageSize);
+
 private:
 	FC_ItemSourceTableRow* FindItemSourceRow(FName _Id);
 
