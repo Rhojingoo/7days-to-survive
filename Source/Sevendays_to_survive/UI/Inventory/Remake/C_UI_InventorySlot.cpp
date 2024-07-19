@@ -4,7 +4,8 @@
 #include "UI/Inventory/Remake/C_UI_InventorySlot.h"
 #include "Components/PanelWidget.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "STS/C_STSGlobalFunctions.h"
+#include "Inventory/C_InventoryComponent.h"
 
 
 void UC_UI_InventorySlot::SetIcon(const FC_ItemRow& _ItemData)
@@ -105,14 +106,14 @@ void UC_UI_InventorySlot::ChangeIndex(UC_UI_InventorySlot* _CurSlot)
 
 void UC_UI_InventorySlot::ChangeSlot(UC_UI_InventorySlot* _OtherSlot)
 {
-	if (this->Num == 0)
+	/*if (this->Num == 0)
 	{
 		this->ChageInfo(_OtherSlot);
 		_OtherSlot = nullptr;
-	}
+	}*/
 	
 	//_OtherSlot->ChageInfo(static_cast<UC_UI_InventorySlot*>(&SaveSlot));
-
+	ChageInfo(_OtherSlot);
 }
 
 void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
@@ -121,9 +122,17 @@ void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
 	{
 		return;
 	}
+
+	FString Tmp = ItemName;
 	this->ItemName = _OtherSlot->ItemName;
-	this->ItemImage = _OtherSlot->ItemImage;
-	this->Num = _OtherSlot->Num; //수량
+	_OtherSlot->ItemName = Tmp;
+
+	UC_InventoryComponent* InvenComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
+	InvenComp->Swap(CurSlotIndex, _OtherSlot->CurSlotIndex);
+
+	
+	//this->ItemImage = _OtherSlot->ItemImage;
+	//this->Num = _OtherSlot->Num; //수량
 	//정보 교환
 
 }
