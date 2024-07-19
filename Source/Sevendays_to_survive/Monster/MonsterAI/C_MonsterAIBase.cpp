@@ -43,7 +43,6 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 	{
 		HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
 		HearingConfig->HearingRange = 1000.0f;  // 청각 범위 설정
-		HearingConfig->LoSHearingRange = 350.0f;  // 시야 내 청각 범위 설정
 		HearingConfig->DetectionByAffiliation.bDetectEnemies = true;  // 적 팀의 소리 감지 설정
 		HearingConfig->DetectionByAffiliation.bDetectNeutrals = false;  // 중립 팀의 소리 감지 설정
 		HearingConfig->DetectionByAffiliation.bDetectFriendlies = false;  // 아군 팀의 소리 감지 설정

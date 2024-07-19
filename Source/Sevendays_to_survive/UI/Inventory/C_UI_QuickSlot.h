@@ -40,6 +40,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void QuickSlotAdd(UWidget* _Widget, FC_ItemRow& _Data);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetQuickSlotIcon(int _Index, UTexture2D* _Icon);
+
+	UFUNCTION(Blueprintcallable)
+	int GetEmptySlotIndex();
+
+	void AddItem(const UC_Item* _Item); // GetEmptySlotIndex 해서 빈 자리 찾고 SetQuickSlotIcon(빈 자리, 아이콘);
+
+
 	//UFUNCTION(Blueprintcallable)
 	//FString GetWeaponName(EWeaponUseState* _Type);
 private:
@@ -47,4 +56,7 @@ private:
 	TArray<UC_UI_InventorySlot*> QuickSlotDataArray;
 	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UTexture2D*> ItemDataArray;
+
+	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<UInvenItemData*> QuickSlotData;
 };

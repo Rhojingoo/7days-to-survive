@@ -11,7 +11,9 @@
 #include "Map/C_ItemPouch.h"
 #include "Map/C_MapDataAsset.h"
 #include "UI/Inventory/C_UI_InventoryCore.h"
+#include "UI/Inventory/C_UI_QuickSlot.h"
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
+
 #include "UI/C_UI_InGameHUD.h"
 
 UC_InventoryComponent::UC_InventoryComponent()
@@ -68,7 +70,32 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     RefreshInventoryCore();
 
     ++UsingSize;
+
+
+    //큇슬롯의 FindEmptySlot 하는 함수도 따로 작성?
+    if (true == IsWeapon(_Item->Type))
+    {
+        // 큇슬롯에 Empty 슬롯 찾기
+        int SlotIndex = QuickSlotWidget->GetEmptySlotIndex();
+        QuickSlotWidget->SetQuickSlotIcon(SlotIndex, _Item->Icon);
+        
+    }
 }
+
+bool UC_InventoryComponent::IsWeapon(EItemType _Type) const
+{
+    EItemType ItemType = _Type;
+
+    if (EItemType::Weapon == ItemType)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+
 
 void UC_InventoryComponent::DropItemAll(int _Index)
 {

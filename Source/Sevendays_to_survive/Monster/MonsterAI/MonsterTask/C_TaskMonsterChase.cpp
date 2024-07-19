@@ -185,6 +185,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 				return;
 			}
+			MCP->Run(TargetLocation - SelfLocation);
 		}
 		return;
 	}

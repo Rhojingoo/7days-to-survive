@@ -112,6 +112,8 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 	USkeletalMeshComponent* MyMesh = GetMesh();
 	if (MyMesh)
 	{
+		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+		Inst->RemoveZombieArray(this);
 		MyMesh->SetSimulatePhysics(true);
 		MyMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 

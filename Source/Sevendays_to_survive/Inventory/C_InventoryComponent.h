@@ -12,6 +12,7 @@
 
 class UC_UI_InverntoryWidget;
 class AC_ItemPouch;
+class UC_UI_QuickSlot;
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SEVENDAYS_TO_SURVIVE_API UC_InventoryComponent : public UActorComponent
@@ -79,6 +80,9 @@ public:
     UFUNCTION(BlueprintPure)
     bool IsCraftable(FName _Id) const;
 
+    UFUNCTION(BlueprintCallable)
+    bool IsWeapon(EItemType _Type) const;
+
 private:
     UFUNCTION(Server, Reliable)
     void SpawnItem(FTransform _SpawnTransform, FName _Id, int _Count);
@@ -88,11 +92,26 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     int Size = 32;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UC_UI_InverntoryWidget* InventoryWidget = nullptr;
+
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    bool UIActiveness = false;
+
+    //Äü½½·Ô
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    int QuickMaxSize = 8;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UC_UI_QuickSlot* QuickSlotWidget = nullptr;
+
 private:
     bool IsValidSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
     UC_UI_InverntoryWidget* GetInventoryWidget();
     void RefreshInventoryCore();
+
 private:
     int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;

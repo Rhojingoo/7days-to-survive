@@ -181,7 +181,7 @@ void UC_STSInstance::SetZombieTarget()
 {
     int Max = PlayerArray.Num();
     for (int i = 0; i < ZombieArray.Num(); ++i) {
-        int RandomInt = GenerateRandomInt(0, Max);
+        int RandomInt = GenerateRandomInt(0, Max - 1);
         ZombieArray[i]->ForceFindTargetActor(PlayerArray[RandomInt]);
     }
 }
@@ -189,6 +189,11 @@ void UC_STSInstance::SetZombieTarget()
 void UC_STSInstance::AddZombieArray(AC_ZombieBase* _Zombie)
 {
     ZombieArray.Add(_Zombie);
+}
+
+void UC_STSInstance::RemoveZombieArray(AC_ZombieBase* _Zombie)
+{
+    ZombieArray.Remove(_Zombie);
 }
 
 void UC_STSInstance::AddPlayerArray(AActor* _Actor)
