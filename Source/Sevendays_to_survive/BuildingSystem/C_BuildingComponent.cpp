@@ -200,7 +200,7 @@ void UC_BuildingComponent::HoldBuildingPart(FName _BuildingPartId)
 	}
 	else
 	{
-		HoldingBuildingPart = Cast<UC_ItemBuildingPart>(UC_STSGlobalFunctions::GetMapDataMemory()->FindItem(_BuildingPartId));
+		HoldingBuildingPart = Cast<UC_ItemBuildingPart>(UC_STSGlobalFunctions::GetMapDataMemory(GetWorld())->FindItem(_BuildingPartId));
 		SetPreviewMesh(HoldingBuildingPart->Mesh);
 	}
 }

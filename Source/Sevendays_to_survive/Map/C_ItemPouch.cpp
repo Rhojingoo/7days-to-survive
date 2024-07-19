@@ -31,13 +31,13 @@ FC_ItemAndCount AC_ItemPouch::GetItemAndCount() const
 
 void AC_ItemPouch::SetItemAndCount_Implementation(FName _Id, int _Count)
 {
-	ItemAndCount.Item = UC_STSGlobalFunctions::FindItem(_Id);
+	ItemAndCount.Item = UC_STSGlobalFunctions::FindItem(GetWorld(), _Id);
 	ItemAndCount.Count = _Count;
 }
 
 void AC_ItemPouch::MapInteract()
 {
-	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
+	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
 	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
 	DestroyOnServer();
 }
@@ -74,6 +74,6 @@ void AC_ItemPouch::Tick(float DeltaTime)
 
 void AC_ItemPouch::DestroyOnServer()
 {
-	UC_STSGlobalFunctions::GetMapInteractionComponent()->DestroyActor(this);
+	UC_STSGlobalFunctions::GetMapInteractionComponent(GetWorld())->DestroyActor(this);
 }
 
