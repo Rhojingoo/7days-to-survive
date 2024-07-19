@@ -14,7 +14,7 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	BoxComponent->SetupAttachment(RootComponent);
-	//BoxComponent->SetCollisionProfileName("NoCollision");
+	BoxComponent->SetBoxExtent({100.0f, 100.0f, 10.0f});
 }
 
 // Called when the game starts or when spawned
@@ -26,8 +26,6 @@ void AC_MonsterSpawnPoint::BeginPlay()
 		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
 		Inst->AddSpawnPoint(this);
 	}
-
-	SetSpawn(true);
 }
 
 // Called every frame
@@ -46,9 +44,8 @@ void AC_MonsterSpawnPoint::MonsterSpawn(float DeltaTime)
 	CoolTime += DeltaTime;
 	if (SpawnTime <= CoolTime) {
 		FTransform Transform;
-		Transform.SetScale3D({ 1.0f, 1.0f,1.0f });
+		Transform.SetScale3D({ 1.0f, 1.0f,1.0f }); 
 		Transform.SetLocation(GetRandomPointInBox());
-		ReduceSpawnArea({ 20.0f, 20.0f });
 		FActorSpawnParameters SpawnInfo;
 		GetWorld()->SpawnActor<AC_ZombieBase>(SpawnZombie, Transform, SpawnInfo);
 		CoolTime = 0.0f;
@@ -93,10 +90,10 @@ FVector AC_MonsterSpawnPoint::GetRandomPointInBox() const
 
 void AC_MonsterSpawnPoint::ReduceSpawnArea(FVector2D _ReduceValue)
 {
-	FVector BoxExtent = BoxComponent->GetScaledBoxExtent();
+	FVector BoxExtent = BoxComponent->GetUnscaledBoxExtent();
 
-	BoxExtent.X -= _ReduceValue.X;
-	BoxExtent.Y -= _ReduceValue.Y;
+	BoxExtent.X = FMath::Max(BoxExtent.X - _ReduceValue.X, 0.0f);
+	BoxExtent.Y = FMath::Max(BoxExtent.Y - _ReduceValue.Y, 0.0f);
 
-	BoxComponent->SetWorldScale3D(BoxExtent);
+	BoxComponent->SetBoxExtent(BoxExtent);
 }
