@@ -424,15 +424,20 @@ bool AC_ZombieBase::MiddleRayTrace()
 
 void AC_ZombieBase::SetHP(double _Damage)
 {
-	double* HP = MCP->GetData()->GetHPRef();
-	*HP -= _Damage;
-	if (*HP <= 0) {
-		SetRagDoll();
+	if(true == HasAuthority()){
+		double* HP = MCP->GetData()->GetHPRef();
+		*HP -= _Damage;
+		if (*HP <= 0) {
+			SetRagDoll();
+		}
 	}
 }
 
-double AC_ZombieBase::GetDamage() const{
-	return MCP->GetData()->GetAtt();
+double AC_ZombieBase::GetDamage() const {
+	if (true == HasAuthority()) {
+		return MCP->GetData()->GetAtt();
+	}
+	return 0.0f;
 }
 
 void AC_ZombieBase::PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh)
