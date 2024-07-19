@@ -18,8 +18,8 @@ void AC_ItemBox::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
-	MapDataMemory = UC_STSGlobalFunctions::GetMapDataMemory();
+	MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset(GetWorld());
+	MapDataMemory = UC_STSGlobalFunctions::GetMapDataMemory(GetWorld());
 	ItemPouchClass = MapDataAsset->GetItemPouchClass();
 
 	SetMaxHp(MapDataAsset->GetItemBoxMaxHp());

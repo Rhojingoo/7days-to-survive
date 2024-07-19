@@ -245,7 +245,7 @@ void UC_InventoryComponent::Craft(FName _Id)
         return;
     }
 
-    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
+    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(GetWorld(), _Id);
 
     TMap<FName, int> CraftMaterials = CraftItem->CraftMaterials;
 
@@ -263,7 +263,7 @@ void UC_InventoryComponent::Craft(FName _Id)
 
 bool UC_InventoryComponent::IsCraftable(FName _Id) const
 {
-    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(_Id);
+    const UC_Item* CraftItem = UC_STSGlobalFunctions::FindItem(GetWorld(), _Id);
 
     if (false == IsValid(CraftItem) || false == CraftItem->IsCraftable())
     {
@@ -354,12 +354,12 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
 
 UC_UI_InverntoryWidget* UC_InventoryComponent::GetInventoryWidget()
 {
-    return UC_STSGlobalFunctions::GetInventoryCore()->GetInventoryWidget();
+    return UC_STSGlobalFunctions::GetInventoryCore(GetWorld())->GetInventoryWidget();
 }
 
 void UC_InventoryComponent::RefreshInventoryCore()
 {
-    UC_STSGlobalFunctions::GetInventoryCore()->Refresh();
+    UC_STSGlobalFunctions::GetInventoryCore(GetWorld())->Refresh();
 }
 
 void UC_InventoryComponent::SpawnItem_Implementation(FTransform _SpawnTransform, FName _Id, int _Count)

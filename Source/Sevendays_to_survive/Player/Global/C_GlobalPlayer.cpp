@@ -59,13 +59,13 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	SpringArm->SetupAttachment(GetMesh(), *FString("Head"));
 	SpringArm->TargetArmLength = 0.0f; // The camera follows at this distance behind the character	
 	SpringArm->bUsePawnControlRotation = false; // Rotate the arm based on the controller
-	SpringArm->bEnableCameraRotationLag = true;
-	SpringArm->CameraRotationLagSpeed = 10.0f;
+	/*SpringArm->bEnableCameraRotationLag = true;
+	SpringArm->CameraRotationLagSpeed = 10.0f;*/
 
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("FollowCamera"));
 	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	//Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	Cameras->bUsePawnControlRotation = true; // Camera does not rotate relative to arm
 
 	NameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Name"));
 	NameText->SetupAttachment(GetCapsuleComponent());
@@ -229,12 +229,19 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 
+	
 	if (nullptr == STSInstance)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%S(%u)> if (STSInstance == 0)"), __FUNCTION__, __LINE__);
 		return;
+	}
+
+	if (UGameplayStatics::GetGameMode(GetWorld()) != nullptr)
+	{
+		PlayerSpawnCheckToken=STSInstance->GetNetToken();
 	}
 
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
@@ -270,6 +277,9 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		SpringArm->TargetArmLength = CameraDT.TargetArmLength;
 		CameraRotSpeed = CameraDT.CameraRotSpeed;
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->ViewPitchMax = (MaxCalPitchCPP*3.0f)-16.0f;
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->ViewPitchMin = MinCalPithchCPP*3.0f;
+
 	}
 
 	
@@ -689,7 +699,7 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
 
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>() * UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
+	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 
 	if (Controller != nullptr)
 	{
