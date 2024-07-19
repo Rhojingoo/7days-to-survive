@@ -37,4 +37,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	const UC_Item* Item = nullptr;
+
+private:
+	void RefreshNull();
 };

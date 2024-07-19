@@ -11,9 +11,15 @@ void UC_UI_InventoryTipDetail::Refresh(const UC_Item* _Item)
 {
     Item = _Item;
 
+    if (nullptr == Item)
+    {
+        RefreshNull();
+        return;
+    }
+
     GetItemImage()->SetBrushFromTexture(Item->Icon);
 
-    UC_InventoryComponent* InventoryComp = UC_STSGlobalFunctions::GetInventoryComponent();
+    UC_InventoryComponent* InventoryComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
 
     TArray<TPair<FName, int>> CraftMaterials;
     for (TPair<FName, int> Pair : Item->CraftMaterials)
@@ -26,7 +32,7 @@ void UC_UI_InventoryTipDetail::Refresh(const UC_Item* _Item)
         FName MatItemId = CraftMaterials[i].Key;
         int NeedCount = CraftMaterials[i].Value;
 
-        const UC_Item* MatItem = UC_STSGlobalFunctions::FindItem(MatItemId);
+        const UC_Item* MatItem = UC_STSGlobalFunctions::FindItem(GetWorld(), MatItemId);
         MaterialInfoBoxes[i]->SetVisibility(ESlateVisibility::Visible);
         MaterialInfoBoxes[i]->Refresh(MatItem, InventoryComp->GetCountByItemId(MatItemId), NeedCount);
     }
@@ -48,10 +54,17 @@ void UC_UI_InventoryTipDetail::Refresh(const UC_Item* _Item)
 
 void UC_UI_InventoryTipDetail::RefreshCurItem()
 {
-    if (nullptr == Item)
+    Refresh(Item);
+}
+
+void UC_UI_InventoryTipDetail::RefreshNull()
+{
+    GetItemImage()->SetBrushFromTexture(nullptr);
+
+    for (int i = 0; i < MaterialInfoBoxes.Num(); ++i)
     {
-        return;
+        MaterialInfoBoxes[i]->SetVisibility(ESlateVisibility::Hidden);
     }
 
-    Refresh(Item);
+    GetCraftButton()->SetIsEnabled(false);
 }
