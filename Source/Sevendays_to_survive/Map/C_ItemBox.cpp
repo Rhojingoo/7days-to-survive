@@ -6,6 +6,7 @@
 #include "STS/C_STSGlobalFunctions.h"
 #include "Map/C_ItemPouch.h"
 #include "Map/C_MapDataAsset.h"
+#include "Map/C_MapDataMemory.h"
 
 // Sets default values
 AC_ItemBox::AC_ItemBox()
@@ -18,6 +19,7 @@ void AC_ItemBox::BeginPlay()
 	Super::BeginPlay();
 
 	MapDataAsset = UC_STSGlobalFunctions::GetMapDataAsset();
+	MapDataMemory = UC_STSGlobalFunctions::GetMapDataMemory();
 	ItemPouchClass = MapDataAsset->GetItemPouchClass();
 
 	SetMaxHp(MapDataAsset->GetItemBoxMaxHp());
@@ -36,7 +38,7 @@ void AC_ItemBox::PreDestroy()
 
 void AC_ItemBox::SpawnItems_Implementation()
 {
-	TArray<FC_ItemAndCount> DropItems = MapDataAsset->GetRandomDropItems();
+	TArray<FC_ItemAndCount> DropItems = MapDataMemory->GetRandomDropItems();
 
 	for (FC_ItemAndCount& ItemAndCount : DropItems)
 	{

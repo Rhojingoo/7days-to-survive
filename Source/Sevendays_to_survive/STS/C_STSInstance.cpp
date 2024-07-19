@@ -3,6 +3,7 @@
 
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
+#include "Map/C_MapDataMemory.h"
 #include "Player/Global/DataTable/C_PlayerDataTable.h"
 #include "UI/C_UITableRow.h"
 #include "Weapon/Global/DataTable/C_WeaponDataTable.h"
@@ -22,12 +23,18 @@ void UC_STSInstance::Init()
 {
     Super::Init();
 
-    MapDataAsset->Init(this);
+    MapDataMemory = NewObject<UC_MapDataMemory>(this);
+    MapDataMemory->Init(this);
 }
 
 UC_MapDataAsset* UC_STSInstance::GetMapDataAsset()
 {
     return MapDataAsset;
+}
+
+UC_MapDataMemory* UC_STSInstance::GetMapDataMemory()
+{
+    return MapDataMemory;
 }
 
 FMonsterDataRow* UC_STSInstance::GetMonsterData(FName _Name)

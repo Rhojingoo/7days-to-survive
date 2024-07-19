@@ -13,6 +13,7 @@
 #include "Map/C_MapInteractionComponent.h"
 #include "STS/C_STSInstance.h"
 #include "Map/C_MapDataAsset.h"
+#include "Map/C_MapDataMemory.h"
 #include "UI/C_UI_InGameHUD.h"
 #include "UI/Inventory/C_UI_InventoryCore.h"
 
@@ -38,11 +39,20 @@ AC_MapPlayer* UC_STSGlobalFunctions::GetMapPlayerCharacter()
     return Cast<AC_MapPlayer>(UGameplayStatics::GetPlayerPawn(World, 0));
 }
 
-UC_MapDataAsset* UC_STSGlobalFunctions::GetMapDataAsset()
+UC_STSInstance* UC_STSGlobalFunctions::GetInst()
 {
     UWorld* World = GEngine->GameViewport->GetWorld();
-    UC_STSInstance* Inst = World->GetGameInstanceChecked<UC_STSInstance>();
-    return Inst->GetMapDataAsset();
+    return World->GetGameInstanceChecked<UC_STSInstance>();
+}
+
+UC_MapDataAsset* UC_STSGlobalFunctions::GetMapDataAsset()
+{
+    return GetInst()->GetMapDataAsset();
+}
+
+UC_MapDataMemory* UC_STSGlobalFunctions::GetMapDataMemory()
+{
+    return GetInst()->GetMapDataMemory();
 }
 
 void UC_STSGlobalFunctions::Day_And_Night_Cycle(ALight* _DirectionLight)
@@ -69,7 +79,7 @@ void UC_STSGlobalFunctions::Day_And_Night_Cycle(ALight* _DirectionLight)
 
 const UC_Item* UC_STSGlobalFunctions::FindItem(FName _Id)
 {
-    return GetMapDataAsset()->FindItem(_Id);
+    return GetMapDataMemory()->FindItem(_Id);
 }
 
 AC_UI_InGameHUD* UC_STSGlobalFunctions::GetInGameHUD()

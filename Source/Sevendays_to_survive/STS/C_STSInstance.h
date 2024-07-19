@@ -9,6 +9,8 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "C_STSInstance.generated.h"
 
+class UC_MapDataAsset;
+class UC_MapDataMemory;
 struct FC_PlayerDataTable;
 struct FC_PlayerSpawnData;
 struct FC_WeaponDataTable;
@@ -27,8 +29,11 @@ public:
 	// BeginPlay ¿ªÇÒ
 	void Init() override;
 
-	UFUNCTION(BlueprintCallable)
-	class UC_MapDataAsset* GetMapDataAsset();
+	UFUNCTION(BlueprintPure)
+	UC_MapDataAsset* GetMapDataAsset();
+
+	UFUNCTION(BlueprintPure)
+	UC_MapDataMemory* GetMapDataMemory();
 
 	FMonsterDataRow* GetMonsterData(FName _Name);
 
@@ -121,6 +126,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UC_MapDataAsset* MapDataAsset = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
+	UC_MapDataMemory* MapDataMemory = nullptr;
 
 	FRandomStream RandomStream;
 
