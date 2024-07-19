@@ -96,8 +96,10 @@ public:
 	void SetSpawnMonster();
 	void AddSpawnPoint(class AC_MonsterSpawnPoint* _Point);
 
+	UFUNCTION(BlueprintCallable)
 	void SetZombieTarget();
 	void AddZombieArray(class AC_ZombieBase* _Zombie);
+	void RemoveZombieArray(AC_ZombieBase* _Zombie);
 
 	void AddPlayerArray(AActor* _Actor);
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
