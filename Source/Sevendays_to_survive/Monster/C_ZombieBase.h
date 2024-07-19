@@ -100,6 +100,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetHP(double _Damage);
 
+	UFUNCTION(BlueprintCallable)
+	double GetDamage() const;
+
 	UFUNCTION(NetMulticast, Reliable)
 	void PlayFindSound();
 	void PlayFindSound_Implementation();

@@ -148,12 +148,14 @@ void AC_ZombieBase::Move(FVector _Location)
 {
 	SetState(MonsterEnum::Move);
 	AddMovementInput(_Location);
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
 void AC_ZombieBase::Run(FVector _Location)
 {
 	SetState(MonsterEnum::Run);
 	AddMovementInput(_Location);
+	GetCharacterMovement()->MaxWalkSpeed = 700.f;
 }
 
 void AC_ZombieBase::Attack()
@@ -425,6 +427,10 @@ void AC_ZombieBase::SetHP(double _Damage)
 	if (*HP <= 0) {
 		SetRagDoll();
 	}
+}
+
+double AC_ZombieBase::GetDamage() const{
+	return MCP->GetData()->GetAtt();
 }
 
 void AC_ZombieBase::PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh)
