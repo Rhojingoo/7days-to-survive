@@ -126,4 +126,4 @@ void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
 	this->Num = _OtherSlot->Num; //수량
 	//정보 교환
 
-}ㅓ 확인 화
+}
