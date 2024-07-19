@@ -23,7 +23,7 @@ public:
 	FName WeaponName = "";
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	EWeaponUseState WeaponType;
+	EWeaponUseState WeaponType= EWeaponUseState::NoWeapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
 	float BulletRange = 0.0f;
