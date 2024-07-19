@@ -406,4 +406,7 @@ private:
 	UPROPERTY()
 	TArray<FireInfo> BulletInfos;
 
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int PlayerSpawnCheckToken = -1;
+
 };

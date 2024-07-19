@@ -229,12 +229,19 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AC_GlobalPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
 
+	
 	if (nullptr == STSInstance)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%S(%u)> if (STSInstance == 0)"), __FUNCTION__, __LINE__);
 		return;
+	}
+
+	if (UGameplayStatics::GetGameMode(GetWorld()) != nullptr)
+	{
+		PlayerSpawnCheckToken=STSInstance->GetNetToken();
 	}
 
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
