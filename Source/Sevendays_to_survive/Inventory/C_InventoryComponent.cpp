@@ -72,14 +72,14 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     ++UsingSize;
 
 
-    //큇슬롯의 FindEmptySlot 하는 함수도 따로 작성?
-    if (true == IsWeapon(_Item->Type))
-    {
-        // 큇슬롯에 Empty 슬롯 찾기
-        int SlotIndex = QuickSlotWidget->GetEmptySlotIndex();
-        QuickSlotWidget->SetQuickSlotIcon(SlotIndex, _Item->Icon);
-        
-    }
+    ////큇슬롯의 FindEmptySlot 하는 함수도 따로 작성?
+    //if (true == IsWeapon(_Item->Type))
+    //{
+    //    // 큇슬롯에 Empty 슬롯 찾기
+    //    int SlotIndex = QuickSlotWidget->GetEmptySlotIndex();
+    //    QuickSlotWidget->SetQuickSlotIcon(SlotIndex, _Item->Icon);
+    //    
+    //}
 }
 
 bool UC_InventoryComponent::IsWeapon(EItemType _Type) const
