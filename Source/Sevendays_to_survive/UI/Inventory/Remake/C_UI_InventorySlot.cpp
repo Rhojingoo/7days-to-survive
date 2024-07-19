@@ -9,7 +9,7 @@
 
 void UC_UI_InventorySlot::SetIcon(const FC_ItemRow& _ItemData)
 {
-	ItemIcons.Add(_ItemData.Name,_ItemData.Icon);
+	ItemIcons.Add(_ItemData.Name, _ItemData.Icon);
 	DragSlot->CopySlotName(ItemName);
 	DragSlot->CopySlotItemImage(ItemImage);
 	//Itemicon = _ItemData.Icon;
@@ -36,17 +36,30 @@ void UC_UI_InventorySlot::SetItemNum(int _Num)
 
 
 
-void UC_UI_InventorySlot::GetSlotInfo()
+void UC_UI_InventorySlot::GetDragSlotInfo()
 {
-DragSlot->CopySlotName(ItemName);
-DragSlot->CopySlotItemImage(ItemImage);
+	DragSlot->CopySlotName(ItemName);
+	DragSlot->CopySlotItemImage(ItemImage);
 
 }
+
+UC_UI_InventorySlot* UC_UI_InventorySlot::GetSlotInfo()
+{
+	return this;
+
+}
+
+FString UC_UI_InventorySlot::GetItemName()
+{
+	return ItemName;
+}
+
+
 
 void UC_UI_InventorySlot::GetDragItemData(UC_UI_SlotDrag* _DragSlot)
 {
 	FString CurDragName = _DragSlot->GetItemName(); //드래그 해서 가지고 있는정보
-	
+
 	UTexture2D* CuuDragImage = _DragSlot->GetDragItemImage();
 
 	if (ItemIcons[CurDragName] == nullptr)
@@ -54,8 +67,8 @@ void UC_UI_InventorySlot::GetDragItemData(UC_UI_SlotDrag* _DragSlot)
 		ItemIcons.Add(CurDragName, CuuDragImage); //아이템이 없으면 넣어주고 
 	}
 
-	
-	
+
+
 
 }
 
@@ -88,3 +101,29 @@ void UC_UI_InventorySlot::ChangeIndex(UC_UI_InventorySlot* _CurSlot)
 	CurSlotIndex = SaveIndex;
 
 }
+
+
+void UC_UI_InventorySlot::ChangeSlot(UC_UI_InventorySlot* _OtherSlot)
+{
+	if (this->Num == 0)
+	{
+		this->ChageInfo(_OtherSlot);
+		_OtherSlot = nullptr;
+	}
+	
+	//_OtherSlot->ChageInfo(static_cast<UC_UI_InventorySlot*>(&SaveSlot));
+
+}
+
+void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
+{
+	if (this == nullptr)
+	{
+		return;
+	}
+	this->ItemName = _OtherSlot->ItemName;
+	this->ItemImage = _OtherSlot->ItemImage;
+	this->Num = _OtherSlot->Num; //수량
+	//정보 교환
+
+}ㅓ 확인 화
