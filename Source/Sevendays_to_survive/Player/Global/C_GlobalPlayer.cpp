@@ -243,7 +243,7 @@ void AC_GlobalPlayer::BeginPlay()
 	{
 		PlayerSpawnCheckToken=STSInstance->GetNetToken();
 	}
-	FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
+	//FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
 
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
 	PlayerDT = STSInstance->GetPlayerDataTable()->PlayerValue;

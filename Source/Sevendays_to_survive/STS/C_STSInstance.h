@@ -44,8 +44,11 @@ public:
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
 	FC_PlayerDataTable* GetPlayerDataTable();
+	
 	FC_PlayerSpawnData* GetPlayerSpawnDataTable();
-
+	
+	UFUNCTION(BlueprintCallable)
+	TArray<USkeletalMesh*> GetPlayerSpawnMesh();
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
 	TMap<FName, FUIWidgetDataRow*> GetUIWidgetDataMap();
@@ -59,10 +62,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerMesh(EPlayerMesh _Mesh);
-	UFUNCTION()
-	TArray<EPlayerMesh> GetPlayerMesh()
+	
+	UFUNCTION(BlueprintCallable)
+	EPlayerMesh GetPlayerMesh()
 	{
-		return PlayerMeshs;
+		if (PlayerMeshs.IsEmpty())
+		{
+			return PlayerMeshs[0];
+		}
+
+		return PlayerMeshs[PlayerMeshs.Num()-1];
 	}
 
 	UFUNCTION()
