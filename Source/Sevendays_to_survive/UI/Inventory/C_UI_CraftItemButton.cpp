@@ -24,10 +24,10 @@ void UC_UI_CraftItemButton::Refresh(const UC_Item* _Item)
     UC_InventoryComponent* InventoryComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
     if (true == InventoryComp->IsCraftable(Item->Id))
     {
-        TextBlock->SetColorAndOpacity(FSlateColor(EStyleColor::AccentBlue));
+        TextBlock->SetColorAndOpacity(FLinearColor::Blue);
     }
     else
     {
-        TextBlock->SetColorAndOpacity(FSlateColor(EStyleColor::AccentRed));
+        TextBlock->SetColorAndOpacity(FLinearColor::Red);
     }
 }
