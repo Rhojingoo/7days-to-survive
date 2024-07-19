@@ -597,8 +597,14 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 		return;
 	}
 
+	if (PlayerCurState != EWeaponUseState::Shotgun)
+	{
+		return;
+	}
+
+
 	CurWeapon->PlayGunAnimation(PlayerCurState);
-	LineTracemagazinecapacity -= 1;
+	--magazinecapacity[ESkerItemSlot::RShotgun];
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -882,6 +888,9 @@ void AC_GlobalPlayer::Reload_Implementation()
 		break;
 	case EWeaponUseState::Pistol2:
 		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RPistol2]);
+		break;
+	case EWeaponUseState::Shotgun:
+		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RShotgun]);
 		break;
 	default:
 		break;
@@ -1261,7 +1270,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		{
 			return;
 		}
-	case EWeaponUseState::Sword:
+	case EWeaponUseState::Shotgun:
 		if (magazinecapacity[ESkerItemSlot::RShotgun] == 0)
 		{
 			return;
