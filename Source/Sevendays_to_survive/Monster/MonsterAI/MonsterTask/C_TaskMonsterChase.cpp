@@ -145,10 +145,10 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	//FVector MyStartLocation = BBC->GetValueAsVector(*StartLocation);
 	float Distance = FVector::Dist(TargetLocation, SelfLocation);
 
-	/*if (Player->GetDead() == true) {
-	Controller->IsFindOff();
-	return;
-	}*/		//플레이어가 죽었을 때 실행되어야 하는 로직
+	if (true == Player->GetIsPlayerDieCpp()) {
+		Controller->IsFindOff();
+		return;
+	}
 
 	if (Target->IsValidLowLevel() == false) {
 		UE_LOG(LogTemp, Fatal, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
@@ -185,6 +185,7 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 				return;
 			}
+			MCP->Run(TargetLocation - SelfLocation);
 		}
 		return;
 	}

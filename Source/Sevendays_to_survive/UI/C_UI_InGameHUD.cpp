@@ -27,10 +27,10 @@ void AC_UI_InGameHUD::DrawHUD()
   // }
 }
 
-UC_UI_InverntoryWidget* AC_UI_InGameHUD::GetInventoryWidget()
+UC_UI_InventoryCore* AC_UI_InGameHUD::GetInventoryCore()
 {
     UC_UI_InventoryCore* InventoryCore = Cast<UC_UI_InventoryCore>(Widgets[EUIType::Inventory]);
-    return InventoryCore->InventoryWidget;
+    return InventoryCore;
 }
 
 void AC_UI_InGameHUD::BeginPlay()

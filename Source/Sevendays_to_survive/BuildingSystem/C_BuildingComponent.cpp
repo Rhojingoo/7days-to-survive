@@ -14,6 +14,7 @@
 #include "Landscape.h"
 #include "STS/C_STSGlobalFunctions.h"
 #include "Map/C_MapDataAsset.h"
+#include "Map/C_MapDataMemory.h"
 #include "Player/Global/C_GlobalPlayer.h"
 
 UC_BuildingComponent::UC_BuildingComponent()
@@ -116,7 +117,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	FHitResult* OutHit = nullptr;
 	for (FHitResult& Hit : OutHits)
 	{
-		if (true == Hit.GetActor()->IsA<ALandscapeProxy>())
+		if (true == Hit.GetActor()->IsA<ALandscapeProxy>() || Hit.GetActor()->ActorHasTag(TEXT("Ground")))
 		{
 			IsLandHit = true;
 			OutHit = &Hit;
@@ -131,29 +132,35 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		BuildTransform.SetLocation(Location);
 		RefreshPreviewTransform();
 
-		// 충돌면의 경사가 급하면 설치할 수 없다.
-		if (false == CheckBuildAngle(OutHit->Normal))
+		// 충돌면의 경사가 급하거나 땅을 제외한 액터와 충돌이 있는 경우 설치할 수 없다.
+		if (false == CheckBuildAngle(OutHit->Normal) || true == HasPreviewCollision())
 		{
 			SetCanBuild(false);
 			return;
 		}
-	}
-	else
-	{
-		OutHit = &OutHits[0];
-		BuildTransform.SetLocation(OutHit->ImpactPoint);
+
+		SetCanBuild(true);
+		return;
 	}
 
-	// 땅을 제외한 액터와 충돌이 있는 경우
-	if (true == HasPreviewCollision())
-	{
-		SetCanBuild(false);
-	}
-	// 땅을 제외한 액터와 충돌이 없는 경우
-	else
-	{
-		SetCanBuild(true);
-	}
+	SetCanBuild(false);
+
+	//else
+	//{
+	//	OutHit = &OutHits[0];
+	//	BuildTransform.SetLocation(OutHit->ImpactPoint);
+	//}
+
+	//// 땅을 제외한 액터와 충돌이 있는 경우
+	//if (true == HasPreviewCollision())
+	//{
+	//	SetCanBuild(false);
+	//}
+	//// 땅을 제외한 액터와 충돌이 없는 경우
+	//else
+	//{
+	//	SetCanBuild(true);
+	//}
 }
 
 bool UC_BuildingComponent::IsBuilding() const
@@ -199,7 +206,7 @@ void UC_BuildingComponent::HoldBuildingPart(FName _BuildingPartId)
 	}
 	else
 	{
-		HoldingBuildingPart = Cast<UC_ItemBuildingPart>(UC_STSGlobalFunctions::GetMapDataAsset()->FindItem(_BuildingPartId));
+		HoldingBuildingPart = Cast<UC_ItemBuildingPart>(UC_STSGlobalFunctions::GetMapDataMemory(GetWorld())->FindItem(_BuildingPartId));
 		SetPreviewMesh(HoldingBuildingPart->Mesh);
 	}
 }

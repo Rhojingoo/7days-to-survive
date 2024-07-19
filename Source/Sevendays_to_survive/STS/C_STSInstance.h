@@ -6,9 +6,13 @@
 #include "Engine/GameInstance.h"
 #include "UI/C_UITableRow.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_STSInstance.generated.h"
 
+class UC_MapDataAsset;
+class UC_MapDataMemory;
 struct FC_PlayerDataTable;
+struct FC_PlayerSpawnData;
 struct FC_WeaponDataTable;
 struct FC_UITableRow;
 /**
@@ -25,8 +29,11 @@ public:
 	// BeginPlay 역할
 	void Init() override;
 
-	UFUNCTION(BlueprintCallable)
-	class UC_MapDataAsset* GetMapDataAsset();
+	UFUNCTION(BlueprintPure)
+	UC_MapDataAsset* GetMapDataAsset();
+
+	UFUNCTION(BlueprintPure)
+	UC_MapDataMemory* GetMapDataMemory();
 
 	FMonsterDataRow* GetMonsterData(FName _Name);
 
@@ -37,6 +44,7 @@ public:
 	void SetPlayerInfo(FString _Name, FString _UserIP);
 
 	FC_PlayerDataTable* GetPlayerDataTable();
+	FC_PlayerSpawnData* GetPlayerSpawnDataTable();
 
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
@@ -48,6 +56,20 @@ public:
 	float GenerateRandomFloat(float _Min, float _Max);
 	FVector GenerateRandomVector(FBox2D _Box);
 
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerMesh(EPlayerMesh _Mesh);
+	UFUNCTION()
+	TArray<EPlayerMesh> GetPlayerMesh()
+	{
+		return PlayerMeshs;
+	}
+
+	UFUNCTION()
+	int GetNetToken()
+	{
+		return ++NetToken;
+	}
 public:
 	// 인게임 밤낮 구분변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
@@ -80,14 +102,29 @@ public:
 	void SetSpawnMonster();
 	void AddSpawnPoint(class AC_MonsterSpawnPoint* _Point);
 
+	UFUNCTION(BlueprintCallable)
+	void SetZombieTarget();
+	void AddZombieArray(class AC_ZombieBase* _Zombie);
+	void RemoveZombieArray(AC_ZombieBase* _Zombie);
+
+	void AddPlayerArray(AActor* _Actor);
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<AC_MonsterSpawnPoint*> SpawnArray;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<AC_ZombieBase*> ZombieArray;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<AActor*> PlayerArray;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* PlayerDataTable;
+	UDataTable* PlayerDataTable=nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* WeaponDataTable;
+	UDataTable* PlayerSpawnDataTable=nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* WeaponDataTable=nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* DT_UIData;
@@ -98,8 +135,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UC_MapDataAsset* MapDataAsset = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
+	UC_MapDataMemory* MapDataMemory = nullptr;
+
 	FRandomStream RandomStream;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	UDataTable* WidgetDataTable = nullptr;
+
+	UPROPERTY()
+	TArray<EPlayerMesh> PlayerMeshs;
+
+	UPROPERTY()
+	int NetToken = -1;
 };

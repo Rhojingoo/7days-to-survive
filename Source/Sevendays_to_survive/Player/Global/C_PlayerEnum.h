@@ -22,7 +22,8 @@ enum class EPlayerState : uint8
 	NoWeapon,
 	PickUp,
 	Fire,
-	AlmostAtt
+	AlmostAtt,
+	Reload
 
 };
 
@@ -59,6 +60,15 @@ enum class ESkerItemSlot : uint8
 	RPistol2,
 	RShotgun,
 	SlotMax
+};
+
+UENUM(BlueprintType)
+enum class EPlayerMesh : uint8
+{
+	Player1,
+	Player2,
+	Player3,
+	Player4
 };
 /**
  * 

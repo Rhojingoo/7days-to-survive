@@ -100,10 +100,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetHP(double _Damage);
 
+	UFUNCTION(BlueprintCallable)
+	double GetDamage() const;
+
 	UFUNCTION(NetMulticast, Reliable)
 	void PlayFindSound();
 	void PlayFindSound_Implementation();
 
+
+	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	void ForceFindTargetActor(AActor* _Actor);
 
 protected:
 	FString MonsterName;
@@ -141,6 +147,7 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void PlayDeadSound(USkeletalMeshComponent* _Mesh);
 	void PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh);
+
 };
 
 

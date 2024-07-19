@@ -76,6 +76,7 @@ void AC_ZombieBase::BeginPlay()
 	if (HasAuthority())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Idle);
+		Inst->AddZombieArray(this);
 	}
 }
 // Called every frame
@@ -111,6 +112,8 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 	USkeletalMeshComponent* MyMesh = GetMesh();
 	if (MyMesh)
 	{
+		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
+		Inst->RemoveZombieArray(this);
 		MyMesh->SetSimulatePhysics(true);
 		MyMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 
@@ -147,12 +150,14 @@ void AC_ZombieBase::Move(FVector _Location)
 {
 	SetState(MonsterEnum::Move);
 	AddMovementInput(_Location);
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
 void AC_ZombieBase::Run(FVector _Location)
 {
 	SetState(MonsterEnum::Run);
 	AddMovementInput(_Location);
+	GetCharacterMovement()->MaxWalkSpeed = 700.f;
 }
 
 void AC_ZombieBase::Attack()
@@ -426,6 +431,10 @@ void AC_ZombieBase::SetHP(double _Damage)
 	}
 }
 
+double AC_ZombieBase::GetDamage() const{
+	return MCP->GetData()->GetAtt();
+}
+
 void AC_ZombieBase::PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh)
 {
 	UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
@@ -453,4 +462,10 @@ void AC_ZombieBase::PlayFindSound_Implementation()
 			AudioComponent->Play();
 		}
 	}
+}
+
+void AC_ZombieBase::ForceFindTargetActor(AActor* _Actor)
+{
+	AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(GetController());
+	AIController->SetTargetActor(_Actor);
 }

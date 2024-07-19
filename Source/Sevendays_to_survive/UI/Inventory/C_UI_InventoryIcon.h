@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "C_UI_InventoryIcon.generated.h"
 
+class UC_UI_InverntoryWidget;
+
 /**
  * 
  */
@@ -14,4 +16,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventoryIcon : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintPure, BlueprintImplementableEvent)
+	UC_UI_InverntoryWidget* GetInventoryWidget();
 };

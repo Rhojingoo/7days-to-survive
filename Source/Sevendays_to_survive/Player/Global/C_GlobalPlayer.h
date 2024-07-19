@@ -17,9 +17,10 @@ struct FireInfo
 public:
 	FVector Start = FVector::ZeroVector;
 	FVector End = FVector::ZeroVector;
-	AActor* FireEffect = nullptr;
+	FRotator BulletRotation = FRotator::ZeroRotator;
+	TSubclassOf<AActor> BulletActor = nullptr;
 	float Time = 3.0f;
-	float BulletSpeed = 10000.0f;
+	//float BulletSpeed = 10000.0f;
 };
 
 class USpringArmComponent; // 스프링 암
@@ -90,6 +91,11 @@ public:
 		return PitchCPP;
 	}
 
+	FORCEINLINE bool GetIsPlayerDieCpp()
+	{
+		return IsPlayerDieCpp;
+	}
+
 	//------------------------------------------------
 
 	EWeaponUseState GetPlayerCurState()
@@ -118,6 +124,10 @@ public:
 	UFUNCTION(Reliable, NetMulticast)
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
+
+	UFUNCTION()
+	void Resetmagazinecapacity();
+
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -226,7 +236,13 @@ protected:
 	UFUNCTION()
 	void SpawnBulletMove(float _DeltaTime);
 
+	UFUNCTION(Reliable, Server)
+	void ReloadServer();
+	void ReloadServer_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void Reload();
+	void Reload_Implementation();
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
@@ -266,6 +282,9 @@ private:
 	TMap<ESkerItemSlot, int> magazinecapacity;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TMap<ESkerItemSlot, UAnimMontage*> ReloadMontages;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EStaticItemSlot, USoundBase*> WeaponSounds;
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -284,7 +303,7 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
 
-	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated,VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsPlayerDieCpp = false;
 
 	UPROPERTY()
@@ -387,6 +406,7 @@ private:
 	UPROPERTY()
 	TArray<FireInfo> BulletInfos;
 
-	UPROPERTY()
-	TSubclassOf<AActor> BulletEffectActor;
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int PlayerSpawnCheckToken = -1;
+
 };

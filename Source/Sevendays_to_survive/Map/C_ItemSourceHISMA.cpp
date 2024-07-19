@@ -124,7 +124,7 @@ void AC_ItemSourceHISMA::GainDropItems(AC_MapPlayer* _HitCharacter)
 
     for (TPair<FName, int>& DropItem : DropItems)
     {
-        const UC_Item* Item = UC_STSGlobalFunctions::FindItem(DropItem.Key);
+        const UC_Item* Item = UC_STSGlobalFunctions::FindItem(GetWorld(), DropItem.Key);
         InventoryComponent->AddItem(Item, DropItem.Value);
         STS_LOG("got %d %ss.", DropItem.Value, *Item->Name);
     }

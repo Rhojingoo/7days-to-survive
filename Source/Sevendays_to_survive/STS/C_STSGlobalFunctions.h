@@ -14,6 +14,9 @@ class UC_BuildingComponent;
 class UC_InventoryComponent;
 class UC_MapInteractionComponent;
 class UC_MapDataAsset;
+class UC_MapDataMemory;
+class UC_UI_InventoryCore;
+class UC_STSInstance;
 
 /**
  * 
@@ -24,29 +27,38 @@ class SEVENDAYS_TO_SURVIVE_API UC_STSGlobalFunctions : public UBlueprintFunction
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static UC_BuildingComponent* GetBuildingComponent();
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_BuildingComponent* GetBuildingComponent(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static UC_InventoryComponent* GetInventoryComponent();
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_InventoryComponent* GetInventoryComponent(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static UC_MapInteractionComponent* GetMapInteractionComponent();
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_MapInteractionComponent* GetMapInteractionComponent(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static AC_MapPlayer* GetMapPlayerCharacter();
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static AC_MapPlayer* GetMapPlayerCharacter(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, Category = "Content")
-	static UC_MapDataAsset* GetMapDataAsset();
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_STSInstance* GetInst(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_MapDataAsset* GetMapDataAsset(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "Content", meta = (WorldContext = "WorldContextObject"))
+	static UC_MapDataMemory* GetMapDataMemory(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable, Category = "Content")
 	static void Day_And_Night_Cycle(ALight* _DirectionLight);
 
-	UFUNCTION(BlueprintCallable)
-	static const UC_Item* FindItem(FName _Id);
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static const UC_Item* FindItem(const UObject* WorldContextObject, FName _Id);
 
-	UFUNCTION(BlueprintPure)
-	static AC_UI_InGameHUD* GetInGameHUD();
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static AC_UI_InGameHUD* GetInGameHUD(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static UC_UI_InventoryCore* GetInventoryCore(const UObject* WorldContextObject);
 
 private:
 	

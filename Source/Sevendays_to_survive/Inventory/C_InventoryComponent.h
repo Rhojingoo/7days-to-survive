@@ -109,6 +109,8 @@ private:
 private:
     bool IsValidSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
+    UC_UI_InverntoryWidget* GetInventoryWidget();
+    void RefreshInventoryCore();
 
 private:
     int UsingSize = 0;

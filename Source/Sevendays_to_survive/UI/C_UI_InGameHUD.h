@@ -9,7 +9,7 @@
 #include "UI/C_UITableRow.h"
 #include "C_UI_InGameHUD.generated.h"
 
-class UC_UI_InverntoryWidget;
+class UC_UI_InventoryCore;
 
 /**
  * 
@@ -52,7 +52,8 @@ public:
 		return ++CurZOrder;
 	}
 
-	UC_UI_InverntoryWidget* GetInventoryWidget();
+	UFUNCTION(BlueprintPure)
+	UC_UI_InventoryCore* GetInventoryCore();
 
 protected:
 	void BeginPlay() override;

@@ -4,19 +4,6 @@
 #include "UI/Inventory/Remake/C_UI_InventorySlot.h"
 #include "Components/PanelWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "Engine/Texture2D.h"
-
-void UC_UI_InventorySlot::Init(UInvenItemData* _Data)
-{
-	if (_Data == nullptr)
-	{
-		return;
-	}
-
-	Data = _Data;
-	//ItemIconImage = Cast<UImage>(GetWidgetFromName(TEXT("Icon"));
-	//ItemCountWidget = Cast<UTextBlock>(GetWidgetFromName(TEXT("ItemCount"));
-}
 
 
 
@@ -40,10 +27,7 @@ UTexture2D* UC_UI_InventorySlot::GetIcons(FString _Key)
 
 }
 
-void UC_UI_InventorySlot::GetItemInfo(const UWidget* _PrevSlot)
-{
 
-}
 
 void UC_UI_InventorySlot::SetItemNum(int _Num)
 {
@@ -84,5 +68,23 @@ void UC_UI_InventorySlot::FindPanelIndex() //슬롯 자신의 인덱스를 가�
 void UC_UI_InventorySlot::SetSlotIndex(int _Index)
 {
 	CurSlotIndex = _Index;
+
 }
 
+int UC_UI_InventorySlot::GetSlotIndex()
+{
+	return CurSlotIndex;
+}
+
+void UC_UI_InventorySlot::ChangeIndex(UC_UI_InventorySlot* _CurSlot)
+{
+	int SaveIndex = _CurSlot->GetSlotIndex();
+	if (CurSlotIndex == SaveIndex)
+	{
+		return;
+	}
+
+	_CurSlot->SetSlotIndex(CurSlotIndex);
+	CurSlotIndex = SaveIndex;
+
+}
