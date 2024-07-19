@@ -64,6 +64,12 @@ public:
 	{
 		return PlayerMeshs;
 	}
+
+	UFUNCTION()
+	int GetNetToken()
+	{
+		return ++NetToken;
+	}
 public:
 	// ¿Œ∞‘¿” π„≥∑ ±∏∫–∫Øºˆ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
@@ -137,4 +143,7 @@ private:
 
 	UPROPERTY()
 	TArray<EPlayerMesh> PlayerMeshs;
+
+	UPROPERTY()
+	int NetToken = -1;
 };
