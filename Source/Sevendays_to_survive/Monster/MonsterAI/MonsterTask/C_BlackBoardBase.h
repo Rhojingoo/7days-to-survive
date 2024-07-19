@@ -44,6 +44,7 @@ protected:
     const FString FollowZombie = "FollowZombie";
     const FString IsInit = "IsInit";
     const FString BreakTime = "BreakTime";
+    const FString NaviTime = "NaviTime";
     //const FString NextNavi = "NextNavi";
     //const FString StartLocation = "StartLocation";
     //const FString RunTime = "RunTime";
@@ -51,6 +52,7 @@ protected:
     const float Minimum_BreakTime = 5.0f;
     const float Minimum_Distance = 100.f;
     const float Max_Distance = 3000.f;
+    const float MaxNaviTime = 3.0f;
     const bool PrevNaviPath = true;
     const bool NextNaviPath = false;
 };

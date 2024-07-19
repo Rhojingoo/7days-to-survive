@@ -109,6 +109,23 @@ bool UC_TaskMonsterChase::MonsterAttack(UMonsterDataObject* _Data, AAIController
 	return false;
 }
 
+bool UC_TaskMonsterChase::MonsterNaviTime(float _DeltaTime, UBlackboardComponent* _BBC)
+{
+	float VelocityTime = _BBC->GetValueAsFloat(*NaviTime);
+	VelocityTime += _DeltaTime;
+	_BBC->SetValueAsFloat(*NaviTime, VelocityTime);
+	if (VelocityTime >= MaxNaviTime) {
+		_BBC->SetValueAsFloat(*NaviTime, 0.0f);
+		return true;
+	}
+	return false;
+}
+
+void UC_TaskMonsterChase::ResetNaviTime(UBlackboardComponent* _BBC)
+{
+	_BBC->SetValueAsFloat(*NaviTime, 0.0f);
+}
+
 EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
@@ -169,6 +186,11 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return;
 		}
+		if (100.f > MCP->GetVelocity()) {
+			if (true == MCP->BreakCheck()) {
+				MCP->RunAttack();
+			}
+		}
 		MCP->Run(TargetLocation - SelfLocation);
 		return;
 	}
@@ -189,7 +211,16 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		}
 		return;
 	}
-	else {
+	else {// 이 때 속도 낮으면 부시기
+		if (10.f > MCP->GetVelocity()) {
+			if (true == MonsterNaviTime(DeltaSeconds, BBC)) {
+				MonsterData->RemovePath();
+				return;
+			}
+		}
+		else {
+			ResetNaviTime(BBC);
+		}
 		NaviMove(MonsterData, BBC, Controller, OwnerComp, Distance);
 		return;
 	}

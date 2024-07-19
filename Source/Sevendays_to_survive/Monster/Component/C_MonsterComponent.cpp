@@ -39,6 +39,16 @@ void UC_MonsterComponent::SetData()
 #endif
 }
 
+float UC_MonsterComponent::GetVelocity()
+{
+ 	float MonsterVelocity = MonsterPawn->GetCharacterMovement()->Velocity.Size();
+#ifdef WITH_EDITOR
+	FString SVelocity = FString::SanitizeFloat(MonsterVelocity);
+	UE_LOG(LogTemp, Display, TEXT("%s"), *SVelocity);
+#endif // WITH_EDITOR
+	return MonsterVelocity;
+}
+
 // Called when the game starts
 void UC_MonsterComponent::BeginPlay()
 {

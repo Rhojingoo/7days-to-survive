@@ -280,6 +280,9 @@ bool AC_ZombieBase::BottomRayTrace()
 				bottomIsHit = false;
 			}
 		}
+		else {
+			bottomIsHit = false;
+		}
 
 
 	}
@@ -320,6 +323,9 @@ bool AC_ZombieBase::BottomRayTrace()
 			else {
 				MiddleIsHit = false;
 			}
+		}
+		else {
+			MiddleIsHit = false;
 		}
 	}
 
@@ -371,6 +377,9 @@ bool AC_ZombieBase::MiddleRayTrace()
 				bottomIsHit = false;
 			}
 		}
+		else {
+			bottomIsHit = false;
+		}
 
 
 	}
@@ -411,6 +420,9 @@ bool AC_ZombieBase::MiddleRayTrace()
 			else {
 				MiddleIsHit = false;
 			}
+		}
+		else {
+			MiddleIsHit = false;
 		}
 	}
 

@@ -34,6 +34,7 @@ public:
 	bool IsFalling();
 
 	void SetData();
+	float GetVelocity();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

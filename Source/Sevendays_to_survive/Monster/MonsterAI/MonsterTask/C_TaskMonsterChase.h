@@ -20,6 +20,8 @@ public:
     bool SetPath(FVector _MyLocation, FVector _TargetLocation, class UMonsterDataObject* _Data, UBlackboardComponent* _BBC);
     bool NaviMove(UMonsterDataObject* _Data, UBlackboardComponent* _BBC, AAIController* _Controller, UBehaviorTreeComponent& OwnerComp, float _TargetDistance);
     bool MonsterAttack(UMonsterDataObject* _Data, AAIController* _Controller, float _Distance);
+    bool MonsterNaviTime(float _DeltaTime, UBlackboardComponent* _BBC);
+    void ResetNaviTime(UBlackboardComponent* _BBC);
 
 protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
