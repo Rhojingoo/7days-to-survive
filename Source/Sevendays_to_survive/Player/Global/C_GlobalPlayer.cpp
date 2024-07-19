@@ -415,7 +415,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Reload], ETriggerEvent::Started, this, &AC_GlobalPlayer::Reload);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Reload], ETriggerEvent::Started, this, &AC_GlobalPlayer::ReloadServer);
 		//AlMostAtt
 		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
@@ -857,7 +857,12 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 	BulletInfos.Empty();
 }
 
-void AC_GlobalPlayer::Reload()
+void AC_GlobalPlayer::ReloadServer_Implementation()
+{
+	Reload();
+}
+
+void AC_GlobalPlayer::Reload_Implementation()
 {
 	if (nullptr == CurWeapon)
 	{

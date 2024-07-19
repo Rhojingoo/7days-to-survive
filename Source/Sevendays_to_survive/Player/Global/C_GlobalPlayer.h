@@ -96,22 +96,6 @@ public:
 		return IsPlayerDieCpp;
 	}
 
-
-	FORCEINLINE int GetPistolmagazinecapacity() const
-	{
-		return Pistolmagazinecapacity;
-	}
-
-	FORCEINLINE int GetShotGunmagazinecapacity() const
-	{
-		return ShotGunmagazinecapacity;
-	}
-
-	FORCEINLINE int GetRiflemagazinecapacity() const
-	{
-		return Riflemagazinecapacity;
-	}
-
 	//------------------------------------------------
 
 	EWeaponUseState GetPlayerCurState()
@@ -140,12 +124,6 @@ public:
 	UFUNCTION(Reliable, NetMulticast)
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
-
-	UFUNCTION()
-	FORCEINLINE TMap<ESkerItemSlot, int> Getmagazinecapacity()
-	{
-		return magazinecapacity;
-	}
 
 	UFUNCTION()
 	void Resetmagazinecapacity();
@@ -258,9 +236,13 @@ protected:
 	UFUNCTION()
 	void SpawnBulletMove(float _DeltaTime);
 
-	UFUNCTION()
-	void Reload();
+	UFUNCTION(Reliable, Server)
+	void ReloadServer();
+	void ReloadServer_Implementation();
 
+	UFUNCTION(Reliable, NetMulticast)
+	void Reload();
+	void Reload_Implementation();
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
