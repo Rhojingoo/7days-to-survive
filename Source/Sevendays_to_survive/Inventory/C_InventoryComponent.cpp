@@ -82,6 +82,15 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     //}
 }
 
+void UC_InventoryComponent::Swap(int _FromIndex, int _ToIndex)
+{
+    FC_ItemAndCount FromSlot = Inventory[_FromIndex];
+    FC_ItemAndCount ToSlot = Inventory[_ToIndex];
+
+    SetSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
+    SetSlot(_FromIndex, ToSlot.Item, ToSlot.Count);
+}
+
 bool UC_InventoryComponent::IsWeapon(EItemType _Type) const
 {
     EItemType ItemType = _Type;
@@ -93,9 +102,6 @@ bool UC_InventoryComponent::IsWeapon(EItemType _Type) const
 
     return false;
 }
-
-
-
 
 void UC_InventoryComponent::DropItemAll(int _Index)
 {
@@ -158,6 +164,30 @@ void UC_InventoryComponent::DropItem(int _Index, int _Count)
     RefreshInventoryCore();
 }
 
+void UC_InventoryComponent::SetSlot(int _Index, const UC_Item* _Item, int _Count)
+{
+    if (false == IsEmptySlot(_Index))
+    {
+        int CurCount = GetCount(_Index);
+        DecItemCount(_Index, CurCount);
+    }
+
+    if (nullptr == _Item)
+    {
+        return;
+    }
+
+    ItemIdToIndex.Emplace(_Item->Id, _Index);
+    Inventory[_Index].Item = _Item;
+    Inventory[_Index].Count = _Count;
+
+    GetInventoryWidget()->SetIcon(_Index, _Item->Icon);
+    GetInventoryWidget()->SetNumber(_Index, _Count);
+    RefreshInventoryCore();
+
+    ++UsingSize;
+}
+
 void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
 {
     if (true == IsEmptySlot(_Index))
@@ -167,6 +197,7 @@ void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
     }
 
     Inventory[_Index].Count += _Count;
+    GetInventoryWidget()->SetNumber(_Index, Inventory[_Index].Count);
     RefreshInventoryCore();
 }
 

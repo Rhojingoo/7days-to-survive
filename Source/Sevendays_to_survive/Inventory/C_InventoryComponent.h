@@ -33,6 +33,9 @@ public:
     void AddItem(const UC_Item* _Item, int _Count);
 
     UFUNCTION(BlueprintCallable)
+    void Swap(int _FromIndex, int _ToIndex);
+
+    UFUNCTION(BlueprintCallable)
     void DropItemAll(int _Index);
 
     UFUNCTION(BlueprintCallable)
@@ -111,7 +114,7 @@ private:
     FTransform GetItemSpawnTransform() const;
     UC_UI_InverntoryWidget* GetInventoryWidget();
     void RefreshInventoryCore();
-
+    void SetSlot(int _Index, const UC_Item* _Item, int _Count);
 private:
     int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;
