@@ -25,9 +25,21 @@ public:
 	UFUNCTION(Blueprintcallable)
 	void TileViewInitialze(UTileView* _Tileview, int _InitCount);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetQuickSlotIcon(int _Index, UTexture2D* _Icon);
+
+	UFUNCTION(Blueprintcallable)
+	int GetEmptySlotIndex();
+
+	void AddItem(const UC_Item* _Item); // GetEmptySlotIndex 해서 빈 자리 찾고 SetQuickSlotIcon(빈 자리, 아이콘);
+
+
 	//UFUNCTION(Blueprintcallable)
 	//FString GetWeaponName(EWeaponUseState* _Type);
 private:
 	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UC_UI_InventorySlot*> QuickSlotDataArray;
+
+	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<UInvenItemData*> QuickSlotData;
 };

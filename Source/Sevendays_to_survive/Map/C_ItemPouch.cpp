@@ -39,6 +39,20 @@ void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent();
 	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
+	
+	//큇슬롯 창으로 Add해주기
+	// 1. 퀵슬롯 창 생성하기
+	// 2. 아이템 type이 무기인지 확인하기
+	// 3. 큇슬롯 창에 AddItem 해주기
+
+	//Enum* ItemCheck = StaticEnum<EItemType>();
+
+	//if (true == EItemType::Weapon)
+	//{
+	//QuickSlot->AddItem()
+
+	//}
+
 	DestroyOnServer();
 }
 
