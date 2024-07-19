@@ -63,15 +63,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerMesh(EPlayerMesh _Mesh);
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	EPlayerMesh GetPlayerMesh()
 	{
-		if (PlayerMeshs.IsEmpty())
+		if (true==PlayerMeshs.IsEmpty() || NetToken==-1)
 		{
-			return PlayerMeshs[0];
+			return EPlayerMesh::Player1;
 		}
-
-		return PlayerMeshs[PlayerMeshs.Num()-1];
+		return PlayerMeshs[NetToken];
 	}
 
 	UFUNCTION()

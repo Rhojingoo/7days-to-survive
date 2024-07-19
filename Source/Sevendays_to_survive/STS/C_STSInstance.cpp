@@ -84,6 +84,11 @@ FC_PlayerSpawnData* UC_STSInstance::GetPlayerSpawnDataTable()
 
     if (nullptr == Data)
     {
+
+       /* TArray<USkeletalMesh*> UC_STSInstance::GetPlayerSpawnMesh()
+        {
+            return TArray<USkeletalMesh*>();
+        }*/
         UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
         return nullptr;
     }
