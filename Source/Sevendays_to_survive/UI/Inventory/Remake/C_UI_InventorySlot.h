@@ -9,13 +9,22 @@
 #include "Components/Image.h"
 #include "UI/Inventory/Remake/C_UI_Inventory.h"
 #include "UI/Inventory/C_UI_SlotDrag.h"
+#include "Map/C_Items.h"
 
 #include "C_UI_InventorySlot.generated.h"
 
+enum class SlotType
+{
+	InventorySLot,
+	QuickSlot,
+	CraftSlot
+
+};
+
 /**
- * 
+ *
  */
-//class UTexture2D;
+ //class UTexture2D;
 class UC_UI_SlotDrag;
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API UC_UI_InventorySlot : public UUserWidget
@@ -23,7 +32,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_InventorySlot : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetIcon(const FC_ItemRow& _ItemData);
 
@@ -37,7 +46,7 @@ public:
 	void SetItemNum(int _Num);
 
 	UFUNCTION(BlueprintCallable)
-	void GetSlotInfo();
+	void GetDragSlotInfo();
 
 	UFUNCTION(BlueprintCallable)
 	void GetDragItemData(UC_UI_SlotDrag* _DragSlot);
@@ -54,12 +63,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeIndex(UC_UI_InventorySlot* _CurSlot);
 
-	
+	UFUNCTION(BlueprintCallable)
+	FString GetItemName();
+
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeSlot(UC_UI_InventorySlot* _OtherSlot); //½½·Ô ¹Ù²Ù±â
+
+	UFUNCTION(BlueprintCallable)
+	void ChageInfo(UC_UI_InventorySlot* _OtherSlot);
+
+	UFUNCTION(BlueprintCallable)
+	UC_UI_InventorySlot* GetSlotInfo();
+
+
 
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TMap<FString,UTexture2D*> ItemIcons;
+	TMap<FString, UTexture2D*> ItemIcons;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -70,11 +92,11 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Num;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int CurSlotIndex;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite , meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -84,5 +106,5 @@ private:
 
 	UInvenItemData* Data;
 
-	
+
 };
