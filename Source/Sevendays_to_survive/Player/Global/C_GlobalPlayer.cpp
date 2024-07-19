@@ -186,6 +186,31 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 		break;
 	}
 }
+void AC_GlobalPlayer::Resetmagazinecapacity()
+{
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		magazinecapacity[ESkerItemSlot::RRifle] = Riflemagazinecapacity;
+		break;
+	case EWeaponUseState::Rifle2:
+		magazinecapacity[ESkerItemSlot::RRifle2] = Riflemagazinecapacity;
+		break;
+	case EWeaponUseState::Pistol:
+		magazinecapacity[ESkerItemSlot::RPistol] = Pistolmagazinecapacity;
+		//PlayCharacter->GetPistolmagazinecapacity();
+		break;
+	case EWeaponUseState::Pistol2:
+		magazinecapacity[ESkerItemSlot::RPistol2] = Pistolmagazinecapacity;
+		break;
+	case EWeaponUseState::Shotgun:
+		magazinecapacity[ESkerItemSlot::RShotgun] = ShotGunmagazinecapacity;
+		break;
+	default:
+		break;
+	}
+}
+
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -390,6 +415,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Reload], ETriggerEvent::Started, this, &AC_GlobalPlayer::Reload);
 		//AlMostAtt
 		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
@@ -838,6 +864,24 @@ void AC_GlobalPlayer::Reload()
 		return;
 	}
 
+	switch (PlayerCurState)
+	{
+	case EWeaponUseState::Rifle:
+		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RRifle]);
+		break;
+	case EWeaponUseState::Pistol:
+		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RPistol]);
+		break;
+	case EWeaponUseState::Rifle2:
+		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RRifle2]);
+		break;
+	case EWeaponUseState::Pistol2:
+		GetMesh()->GetAnimInstance()->Montage_Play(ReloadMontages[ESkerItemSlot::RPistol2]);
+		break;
+	default:
+		break;
+	}
+
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()
@@ -999,7 +1043,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
-		LineTracemagazinecapacity = Riflemagazinecapacity;
+		//LineTracemagazinecapacity = Riflemagazinecapacity;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RRifle2:
@@ -1031,7 +1075,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
-		LineTracemagazinecapacity = Riflemagazinecapacity;
+		//LineTracemagazinecapacity = Riflemagazinecapacity;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RPistol:
@@ -1063,7 +1107,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
-		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		//LineTracemagazinecapacity = Pistolmagazinecapacity;
 		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RPistol2:
@@ -1130,7 +1174,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
-		LineTracemagazinecapacity = ShotGunmagazinecapacity;
+		//LineTracemagazinecapacity = ShotGunmagazinecapacity;
 		LineTraceRange = ShotGunRange;
 		break;
 	case ESkerItemSlot::SlotMax:

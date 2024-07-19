@@ -147,6 +147,8 @@ public:
 		return magazinecapacity;
 	}
 
+	UFUNCTION()
+	void Resetmagazinecapacity();
 
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
@@ -258,6 +260,7 @@ protected:
 
 	UFUNCTION()
 	void Reload();
+
 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
