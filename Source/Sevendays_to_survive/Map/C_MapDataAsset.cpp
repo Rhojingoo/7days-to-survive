@@ -14,6 +14,7 @@
 void UC_MapDataAsset::Init(UC_STSInstance* _Inst)
 {
     Inst = _Inst;
+    CraftItems.Empty();
 
     Type_To_AccDropIds.Emplace(EItemType::Material);
     Type_To_AccDropIds.Emplace(EItemType::Consumable);
