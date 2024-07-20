@@ -66,11 +66,11 @@ public:
 	UFUNCTION(BlueprintPure)
 	EPlayerMesh GetPlayerMesh()
 	{
-		if (true==PlayerMeshs.IsEmpty() || NetToken==-1)
+		if (true==PlayerMeshs.IsEmpty())
 		{
 			return EPlayerMesh::Player1;
 		}
-		return PlayerMeshs[NetToken];
+		return PlayerMeshs[PlayerMeshs.Num()-1];
 	}
 
 	UFUNCTION()

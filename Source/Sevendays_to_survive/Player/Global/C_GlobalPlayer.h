@@ -409,4 +409,6 @@ private:
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	int PlayerSpawnCheckToken = -1;
 
+	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadOnly,  meta = (AllowPrivateAccess = "true"))
+	EPlayerMesh characterResultMesh = EPlayerMesh::Player1;
 };

@@ -218,16 +218,27 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerCurState);
 	DOREPLIFETIME(AC_GlobalPlayer, PitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsAimCpp);
-	//DOREPLIFETIME(AC_GlobalPlayer, CurWeapon);
+	DOREPLIFETIME(AC_GlobalPlayer, PlayerSpawnCheckToken);
 	DOREPLIFETIME(AC_GlobalPlayer, IsFireCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
 }
 
 // Called when the game starts or when spawned
 void AC_GlobalPlayer::BeginPlay()
 {
+	{
+		UC_STSInstance* init= GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+		if (GetWorld()->GetAuthGameMode() != nullptr)
+		{
+			PlayerSpawnCheckToken = init->GetNetToken();
+		}
+		characterResultMesh = init->GetPlayerMesh();
+	}
+
 	Super::BeginPlay();
 
 	UC_STSInstance* STSInstance = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
