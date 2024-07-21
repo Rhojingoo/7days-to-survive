@@ -8,7 +8,14 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class ESlotType : uint8
+{
+	InventorySLot,
+	QuickSlot,
+	CraftSlot
 
+};
 
 
 UENUM(BlueprintType)

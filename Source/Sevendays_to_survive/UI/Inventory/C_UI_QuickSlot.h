@@ -46,6 +46,7 @@ public:
 	UFUNCTION(Blueprintcallable)
 	int GetEmptySlotIndex();
 
+	
 	void AddItem(const UC_Item* _Item); // GetEmptySlotIndex 해서 빈 자리 찾고 SetQuickSlotIcon(빈 자리, 아이콘);
 
 

@@ -10,6 +10,7 @@ void UC_UI_QuickSlot::TileViewInitialze(UTileView* _Tileview, int _InitCount)
 	{
 		UC_UI_InventorySlot* Object = NewObject<UC_UI_InventorySlot>(this);
 		QuickSlotDataArray.Add(Object);
+		QuickSlotDataArray[i]->ESlotType::QuickSlot;
 		_Tileview->AddItem(Object);
 	}
 }
