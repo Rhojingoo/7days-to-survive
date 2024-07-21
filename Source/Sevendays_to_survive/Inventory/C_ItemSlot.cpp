@@ -93,14 +93,14 @@ void UItemSlot::UpdateUI()
     {
         if (nullptr != Item)
         {
-            GetQuickSlotWidget()->SetIcon(Index, Item->Icon);
+            GetQuickSlotWidget()->SetQuickSlotIcon(Index, Item->Icon);
         }
         else
         {
-            GetQuickSlotWidget()->SetIcon(Index, nullptr);
+            GetQuickSlotWidget()->SetQuickSlotIcon(Index, nullptr);
         }
 
-        GetQuickSlotWidget()->SetNumber(Index, Count);
+        GetQuickSlotWidget()->SetQuickSlotNumber(Index, Count);
     }
 }
 

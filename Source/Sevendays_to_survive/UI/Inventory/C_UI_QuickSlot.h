@@ -9,7 +9,7 @@
 #include "Player/Global/C_PlayerEnum.h"
 #include "Inventory/C_InventoryComponent.h"
 #include "C_UI_InverntoryWidget.h"
-
+#include "Components/PanelWidget.h"
 
 #include <UI/Inventory/Remake/C_UI_InventorySlot.h>
 #include "C_UI_QuickSlot.generated.h"
@@ -29,7 +29,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_UI_QuickSlot : public UC_UI_InverntoryWidget
 
 public:
 	UFUNCTION(Blueprintcallable)
-	void TileViewInitialze(UTileView* _Tileview, int _InitCount);
+	void Init(UPanelWidget* _GridPanel);
 
 	UFUNCTION(Blueprintcallable)
 	void SettingItemData(FString _Name);
@@ -43,7 +43,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetQuickSlotIcon(int _Index, UTexture2D* _Icon);
 
-	UFUNCTION(Blueprintcallable)
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetQuickSlotNumber(int _Index, int _Count);
+
+	UFUNCTION(BlueprintCallable)
 	int GetEmptySlotIndex();
 
 	
@@ -60,4 +63,10 @@ private:
 
 	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<UInvenItemData*> QuickSlotData;
+
+	UPROPERTY(Category = "QuickItem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> BPInventorySlotClass;
+
+	UPROPERTY()
+	bool InitEnd = false;
 };
