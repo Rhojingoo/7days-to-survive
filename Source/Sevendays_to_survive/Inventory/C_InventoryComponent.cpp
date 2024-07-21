@@ -123,6 +123,13 @@ void UC_InventoryComponent::SwapInvenToQuick(int _FromIndex, int _ToIndex)
 
     if (false == FromSlot->IsEmpty())
     {
+        // 재료 아이템이나 소비 아이템은 퀵슬롯에 올릴 수 없다.
+        if (EItemType::Material == FromSlot->GetItem()->Type
+            || EItemType::Consumable == FromSlot->GetItem()->Type)
+        {
+            return;
+        }
+
         FName FromItemId = FromSlot->GetItem()->Id;
         ItemIdToIndex.Remove(FromItemId);
     }
@@ -149,6 +156,13 @@ void UC_InventoryComponent::SwapQuickToInven(int _FromIndex, int _ToIndex)
 
     if (false == ToSlot->IsEmpty())
     {
+        // 재료 아이템이나 소비 아이템은 퀵슬롯에 올릴 수 없다.
+        if (EItemType::Material == ToSlot->GetItem()->Type
+            || EItemType::Consumable == ToSlot->GetItem()->Type)
+        {
+            return;
+        }
+
         FName ToItemId = ToSlot->GetItem()->Id;
         ItemIdToIndex.Remove(ToItemId);
     }
@@ -269,6 +283,11 @@ void UC_InventoryComponent::Craft(FName _Id)
 
         int Index = ItemIdToIndex[MatId];
         Inventory[Index]->DecCount(MatNeedCount);
+
+        if (true == Inventory[Index]->IsEmpty())
+        {
+            ItemIdToIndex.Remove(MatId);
+        }
     }
 
     AddItem(CraftItem, 1);
