@@ -33,12 +33,6 @@ void UC_InventoryComponent::BeginPlay()
     Inventory.SetNum(Size);
 }
 
-void UC_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-}
-
 void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 {
     // 이미 가지고 있는 아이템을 추가하는 경우
@@ -70,16 +64,6 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     RefreshInventoryCore();
 
     ++UsingSize;
-
-
-    ////큇슬롯의 FindEmptySlot 하는 함수도 따로 작성?
-    //if (true == IsWeapon(_Item->Type))
-    //{
-    //    // 큇슬롯에 Empty 슬롯 찾기
-    //    int SlotIndex = QuickSlotWidget->GetEmptySlotIndex();
-    //    QuickSlotWidget->SetQuickSlotIcon(SlotIndex, _Item->Icon);
-    //    
-    //}
 }
 
 void UC_InventoryComponent::Swap(int _FromIndex, int _ToIndex)
@@ -87,20 +71,35 @@ void UC_InventoryComponent::Swap(int _FromIndex, int _ToIndex)
     FC_ItemAndCount FromSlot = Inventory[_FromIndex];
     FC_ItemAndCount ToSlot = Inventory[_ToIndex];
 
-    SetSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
     SetSlot(_FromIndex, ToSlot.Item, ToSlot.Count);
+    SetSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
 }
 
-bool UC_InventoryComponent::IsWeapon(EItemType _Type) const
+void UC_InventoryComponent::SwapInvenToQuick(int _FromIndex, int _ToIndex)
 {
-    EItemType ItemType = _Type;
+    FC_ItemAndCount FromSlot = Inventory[_FromIndex];
+    FC_ItemAndCount ToSlot = QuickSlots[_ToIndex];
 
-    if (EItemType::Weapon == ItemType)
-    {
-        return true;
-    }
+    SetSlot(_FromIndex, ToSlot.Item, ToSlot.Count);
+    SetQuickSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
+}
 
-    return false;
+void UC_InventoryComponent::SwapQuickToInven(int _FromIndex, int _ToIndex)
+{
+    FC_ItemAndCount FromSlot = QuickSlots[_FromIndex];
+    FC_ItemAndCount ToSlot = Inventory[_ToIndex];
+
+    SetQuickSlot(_FromIndex, ToSlot.Item, ToSlot.Count);
+    SetSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
+}
+
+void UC_InventoryComponent::SwapQuickToQuick(int _FromIndex, int _ToIndex)
+{
+    FC_ItemAndCount FromSlot = QuickSlots[_FromIndex];
+    FC_ItemAndCount ToSlot = QuickSlots[_ToIndex];
+
+    SetQuickSlot(_FromIndex, ToSlot.Item, ToSlot.Count);
+    SetQuickSlot(_ToIndex, FromSlot.Item, FromSlot.Count);
 }
 
 void UC_InventoryComponent::DropItemAll(int _Index)
@@ -172,20 +171,38 @@ void UC_InventoryComponent::SetSlot(int _Index, const UC_Item* _Item, int _Count
         DecItemCount(_Index, CurCount);
     }
 
-    if (nullptr == _Item)
+    UTexture2D* Icon = nullptr;
+    if (nullptr != _Item)
     {
-        return;
+        ItemIdToIndex.Emplace(_Item->Id, _Index);
+        Inventory[_Index].Item = _Item;
+        Inventory[_Index].Count = _Count;
+        Icon = _Item->Icon;
     }
 
-    ItemIdToIndex.Emplace(_Item->Id, _Index);
-    Inventory[_Index].Item = _Item;
-    Inventory[_Index].Count = _Count;
-
-    GetInventoryWidget()->SetIcon(_Index, _Item->Icon);
+    GetInventoryWidget()->SetIcon(_Index, Icon);
     GetInventoryWidget()->SetNumber(_Index, _Count);
     RefreshInventoryCore();
 
     ++UsingSize;
+}
+
+void UC_InventoryComponent::SetQuickSlot(int _Index, const UC_Item* _Item, int _Count)
+{
+    if (false == IsEmptyQuickSlot(_Index))
+    {
+        int CurCount = QuickSlots[_Index].Count;
+        DecQuickSlotItemCount(_Index, CurCount);
+    }
+
+    if (nullptr != _Item)
+    {
+        QuickSlots[_Index].Item = _Item;
+        QuickSlots[_Index].Count = _Count;
+    }
+
+    GetQuickSlotWidget()->SetIcon(_Index, _Item->Icon);
+    GetQuickSlotWidget()->SetNumber(_Index, _Count);
 }
 
 void UC_InventoryComponent::IncItemCount(int _Index, int _Count)
@@ -229,6 +246,38 @@ void UC_InventoryComponent::DecItemCount(int _Index, int _Count)
     Inventory[_Index].Count -= _Count;
     GetInventoryWidget()->SetNumber(_Index, Inventory[_Index].Count);
     RefreshInventoryCore();
+}
+
+void UC_InventoryComponent::IncQuickSlotItemCount(int _Index, int _Count)
+{
+
+}
+
+void UC_InventoryComponent::DecQuickSlotItemCount(int _Index, int _Count)
+{
+    if (true == IsEmptyQuickSlot(_Index))
+    {
+        STS_FATAL("[%s] %d is empty slot. Can't increase count.", __FUNCTION__, _Index);
+        return;
+    }
+
+    if (QuickSlots[_Index].Count < _Count)
+    {
+        FString ItemName = QuickSlots[_Index].Item->Name;
+        STS_FATAL("[%s] There is %d of %s in the inventory. But you tried to decrease %d of %s.", __FUNCTION__
+            , QuickSlots[_Index].Count, *ItemName, _Count, *ItemName);
+        return;
+    }
+
+    if (QuickSlots[_Index].Count == _Count)
+    {
+        QuickSlots[_Index].Item = nullptr;
+        GetQuickSlotWidget()->SetIcon(_Index, nullptr);
+        --UsingSize;
+    }
+
+    QuickSlots[_Index].Count -= _Count;
+    GetQuickSlotWidget()->SetNumber(_Index, QuickSlots[_Index].Count);
 }
 
 bool UC_InventoryComponent::HasItemByObject(const UC_Item* _Item) const
@@ -283,11 +332,22 @@ bool UC_InventoryComponent::IsEmptySlot(int _Index) const
 {
     if (false == IsValidSlot(_Index))
     {
-        STS_FATAL("[%s] %d is an invalid index. Can't check whether it's empty.", __FUNCTION__, _Index);
+        STS_FATAL("[%s] %d is an invalid index.", __FUNCTION__, _Index);
         return true;
     }
 
     return nullptr == Inventory[_Index].Item;
+}
+
+bool UC_InventoryComponent::IsEmptyQuickSlot(int _Index) const
+{
+    if (false == IsValidQuickSlot(_Index))
+    {
+        STS_FATAL("[%s] %d is an invalid index.", __FUNCTION__, _Index);
+        return true;
+    }
+
+    return nullptr == QuickSlots[_Index].Item;
 }
 
 int UC_InventoryComponent::GetUsingSize() const
@@ -391,12 +451,12 @@ int UC_InventoryComponent::FindNonEmptySlot() const
 
 bool UC_InventoryComponent::IsValidSlot(int _Index) const
 {
-    if (0 <= _Index && _Index < Size)
-    {
-        return true;
-    }
+    return 0 <= _Index && _Index < Size;
+}
 
-    return false;
+bool UC_InventoryComponent::IsValidQuickSlot(int _Index) const
+{
+    return 0 <= _Index && _Index < QuickSize;
 }
 
 FTransform UC_InventoryComponent::GetItemSpawnTransform() const
@@ -413,6 +473,11 @@ FTransform UC_InventoryComponent::GetItemSpawnTransform() const
 UC_UI_InverntoryWidget* UC_InventoryComponent::GetInventoryWidget()
 {
     return UC_STSGlobalFunctions::GetInventoryCore(GetWorld())->GetInventoryWidget();
+}
+
+UC_UI_QuickSlot* UC_InventoryComponent::GetQuickSlotWidget()
+{
+    return UC_STSGlobalFunctions::GetQuickSlotWidget(GetWorld());
 }
 
 void UC_InventoryComponent::RefreshInventoryCore()

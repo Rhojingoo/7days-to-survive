@@ -10,10 +10,10 @@
 #include "C_UI_InGameHUD.generated.h"
 
 class UC_UI_InventoryCore;
+class UC_UI_QuickSlot;
+class UC_UI_InGameMainWidget;
+class UC_UI_InGameWidgetCore;
 
-/**
- * 
- */
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_UI_InGameHUD : public AHUD
 {
@@ -55,12 +55,21 @@ public:
 	UFUNCTION(BlueprintPure)
 	UC_UI_InventoryCore* GetInventoryCore();
 
+	UFUNCTION(BlueprintPure)
+	UC_UI_QuickSlot* GetQuickSlotWidget();
+
 protected:
 	void BeginPlay() override;
 
 private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> MainWidgetClass = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UC_UI_InGameMainWidget* MainWidget = nullptr;
+
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UC_UI_InGameWidgetCore* WidgetCore = nullptr;
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<EUIType, UUserWidget*> Widgets;

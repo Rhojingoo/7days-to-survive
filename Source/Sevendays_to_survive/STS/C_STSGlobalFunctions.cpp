@@ -90,3 +90,9 @@ UC_UI_InventoryCore* UC_STSGlobalFunctions::GetInventoryCore(const UObject* Worl
     AC_UI_InGameHUD* InGameHUD = GetInGameHUD(WorldContextObject);
     return InGameHUD->GetInventoryCore();
 }
+
+UC_UI_QuickSlot* UC_STSGlobalFunctions::GetQuickSlotWidget(const UObject* WorldContextObject)
+{
+    AC_UI_InGameHUD* InGameHUD = GetInGameHUD(WorldContextObject);
+    return InGameHUD->GetQuickSlotWidget();
+}

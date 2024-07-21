@@ -16,6 +16,7 @@ class UC_MapInteractionComponent;
 class UC_MapDataAsset;
 class UC_MapDataMemory;
 class UC_UI_InventoryCore;
+class UC_UI_QuickSlot;
 class UC_STSInstance;
 
 /**
@@ -59,6 +60,9 @@ public:
 
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
 	static UC_UI_InventoryCore* GetInventoryCore(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static UC_UI_QuickSlot* GetQuickSlotWidget(const UObject* WorldContextObject);
 
 private:
 	

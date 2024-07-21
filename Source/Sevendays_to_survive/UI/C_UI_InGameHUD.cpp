@@ -7,6 +7,8 @@
 #include "STS/C_STSInstance.h"
 #include "Blueprint/WidgetTree.h"
 #include "UI/Inventory/C_UI_InventoryCore.h"
+#include "UI/C_UI_InGameMainWidget.h"
+#include "UI/C_UI_InGameWidgetCore.h"
 
 void AC_UI_InGameHUD::DrawHUD()
 {
@@ -33,6 +35,11 @@ UC_UI_InventoryCore* AC_UI_InGameHUD::GetInventoryCore()
     return InventoryCore;
 }
 
+UC_UI_QuickSlot* AC_UI_InGameHUD::GetQuickSlotWidget()
+{
+    return WidgetCore->GetQuickSlotWidget();
+}
+
 void AC_UI_InGameHUD::BeginPlay()
 {
     Super::BeginPlay();
@@ -45,7 +52,7 @@ void AC_UI_InGameHUD::BeginPlay()
         STS_FATAL("[%s] MainWidgetClass is unset.", __FUNCTION__);
     }
 
-    UUserWidget* MainWidget = CreateWidget<UUserWidget>(GetWorld(), MainWidgetClass);
+    MainWidget = CreateWidget<UC_UI_InGameMainWidget>(GetWorld(), MainWidgetClass);
     MainWidget->AddToViewport();
 
     UPanelWidget* PanelWidget = Cast<UPanelWidget>(MainWidget->GetWidgetFromName(TEXT("MainPanel")));
