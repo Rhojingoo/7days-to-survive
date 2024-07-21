@@ -128,7 +128,29 @@ void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
 	_OtherSlot->ItemName = Tmp;
 
 	UC_InventoryComponent* InvenComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
-	InvenComp->Swap(CurSlotIndex, _OtherSlot->CurSlotIndex);
+
+	if (SlotType == ESlotType::InventorySLot)
+	{
+		if (_OtherSlot->SlotType == ESlotType::InventorySLot)
+		{
+			InvenComp->Swap(CurSlotIndex, _OtherSlot->CurSlotIndex);
+		}
+		else if (_OtherSlot->SlotType == ESlotType::QuickSlot)
+		{
+			InvenComp->SwapInvenToQuick(CurSlotIndex, _OtherSlot->CurSlotIndex);
+		}
+	}
+	else if (SlotType == ESlotType::QuickSlot)
+	{
+		if (_OtherSlot->SlotType == ESlotType::InventorySLot)
+		{
+			InvenComp->SwapQuickToInven(CurSlotIndex, _OtherSlot->CurSlotIndex);
+		}
+		else if (_OtherSlot->SlotType == ESlotType::QuickSlot)
+		{
+			InvenComp->SwapQuickToQuick(CurSlotIndex, _OtherSlot->CurSlotIndex);
+		}
+	}
 
 	
 	//this->ItemImage = _OtherSlot->ItemImage;

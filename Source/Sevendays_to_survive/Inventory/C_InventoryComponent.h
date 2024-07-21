@@ -6,9 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Delegates/Delegate.h"
-#include "Map/C_Items.h"
 #include "C_InventoryComponent.generated.h"
 
+class UItemSlot;
 class UC_UI_InverntoryWidget;
 class AC_ItemPouch;
 class UC_UI_QuickSlot;
@@ -41,25 +41,11 @@ public:
     UFUNCTION(BlueprintCallable)
     void SwapQuickToQuick(int _FromIndex, int _ToIndex);
 
+    UFUNCTION(BlueprintCallable)
+    void Empty(int _Index);
 
     UFUNCTION(BlueprintCallable)
     void DropItemAll(int _Index);
-
-    UFUNCTION(BlueprintCallable)
-    void DropItem(int _Index, int _Count);
-
-    UFUNCTION(BlueprintCallable)
-    void IncItemCount(int _Index, int _Count);
-
-    UFUNCTION(BlueprintCallable)
-    void DecItemCount(int _Index, int _Count);
-
-    UFUNCTION(BlueprintCallable)
-    void IncQuickSlotItemCount(int _Index, int _Count);
-
-    UFUNCTION(BlueprintCallable)
-    void DecQuickSlotItemCount(int _Index, int _Count);
-
 
     UFUNCTION(BlueprintPure)
     bool HasItemByObject(const UC_Item* _Item) const;
@@ -80,19 +66,7 @@ public:
     bool IsEmpty() const;
 
     UFUNCTION(BlueprintCallable)
-    bool IsEmptySlot(int _Index) const;
-
-    UFUNCTION(BlueprintPure)
-    bool IsEmptyQuickSlot(int _Index) const;
-
-    UFUNCTION(BlueprintCallable)
     int GetUsingSize() const;
-
-    UFUNCTION(BlueprintCallable)
-    int FindEmptySlot() const;
-
-    UFUNCTION(BlueprintCallable)
-    int FindNonEmptySlot() const;
 
     UFUNCTION(BlueprintCallable)
     void Craft(FName _Id);
@@ -113,21 +87,25 @@ private:
     int QuickSize = 8;
 
 private:
+    int FindEmptySlot() const;
+    int FindNonEmptySlot() const;
     bool IsValidSlot(int _Index) const;
     bool IsValidQuickSlot(int _Index) const;
     FTransform GetItemSpawnTransform() const;
     UC_UI_InverntoryWidget* GetInventoryWidget();
     UC_UI_QuickSlot* GetQuickSlotWidget();
     void RefreshInventoryCore();
-    void SetSlot(int _Index, const UC_Item* _Item, int _Count);
-    void SetQuickSlot(int _Index, const UC_Item* _Item, int _Count);
+    void SwapSlotData(UItemSlot* _FromSlot, UItemSlot* _ToSlot);
 private:
     int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;
-    TArray<FC_ItemAndCount> Inventory;
-    TArray<FC_ItemAndCount> QuickSlots;
 
-    FC_ItemAndCount NullItem = { nullptr, 0 };
+    UPROPERTY()
+    TArray<UItemSlot*> Inventory;
+
+    UPROPERTY()
+    TArray<UItemSlot*> QuickSlots;
+
     TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;
     float SpawnDistance = 100.0f;
 };
