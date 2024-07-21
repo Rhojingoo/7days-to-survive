@@ -53,6 +53,10 @@ void UC_Weapon::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     }
 
     Damage = TypeRow->Damage;
+    IsStatic = TypeRow->IsStatic;
+    StaticItemSlot = TypeRow->StaticItemSlot;
+    StaticMesh = TypeRow->StaticMesh;
+    SkeletalItemSlot = TypeRow->SkeletalItemSlot;
 }
 
 

@@ -25,6 +25,14 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	bool IsBuilding() const;
+
+	// 손에 건축물을 들고 있어라
+	UFUNCTION(BlueprintCallable)
+	void HoldBuildingPart(FName _BuildingPartId);
+
+	UFUNCTION(BlueprintCallable)
+	void PlaceBuildPart();
+
 private:
 	UPROPERTY(Category = "Component", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent = nullptr;
@@ -66,13 +74,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetLineTraceEndPoint();
-
-	// 손에 건축물을 들고 있어라
-	UFUNCTION(BlueprintCallable)
-	void HoldBuildingPart(FName _BuildingPartId);
-
-	UFUNCTION(BlueprintCallable)
-	void PlaceBuildPart();
 
 	UFUNCTION(BlueprintCallable)
 	void RotatePreview();

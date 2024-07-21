@@ -73,6 +73,9 @@ public:
 
     UFUNCTION(BlueprintPure)
     bool IsCraftable(FName _Id) const;
+
+    UFUNCTION(BlueprintPure)
+    const UC_Item* GetQuickSlotItem(int _Index) const;
 private:
     UFUNCTION(Server, Reliable)
     void SpawnItem(FTransform _SpawnTransform, FName _Id, int _Count);

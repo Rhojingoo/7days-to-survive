@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/Texture2D.h"
 #include "Map/C_MapEnums.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_Items.generated.h"
 
 USTRUCT(BlueprintType)
@@ -77,8 +78,20 @@ class SEVENDAYS_TO_SURVIVE_API UC_Weapon : public UC_Item
 public:
     void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int Damage = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool IsStatic = true;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EStaticItemSlot StaticItemSlot = EStaticItemSlot::SlotMax;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UStaticMesh* StaticMesh = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    ESkerItemSlot SkeletalItemSlot = ESkerItemSlot::SlotMax;
 
 private:
     int RowIndex = 1;

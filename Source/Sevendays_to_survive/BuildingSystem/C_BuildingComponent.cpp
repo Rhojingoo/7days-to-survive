@@ -182,21 +182,6 @@ FVector UC_BuildingComponent::GetLineTraceEndPoint()
 	return Point + EndPointOffset * Forward;
 }
 
-//void UC_BuildingComponent::ToggleBuildMode()
-//{
-//	BuildMode = !BuildMode;
-//
-//	if (true == BuildMode)
-//	{
-//		SetPreviewMesh(BuildPartData[BuildPartIndex].Mesh);
-//	}
-//	else
-//	{
-//		CanBuild = false;
-//		SetPreviewMesh(nullptr);
-//	}
-//}
-
 void UC_BuildingComponent::HoldBuildingPart(FName _BuildingPartId)
 {
 	if (true == _BuildingPartId.IsNone())

@@ -58,6 +58,15 @@ void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
     }
 
     // TODO: 퀵슬롯에 이미 가지고 있는 아이템을 추가하는 경우
+    for (int i = 0; i < QuickSlots.Num(); ++i)
+    {
+        if (QuickSlots[i]->GetItem() == _Item)
+        {
+            QuickSlots[i]->IncCount(_Count);
+            RefreshInventoryCore();
+            return;
+        }
+    }
 
     // 인벤토리가 꽉 차 있는 경우
     if (true == IsFull())
@@ -293,6 +302,17 @@ bool UC_InventoryComponent::IsCraftable(FName _Id) const
     }
 
     return true;
+}
+
+const UC_Item* UC_InventoryComponent::GetQuickSlotItem(int _Index) const
+{
+    if (false == IsValidQuickSlot(_Index))
+    {
+        STS_ERROR("[%s] %d is an invalid quick slot index.", __FUNCTION__, _Index);
+        return nullptr;
+    }
+
+    return QuickSlots[_Index]->GetItem();
 }
 
 int UC_InventoryComponent::FindEmptySlot() const

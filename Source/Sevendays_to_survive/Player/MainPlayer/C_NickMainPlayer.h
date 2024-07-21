@@ -7,10 +7,9 @@
 #include "C_NickMainPlayer.generated.h"
 
 class UAnimMontage;
-//class UC_GlobalAnimInstance;
-/**
- *
- */
+class UC_Weapon;
+class UC_ItemBuildingPart;
+
 UCLASS()
 class SEVENDAYS_TO_SURVIVE_API AC_NickMainPlayer : public AC_MapPlayer
 {
@@ -32,6 +31,16 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	AActor* SpawnMapCamera(const FTransform& _Transform);
+
+	UFUNCTION(BlueprintCallable)
+	void OnQuickSlotSelected(int _Index);
+
+	UFUNCTION(BlueprintCallable)
+	void OnWeaponSelected(const UC_Weapon* _Weapon);
+
+	UFUNCTION(BlueprintCallable)
+	void OnBuildingPartSelected(const UC_ItemBuildingPart* _BuildingPart);
+
 private:
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* MontageToPlay;

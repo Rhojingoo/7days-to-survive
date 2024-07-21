@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Map/C_Items.h"
 #include "Engine/Texture2D.h"
+#include "Player/Global/C_PlayerEnum.h"
 #include "C_ItemRows.generated.h"
 
 USTRUCT(BlueprintType)
@@ -62,6 +63,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Damage = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsStatic = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EStaticItemSlot StaticItemSlot = EStaticItemSlot::SlotMax;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* StaticMesh = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ESkerItemSlot SkeletalItemSlot = ESkerItemSlot::SlotMax;
 };
 
 USTRUCT(BlueprintType)

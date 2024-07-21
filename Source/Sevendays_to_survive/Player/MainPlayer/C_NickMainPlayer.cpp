@@ -11,7 +11,11 @@
 #include "Components/ArrowComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "Components/CapsuleComponent.h"
+#include "Map/C_Items.h"
+#include "BuildingSystem/C_BuildingComponent.h"
+#include "Inventory/C_InventoryComponent.h"
 #include "STS/C_STSInstance.h"
+#include "STS/C_STSGlobalFunctions.h"
 
 
 
@@ -70,5 +74,48 @@ AActor* AC_NickMainPlayer::SpawnMapCamera(const FTransform& _Transform)
 		return Camera;
 	}
 	return nullptr;
+}
+
+void AC_NickMainPlayer::OnQuickSlotSelected(int _Index)
+{
+	const UC_Item* Item = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld())->GetQuickSlotItem(_Index);
+
+	ChangeNoWeaponServer();
+	UC_STSGlobalFunctions::GetBuildingComponent(GetWorld())->HoldBuildingPart(FName());
+
+	if (nullptr == Item)
+	{
+		return;
+	}
+
+	switch (Item->Type)
+	{
+	case EItemType::Weapon:
+		OnWeaponSelected(Cast<const UC_Weapon>(Item));
+		break;
+	case EItemType::BuildingPart:
+		OnBuildingPartSelected(Cast<const UC_ItemBuildingPart>(Item));
+		break;
+	default:
+		break;
+	}
+
+}
+
+void AC_NickMainPlayer::OnWeaponSelected(const UC_Weapon* _Weapon)
+{
+	if (true == _Weapon->IsStatic)
+	{
+		ChangeSlotMeshServer(_Weapon->StaticItemSlot, _Weapon->StaticMesh);
+	}
+	else
+	{
+		ChangeSlotSkeletalServer(_Weapon->SkeletalItemSlot);
+	}
+}
+
+void AC_NickMainPlayer::OnBuildingPartSelected(const UC_ItemBuildingPart* _BuildingPart)
+{
+	BuildingComponent->HoldBuildingPart(_BuildingPart->Id);
 }
 
