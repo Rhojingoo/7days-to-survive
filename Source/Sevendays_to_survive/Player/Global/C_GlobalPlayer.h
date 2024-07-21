@@ -23,6 +23,17 @@ public:
 	//float BulletSpeed = 10000.0f;
 };
 
+USTRUCT()
+struct Frebound
+{
+	GENERATED_BODY()
+public:
+	float PitchMin = -1.0f;
+	float PitchMax = 0.5f;
+	float YawMin = -1.0f;
+	float YawMax = 1.0f;
+};
+
 class USpringArmComponent; // 스프링 암
 class UCameraComponent; // 카메라 컴포넌트
 class UInputMappingContext; // 입력 매핑
@@ -244,9 +255,9 @@ protected:
 	void Reload();
 	void Reload_Implementation();
 
+	UFUNCTION()
+	void Rebound();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
-	bool bHasRifle=false;
 
 
 	UC_GlobalAnimInstance* GlobalAnim = nullptr;

@@ -501,6 +501,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	case EWeaponUseState::Rifle:
 		--magazinecapacity[ESkerItemSlot::RRifle];
 		CurWeapon->GunParticleAndSound(PlayerCurState);
+		Rebound();
 		break;
 	case EWeaponUseState::Pistol:
 		--magazinecapacity[ESkerItemSlot::RPistol];
@@ -509,6 +510,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 	case EWeaponUseState::Rifle2:
 		--magazinecapacity[ESkerItemSlot::RRifle2];
 		CurWeapon->PlayGunAnimation(PlayerCurState);
+		Rebound();
 		break;
 	case EWeaponUseState::Pistol2:
 		--magazinecapacity[ESkerItemSlot::RPistol2];
@@ -897,6 +899,16 @@ void AC_GlobalPlayer::Reload_Implementation()
 		return;
 	}
 
+	if (true == IsAimCpp)
+	{
+		return;
+	}
+
+	if (true == IsFireCpp)
+	{
+		return;
+	}
+
 	switch (PlayerCurState)
 	{
 	case EWeaponUseState::Rifle:
@@ -918,6 +930,20 @@ void AC_GlobalPlayer::Reload_Implementation()
 		break;
 	}
 
+}
+
+void AC_GlobalPlayer::Rebound()
+{
+	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+	Frebound RifleReBound;
+	float PitchRebound = Random.FRandRange(RifleReBound.PitchMin, RifleReBound.PitchMax);
+	PitchCPP = PitchCPP + PitchRebound;
+	float YawRebound= Random.FRandRange(RifleReBound.YawMin, RifleReBound.YawMax);
+	AddControllerYawInput(YawRebound);
+	AddControllerPitchInput(PitchRebound);
 }
 
 void AC_GlobalPlayer::PlayerMeshOption()
