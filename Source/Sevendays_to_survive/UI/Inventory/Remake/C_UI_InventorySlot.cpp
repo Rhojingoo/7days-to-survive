@@ -136,3 +136,8 @@ void UC_UI_InventorySlot::ChageInfo(UC_UI_InventorySlot* _OtherSlot)
 	//정보 교환
 
 }
+
+void UC_UI_InventorySlot::SettingSlotType(ESlotType _SlotType)
+{
+	SlotType = _SlotType;
+}
