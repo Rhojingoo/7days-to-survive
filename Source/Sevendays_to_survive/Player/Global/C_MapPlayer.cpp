@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Player/Global/C_MapPlayer.h"
@@ -14,7 +14,7 @@ AC_MapPlayer::AC_MapPlayer()
 	if (true == BpBuildingComponentAsset.Succeeded())
 	{
 		TSubclassOf<UActorComponent> BpClass = BpBuildingComponentAsset.Class;
-		BuildingComponent = Cast<UC_BuildingComponent>(CreateDefaultSubobject(TEXT("Building Component"), UC_BuildingComponent::StaticClass(), BpClass.Get(), true, false));
+		BuildingComp = Cast<UC_BuildingComponent>(CreateDefaultSubobject(TEXT("Building Component"), UC_BuildingComponent::StaticClass(), BpClass.Get(), true, false));
 	}
 	else
 	{
@@ -25,7 +25,7 @@ AC_MapPlayer::AC_MapPlayer()
 	if (true == BpInventoryComponentAsset.Succeeded())
 	{
 		TSubclassOf<UActorComponent> BpClass = BpInventoryComponentAsset.Class;
-		InventoryComponent = Cast<UC_InventoryComponent>(CreateDefaultSubobject(TEXT("Inventory Component"), UC_InventoryComponent::StaticClass(), BpClass.Get(), true, false));
+		InventoryComp = Cast<UC_InventoryComponent>(CreateDefaultSubobject(TEXT("Inventory Component"), UC_InventoryComponent::StaticClass(), BpClass.Get(), true, false));
 	}
 	else
 	{

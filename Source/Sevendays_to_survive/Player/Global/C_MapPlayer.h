@@ -26,10 +26,10 @@ protected:
 
 protected:
 	UPROPERTY(Category = "Contents | Map", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_BuildingComponent* BuildingComponent = nullptr;
+	UC_BuildingComponent* BuildingComp = nullptr;
 
 	UPROPERTY(Category = "Contents | Map", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UC_InventoryComponent* InventoryComponent = nullptr;
+	UC_InventoryComponent* InventoryComp = nullptr;
 
 	UPROPERTY(Category = "Contents | Map", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UC_MapInteractionComponent* MapInteractionComp = nullptr;

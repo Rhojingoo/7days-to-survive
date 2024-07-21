@@ -78,10 +78,10 @@ AActor* AC_NickMainPlayer::SpawnMapCamera(const FTransform& _Transform)
 
 void AC_NickMainPlayer::OnQuickSlotSelected(int _Index)
 {
-	const UC_Item* Item = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld())->GetQuickSlotItem(_Index);
+	const UC_Item* Item = InventoryComp->GetQuickSlotItem(_Index);
 
 	ChangeNoWeaponServer();
-	UC_STSGlobalFunctions::GetBuildingComponent(GetWorld())->HoldBuildingPart(FName());
+	BuildingComp->HoldBuildingPart(FName());
 
 	if (nullptr == Item)
 	{
@@ -116,6 +116,6 @@ void AC_NickMainPlayer::OnWeaponSelected(const UC_Weapon* _Weapon)
 
 void AC_NickMainPlayer::OnBuildingPartSelected(const UC_ItemBuildingPart* _BuildingPart)
 {
-	BuildingComponent->HoldBuildingPart(_BuildingPart->Id);
+	BuildingComp->HoldBuildingPart(_BuildingPart->Id);
 }
 
