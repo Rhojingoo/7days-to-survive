@@ -1,7 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Map/C_MapSound.h"
+#include "Engine/GameInstance.h"
+#include "STS/C_STSInstance.h"
 
 // Sets default values
 AC_MapSound::AC_MapSound()
@@ -23,5 +25,39 @@ void AC_MapSound::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool AC_MapSound::TimeCheck(float DeltaTime)
+{
+	static float CheckTime = 0;
+	CheckTime += DeltaTime;
+	UC_STSInstance* GINS = Cast<UC_STSInstance>(GetGameInstance());
+	bool Isday = GINS->IsDay;
+
+	if (Isday)
+	{
+		if (CheckTime>40.f)
+		{
+			PlaySound = true;
+			CheckTime = 0.f;
+		}
+		else
+		{
+			PlaySound = false;
+		}
+	}
+	else
+	{
+		if (CheckTime > 20.f)
+		{
+			PlaySound = true;
+			CheckTime = 0.f;
+		}
+		else
+		{
+			PlaySound = false;
+		}
+	}
+	return PlaySound;
 }
 

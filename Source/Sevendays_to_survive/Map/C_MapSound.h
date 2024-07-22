@@ -23,4 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	bool TimeCheck(float DeltaTime);
+
+	bool PlaySound = false;
 };
