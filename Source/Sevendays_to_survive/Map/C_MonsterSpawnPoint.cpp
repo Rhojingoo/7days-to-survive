@@ -15,7 +15,7 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	BoxComponent->SetupAttachment(RootComponent);
 	//BoxComponent->SetHiddenInGame(false);
-	BoxComponent->SetBoxExtent({100.0f, 100.0f, 10.0f});
+	BoxComponent->SetBoxExtent({ 100.0f, 100.0f, 10.0f });
 }
 
 // Called when the game starts or when spawned
@@ -54,7 +54,7 @@ void AC_MonsterSpawnPoint::MonsterSpawn(float DeltaTime)
 	CoolTime += DeltaTime;
 	if (SpawnTime <= CoolTime) {
 		FTransform Transform;
-		Transform.SetScale3D({ 1.0f, 1.0f,1.0f }); 
+		Transform.SetScale3D({ 1.0f, 1.0f,1.0f });
 		Transform.SetLocation(GetRandomPointInBox());
 		FActorSpawnParameters SpawnInfo;
 		GetWorld()->SpawnActor<AC_ZombieBase>(SpawnZombie, Transform, SpawnInfo);
@@ -115,4 +115,13 @@ void AC_MonsterSpawnPoint::ReduceSpawnArea(FVector2D _ReduceValue)
 	BoxExtent.Y = FMath::Max(BoxExtent.Y - _ReduceValue.Y, 0.0f);
 
 	BoxComponent->SetBoxExtent(BoxExtent);
+}
+
+void AC_MonsterSpawnPoint::IncreaseZombie()
+{
+	if (false == IsBoss)
+	{
+		uint8 IncreaseSpawnCount = SpawnEndCount * 2;
+		SpawnEndCount = IncreaseSpawnCount;
+	}
 }

@@ -58,4 +58,10 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	uint8 SpawnEndCount = 10;
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseZombie();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsBoss = false;
 };
