@@ -13,6 +13,7 @@
 #include "UI/Inventory/C_UI_QuickSlot.h"
 #include "UI/Inventory/C_UI_InverntoryWidget.h"
 #include "UI/C_UI_InGameHUD.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 
 UC_InventoryComponent::UC_InventoryComponent()
 {
@@ -43,6 +44,26 @@ void UC_InventoryComponent::BeginPlay()
         QuickSlot->Init(i, false);
 
         QuickSlots.Add(QuickSlot);
+    }
+}
+
+int UC_InventoryComponent::GetCurQuickSlot() const
+{
+    return CurQuickSlot;
+}
+
+void UC_InventoryComponent::SetCurQuickSlot(int _Index)
+{
+    CurQuickSlot = _Index;
+}
+
+void UC_InventoryComponent::DecQuickSlotItemCount(int _Index)
+{
+    QuickSlots[_Index]->DecCount(1);
+
+    if (true == QuickSlots[_Index]->IsEmpty())
+    {
+        RefreshCurQuickSlot();
     }
 }
 
@@ -95,6 +116,12 @@ void UC_InventoryComponent::SwapSlotData(UItemSlot* _FromSlot, UItemSlot* _ToSlo
     _ToSlot->SetSlot(FromItem, FromCount);
 }
 
+void UC_InventoryComponent::RefreshCurQuickSlot()
+{
+    AC_NickMainPlayer* MainPlayer = Cast<AC_NickMainPlayer>(GetOwner());
+    MainPlayer->OnQuickSlotSelected(CurQuickSlot);
+}
+
 
 void UC_InventoryComponent::Swap(int _FromIndex, int _ToIndex)
 {
@@ -141,6 +168,7 @@ void UC_InventoryComponent::SwapInvenToQuick(int _FromIndex, int _ToIndex)
     }
     
     SwapSlotData(FromSlot, ToSlot);
+    RefreshCurQuickSlot();
 }
 
 void UC_InventoryComponent::SwapQuickToInven(int _FromIndex, int _ToIndex)
@@ -168,6 +196,7 @@ void UC_InventoryComponent::SwapQuickToInven(int _FromIndex, int _ToIndex)
     }
 
     SwapSlotData(FromSlot, ToSlot);
+    RefreshCurQuickSlot();
 }
 
 void UC_InventoryComponent::SwapQuickToQuick(int _FromIndex, int _ToIndex)
@@ -176,6 +205,7 @@ void UC_InventoryComponent::SwapQuickToQuick(int _FromIndex, int _ToIndex)
     UItemSlot* ToSlot = QuickSlots[_ToIndex];
 
     SwapSlotData(FromSlot, ToSlot);
+    RefreshCurQuickSlot();
 }
 
 void UC_InventoryComponent::Empty(int _Index)

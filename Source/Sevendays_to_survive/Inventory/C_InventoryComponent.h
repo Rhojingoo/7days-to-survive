@@ -26,6 +26,15 @@ protected:
     virtual void BeginPlay() override;
 
 public:
+    UFUNCTION(BlueprintPure)
+    int GetCurQuickSlot() const;
+
+    UFUNCTION(BlueprintCallable)
+    void SetCurQuickSlot(int _Index);
+
+    UFUNCTION(BlueprintCallable)
+    void DecQuickSlotItemCount(int _Index);
+
     UFUNCTION(BlueprintCallable)
     void AddItem(const UC_Item* _Item, int _Count);
 
@@ -99,6 +108,7 @@ private:
     UC_UI_QuickSlot* GetQuickSlotWidget();
     void RefreshInventoryCore();
     void SwapSlotData(UItemSlot* _FromSlot, UItemSlot* _ToSlot);
+    void RefreshCurQuickSlot();
 private:
     int UsingSize = 0;
     TMap<FName, int> ItemIdToIndex;
@@ -111,4 +121,6 @@ private:
 
     TSubclassOf<AC_ItemPouch> ItemPouchClass = nullptr;
     float SpawnDistance = 100.0f;
+
+    int CurQuickSlot = 0;
 };
