@@ -241,6 +241,7 @@ void AC_GlobalPlayer::BeginPlay()
 				PlayerSpawnCheckToken = init->GetNetToken();
 			}
 			characterResultMesh = init->GetPlayerMesh();
+			//MeshInit(characterResultMesh);
 		}
 	}
 
@@ -454,7 +455,7 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
-
+	MeshInit(characterResultMesh);
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -715,7 +716,7 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
-
+	MeshInit(characterResultMesh);
 	if (Controller != nullptr)
 	{
 		ResultPitchCal(LookAxisVector.Y);
@@ -947,6 +948,11 @@ void AC_GlobalPlayer::MeshInit_Implementation(EPlayerMesh _Mesh)
 		//	}
 		//	characterResultMesh = init->GetPlayerMesh();
 		//}
+	if (_Mesh == characterResultMesh)
+	{
+		return;
+	}
+
 	characterResultMesh = _Mesh;
 }
 

@@ -49,4 +49,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReduceSpawnArea(FVector2D _ReduceValue);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsBeginSpawn = false;
+
+	UPROPERTY()
+	uint8 SpawnCount = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	uint8 SpawnEndCount = 10;
 };

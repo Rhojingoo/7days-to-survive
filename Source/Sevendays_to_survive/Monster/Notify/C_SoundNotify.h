@@ -17,5 +17,5 @@ class SEVENDAYS_TO_SURVIVE_API UC_SoundNotify : public UAnimNotify_PlaySound
 public:
 	UC_SoundNotify();
 
-	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 };
