@@ -14,6 +14,7 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	BoxComponent->SetupAttachment(RootComponent);
+	BoxComponent->SetHiddenInGame(false);
 	BoxComponent->SetBoxExtent({100.0f, 100.0f, 10.0f});
 }
 
@@ -25,6 +26,19 @@ void AC_MonsterSpawnPoint::BeginPlay()
 	if (true == HasAuthority()) {
 		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
 		Inst->AddSpawnPoint(this);
+		if (true == IsBeginSpawn)
+		{
+			CanSpawn = true;
+			if (SpawnCount != SpawnEndCount)
+			{
+
+			}
+			/*FTimerHandle ZombieSpawn;
+			GetWorld()->GetTimerManager().SetTimer(ZombieSpawn, FTimerDelegate::CreateLambda([&]()
+				{
+					this->CanSpawn = false;
+				}), TotalSpawnTime, false);*/
+		}
 	}
 }
 
@@ -54,7 +68,10 @@ void AC_MonsterSpawnPoint::MonsterSpawn(float DeltaTime)
 
 void AC_MonsterSpawnPoint::SetSpawn(bool _IsSpawn)
 {
-	CanSpawn = true;
+	if (false == IsBeginSpawn)
+	{
+		CanSpawn = true;
+	}
 
 	FTimerHandle ZombieSpawn;
 	GetWorld()->GetTimerManager().SetTimer(ZombieSpawn, FTimerDelegate::CreateLambda([&]()

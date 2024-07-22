@@ -15,9 +15,9 @@ UC_SoundNotify::UC_SoundNotify()
 
 }
 
-void UC_SoundNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+void UC_SoundNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	Super::Notify(MeshComp, Animation);
+	Super::Notify(MeshComp, Animation, EventReference);
 
 	AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(MeshComp->GetOwner());
 	if (nullptr == Zombie)
