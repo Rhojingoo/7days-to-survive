@@ -488,5 +488,7 @@ void AC_ZombieBase::PlayFindSound_Implementation()
 void AC_ZombieBase::ForceFindTargetActor(AActor* _Actor)
 {
 	AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(GetController());
-	AIController->SetTargetActor(_Actor);
+	if (AIController != nullptr) {
+		AIController->SetTargetActor(_Actor);
+	}
 }
