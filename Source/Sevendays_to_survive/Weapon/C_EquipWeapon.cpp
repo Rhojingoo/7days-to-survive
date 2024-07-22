@@ -29,6 +29,8 @@ AC_EquipWeapon::AC_EquipWeapon()
 	// Create a follow camera
 	Cameras = CreateDefaultSubobject<UCameraComponent >(TEXT("GunFollowCamera"));
 	Cameras->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+
+	bReplicates = 1;
 }
 
 void AC_EquipWeapon::PlayGunAnimation_Implementation(const EWeaponUseState _CurWeapon)
