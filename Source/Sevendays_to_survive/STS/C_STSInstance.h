@@ -81,7 +81,7 @@ public:
 public:
 	// 인게임 밤낮 구분변수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
-	bool IsDay;
+	bool IsDay; 
 
 	// 인게임 날자카운트
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayorNight", meta = (AllowPrivateAccess = "true"))
