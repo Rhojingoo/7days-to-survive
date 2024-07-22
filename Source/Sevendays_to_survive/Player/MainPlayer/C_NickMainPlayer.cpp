@@ -78,6 +78,7 @@ AActor* AC_NickMainPlayer::SpawnMapCamera(const FTransform& _Transform)
 
 void AC_NickMainPlayer::OnQuickSlotSelected(int _Index)
 {
+	InventoryComp->SetCurQuickSlot(_Index);
 	const UC_Item* Item = InventoryComp->GetQuickSlotItem(_Index);
 
 	ChangeNoWeaponServer();

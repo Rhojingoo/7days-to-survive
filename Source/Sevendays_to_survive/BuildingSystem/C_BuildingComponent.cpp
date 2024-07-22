@@ -10,6 +10,7 @@
 #include "BuildingSystem/C_BuildingPart.h"
 #include "BuildingSystem/C_BuildingPartInterface.h"
 #include "BuildingSystem/C_BuildingPart.h"
+#include "Inventory/C_InventoryComponent.h"
 #include "Map/C_Items.h"
 #include "Landscape.h"
 #include "STS/C_STSGlobalFunctions.h"
@@ -144,23 +145,6 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 
 	SetCanBuild(false);
-
-	//else
-	//{
-	//	OutHit = &OutHits[0];
-	//	BuildTransform.SetLocation(OutHit->ImpactPoint);
-	//}
-
-	//// 땅을 제외한 액터와 충돌이 있는 경우
-	//if (true == HasPreviewCollision())
-	//{
-	//	SetCanBuild(false);
-	//}
-	//// 땅을 제외한 액터와 충돌이 없는 경우
-	//else
-	//{
-	//	SetCanBuild(true);
-	//}
 }
 
 bool UC_BuildingComponent::IsBuilding() const
@@ -204,6 +188,10 @@ void UC_BuildingComponent::PlaceBuildPart()
 	}
 
 	SpawnBuildPart(HoldingBuildingPart->ActorClass, BuildTransform, HoldingBuildingPart->MaxHp);
+
+	UC_InventoryComponent* InvenComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
+	int CurQuickSlot = InvenComp->GetCurQuickSlot();
+	InvenComp->DecQuickSlotItemCount(CurQuickSlot);
 }
 
 void UC_BuildingComponent::SpawnBuildPart_Implementation(TSubclassOf<AActor> _ActorClass, const FTransform& _SpawnTransform, int _MaxHp)

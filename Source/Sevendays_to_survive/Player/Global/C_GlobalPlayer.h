@@ -255,6 +255,10 @@ protected:
 	void Reload();
 	void Reload_Implementation();
 
+	UFUNCTION(BlueprintCallable,Reliable, Server)
+	void MeshInit(EPlayerMesh _Mesh);
+	void MeshInit_Implementation(EPlayerMesh _Mesh);
+
 	UFUNCTION()
 	void Rebound();
 

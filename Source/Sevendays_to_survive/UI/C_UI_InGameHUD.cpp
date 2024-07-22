@@ -12,21 +12,21 @@
 
 void AC_UI_InGameHUD::DrawHUD()
 {
-   Super::DrawHUD();
+    Super::DrawHUD();
 
-  // if (CrosshairTexture)
-  // {
-  //     // 캔버스 중심을 찾습니다.
-  //     FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
-  //
-  //     // 텍스처 중심이 캔버스 중심에 맞도록 텍스처의 크기 절반 만큼 오프셋을 줍니다.
-  //     FVector2D CrossHairDrawPosition(Center.X - (CrosshairTexture->GetSurfaceWidth() * 0.5f), Center.Y - (CrosshairTexture->GetSurfaceHeight() * 0.5f));
-  //
-  //     // 중심점에 조준선을 그립니다.
-  //     FCanvasTileItem TileItem(CrossHairDrawPosition, CrosshairTexture->Resource, FLinearColor::White);
-  //     TileItem.BlendMode = SE_BLEND_Translucent;
-  //     Canvas->DrawItem(TileItem);
-  // }
+    // if (CrosshairTexture)
+    // {
+    //     // 캔버스 중심을 찾습니다.
+    //     FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
+    //
+    //     // 텍스처 중심이 캔버스 중심에 맞도록 텍스처의 크기 절반 만큼 오프셋을 줍니다.
+    //     FVector2D CrossHairDrawPosition(Center.X - (CrosshairTexture->GetSurfaceWidth() * 0.5f), Center.Y - (CrosshairTexture->GetSurfaceHeight() * 0.5f));
+    //
+    //     // 중심점에 조준선을 그립니다.
+    //     FCanvasTileItem TileItem(CrossHairDrawPosition, CrosshairTexture->Resource, FLinearColor::White);
+    //     TileItem.BlendMode = SE_BLEND_Translucent;
+    //     Canvas->DrawItem(TileItem);
+    // }
 }
 
 UC_UI_InventoryCore* AC_UI_InGameHUD::GetInventoryCore()
@@ -120,13 +120,13 @@ void AC_UI_InGameHUD::UISetVisibility(EUIType _Type, ESlateVisibility _Value)
     if (nullptr == WidgetPtr)
     {
         STS_FATAL("[%s] Invalid EUIType.", __FUNCTION__)
-        return;
+            return;
     }
     UUserWidget* Widget = *WidgetPtr;
     if (nullptr == Widget)
     {
         STS_FATAL("[%s] Widget is null.", __FUNCTION__)
-        return;
+            return;
     }
 
     if (ESlateVisibility::Visible == _Value)
@@ -141,18 +141,20 @@ void AC_UI_InGameHUD::UISetVisibility(EUIType _Type, ESlateVisibility _Value)
             UIOnly.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
             Controller->SetInputMode(UIOnly);
             Controller->bShowMouseCursor = true;
+            Widget->SetFocus();
+            UIOnlyWidgets.Add(Widget);
         }
 
         OpenWidget.Add(Widget);
-        Widget->SetFocus();
         ++AllUIViewCount;
     }
     else if (ESlateVisibility::Hidden == _Value)
     {
         --AllUIViewCount;
         OpenWidget.Remove(Widget);
+        UIOnlyWidgets.Remove(Widget);
 
-        if (0 == AllUIViewCount)
+        if (0 == AllUIViewCount || true == UIOnlyWidgets.IsEmpty())
         {
             APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
             FInputModeGameOnly Option;
@@ -160,9 +162,9 @@ void AC_UI_InGameHUD::UISetVisibility(EUIType _Type, ESlateVisibility _Value)
             Controller->SetInputMode(Option);
             Controller->bShowMouseCursor = false;
         }
-        else
+        else if (false == UIOnlyWidgets.IsEmpty())
         {
-            OpenWidget[OpenWidget.Num() - 1]->SetFocus();
+            UIOnlyWidgets[UIOnlyWidgets.Num() - 1]->SetFocus();
         }
     }
     Widget->SetVisibility(_Value);
@@ -229,18 +231,20 @@ void AC_UI_InGameHUD::UISetVisibilityKey(FKey _Key, ESlateVisibility _Value)
             Option.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
             Controller->SetInputMode(Option);
             Controller->bShowMouseCursor = true;
+            Widget->SetFocus();
+            UIOnlyWidgets.Add(Widget);
         }
 
         OpenWidget.Add(Widget);
-        Widget->SetFocus();
         ++AllUIViewCount;
     }
     else if (_Value == ESlateVisibility::Hidden)
     {
         --AllUIViewCount;
         OpenWidget.Remove(Widget);
+        UIOnlyWidgets.Remove(Widget);
 
-        if (0 == AllUIViewCount)
+        if (0 == AllUIViewCount || true == UIOnlyWidgets.IsEmpty())
         {
             APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
             FInputModeGameOnly Option;
@@ -248,9 +252,9 @@ void AC_UI_InGameHUD::UISetVisibilityKey(FKey _Key, ESlateVisibility _Value)
             Controller->SetInputMode(Option);
             Controller->bShowMouseCursor = false;
         }
-        else
+        else if (false == UIOnlyWidgets.IsEmpty())
         {
-            OpenWidget[OpenWidget.Num() - 1]->SetFocus();
+            UIOnlyWidgets[UIOnlyWidgets.Num() - 1]->SetFocus();
         }
     }
 

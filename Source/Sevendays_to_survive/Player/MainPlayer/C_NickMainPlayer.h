@@ -18,6 +18,10 @@ public:
 	AC_NickMainPlayer();
 
 	FVector GetComponentLocation();
+
+	UFUNCTION(BlueprintCallable)
+	void OnQuickSlotSelected(int _Index);
+
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -31,9 +35,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	AActor* SpawnMapCamera(const FTransform& _Transform);
-
-	UFUNCTION(BlueprintCallable)
-	void OnQuickSlotSelected(int _Index);
 
 	UFUNCTION(BlueprintCallable)
 	void OnWeaponSelected(const UC_Weapon* _Weapon);
