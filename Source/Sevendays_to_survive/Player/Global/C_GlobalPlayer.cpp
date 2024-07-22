@@ -230,13 +230,18 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AC_GlobalPlayer::BeginPlay()
 {
 	{
-		UC_STSInstance* init= GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-
-		if (GetWorld()->GetAuthGameMode() != nullptr)
+		if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 		{
-			PlayerSpawnCheckToken = init->GetNetToken();
+			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
+			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
+			UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+			if (GetWorld()->GetAuthGameMode() != nullptr)
+			{
+				PlayerSpawnCheckToken = init->GetNetToken();
+			}
+			characterResultMesh = init->GetPlayerMesh();
 		}
-		characterResultMesh = init->GetPlayerMesh();
 	}
 
 	Super::BeginPlay();
@@ -250,10 +255,6 @@ void AC_GlobalPlayer::BeginPlay()
 		return;
 	}
 
-	if (UGameplayStatics::GetGameMode(GetWorld()) != nullptr)
-	{
-		PlayerSpawnCheckToken=STSInstance->GetNetToken();
-	}
 	//FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
 
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
@@ -930,6 +931,23 @@ void AC_GlobalPlayer::Reload_Implementation()
 		break;
 	}
 
+}
+
+void AC_GlobalPlayer::MeshInit_Implementation(EPlayerMesh _Mesh)
+{
+	//if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
+		//{
+		//	// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
+		//	// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
+		//	UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+
+		//	if (GetWorld()->GetAuthGameMode() != nullptr)
+		//	{
+		//		PlayerSpawnCheckToken = init->GetNetToken();
+		//	}
+		//	characterResultMesh = init->GetPlayerMesh();
+		//}
+	characterResultMesh = _Mesh;
 }
 
 void AC_GlobalPlayer::Rebound()
