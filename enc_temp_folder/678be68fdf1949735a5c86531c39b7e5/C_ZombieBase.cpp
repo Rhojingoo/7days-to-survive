@@ -268,9 +268,8 @@ bool AC_ZombieBase::BottomRayTrace()
 		//);
 
 		// 디버그 라인 그리기
-#ifdef WITH_DEITOR
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
-#endif // WITH_DEITOR
+
 		if (bottomIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
@@ -313,9 +312,8 @@ bool AC_ZombieBase::BottomRayTrace()
 		//);
 
 		// 디버그 라인 그리기
-#ifdef WITH_DEITOR
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
-#endif // WITH_DEITOR
+
 		if (MiddleIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
@@ -367,9 +365,8 @@ bool AC_ZombieBase::MiddleRayTrace()
 		//);
 
 		// 디버그 라인 그리기
-#ifdef WITH_DEITOR
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
-#endif // WITH_DEITOR
+
 		if (bottomIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
@@ -412,9 +409,8 @@ bool AC_ZombieBase::MiddleRayTrace()
 		//);
 
 		// 디버그 라인 그리기
-#ifdef WITH_DEITOR
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
-#endif // WITH_DEITOR
+
 		if (MiddleIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
