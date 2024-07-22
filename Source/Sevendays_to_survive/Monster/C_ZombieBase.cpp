@@ -255,22 +255,22 @@ bool AC_ZombieBase::BottomRayTrace()
 
 		ETraceTypeQuery::TraceTypeQuery1;
 		bottomIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			false, // 복합 콜리전 여부
-			TArray<AActor*>(), // 무시할 액터들
-			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
-			HitResult,
-			true // 트레이스를 시각화할지 여부
-		);
+		//bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+		//	GetWorld(),
+		//	Start,
+		//	End,
+		//	ObjectTypes,
+		//	false, // 복합 콜리전 여부
+		//	TArray<AActor*>(), // 무시할 액터들
+		//	EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+		//	HitResult,
+		//	true // 트레이스를 시각화할지 여부
+		//);
 
 		// 디버그 라인 그리기
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
-		if (bottomIsHit && HitResult.GetActor())
+		if (bottomIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
 			if (MapActor->IsValidLowLevel() == true) {
@@ -299,22 +299,22 @@ bool AC_ZombieBase::BottomRayTrace()
 
 		ETraceTypeQuery::TraceTypeQuery1;
 		MiddleIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			false, // 복합 콜리전 여부
-			TArray<AActor*>(), // 무시할 액터들
-			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
-			HitResult,
-			true // 트레이스를 시각화할지 여부
-		);
+		//bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+		//	GetWorld(),
+		//	Start,
+		//	End,
+		//	ObjectTypes,
+		//	false, // 복합 콜리전 여부
+		//	TArray<AActor*>(), // 무시할 액터들
+		//	EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+		//	HitResult,
+		//	true // 트레이스를 시각화할지 여부
+		//);
 
 		// 디버그 라인 그리기
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
-		if (MiddleIsHit && HitResult.GetActor())
+		if (MiddleIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
 			if (MapActor->IsValidLowLevel() == true) {
@@ -352,22 +352,22 @@ bool AC_ZombieBase::MiddleRayTrace()
 
 		ETraceTypeQuery::TraceTypeQuery1;
 		bottomIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			false, // 복합 콜리전 여부
-			TArray<AActor*>(), // 무시할 액터들
-			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
-			HitResult,
-			true // 트레이스를 시각화할지 여부
-		);
+		//bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+		//	GetWorld(),
+		//	Start,
+		//	End,
+		//	ObjectTypes,
+		//	false, // 복합 콜리전 여부
+		//	TArray<AActor*>(), // 무시할 액터들
+		//	EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+		//	HitResult,
+		//	true // 트레이스를 시각화할지 여부
+		//);
 
 		// 디버그 라인 그리기
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
-		if (bottomIsHit && HitResult.GetActor())
+		if (bottomIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
 			if (MapActor->IsValidLowLevel() == true) {
@@ -396,22 +396,22 @@ bool AC_ZombieBase::MiddleRayTrace()
 
 		ETraceTypeQuery::TraceTypeQuery1;
 		MiddleIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-		bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			false, // 복합 콜리전 여부
-			TArray<AActor*>(), // 무시할 액터들
-			EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
-			HitResult,
-			true // 트레이스를 시각화할지 여부
-		);
+		//bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+		//	GetWorld(),
+		//	Start,
+		//	End,
+		//	ObjectTypes,
+		//	false, // 복합 콜리전 여부
+		//	TArray<AActor*>(), // 무시할 액터들
+		//	EDrawDebugTrace::ForDuration, // 디버깅을 위한 트레이스
+		//	HitResult,
+		//	true // 트레이스를 시각화할지 여부
+		//);
 
 		// 디버그 라인 그리기
 		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
 
-		if (MiddleIsHit && HitResult.GetActor())
+		if (MiddleIsHit && nullptr != HitResult.GetActor())
 		{
 			AC_MapActor* MapActor = Cast<AC_MapActor>(HitResult.GetActor());
 			if (MapActor->IsValidLowLevel() == true) {
