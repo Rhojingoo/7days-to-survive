@@ -119,12 +119,10 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 
 void AC_GlobalPlayer::Playerhit(int _Damage)
 {
-	if (Hp <= 0)
+	if (true == IsPlayerDieCpp)
 	{
 		return;
 	}
-
-	
 
 	if (true == IsHitCpp)
 	{
@@ -134,8 +132,13 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
-	Hp -= 5;
 	
+	Hp -= 100;
+	if (Hp <= 0)
+	{
+		PlayerDieCheck();
+		return;
+	}
 }
 
 void AC_GlobalPlayer::ResetHit()
@@ -974,6 +977,25 @@ void AC_GlobalPlayer::PlayerMeshOption()
 {
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
+}
+
+void AC_GlobalPlayer::PlayerDieCheck_Implementation()
+{
+	if (Hp > 0)
+	{
+		return;
+	}
+
+	//IsPlayerDieCpp = true;
+	FTimerHandle DieTime;
+	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
+
+}
+
+void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
+{
+	IsPlayerDieCpp = false;
+	Hp = 100;
 }
 
 
