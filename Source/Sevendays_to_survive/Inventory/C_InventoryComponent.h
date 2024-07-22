@@ -99,6 +99,13 @@ private:
     int QuickSize = 8;
 
 private:
+    UFUNCTION(BlueprintCallable)
+    void DebugAddItems();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+    TMap<FName, int> DebugItems;
+
+private:
     int FindEmptySlot() const;
     int FindNonEmptySlot() const;
     bool IsValidSlot(int _Index) const;

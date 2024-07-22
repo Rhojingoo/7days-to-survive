@@ -364,6 +364,15 @@ const UC_Item* UC_InventoryComponent::GetQuickSlotItem(int _Index) const
     return QuickSlots[_Index]->GetItem();
 }
 
+void UC_InventoryComponent::DebugAddItems()
+{
+    for (TPair<FName, int> Pair : DebugItems)
+    {
+        const UC_Item* Item = UC_STSGlobalFunctions::FindItem(GetWorld(), Pair.Key);
+        AddItem(Item, Pair.Value);
+    }
+}
+
 int UC_InventoryComponent::FindEmptySlot() const
 {
     if (true == IsFull())
