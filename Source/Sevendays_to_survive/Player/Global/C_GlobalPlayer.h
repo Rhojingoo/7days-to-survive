@@ -268,9 +268,19 @@ protected:
 	UPROPERTY()
 	UC_InputActionDatas* InputData=nullptr;
 
+	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool IsPlayerDieCpp = false;
 private:
 	UFUNCTION()
 	void PlayerMeshOption();
+
+	UFUNCTION(Reliable, Server)
+	void PlayerDieCheck();
+	void PlayerDieCheck_Implementation();
+
+	UFUNCTION(Reliable, Server)
+	void PlayerReStartCheck();
+	void PlayerReStartCheck_Implementation();
 
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponUseState, TSubclassOf<AActor>> GunWeapon;
@@ -317,9 +327,6 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool IsFireCpp = false;
-
-	UPROPERTY(Category = "Contents", Replicated,VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool IsPlayerDieCpp = false;
 
 	UPROPERTY()
 	FTimerHandle timer;
