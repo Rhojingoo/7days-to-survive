@@ -26,6 +26,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Player/Global/DataTable/C_PlayerSpawnData.h"
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
@@ -243,6 +244,14 @@ void AC_GlobalPlayer::BeginPlay()
 			{
 				PlayerSpawnCheckToken = init->GetNetToken();
 			}
+
+			if (PlayerSpawnCheckToken != -1)
+			{
+				FC_PlayerSpawnData* DataTables = init->GetPlayerSpawnDataTable();
+				FVector test = DataTables->PlayerSpawnLocations[PlayerSpawnCheckToken + 1];
+				SetActorLocation(test);
+			}
+			
 			characterResultMesh = init->GetPlayerMesh();
 			//MeshInit(characterResultMesh);
 		}
@@ -259,6 +268,7 @@ void AC_GlobalPlayer::BeginPlay()
 		return;
 	}
 
+	//NameText->Text = FText::FromString(STSInstance->GetPlayerName());
 	//FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
 
 	CameraDT = STSInstance->GetPlayerDataTable()->CameraValue;
