@@ -63,10 +63,10 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
 #ifdef WITH_EDITOR
-	UE_LOG(LogTemp, Warning, TEXT("MonsterrChase Task"));
-	UE_LOG(LogTemp, Warning, TEXT("TargetLocation: X = %f  : Y = %f "), TargetLocation.X, TargetLocation.Y);
-	UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
-	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
+	//UE_LOG(LogTemp, Warning, TEXT("MonsterrChase Task"));
+	//UE_LOG(LogTemp, Warning, TEXT("TargetLocation: X = %f  : Y = %f "), TargetLocation.X, TargetLocation.Y);
+	//UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
+	//UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
 
 	if (ShoutCheck == true)

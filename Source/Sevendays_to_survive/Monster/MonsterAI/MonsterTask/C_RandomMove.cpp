@@ -42,10 +42,10 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	float Vec = FVector::Dist(SelfVec, RanVec);
 
 #ifdef WITH_EDITOR
-	UE_LOG(LogTemp, Warning, TEXT("RandomMove Task"));
-	UE_LOG(LogTemp, Warning, TEXT("Self: %f"), SelfVec);
-	UE_LOG(LogTemp, Warning, TEXT("Ran: %f"), RanVec);
-	UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Vec);
+	//UE_LOG(LogTemp, Warning, TEXT("RandomMove Task"));
+	//UE_LOG(LogTemp, Warning, TEXT("Self: %f"), SelfVec);
+	//UE_LOG(LogTemp, Warning, TEXT("Ran: %f"), RanVec);
+	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Vec);
 #endif
 
 	if (Vec < 100.f) {

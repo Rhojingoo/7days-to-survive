@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_TaskMonsterPatrol.h"
@@ -23,11 +23,11 @@ void UC_TaskMonsterPatrol::InitTask(UBehaviorTreeComponent* OwnerComp)
 
 EBTNodeResult::Type UC_TaskMonsterPatrol::PatrolMove(AC_MonsterAIBase* _MonsterController)
 {
-	FVector Origin = FVector(_MonsterController->GetPawn()->GetActorLocation()); // ÀÚ±â ÀÚ½ÅÀÇ À§Ä¡ (¿¹: ÇöÀç ActorÀÇ À§Ä¡)
-	float Radius = 1000.0f; // ¹İ°æ
+	FVector Origin = FVector(_MonsterController->GetPawn()->GetActorLocation()); // ìê¸° ìì‹ ì˜ ìœ„ì¹˜ (ì˜ˆ: í˜„ì¬ Actorì˜ ìœ„ì¹˜)
+	float Radius = 1000.0f; // ë°˜ê²½
 	UBlackboardComponent* Blackboard = _MonsterController->GetBlackboardComponent();
 	Blackboard->SetValueAsVector(*RandomVector, GetRandomVectorInRadius(Origin, Radius));
-	UE_LOG(LogTemp, Log, TEXT("Random Vector in Radius: %s"), *RandomVector);
+	//UE_LOG(LogTemp, Log, TEXT("Random Vector in Radius: %s"), *RandomVector);
 	//_MonsterController->GetMCP()->Move(RandomVector);
 	EPathFollowingRequestResult::Type MoveResult = _MonsterController->MoveToLocation(Blackboard->GetValueAsVector(*RandomVector));
 	if (MoveResult == EPathFollowingRequestResult::Failed)
@@ -46,7 +46,7 @@ EBTNodeResult::Type UC_TaskMonsterPatrol::ExecuteTask(UBehaviorTreeComponent& Ow
 	if (Controller->GetIsFind() == true) {
 		return EBTNodeResult::Succeeded;
 	}
-	UObject* object = (BlackBoard->GetValueAsObject("SelfActor")); //µğ¹ö±ë¿ë
+	UObject* object = (BlackBoard->GetValueAsObject("SelfActor")); //ë””ë²„ê¹…ìš©
 	AC_ZombieBase* Zom = Cast<AC_ZombieBase>(object);
 	if (!IsValid(Controller)) {
 		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
@@ -73,10 +73,10 @@ void UC_TaskMonsterPatrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	}
 }
 
-// ÁÖ¾îÁø ¹İ°æ ³»¿¡¼­ ·£´ı º¤ÅÍ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+// ì£¼ì–´ì§„ ë°˜ê²½ ë‚´ì—ì„œ ëœë¤ ë²¡í„°ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 FVector UC_TaskMonsterPatrol::GetRandomVectorInRadius(const FVector& Origin, float Radius)
 {
-	// ±¸ ³»ºÎÀÇ ·£´ı À§Ä¡¸¦ »ı¼º
+	// êµ¬ ë‚´ë¶€ì˜ ëœë¤ ìœ„ì¹˜ë¥¼ ìƒì„±
 	FVector RandomUnitVector = UKismetMathLibrary::RandomUnitVector();
 	float RandomDistance = FMath::FRandRange(0.0f, Radius);
 
