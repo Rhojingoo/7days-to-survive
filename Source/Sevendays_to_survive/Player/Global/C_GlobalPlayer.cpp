@@ -238,8 +238,9 @@ void AC_GlobalPlayer::BeginPlay()
 		if (GetWorld()->GetAuthGameMode() != nullptr)
 		{
 			PlayerSpawnCheckToken = init->GetNetToken();
-			PlayerTokenCheck(PlayerSpawnCheckToken);
 		}
+
+		PlayerTokenCheck(PlayerSpawnCheckToken);
 
 		if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 		{
