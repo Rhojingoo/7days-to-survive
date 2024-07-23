@@ -883,6 +883,11 @@ void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 		return;
 	}
 
+	if (true == GetMovementComponent()->IsFalling())
+	{
+		return;
+	}
+
 	if (true==GetCharacterMovement()->bWantsToCrouch)
 	{
 		UnCrouch();
@@ -1040,7 +1045,7 @@ void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 	//ReStartLocation
 	IsPlayerDieCpp = false;
 	Hp = 100;
-	SetActorLocation(FVector(0.0f, 0.0f, 400.0f));
+	SetActorLocation(ReStartLocation);
 }
 
 void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
