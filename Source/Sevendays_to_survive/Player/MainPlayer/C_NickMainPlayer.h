@@ -43,8 +43,6 @@ protected:
 	void OnBuildingPartSelected(const UC_ItemBuildingPart* _BuildingPart);
 
 private:
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* MontageToPlay;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UArrowComponent* LocationComponent;

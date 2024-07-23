@@ -447,4 +447,11 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadOnly,  meta = (AllowPrivateAccess = "true"))
 	EPlayerMesh characterResultMesh = EPlayerMesh::Player1;
+
+
+	UPROPERTY()
+	FVector ReStartLocation = FVector::ZeroVector;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* MontageDiePlay=nullptr;
 };

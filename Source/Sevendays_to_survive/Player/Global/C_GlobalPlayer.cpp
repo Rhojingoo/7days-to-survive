@@ -272,6 +272,7 @@ void AC_GlobalPlayer::BeginPlay()
 		return;
 	}
 
+	ReStartLocation = STSInstance->GetPlayerSpawnLocation()[PlayerSpawnCheckToken];
 	//NameText->Text = FText::FromString(STSInstance->GetPlayerName());
 	//FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
 
@@ -1036,8 +1037,10 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 
 void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 {
+	//ReStartLocation
 	IsPlayerDieCpp = false;
 	Hp = 100;
+	SetActorLocation(FVector(0.0f, 0.0f, 400.0f));
 }
 
 void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
