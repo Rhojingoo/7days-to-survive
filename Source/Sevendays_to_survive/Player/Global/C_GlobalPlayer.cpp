@@ -234,23 +234,24 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AC_GlobalPlayer::BeginPlay()
 {
 	{
+		UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+		if (GetWorld()->GetAuthGameMode() != nullptr)
+		{
+			PlayerSpawnCheckToken = init->GetNetToken();
+			PlayerTokenCheck(PlayerSpawnCheckToken);
+		}
+
 		if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 		{
 			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
 			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
-			UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-
-			if (GetWorld()->GetAuthGameMode() != nullptr)
-			{
-				PlayerSpawnCheckToken = init->GetNetToken();
-			}
-
-			if (PlayerSpawnCheckToken != -1)
+		
+			/*if (PlayerSpawnCheckToken != -1)
 			{
 				FC_PlayerSpawnData* DataTables = init->GetPlayerSpawnDataTable();
 				FVector test = DataTables->PlayerSpawnLocations[PlayerSpawnCheckToken + 1];
 				SetActorLocation(test);
-			}
+			}*/
 			
 			characterResultMesh = init->GetPlayerMesh();
 			//MeshInit(characterResultMesh);
@@ -365,6 +366,11 @@ void AC_GlobalPlayer::BeginPlay()
 		PistolRange= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->BulletRange;
 		ShotGunRange= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->BulletRange;
 		RifleRange= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->BulletRange;
+
+		PistolAtt = STSInstance->GetWeaPonDataTable(FName("Pistol2"))->Damage;
+		ShotGunAtt= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->Damage;
+		RifleAtt= STSInstance->GetWeaPonDataTable(FName("Rifle2"))->Damage;
+
 
 		Pistolmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("Pistol2"))->MagagineSize;
 		ShotGunmagazinecapacity= STSInstance->GetWeaPonDataTable(FName("ShotGun"))->MagagineSize;
@@ -589,7 +595,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 				if (Zombie)
 				{
 					CreateZombieBlood(Hit);
-					Zombie->SetHP(5.0f);
+					Zombie->SetHP(LineTraceDamage);
 				/*	FTimerHandle ZombieDestory;
 
 					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -666,7 +672,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 	Actors.Add(CurWeapon);
 	//FRandomStream Stream(FMath::Rand());
 	
-	for (size_t i = 0; i < 7; i++)
+	for (size_t i = 0; i < 8; i++)
 	{
 		float X = Random.FRandRange(Spreed * -1.0f, Spreed);
 		float Y = Random.FRandRange(Spreed * -1.0f, Spreed);
@@ -687,7 +693,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					{
 						//ZombieDieTrace(Zombie);
 						CreateZombieBlood(Hit);
-						Zombie->SetHP(5.0f);
+						Zombie->SetHP(LineTraceDamage);
 						/*FTimerHandle ZombieDestory;
 
 						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -997,7 +1003,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
-	//IsPlayerDieCpp = true;
+	IsPlayerDieCpp = true;
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 
@@ -1007,6 +1013,11 @@ void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 {
 	IsPlayerDieCpp = false;
 	Hp = 100;
+}
+
+void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
+{
+	PlayerSpawnCheckToken = _Token;
 }
 
 
@@ -1162,7 +1173,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
-		//LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RRifle2:
@@ -1194,7 +1205,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
-		//LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RPistol:
@@ -1226,7 +1237,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
-		//LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RPistol2:
@@ -1258,7 +1269,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
-		LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RShotgun:
@@ -1293,7 +1304,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
-		//LineTracemagazinecapacity = ShotGunmagazinecapacity;
+		LineTraceDamage = ShotGunAtt;
 		LineTraceRange = ShotGunRange;
 		break;
 	case ESkerItemSlot::SlotMax:

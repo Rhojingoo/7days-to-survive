@@ -282,6 +282,10 @@ private:
 	void PlayerReStartCheck();
 	void PlayerReStartCheck_Implementation();
 
+	UFUNCTION(Reliable, Server)
+	void PlayerTokenCheck(int _Token);
+	void PlayerTokenCheck_Implementation(int _Token);
+
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponUseState, TSubclassOf<AActor>> GunWeapon;
 
@@ -365,10 +369,20 @@ private:
 	float MinCalPithchCPP = -30.0f;
 
 	UPROPERTY()
-	float LineTraceRange = 0;
+	float LineTraceRange = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	int LineTracemagazinecapacity = 0;
+	UPROPERTY()
+	float LineTraceDamage = 0.0f;
+
+	UPROPERTY()
+	float PistolAtt = 0.0f;
+
+	UPROPERTY()
+	float ShotGunAtt = 0.0f;
+
+	UPROPERTY()
+	float RifleAtt = 0.0f;
+
 
 	UPROPERTY()
 	float PistolRange = 0.0f;
