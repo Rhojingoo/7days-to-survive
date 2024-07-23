@@ -160,6 +160,11 @@ void UC_MapInteractionComponent::ResetIsInteractingMap()
 
 void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
 {
+    if (nullptr == _Actor)
+    {
+        return;
+    }
+
     _Actor->Destroy();
 }
 
