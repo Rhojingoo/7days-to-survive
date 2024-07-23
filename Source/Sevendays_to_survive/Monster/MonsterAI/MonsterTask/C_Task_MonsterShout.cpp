@@ -45,6 +45,7 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 	if (Target->IsValidLowLevel() == false) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = 0;
