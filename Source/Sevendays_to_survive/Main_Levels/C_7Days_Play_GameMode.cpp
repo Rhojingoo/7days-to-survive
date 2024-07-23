@@ -17,23 +17,7 @@ void AC_7Days_Play_GameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//UC_STSInstance* Inst = GetGameInstance<UC_STSInstance>();
-	//if (nullptr == Inst)
-	//{
-	//	return;
-	//}
-	//FString& Port = Inst->TitleToGameInfo.ServerPort; //포트 값을 가져와야한다.
-	//
-	//int PortNumber = FCString::Atoi(*Port);
-	//if (PortNumber == 0)
-	//{
-	//	UE_LOG(SevenDays_Log, Error, TEXT("%S(%u)>if(PortNumber == 0)"), __FUNCTION__, __LINE__);
-	//	PortNumber = 30002;
-	//}
-	//Inst->EnableListenServer(true, PortNumber);
-	//IsServer = Inst->TitleToGameInfo.ServerOpenCheck;
-
-	SpawnItemBoxes();
+	//SpawnItemBoxes();
 }
 
 void AC_7Days_Play_GameMode::Tick(float _DeltaTime)
