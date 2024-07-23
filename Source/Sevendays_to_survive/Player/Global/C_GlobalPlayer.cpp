@@ -458,7 +458,7 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
-	MeshInit(characterResultMesh);
+	//MeshInit(characterResultMesh);
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -719,7 +719,7 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
-	MeshInit(characterResultMesh);
+	//MeshInit(characterResultMesh);
 	if (Controller != nullptr)
 	{
 		ResultPitchCal(LookAxisVector.Y);
@@ -986,7 +986,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
-	IsPlayerDieCpp = true;
+	//IsPlayerDieCpp = true;
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 
