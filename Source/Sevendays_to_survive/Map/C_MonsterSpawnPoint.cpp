@@ -16,13 +16,13 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 
 	SpawnBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnBoxComponent"));
 	SpawnBoxComponent->SetupAttachment(RootComponent);
-	SpawnBoxComponent->SetHiddenInGame(false);
+	//SpawnBoxComponent->SetHiddenInGame(false);
 	SpawnBoxComponent->SetBoxExtent({ 100.0f, 100.0f, 10.0f });
 
 	CollisionCheckBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionCheckBoxComponent"));
 	CollisionCheckBoxComponent->SetupAttachment(RootComponent);
-	CollisionCheckBoxComponent->SetHiddenInGame(false);
-	CollisionCheckBoxComponent->SetBoxExtent({ 120.0f, 120.0f, 300.0f });
+	//CollisionCheckBoxComponent->SetHiddenInGame(false);
+	CollisionCheckBoxComponent->SetBoxExtent({ 200.0f, 200.0f, 400.0f });
 
 }
 
