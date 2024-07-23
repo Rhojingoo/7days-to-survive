@@ -234,17 +234,18 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void AC_GlobalPlayer::BeginPlay()
 {
 	{
+		UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
+		if (GetWorld()->GetAuthGameMode() != nullptr)
+		{
+			PlayerSpawnCheckToken = init->GetNetToken();
+			PlayerTokenCheck(PlayerSpawnCheckToken);
+		}
+
 		if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 		{
 			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
 			// 스켈레탈 매쉬 TArray<SkeletalMesh> Arr;
-			UC_STSInstance* init = GetWorld()->GetGameInstanceChecked<UC_STSInstance>();
-
-			if (GetWorld()->GetAuthGameMode() != nullptr)
-			{
-				PlayerSpawnCheckToken = init->GetNetToken();
-			}
-
+		
 			/*if (PlayerSpawnCheckToken != -1)
 			{
 				FC_PlayerSpawnData* DataTables = init->GetPlayerSpawnDataTable();
@@ -1012,6 +1013,11 @@ void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 {
 	IsPlayerDieCpp = false;
 	Hp = 100;
+}
+
+void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
+{
+	PlayerSpawnCheckToken = _Token;
 }
 
 
