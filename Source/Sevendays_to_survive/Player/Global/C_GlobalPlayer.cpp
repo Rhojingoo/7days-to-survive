@@ -230,6 +230,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
+	DOREPLIFETIME(AC_GlobalPlayer, PlayerName);
 }
 
 // Called when the game starts or when spawned
@@ -257,6 +258,8 @@ void AC_GlobalPlayer::BeginPlay()
 			}*/
 			
 			characterResultMesh = init->GetPlayerMesh();
+			FString ServerName = init->GetPlayerName();
+			PlayerName = FText::FromString(ServerName);
 			//MeshInit(characterResultMesh);
 		}
 	}
@@ -1005,6 +1008,11 @@ void AC_GlobalPlayer::MeshInit_Implementation(EPlayerMesh _Mesh)
 	}
 
 	characterResultMesh = _Mesh;
+}
+
+void AC_GlobalPlayer::NamesInit_Implementation(const FText& _Name)
+{
+	PlayerName = _Name;
 }
 
 void AC_GlobalPlayer::Rebound()
