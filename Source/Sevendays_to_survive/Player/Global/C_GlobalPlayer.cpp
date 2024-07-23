@@ -728,7 +728,8 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
 
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>()* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+		//* UGameplayStatics::GetWorldDeltaSeconds(this) * CameraRotSpeed;
 	//MeshInit(characterResultMesh);
 	if (Controller != nullptr)
 	{
