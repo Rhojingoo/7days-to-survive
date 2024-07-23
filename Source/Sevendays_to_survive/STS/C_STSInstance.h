@@ -115,6 +115,10 @@ public:
 	void AddZombieArray(class AC_ZombieBase* _Zombie);
 	void RemoveZombieArray(AC_ZombieBase* _Zombie);
 
+
+	UFUNCTION(BlueprintCallable)
+	FString GetPlayerName();
+
 	void AddPlayerArray(AActor* _Actor);
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<AC_MonsterSpawnPoint*> SpawnArray;
@@ -153,6 +157,9 @@ private:
 
 	UPROPERTY()
 	TArray<EPlayerMesh> PlayerMeshs;
+
+	UPROPERTY()
+	FString PlayerName;
 
 	UPROPERTY()
 	int NetToken = -1;

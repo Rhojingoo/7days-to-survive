@@ -271,3 +271,8 @@ void UC_STSInstance::SetPlayerInfo(FString _Name, FString _UserIP)
 	}
 
 }
+
+FString UC_STSInstance::GetPlayerName()
+{
+	return PlayerName;
+}
