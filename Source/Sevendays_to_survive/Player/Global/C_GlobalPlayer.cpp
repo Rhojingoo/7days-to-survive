@@ -986,7 +986,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
-	IsPlayerDieCpp = true;
+	//IsPlayerDieCpp = true;
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 
