@@ -1002,7 +1002,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
-	//IsPlayerDieCpp = true;
+	IsPlayerDieCpp = true;
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 
@@ -1167,7 +1167,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
-		//LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RRifle2:
