@@ -24,7 +24,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void MonsterSpawn(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
 	void SetSpawn(bool _IsSpawn);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> SpawnZombie;
 	
@@ -43,7 +46,10 @@ public:
 	bool CanSpawn = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UBoxComponent* BoxComponent;
+	class UBoxComponent* SpawnBoxComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UBoxComponent* CollisionCheckBoxComponent;
 
 	FVector GetRandomPointInBox() const;
 
@@ -51,7 +57,7 @@ public:
 	void ReduceSpawnArea(FVector2D _ReduceValue);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool IsBeginSpawn = false;
+	bool SpawnOn = false;
 
 	UPROPERTY()
 	uint8 SpawnCount = 0;
@@ -61,6 +67,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void IncreaseZombie();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool IsBeginSpawnPoint = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool IsBoss = false;
