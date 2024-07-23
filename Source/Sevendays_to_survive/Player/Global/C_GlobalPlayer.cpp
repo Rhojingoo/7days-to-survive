@@ -594,7 +594,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 				if (Zombie)
 				{
 					CreateZombieBlood(Hit);
-					Zombie->SetHP(5.0f);
+					Zombie->SetHP(LineTraceDamage);
 				/*	FTimerHandle ZombieDestory;
 
 					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -692,7 +692,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					{
 						//ZombieDieTrace(Zombie);
 						CreateZombieBlood(Hit);
-						Zombie->SetHP(10.0f);
+						Zombie->SetHP(LineTraceDamage);
 						/*FTimerHandle ZombieDestory;
 
 						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
@@ -1199,7 +1199,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
-		//LineTracemagazinecapacity = Riflemagazinecapacity;
+		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
 	case ESkerItemSlot::RPistol:
@@ -1231,7 +1231,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
-		//LineTracemagazinecapacity = Pistolmagazinecapacity;
+		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RPistol2:
@@ -1263,6 +1263,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
+		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
 	case ESkerItemSlot::RShotgun:
@@ -1297,7 +1298,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
 
 		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
-		//LineTracemagazinecapacity = ShotGunmagazinecapacity;
+		LineTraceDamage = ShotGunAtt;
 		LineTraceRange = ShotGunRange;
 		break;
 	case ESkerItemSlot::SlotMax:
