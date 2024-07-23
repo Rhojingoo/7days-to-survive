@@ -66,7 +66,7 @@ void AC_RangedZombie::RangedAttack_Implementation()
 
     SetState(MonsterEnum::Idle);
 
-        AnimInstance->ChangeAnimation(MonsterEnum::RangedAttack);
+    AnimInstance->ChangeAnimation(MonsterEnum::RangedAttack);
 }
 
 void AC_RangedZombie::OnRangedAttackNotifyBegin()
@@ -78,6 +78,11 @@ void AC_RangedZombie::OnRangedAttackNotifyBegin()
 
     // 투사체 발사
     AActor* TargetActor = GetTargetActor();
+    if (false == TargetActor->IsValidLowLevel())
+    {
+        return;
+    }
+
     FVector TargetLocation = TargetActor->GetActorLocation() + FVector{ 0.0f, 0.0f, 30.0f };
 
     FVector SpawnLocation = GetActorLocation() + SpitTransformComponent->GetRelativeLocation();
