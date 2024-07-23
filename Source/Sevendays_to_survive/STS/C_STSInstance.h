@@ -158,7 +158,7 @@ private:
 	UPROPERTY()
 	TArray<EPlayerMesh> PlayerMeshs;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
 	FString PlayerName;
 
 	UPROPERTY()
