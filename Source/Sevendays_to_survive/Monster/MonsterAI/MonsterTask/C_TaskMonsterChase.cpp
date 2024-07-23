@@ -135,8 +135,9 @@ EBTNodeResult::Type UC_TaskMonsterChase::ExecuteTask(UBehaviorTreeComponent& Own
 		return EBTNodeResult::Failed;
 	}
 	if (Controller->GetIsFind()) {
-.		return EBTNodeResult::InProgress;
+		return EBTNodeResult::InProgress;
 	}
+
 
 	else {
 		return EBTNodeResult::Failed;
