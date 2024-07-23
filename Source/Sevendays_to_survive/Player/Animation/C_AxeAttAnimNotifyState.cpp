@@ -61,7 +61,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			{
 				//ZombieDieTrace(Zombie);
 				PlayCharacter->WeaponSwingSound(Hit, true);
-				Zombie->SetHP(20.0f);
+				Zombie->SetHP(25.0f);
 				PlayCharacter->CreateZombieBlood(Hit);
 				
 				
@@ -85,7 +85,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 			{
 				int ItemHit = Hit.Item;
 				PlayCharacter->WeaponSwingSound(Hit, false);
-				MapObject->Damage(ItemHit, 10, PlayCharacter);
+				MapObject->Damage(ItemHit, 25, PlayCharacter);
 				
 			}
 		}

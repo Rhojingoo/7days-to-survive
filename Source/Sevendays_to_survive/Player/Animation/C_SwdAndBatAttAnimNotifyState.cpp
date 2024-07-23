@@ -20,6 +20,20 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 	{
 		return;
 	}
+
+	float Damage = 0.0f;
+
+	switch (PlayCharacter->GetPlayerCurState())
+	{
+	case EWeaponUseState::Sword:
+		Damage = 50.0f;
+		break;
+	case EWeaponUseState::bat:
+		Damage = 20.0f;
+	default:
+		break;
+	}
+
 	PlayCharacter->AttCalstamina();
 	if (UGameplayStatics::GetGameMode(MeshComp->GetWorld()) == nullptr)
 	{
@@ -69,7 +83,7 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 					PlayCharacter->WeaponSwingSound(Hit, true);
 					PlayCharacter->CreateZombieBlood(Hit);
 				}
-				Zombie->SetHP(20.0f);
+				Zombie->SetHP(Damage);
 
 
 				/*FTimerHandle ZombieDestory;
@@ -92,7 +106,7 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 			{
 				int ItemHit = Hit.Item;
 				PlayCharacter->WeaponSwingSound(Hit, false);
-				MapObject->Damage(ItemHit, 10, PlayCharacter);
+				MapObject->Damage(ItemHit, 20, PlayCharacter);
 
 			}
 		}
