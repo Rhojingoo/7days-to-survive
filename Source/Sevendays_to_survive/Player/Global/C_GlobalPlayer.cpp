@@ -136,7 +136,7 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
-	Hp -= 100;
+	Hp -= _Damage;
 	if (Hp <= 0)
 	{
 		PlayerDieCheck();
