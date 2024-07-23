@@ -282,6 +282,10 @@ private:
 	void PlayerReStartCheck();
 	void PlayerReStartCheck_Implementation();
 
+	UFUNCTION(Reliable, Server)
+	void PlayerTokenCheck(int _Token);
+	void PlayerTokenCheck_Implementation(int _Token);
+
 	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponUseState, TSubclassOf<AActor>> GunWeapon;
 
