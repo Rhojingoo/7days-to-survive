@@ -197,12 +197,31 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 }
 void AC_GlobalPlayer::AddHp_Implementation(const int _Hp)
 {
-	Hp += _Hp;
+	if (100 < Hp + _Hp)
+	{
+		Hp = 100;
+		return;
+	}
+	else
+	{
+		Hp += _Hp;
+		return;
+	}
+
 }
 
 void AC_GlobalPlayer::Addstamina(const int _stamina)
 {
-	stamina += _stamina;
+	if (Maxstamina < stamina + _stamina)
+	{
+		stamina = Maxstamina;
+		return;
+	}
+	else
+	{
+		stamina += _stamina;
+		return;
+	}
 }
 
 void AC_GlobalPlayer::Resetmagazinecapacity()
