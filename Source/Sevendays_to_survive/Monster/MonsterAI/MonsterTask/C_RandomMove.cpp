@@ -82,10 +82,10 @@ bool UC_RandomMove::NaviMove(UMonsterDataObject* _Data, UBlackboardComponent* _B
 	float Distance = FVector::Dist(TargetNavLocation, BottomLocation);
 
 #ifdef WITH_EDITOR
-	UE_LOG(LogTemp, Warning, TEXT("RandomMove Task"));
-	UE_LOG(LogTemp, Warning, TEXT("Self: %f"), SelfVec);
-	UE_LOG(LogTemp, Warning, TEXT("Ran: %f"), RanVec);
-	UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), Vec);
+	for (const FVector& Location : _Data->GetPath())
+	{
+		DrawDebugSphere(GetWorld(), Location, 10.0f, 8, FColor::Red, false, 1.0f);
+	}
 #endif
 	
 
