@@ -232,6 +232,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerName);
+	DOREPLIFETIME(AC_GlobalPlayer, Hp);
 }
 
 // Called when the game starts or when spawned
@@ -478,20 +479,8 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AC_GlobalPlayer::DamageCalServer_Implementation(const int _Damge)
 {
-	DamageCal(_Damge);
+	Hp = Hp - _Damge;
 }
-
-void AC_GlobalPlayer::DamageCal_Implementation(const int _Damge)
-{
-	PlayerHitDamage = _Damge;
-	Hp = Hp- PlayerHitDamage;
-}
-
-void AC_GlobalPlayer::SerVerHpSet_Implementation(const int _Hp)
-{
-	Hp = _Hp;
-}
-
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
