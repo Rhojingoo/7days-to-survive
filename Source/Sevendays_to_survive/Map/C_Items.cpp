@@ -78,9 +78,9 @@ void UC_Consumable::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     Stamina = TypeRow->Stamina;
 }
 
-void UC_Consumable::Use() const
+void UC_Consumable::Use(UWorld* _World) const
 {
-    AC_MapPlayer* Player = UC_STSGlobalFunctions::GetMapPlayerCharacter(GetWorld());
+    AC_MapPlayer* Player = UC_STSGlobalFunctions::GetMapPlayerCharacter(_World);
     if (false == Player->IsValidLowLevel())
     {
         return;
