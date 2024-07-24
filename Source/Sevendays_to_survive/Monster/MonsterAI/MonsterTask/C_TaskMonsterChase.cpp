@@ -157,7 +157,17 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UC_MonsterComponent* MCP = Controller->GetMCP();
 	UBlackboardComponent* BBC = Controller->GetBlackboardComponent();
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	if (false == Target->IsValidLowLevel())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Target);
+	if (false == Player->IsValidLowLevel())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	UMonsterDataObject* MonsterData = MCP->GetData();
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
 	FVector TargetLocation = Player->GetComponentLocation();
