@@ -82,6 +82,14 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
 		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
 
+		if (Target == nullptr)
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+			Controller->SetIsSound(false);
+			return;
+		}
+
+
 		if (SC_ZOMBIE != nullptr)
 		{
 			if (SC_ZOMBIE->TargetDie == true)
