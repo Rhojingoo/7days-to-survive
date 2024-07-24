@@ -75,6 +75,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UC_UI_InventorySlot* GetSlotInfo();
 
+	UFUNCTION(BlueprintCallable)
+	void UseFoodItem();
 
 
 	
