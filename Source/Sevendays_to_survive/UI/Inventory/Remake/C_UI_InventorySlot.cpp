@@ -163,3 +163,20 @@ void UC_UI_InventorySlot::SettingSlotType(ESlotType _SlotType)
 {
 	SlotType = _SlotType;
 }
+
+
+void UC_UI_InventorySlot::UseFoodItem() //GetCurIndex해서 사용하면 될듯
+{
+	UC_InventoryComponent* ItemComp = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
+	
+	ItemComp->UseInvenItem(this->GetSlotIndex());
+
+	
+
+
+	
+}
+
+
+
+

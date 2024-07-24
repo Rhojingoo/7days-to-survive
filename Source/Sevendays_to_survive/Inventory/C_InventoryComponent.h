@@ -36,6 +36,9 @@ public:
     void DecQuickSlotItemCount(int _Index);
 
     UFUNCTION(BlueprintCallable)
+    void UseInvenItem(int _Index);
+
+    UFUNCTION(BlueprintCallable)
     void AddItem(const UC_Item* _Item, int _Count);
 
     UFUNCTION(BlueprintCallable)

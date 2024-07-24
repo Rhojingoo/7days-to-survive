@@ -4,6 +4,8 @@
 #include "Map/C_Items.h"
 
 #include "Map/C_ItemRows.h"
+#include "STS/C_STSGlobalFunctions.h"
+#include "Player/Global/C_MapPlayer.h"
 
 void UC_Item::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
 {
@@ -74,6 +76,18 @@ void UC_Consumable::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)
     Hp = TypeRow->Hp;
 
     Stamina = TypeRow->Stamina;
+}
+
+void UC_Consumable::Use(UWorld* _World) const
+{
+    AC_MapPlayer* Player = UC_STSGlobalFunctions::GetMapPlayerCharacter(_World);
+    if (false == Player->IsValidLowLevel())
+    {
+        return;
+    }
+
+    Player->AddHp(Hp);
+    Player->Addstamina(Stamina);
 }
 
 void UC_ItemBuildingPart::Init(FName _Id, TArray<FTableRowBase*> _JoinRows)

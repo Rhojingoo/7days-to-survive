@@ -109,6 +109,11 @@ public:
 
 	//------------------------------------------------
 
+	FORCEINLINE void SetISReload(const bool _ISReload)
+	{
+		ISReload= _ISReload;
+	}
+
 	EWeaponUseState GetPlayerCurState()
 	{
 		return PlayerCurState;
@@ -136,6 +141,14 @@ public:
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
 
+
+	UFUNCTION(BlueprintCallable,Reliable, Server)
+	void AddHp(const int _Hp);
+	void AddHp_Implementation(const int _Hp);
+
+	UFUNCTION(BlueprintCallable)
+	void Addstamina(const int _stamina);
+
 	UFUNCTION()
 	void Resetmagazinecapacity();
 
@@ -153,13 +166,6 @@ protected:
 	void DamageCalServer(const int _Damge);
 	void DamageCalServer_Implementation(const int _Damge);
 
-	UFUNCTION(Reliable, NetMulticast)
-	void DamageCal(const int _Damge);
-	void DamageCal_Implementation(const int _Damge);
-
-	UFUNCTION(Reliable, Server)
-	void SerVerHpSet(const int _Hp);
-	void SerVerHpSet_Implementation(const int _Hp);
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
 	UFUNCTION(Reliable, NetMulticast)
@@ -371,9 +377,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Hp = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = Input, meta = (AllowPrivateAccess = "true"))
-	int PlayerHitDamage = 0;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float CameraRotSpeed = 100.0f;
 
@@ -432,7 +435,7 @@ private:
 	UPROPERTY()
 	float PistolTIme = 0.0f;
 
-	UPROPERTY()
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool ISReload = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -475,7 +478,4 @@ private:
 
 	UPROPERTY()
 	FVector ReStartLocation = FVector::ZeroVector;
-
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* MontageDiePlay=nullptr;
 };

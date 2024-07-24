@@ -59,7 +59,7 @@ void UC_BreakTimeTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 		UC_MonsterComponent* MCP = Controller->GetMCP();
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 		if (Target->IsValidLowLevel() == false) {
-			UE_LOG(LogTemp, Fatal, TEXT("절대로 접근할 수 없는 노드"));
+			FinishLatentTask(OwnerComp, EBTNodeResult::Type::Failed);
 			return;
 		}
 
