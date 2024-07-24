@@ -2,6 +2,7 @@
 
 
 #include "Monster/MonsterAI/MonsterTask/C_MoveTask.h"
+#include "Monster/C_ScreamZombie.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 
 UC_MoveTask::UC_MoveTask()
@@ -52,11 +53,21 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true)
 	{
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
+		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
 		if (Target == nullptr)
 		{
 			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 			Controller->SetIsSound(false);
 			return;
+		}
+		if (SC_ZOMBIE != nullptr)
+		{
+			if (SC_ZOMBIE->TargetDie == true)
+			{
+				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+				Controller->SetIsSound(false);
+				return;
+			}
 		}
 		FVector MonLocation = Target->GetActorLocation();
 		FVector Distance = MonLocation - SelfLocation;
@@ -66,6 +77,13 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	{
 		Controller->GetMCP()->Run(Dist);
 	}
+
+
+	//AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Controller->GetMonster());
+	//if (SC_ZOMBIE != nullptr)
+	//{
+	//	SC_ZOMBIE->TargetDie = true;
+	//}
 	
 
 	//	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
