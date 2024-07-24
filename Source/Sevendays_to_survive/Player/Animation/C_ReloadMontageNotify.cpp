@@ -24,4 +24,6 @@ void UC_ReloadMontageNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	}
 
 	PlayCharacter->Resetmagazinecapacity();
+
+	PlayCharacter->SetISReload(false);
 }

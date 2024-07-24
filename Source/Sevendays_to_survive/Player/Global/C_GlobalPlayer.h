@@ -109,6 +109,11 @@ public:
 
 	//------------------------------------------------
 
+	FORCEINLINE void SetISReload(const bool _ISReload)
+	{
+		ISReload= _ISReload;
+	}
+
 	EWeaponUseState GetPlayerCurState()
 	{
 		return PlayerCurState;
@@ -135,6 +140,14 @@ public:
 	UFUNCTION(Reliable, NetMulticast)
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
+
+
+	UFUNCTION(BlueprintCallable,Reliable, Server)
+	void AddHp(const int _Hp);
+	void AddHp_Implementation(const int _Hp);
+
+	UFUNCTION(BlueprintCallable)
+	void Addstamina(const int _stamina);
 
 	UFUNCTION()
 	void Resetmagazinecapacity();
@@ -422,7 +435,7 @@ private:
 	UPROPERTY()
 	float PistolTIme = 0.0f;
 
-	UPROPERTY()
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool ISReload = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

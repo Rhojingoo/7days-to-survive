@@ -103,6 +103,7 @@ class SEVENDAYS_TO_SURVIVE_API UC_Consumable : public UC_Item
     GENERATED_BODY()
 public:
     void Init(FName _Id, TArray<FTableRowBase*> _JoinRows) override;
+    void Use() const;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
     int Hp = 0;
