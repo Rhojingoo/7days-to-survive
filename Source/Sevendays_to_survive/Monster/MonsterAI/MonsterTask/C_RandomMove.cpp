@@ -73,6 +73,9 @@ bool UC_RandomMove::SetPath(FVector _MyLocation, FVector _TargetLocation, UMonst
 
 bool UC_RandomMove::NaviMove(UMonsterDataObject* _Data, UBlackboardComponent* _BBC, AAIController* _Controller, UBehaviorTreeComponent& OwnerComp)
 {
+	if (true == _Data->PathIsEmpty()) {
+		return true;
+	}
 	FVector TargetNavLocation = _Data->NextPath();
 	FVector BottomLocation = GetSelfLocation(&OwnerComp);
 	FVector Direction = (TargetNavLocation - BottomLocation);

@@ -96,6 +96,12 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	}
 }
 
+void AC_MonsterAIBase::OnUnPossess()
+{
+	Super::OnUnPossess();
+	BTC->StopTree();
+}
+
 
 ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other) const
 {
@@ -237,4 +243,9 @@ void AC_MonsterAIBase::SetTargetActor(AActor* _Actor)
 {
 	BBC->SetValueAsObject(EnemyKeyId, _Actor);
 	IsFind = true;
+}
+
+void AC_MonsterAIBase::BTCStop()
+{
+	BTC->StopTree();
 }
