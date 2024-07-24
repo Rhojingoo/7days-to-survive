@@ -1109,7 +1109,7 @@ void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 	//ReStartLocation
 	IsPlayerDieCpp = false;
 	Hp = 100;
-	SetActorLocation(ReStartLocation,true,nullptr, ETeleportType::TeleportPhysics);
+	SetActorLocation(ReStartLocation, false, nullptr, ETeleportType::TeleportPhysics);
 	//SetActorLocation(FVector(0.0f, 0.0f, 400.0f));
 }
 
