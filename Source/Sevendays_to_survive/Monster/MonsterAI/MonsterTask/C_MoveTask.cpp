@@ -36,6 +36,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	if (true == Controller->GetIsFind()) 
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);
@@ -50,7 +51,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	{
 		Controller->GetBlackboardComponent()->SetValueAsBool(*FollowZombie, true);
 	}
-	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true)
+	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true) // 스크림 좀비를 따라 가는중
 	{
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
 		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
@@ -60,6 +61,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 			Controller->SetIsSound(false);
 			return;
 		}
+
 		if (SC_ZOMBIE != nullptr)
 		{
 			if (SC_ZOMBIE->TargetDie == true)
@@ -69,12 +71,27 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 				return;
 			}
 		}
+
+
 		FVector MonLocation = Target->GetActorLocation();
 		FVector Distance = MonLocation - SelfLocation;
 		Controller->GetMCP()->Run(Distance);
 	}
-	else
+	else // 플레이어를 보고 소리 지른곳으로 가능중
 	{
+		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
+		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
+
+		if (SC_ZOMBIE != nullptr)
+		{
+			if (SC_ZOMBIE->TargetDie == true)
+			{
+				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+				Controller->SetIsSound(false);
+				return;
+			}
+		}
+
 		Controller->GetMCP()->Run(Dist);
 	}
 
