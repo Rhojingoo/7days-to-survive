@@ -104,11 +104,16 @@ void AC_ScreamZombie::OnAttackNotifyBegin()
 {
 	Super::OnAttackNotifyBegin();
 	MakeNoise(1000.f);
+	//if (Shout == false)
+	//{
+	//	Shout = true;
+	//}
 }
 
 void AC_ScreamZombie::OnAttackNotifyEnd()
 {
 	Super::OnAttackNotifyEnd();
+
 
 	if (Shout == false)
 	{
