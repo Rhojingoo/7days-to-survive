@@ -140,6 +140,7 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	//Hp -= 100;
 	if (Hp <= 0)
 	{
+		ChangeNoWeaponServer();
 		PlayerDieCheck();
 		return;
 	}
@@ -628,14 +629,18 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 				if (Zombie)
 				{
-					if ("Head" == Zombie->GetMesh()->GetSocketBoneName(FName("Head")))
-					{
-						LineTraceDamage = LineTraceDamage * 2.0f;
-					}
-
 					CreateZombieBlood(Hit);
-					Zombie->SetHP(LineTraceDamage);
-			
+					//Zombie->GetMesh()->GetSock
+					if (Hit.BoneName == Zombie->GetMesh()->GetSocketBoneName("Head"))
+					{
+						Zombie->SetHP(LineTraceDamage*2.0f);
+						return;
+					}
+					else
+					{
+						Zombie->SetHP(LineTraceDamage);
+						return;
+					}
 				}
 				else
 				{
@@ -722,13 +727,17 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 					if (Zombie)
 					{
 
-						if ("Head" == Zombie->GetMesh()->GetSocketBoneName(FName("Head")))
-						{
-							LineTraceDamage = LineTraceDamage * 2.0f;
-						}
-						//ZombieDieTrace(Zombie);
 						CreateZombieBlood(Hit);
-						Zombie->SetHP(LineTraceDamage);
+						if (Hit.BoneName == Zombie->GetMesh()->GetSocketBoneName("Head"))
+						{
+							Zombie->SetHP(LineTraceDamage * 2.0f);
+							return;
+						}
+						else
+						{
+							Zombie->SetHP(LineTraceDamage);
+							return;
+						}
 
 					}
 					else
@@ -1068,7 +1077,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
-	ChangeNoWeaponServer();
+	//ChangeNoWeaponServer();
 	IsPlayerDieCpp = true;
 
 	FTimerHandle DieTime;
