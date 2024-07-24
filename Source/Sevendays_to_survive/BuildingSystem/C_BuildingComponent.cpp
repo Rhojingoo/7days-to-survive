@@ -52,20 +52,20 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	FVector TraceStart = GetLineTraceStartPoint();
 	FVector TraceEnd = GetLineTraceEndPoint();
 
-	bool IsLineTraceHit = UKismetSystemLibrary::LineTraceMulti(
+	bool IsLineTraceBlocked = UKismetSystemLibrary::LineTraceMulti(
 		GetWorld(),
 		TraceStart,
 		TraceEnd,
 		HoldingBuildingPart->TraceType,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::None,
+		EDrawDebugTrace::ForDuration,
 		OutHits,
 		true
 	);
 
 	// 레이가 적중하지 않은 경우
-	if (false == IsLineTraceHit)
+	if (true == OutHits.IsEmpty())
 	{
 		BuildTransform.SetLocation(TraceEnd);
 		SetCanBuild(false);
@@ -74,9 +74,8 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	}
 
 	// 레이가 소켓에 적중한 경우에 대한 처리
-	// - 가장 멀리 있는 소켓을 기준으로 트랜스폼 결정
+	// - 가장 멀리 있는 소켓을 대상으로 선택한다.
 	bool SocketHit = false;
-	float MaxDistance = 0.0f;
 	for (FHitResult& OutHit : OutHits)
 	{
 		AActor* HitActor = OutHit.GetActor();
@@ -86,13 +85,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 			continue;
 		}
 
-		if (OutHit.Distance < MaxDistance)
-		{
-			continue;
-		}
 		SocketHit = true;
-		MaxDistance = OutHit.Distance;
-
 		BuildTransform = OutHit.GetComponent()->GetComponentTransform();
 		RefreshPreviewTransform();
 
@@ -113,7 +106,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		return;
 	}
 
-	// 레이가 적중한 경우에 대한 처리
+	// 레이가 지면과 충돌할 경우 지면을 기준으로 처리한다.
 	bool IsLandHit = false;
 	FHitResult* OutHit = nullptr;
 	for (FHitResult& Hit : OutHits)
@@ -133,7 +126,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		BuildTransform.SetLocation(Location);
 		RefreshPreviewTransform();
 
-		// 충돌면의 경사가 급하거나 땅을 제외한 액터와 충돌이 있는 경우 설치할 수 없다.
+		// 충돌면의 경사가 급하거나 프리뷰가 땅이 아닌 액터와 충돌하는 경우 설치할 수 없다.
 		if (false == CheckBuildAngle(OutHit->Normal) || true == HasPreviewCollision())
 		{
 			SetCanBuild(false);
@@ -144,6 +137,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		return;
 	}
 
+	// 레이가 소켓, 지면과 충돌하지 않은 경우 설치할 수 없다.
 	SetCanBuild(false);
 }
 
@@ -284,7 +278,7 @@ bool UC_BuildingComponent::CheckBuildAngle(FVector& _Normal)
 	float Z = _Normal.Z;
 	float Tangent = Z / UKismetMathLibrary::Sqrt(1.0f - Z * Z);
 	float NormalAngle = UKismetMathLibrary::DegAtan(Tangent);
-	return 90.0f - MaxBuildableAngle <= NormalAngle && NormalAngle <= 90.0f;
+	return 90.0f - MaxBuildableAngle <= NormalAngle;
 }
 
 bool UC_BuildingComponent::HasPreviewCollision()
