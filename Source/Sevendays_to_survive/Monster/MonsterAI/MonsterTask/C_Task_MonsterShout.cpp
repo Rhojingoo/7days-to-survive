@@ -2,6 +2,7 @@
 
 
 #include "Monster/MonsterAI/MonsterTask/C_Task_MonsterShout.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/C_ScreamZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -48,20 +49,27 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
+
+	AC_NickMainPlayer* Target_PL = Cast<AC_NickMainPlayer>(Target);
+	if (Target_PL->GetIsPlayerDieCpp() == true)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Controller->GetMonster());
+		if (SC_ZOMBIE != nullptr)
+		{
+			SC_ZOMBIE->TargetDie = true;
+		}
+		return;
+	}
+
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = 0;
 
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
 	MCP->Shout();
-	//AC_ZombieBase* Zombie = MCP->GetMonster();
 	AC_ZombieBase* Scream_Zombie = MCP->GetMonster();
-	//AC_ScreamZombie* Scream_Zombie = Cast<AC_ScreamZombie>(Zombie);
-	//if (Scream_Zombie == nullptr)
-	//{
-	//	int a = 0;
-	//	return;
-	//}
+
 	bool ShoutCheck = Scream_Zombie->IsShout();
 
 	FVector Direction = (Target->GetActorLocation() - SelfLocation).GetSafeNormal();

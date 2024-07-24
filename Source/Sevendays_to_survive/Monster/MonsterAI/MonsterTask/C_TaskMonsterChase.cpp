@@ -3,6 +3,7 @@
 
 #include "Monster/MonsterAI/MonsterTask/C_TaskMonsterChase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Monster/C_ScreamZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
@@ -166,6 +167,11 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	if (true == Player->GetIsPlayerDieCpp()) {
 		Controller->IsFindOff();
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Controller->GetMonster());
+		if (SC_ZOMBIE != nullptr)
+		{
+			SC_ZOMBIE->TargetDie = true;
+		}
 		return;
 	}
 
