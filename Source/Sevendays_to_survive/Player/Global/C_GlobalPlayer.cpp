@@ -136,8 +136,8 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
-	DamageCalServer(_Damage);
-	//Hp -= 100;
+	//DamageCalServer(_Damage);
+	Hp -= 100;
 	if (Hp <= 0)
 	{
 		ChangeNoWeaponServer();
