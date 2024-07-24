@@ -71,8 +71,6 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 				return;
 			}
 		}
-
-
 		FVector MonLocation = Target->GetActorLocation();
 		FVector Distance = MonLocation - SelfLocation;
 		Controller->GetMCP()->Run(Distance);
@@ -89,7 +87,6 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 			return;
 		}
 
-
 		if (SC_ZOMBIE != nullptr)
 		{
 			if (SC_ZOMBIE->TargetDie == true)
@@ -99,64 +96,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 				return;
 			}
 		}
-
 		Controller->GetMCP()->Run(Dist);
 	}
-
-
-	//AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Controller->GetMonster());
-	//if (SC_ZOMBIE != nullptr)
-	//{
-	//	SC_ZOMBIE->TargetDie = true;
-	//}
-	
-
-	//	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-	//	if (!NavSystem) {
-	//		return;
-	//	}
-	//
-	//	UNavigationPath* NavPath = NavSystem->FindPathToLocationSynchronously(
-	//		GetWorld(),
-	//		SelfLocation,
-	//		TargetLocation
-	//	);
-	//
-	//	UMonsterDataObject* MonsterData = Controller->GetMCP()->GetData();
-	//
-	//	if (NavPath->GetPathCost() < FLT_MAX) {
-	//		int a = 0;
-	//	}
-	//
-	//	if (true == MonsterData->PathIsEmpty())		//path 즉 경로가 비어있으면 일단 경로 찾아서 넣기
-	//	{
-	//		//UNavigationPath* Path = UNavigationSystemV1::FindPathToLocationSynchronously(GetWorld(), SelfLocation, TargetLocation, GetSelf(&OwnerComp));
-	//		MonsterData->SetPath(NavPath->PathPoints);
-	//		if (MonsterData->GetPathLength() > 3) {
-	//			int a = 0;
-	//		}
-	//		MonsterData->PathHeadRemove();  //이걸 삭제하는 이유는 맨 첫번째 위치는 selflocation의 위치 즉 처음 시작 위치이다.
-	//
-	//
-	//#if WITH_EDITOR
-	//		//Path->EnableDebugDrawing(true);
-	//#endif
-	//	}
-	//	if (false == MonsterData->PathIsEmpty()) // 만약 경로가 남아있지 않다면? 이동해야한다.
-	//	{
-	//		TargetLocation = MonsterData->NextPath();
-	//		TargetLocation.Z = 0;
-	//
-	//		FVector CheckDir = (TargetLocation - SelfLocation);
-	//		Controller->GetMCP()->Run(CheckDir);
-	//		if (10.0f >= CheckDir.Size())
-	//		{
-	//			MonsterData->PathHeadRemove();
-	//		}
-	//	}
-	//	else {
-	//		return;
-	//	}
-
 }
 
