@@ -148,6 +148,7 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 void AC_GlobalPlayer::ResetHit()
 {
 	IsHitCpp = false;
+	ISReload = false;
 }
 
 void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const bool _IsZombie)
@@ -193,6 +194,16 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 		break;
 	}
 }
+void AC_GlobalPlayer::AddHp_Implementation(const int _Hp)
+{
+	Hp += _Hp;
+}
+
+void AC_GlobalPlayer::Addstamina(const int _stamina)
+{
+	stamina += _stamina;
+}
+
 void AC_GlobalPlayer::Resetmagazinecapacity()
 {
 	switch (PlayerCurState)
@@ -456,6 +467,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
 
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Started, this, &AC_GlobalPlayer::AimStart);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::AimEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Completed, this, &AC_GlobalPlayer::AimEnd);
 		// Att 
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
@@ -1114,6 +1126,11 @@ void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
 {
 	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
+	if (true == ISReload)
 	{
 		return;
 	}
