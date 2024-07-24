@@ -163,3 +163,4 @@ void UC_UI_InventorySlot::SettingSlotType(ESlotType _SlotType)
 {
 	SlotType = _SlotType;
 }
+

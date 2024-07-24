@@ -67,6 +67,24 @@ void UC_InventoryComponent::DecQuickSlotItemCount(int _Index)
     }
 }
 
+void UC_InventoryComponent::UseInvenItem(int _Index)
+{
+    if (true == Inventory[_Index]->IsEmpty() || Inventory[_Index]->GetItem()->Type != EItemType::Consumable)
+    {
+        return;
+    }
+
+    const UC_Item* Item = Inventory[_Index]->GetItem();
+    const UC_Consumable* Consumable = Cast<const UC_Consumable>(Item);
+    Consumable->Use();
+    Inventory[_Index]->DecCount(1);
+
+    if (true == Inventory[_Index]->IsEmpty())
+    {
+        ItemIdToIndex.Remove(Item->Id);
+    }
+}
+
 void UC_InventoryComponent::AddItem(const UC_Item* _Item, int _Count)
 {
     // 인벤토리에 이미 가지고 있는 아이템을 추가하는 경우
