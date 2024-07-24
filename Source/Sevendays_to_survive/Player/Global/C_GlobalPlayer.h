@@ -109,6 +109,11 @@ public:
 
 	//------------------------------------------------
 
+	FORCEINLINE void SetISReload(const bool _ISReload)
+	{
+		ISReload= _ISReload;
+	}
+
 	EWeaponUseState GetPlayerCurState()
 	{
 		return PlayerCurState;
@@ -422,7 +427,7 @@ private:
 	UPROPERTY()
 	float PistolTIme = 0.0f;
 
-	UPROPERTY()
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool ISReload = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
