@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Monster/MonsterAI/MonsterTask/C_SetRandomVec.h"
@@ -21,17 +21,17 @@ EBTNodeResult::Type UC_SetRandomVec::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 
 FVector UC_SetRandomVec::GetRandomVectorInRadius(const FVector& Origin, float Radius)
 {
-    // ¹İ°æÀÌ À½¼öÀÎ °æ¿ì ¿¹¿Ü Ã³¸®
+    // ë°˜ê²½ì´ ìŒìˆ˜ì¸ ê²½ìš° ì˜ˆì™¸ ì²˜ë¦¬
     if (Radius < 0.0f)
     {
         UE_LOG(LogTemp, Warning, TEXT("Radius should be non-negative"));
         return Origin;
     }
 
-    // ±¸ ³»ºÎÀÇ ·£´ı À§Ä¡¸¦ »ı¼º
+    // êµ¬ ë‚´ë¶€ì˜ ëœë¤ ìœ„ì¹˜ë¥¼ ìƒì„±
     FVector RandomUnitVector = UKismetMathLibrary::RandomUnitVector();
-    float RandomDistance = FMath::FRandRange(0.0f, Radius);
+    float RandomDistance = FMath::FRandRange(20.0f, Radius);
 
-    // ¿øÁ¡À¸·ÎºÎÅÍ ·£´ı À§Ä¡ ¹İÈ¯
+    // ì›ì ìœ¼ë¡œë¶€í„° ëœë¤ ìœ„ì¹˜ ë°˜í™˜
     return Origin + RandomUnitVector * RandomDistance;
 }

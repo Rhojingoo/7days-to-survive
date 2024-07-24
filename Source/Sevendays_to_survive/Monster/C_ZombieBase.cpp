@@ -129,8 +129,7 @@ void AC_ZombieBase::SetRagDoll_Implementation()
 		AC_MonsterAIBase* ActorController = Cast<AC_MonsterAIBase>(GetController());
 		if (ActorController->IsValidLowLevel())
 		{
-			ActorController->UnPossess();
-			ActorController->Destroy();
+			ActorController->BTCStop();
 		}
 		FTimerHandle ZombieDestory;
 

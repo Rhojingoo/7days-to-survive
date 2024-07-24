@@ -118,7 +118,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 }
 
-void AC_GlobalPlayer::Playerhit(int _Damage)
+void AC_GlobalPlayer::Playerhit(const int _Damage)
 {
 	if (true == IsPlayerDieCpp)
 	{
@@ -136,7 +136,8 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
-	Hp -= _Damage;
+	DamageCalServer(_Damage);
+
 	if (Hp <= 0)
 	{
 		PlayerDieCheck();
@@ -231,6 +232,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerName);
+	DOREPLIFETIME(AC_GlobalPlayer, Hp);
 }
 
 // Called when the game starts or when spawned
@@ -475,6 +477,10 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
+void AC_GlobalPlayer::DamageCalServer_Implementation(const int _Damge)
+{
+	Hp = Hp - _Damge;
+}
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
@@ -703,18 +709,14 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 
 					if (Zombie)
 					{
+
+						if ("Head" == Zombie->GetMesh()->GetSocketBoneName(FName("Head")))
+						{
+							LineTraceDamage = LineTraceDamage * 2.0f;
+						}
 						//ZombieDieTrace(Zombie);
 						CreateZombieBlood(Hit);
 						Zombie->SetHP(LineTraceDamage);
-						/*FTimerHandle ZombieDestory;
-
-						GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-						{
-							if (Zombie != nullptr)
-							{
-								Zombie->Destroy();
-							}
-						}), 5.0f, false);*/
 
 					}
 					else
@@ -941,6 +943,11 @@ void AC_GlobalPlayer::ReloadServer_Implementation()
 		return;
 	}
 
+	if (true == IsHitCpp)
+	{
+		return;
+	}
+
 	Reload();
 }
 
@@ -961,6 +968,17 @@ void AC_GlobalPlayer::Reload_Implementation()
 		return;
 	}
 
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
+	if (true == ISReload)
+	{
+		return;
+	}
+
+	ISReload = true;
 	switch (PlayerCurState)
 	{
 	case EWeaponUseState::Rifle:
@@ -1039,6 +1057,8 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 	}
 
 	IsPlayerDieCpp = true;
+
+	GetMesh()->GetAnimInstance()->Montage_Play(MontageDiePlay);
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 

@@ -120,7 +120,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	void Playerhit(int _Damage);
+	void Playerhit(const int _Damage);
 
 	UFUNCTION()
 	void ResetHit();
@@ -148,6 +148,10 @@ protected:
 
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
+
+	UFUNCTION(Reliable, Server)
+	void DamageCalServer(const int _Damge);
+	void DamageCalServer_Implementation(const int _Damge);
 
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
@@ -357,7 +361,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int staminaJumpCalValue = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = Input, meta = (AllowPrivateAccess = "true"))
 	int Hp = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -417,6 +421,9 @@ private:
 
 	UPROPERTY()
 	float PistolTIme = 0.0f;
+
+	UPROPERTY()
+	bool ISReload = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	AC_MainPlayerController* PlayerController = nullptr;

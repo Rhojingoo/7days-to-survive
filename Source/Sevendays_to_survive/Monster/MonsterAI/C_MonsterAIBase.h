@@ -19,6 +19,7 @@ public:
 	AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer);
 
 	virtual void OnPossess(APawn* InPawn) override;		// AI 컨트롤러는 어떤 식으로 컨트롤이 되어야 할지 알아야 한다.
+	virtual void OnUnPossess() override;
 
 
 	//class percpe
@@ -80,6 +81,8 @@ public:
 
 	void SetTargetActor(AActor* _Actor);
 
+	void BTCStop();
+
 private:
 	UPROPERTY()
 	float AISightRadius = 1000.f;
@@ -96,8 +99,11 @@ private:
 	UPROPERTY()
 	class UBehaviorTreeComponent* BTC;		// 어떻게 컨트롤 되어야 하지?	(로직 저장)
 
+
+
 	UPROPERTY()
 	class UBlackboardComponent* BBC;		// 어떤 값에 기반하여 컨트롤 해야 하지? (값 저장)
+
 
 	/// <summary>
 	/// 사운드 듣기 기능 컴포넌트

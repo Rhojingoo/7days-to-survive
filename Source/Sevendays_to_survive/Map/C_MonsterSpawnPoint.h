@@ -40,9 +40,6 @@ public:
 	UPROPERTY()
 	float CoolTime = 0.0f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float TotalSpawnTime = 20.f;
-
 	bool CanSpawn = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
