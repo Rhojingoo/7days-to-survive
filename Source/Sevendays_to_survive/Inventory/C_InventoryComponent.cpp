@@ -76,7 +76,7 @@ void UC_InventoryComponent::UseInvenItem(int _Index)
 
     const UC_Item* Item = Inventory[_Index]->GetItem();
     const UC_Consumable* Consumable = Cast<const UC_Consumable>(Item);
-    Consumable->Use();
+    Consumable->Use(GetWorld());
     Inventory[_Index]->DecCount(1);
 
     if (true == Inventory[_Index]->IsEmpty())
