@@ -3,6 +3,7 @@
 
 #include "Monster/MonsterAI/MonsterTask/C_Task_MonsterShout.h"
 #include "Kismet/GameplayStatics.h"
+#include "Monster/C_ScreamZombie.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Monster/MonsterData/MonsterDataRow.h"
@@ -53,7 +54,13 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	FVector SelfLocation = GetSelfLocationNoneZ(&OwnerComp);
 
 	MCP->Shout();
-	AC_ZombieBase* Scream_Zombie = MCP->GetMonster();
+	AC_ZombieBase* Zombie = MCP->GetMonster();
+	AC_ScreamZombie* Scream_Zombie = Cast<AC_ScreamZombie>(Zombie);
+	if (Scream_Zombie == nullptr)
+	{
+		int a = 0;
+		return;
+	}
 	bool ShoutCheck = Scream_Zombie->IsShout();
 
 	FVector Direction = (Target->GetActorLocation() - SelfLocation).GetSafeNormal();
