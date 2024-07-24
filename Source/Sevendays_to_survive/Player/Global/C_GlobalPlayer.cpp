@@ -137,7 +137,7 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
 	DamageCalServer(_Damage);
-
+	//Hp -= 100;
 	if (Hp <= 0)
 	{
 		PlayerDieCheck();
@@ -1068,9 +1068,9 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 		return;
 	}
 
+	ChangeNoWeaponServer();
 	IsPlayerDieCpp = true;
 
-	GetMesh()->GetAnimInstance()->Montage_Play(MontageDiePlay);
 	FTimerHandle DieTime;
 	GetWorld()->GetTimerManager().SetTimer(DieTime, this, &AC_GlobalPlayer::PlayerReStartCheck, 10.0f, false);
 
@@ -1082,6 +1082,7 @@ void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 	IsPlayerDieCpp = false;
 	Hp = 100;
 	SetActorLocation(ReStartLocation);
+	//SetActorLocation(FVector(0.0f, 0.0f, 400.0f));
 }
 
 void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
