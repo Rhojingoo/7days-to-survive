@@ -75,12 +75,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UC_UI_InventorySlot* GetSlotInfo();
 
+
+
 	
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TMap<FString, UTexture2D*> ItemIcons;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FString ItemName;
