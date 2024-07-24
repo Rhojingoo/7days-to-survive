@@ -259,6 +259,10 @@ protected:
 	void MeshInit(EPlayerMesh _Mesh);
 	void MeshInit_Implementation(EPlayerMesh _Mesh);
 
+	UFUNCTION(BlueprintCallable, Reliable, Server)
+	void NamesInit(const FText& _Name);
+	void NamesInit_Implementation(const FText& _Name);
+
 	UFUNCTION()
 	void Rebound();
 
@@ -447,4 +451,14 @@ private:
 
 	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadOnly,  meta = (AllowPrivateAccess = "true"))
 	EPlayerMesh characterResultMesh = EPlayerMesh::Player1;
+
+	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FText PlayerName;
+
+
+	UPROPERTY()
+	FVector ReStartLocation = FVector::ZeroVector;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* MontageDiePlay=nullptr;
 };

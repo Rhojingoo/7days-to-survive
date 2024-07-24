@@ -34,7 +34,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	//FVector ItemLocation = ItemMesh->GetSocketLocation(FName("AttackPoint"));
 	
 	//FTransform ItemTansForm=ItemMesh->GetRelativeTransform();
-	FVector ItemRelativeLocationAdd=ItemMesh->GetRelativeLocation()+FVector(20.0f,20.0f,20.0f);
+	FVector ItemRelativeLocationAdd=ItemMesh->GetRelativeLocation()+FVector(35.0f,20.0f,20.0f);
 
 	FVector Start= ItemMesh->GetSocketLocation(FName("AttackPoint"));
 	FVector End = UKismetMathLibrary::TransformLocation(ItemTansForm, ItemRelativeLocationAdd);

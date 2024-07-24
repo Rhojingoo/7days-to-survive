@@ -113,6 +113,23 @@ TArray<USkeletalMesh*> UC_STSInstance::GetPlayerSpawnMesh()
 	return Data->PlayerMeshs;
 }
 
+TArray<FVector> UC_STSInstance::GetPlayerSpawnLocation()
+{
+	if (nullptr == PlayerSpawnDataTable)
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("%S(%u)> if (nullptr == PlayerSpawnDataTable)"), __FUNCTION__, __LINE__);
+	}
+
+	FC_PlayerSpawnData* Data = PlayerSpawnDataTable->FindRow<FC_PlayerSpawnData>(TEXT("PlayerBegin"), nullptr);
+
+	if (nullptr == Data)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%S(%u)> %s PlayerDataTable Data Is Nullptr"), __FUNCTION__, __LINE__);
+	}
+
+	return Data->PlayerSpawnLocations;
+}
+
 FC_WeaponDataTable* UC_STSInstance::GetWeaPonDataTable(FName _Name)
 {
 	if (nullptr == WeaponDataTable)

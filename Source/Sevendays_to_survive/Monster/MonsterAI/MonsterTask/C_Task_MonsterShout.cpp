@@ -45,6 +45,7 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
 	if (Target->IsValidLowLevel() == false) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = 0;
@@ -63,10 +64,10 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	float Vec = FVector::Dist(SelfLocation, TargetLocation);
 
 #ifdef WITH_EDITOR
-	UE_LOG(LogTemp, Warning, TEXT("MonsterrChase Task"));
-	UE_LOG(LogTemp, Warning, TEXT("TargetLocation: X = %f  : Y = %f "), TargetLocation.X, TargetLocation.Y);
-	UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
-	UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
+	//UE_LOG(LogTemp, Warning, TEXT("MonsterrChase Task"));
+	//UE_LOG(LogTemp, Warning, TEXT("TargetLocation: X = %f  : Y = %f "), TargetLocation.X, TargetLocation.Y);
+	//UE_LOG(LogTemp, Warning, TEXT("SelfLocation: X = %f  : Y = %f "), SelfLocation.X, SelfLocation.Y);
+	//UE_LOG(LogTemp, Warning, TEXT("Vec: %f"), Vec);
 #endif
 
 	if (ShoutCheck == true)

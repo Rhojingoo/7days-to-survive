@@ -20,6 +20,11 @@ bool UC_RangedZombie_ChaseTask::MonsterRangeTask(UBehaviorTreeComponent& OwnerCo
     UC_MonsterComponent* MCP = Controller->GetMCP();
     UMonsterDataObject* MonsterData = MCP->GetData();
     AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+    if (false == Target->IsValidLowLevel())
+    {
+        FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+        return true;
+    }
 
     FVector TargetLocation = Target->GetActorLocation();
     FVector SelfLocation = GetSelfLocation(&OwnerComp);

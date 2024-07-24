@@ -12,10 +12,18 @@ AC_MonsterSpawnPoint::AC_MonsterSpawnPoint()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	BoxComponent->SetupAttachment(RootComponent);
-	//BoxComponent->SetHiddenInGame(false);
-	BoxComponent->SetBoxExtent({ 100.0f, 100.0f, 10.0f });
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
+	SpawnBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnBoxComponent"));
+	SpawnBoxComponent->SetupAttachment(RootComponent);
+	//SpawnBoxComponent->SetHiddenInGame(false);
+	SpawnBoxComponent->SetBoxExtent({ 100.0f, 100.0f, 10.0f });
+
+	CollisionCheckBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionCheckBoxComponent"));
+	CollisionCheckBoxComponent->SetupAttachment(RootComponent);
+	//CollisionCheckBoxComponent->SetHiddenInGame(false);
+	CollisionCheckBoxComponent->SetBoxExtent({ 200.0f, 150.0f, 600.0f });
+
 }
 
 // Called when the game starts or when spawned
@@ -26,15 +34,15 @@ void AC_MonsterSpawnPoint::BeginPlay()
 	if (true == HasAuthority()) {
 		UC_STSInstance* Inst = Cast<UC_STSInstance>(GetGameInstance());
 		Inst->AddSpawnPoint(this);
-		if (true == IsBeginSpawn)
+		if (true == IsBeginSpawnPoint)
 		{
-			CanSpawn = true;
-			/*FTimerHandle ZombieSpawn;
-			GetWorld()->GetTimerManager().SetTimer(ZombieSpawn, FTimerDelegate::CreateLambda([&]()
-				{
-					this->CanSpawn = false;
-				}), TotalSpawnTime, false);*/
+			SetSpawn(true);
 		}
+		/*FTimerHandle ZombieSpawn;
+		GetWorld()->GetTimerManager().SetTimer(ZombieSpawn, FTimerDelegate::CreateLambda([&]()
+			{
+				this->CanSpawn = false;
+			}), TotalSpawnTime, false);*/
 	}
 }
 
@@ -63,17 +71,13 @@ void AC_MonsterSpawnPoint::MonsterSpawn(float DeltaTime)
 	}
 	if (SpawnCount == SpawnEndCount)
 	{
-		this->CanSpawn = false;
-		SpawnCount = 0;
+		this->Destroy();
 	}
 }
 
 void AC_MonsterSpawnPoint::SetSpawn(bool _IsSpawn)
 {
-	if (false == IsBeginSpawn)
-	{
-		CanSpawn = true;
-	}
+	CanSpawn = true;
 
 	/*FTimerHandle ZombieSpawn;
 	GetWorld()->GetTimerManager().SetTimer(ZombieSpawn, FTimerDelegate::CreateLambda([&]()
@@ -89,13 +93,12 @@ UClass* AC_MonsterSpawnPoint::ZombieClass()
 
 FVector AC_MonsterSpawnPoint::GetRandomPointInBox() const
 {
-	int a = 0;
-	if (BoxComponent)
+	if (SpawnBoxComponent)
 	{
 		FVector Origin;
 		FVector BoxExtent;
-		BoxExtent = BoxComponent->GetScaledBoxExtent();
-		Origin = BoxComponent->GetComponentLocation();
+		BoxExtent = SpawnBoxComponent->GetScaledBoxExtent();
+		Origin = SpawnBoxComponent->GetComponentLocation();
 
 		FVector RandomPoint = Origin;
 		RandomPoint.X += FMath::FRandRange(-BoxExtent.X, BoxExtent.X);
@@ -109,12 +112,12 @@ FVector AC_MonsterSpawnPoint::GetRandomPointInBox() const
 
 void AC_MonsterSpawnPoint::ReduceSpawnArea(FVector2D _ReduceValue)
 {
-	FVector BoxExtent = BoxComponent->GetUnscaledBoxExtent();
+	FVector BoxExtent = SpawnBoxComponent->GetUnscaledBoxExtent();
 
 	BoxExtent.X = FMath::Max(BoxExtent.X - _ReduceValue.X, 0.0f);
 	BoxExtent.Y = FMath::Max(BoxExtent.Y - _ReduceValue.Y, 0.0f);
 
-	BoxComponent->SetBoxExtent(BoxExtent);
+	SpawnBoxComponent->SetBoxExtent(BoxExtent);
 }
 
 void AC_MonsterSpawnPoint::IncreaseZombie()

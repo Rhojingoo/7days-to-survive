@@ -130,11 +130,13 @@ void AC_GlobalPlayer::Playerhit(int _Damage)
 		return;
 	}
 	IsHitCpp = true;
-	
+	IsAimCpp = false;
+	IsFireCpp = false;
+
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
-	Hp -= 100;
+	Hp -= _Damage;
 	if (Hp <= 0)
 	{
 		PlayerDieCheck();
@@ -228,6 +230,7 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
 	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
+	DOREPLIFETIME(AC_GlobalPlayer, PlayerName);
 }
 
 // Called when the game starts or when spawned
@@ -238,8 +241,9 @@ void AC_GlobalPlayer::BeginPlay()
 		if (GetWorld()->GetAuthGameMode() != nullptr)
 		{
 			PlayerSpawnCheckToken = init->GetNetToken();
-			PlayerTokenCheck(PlayerSpawnCheckToken);
 		}
+
+		PlayerTokenCheck(PlayerSpawnCheckToken);
 
 		if (this == UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 		{
@@ -254,6 +258,8 @@ void AC_GlobalPlayer::BeginPlay()
 			}*/
 			
 			characterResultMesh = init->GetPlayerMesh();
+			FString ServerName = init->GetPlayerName();
+			PlayerName = FText::FromString(ServerName);
 			//MeshInit(characterResultMesh);
 		}
 	}
@@ -269,6 +275,7 @@ void AC_GlobalPlayer::BeginPlay()
 		return;
 	}
 
+	ReStartLocation = STSInstance->GetPlayerSpawnLocation()[PlayerSpawnCheckToken];
 	//NameText->Text = FText::FromString(STSInstance->GetPlayerName());
 	//FC_PlayerSpawnData* DataTables = STSInstance->GetPlayerSpawnDataTable();
 
@@ -472,6 +479,10 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	//MeshInit(characterResultMesh);
@@ -495,6 +506,11 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	if (stamina < staminaJumpCalValue)
 	{
 		return;
@@ -594,18 +610,14 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 				if (Zombie)
 				{
+					if ("Head" == Zombie->GetMesh()->GetSocketBoneName(FName("Head")))
+					{
+						LineTraceDamage = LineTraceDamage * 2.0f;
+					}
+
 					CreateZombieBlood(Hit);
 					Zombie->SetHP(LineTraceDamage);
-				/*	FTimerHandle ZombieDestory;
-
-					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-					{
-						if (Zombie != nullptr)
-						{
-							Zombie->Destroy();
-						}
-					}), 5.0f, false);*/
-
+			
 				}
 				else
 				{
@@ -732,6 +744,10 @@ void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
 
 void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
 
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -861,6 +877,15 @@ void AC_GlobalPlayer::AttCalstamina()
 
 void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
+	if (true == GetMovementComponent()->IsFalling())
+	{
+		return;
+	}
 
 	if (true==GetCharacterMovement()->bWantsToCrouch)
 	{
@@ -911,6 +936,11 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 
 void AC_GlobalPlayer::ReloadServer_Implementation()
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	Reload();
 }
 
@@ -976,6 +1006,11 @@ void AC_GlobalPlayer::MeshInit_Implementation(EPlayerMesh _Mesh)
 	characterResultMesh = _Mesh;
 }
 
+void AC_GlobalPlayer::NamesInit_Implementation(const FText& _Name)
+{
+	PlayerName = _Name;
+}
+
 void AC_GlobalPlayer::Rebound()
 {
 	if (nullptr == CurWeapon)
@@ -1011,8 +1046,10 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 
 void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 {
+	//ReStartLocation
 	IsPlayerDieCpp = false;
 	Hp = 100;
+	SetActorLocation(ReStartLocation);
 }
 
 void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
@@ -1023,6 +1060,11 @@ void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	if (true == GetMovementComponent()->IsFalling())
 	{
 		IsRunCpp = false;
@@ -1051,6 +1093,11 @@ void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	IsAimCpp = true;
 }
 
@@ -1123,6 +1170,11 @@ void AC_GlobalPlayer::ChangeSlotMesh_Implementation(EStaticItemSlot _Slot, UStat
 
 void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot, UStaticMesh* _Mesh)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	ChangeSlotMesh(_Slot, _Mesh);
 }
 
@@ -1316,11 +1368,17 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slot)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
 	ChangeSlotSkeletal(_Slot);
 }
 
 void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 {
+
 	if (PlayerCurState == EWeaponUseState::NoWeapon)
 	{
 		return;
@@ -1355,11 +1413,19 @@ void AC_GlobalPlayer::ChangeNoWeapon_Implementation()
 
 void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
 	ChangeNoWeapon();
 }
 
 void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 {
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
 
 	switch (PlayerCurState)
 	{

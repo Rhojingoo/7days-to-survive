@@ -49,6 +49,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<USkeletalMesh*> GetPlayerSpawnMesh();
+
+	UFUNCTION(BlueprintPure)
+	TArray<FVector> GetPlayerSpawnLocation();
+
 	FC_WeaponDataTable* GetWeaPonDataTable(FName _Name);
 
 	TMap<FName, FUIWidgetDataRow*> GetUIWidgetDataMap();
