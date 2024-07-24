@@ -141,6 +141,14 @@ public:
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
 
+
+	UFUNCTION(BlueprintCallable,Reliable, Server)
+	void AddHp(const int _Hp);
+	void AddHp_Implementation(const int _Hp);
+
+	UFUNCTION(BlueprintCallable)
+	void Addstamina(const int _stamina);
+
 	UFUNCTION()
 	void Resetmagazinecapacity();
 

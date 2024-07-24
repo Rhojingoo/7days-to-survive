@@ -194,6 +194,16 @@ void AC_GlobalPlayer::WeaponSwingSound_Implementation(FHitResult _Hit, const boo
 		break;
 	}
 }
+void AC_GlobalPlayer::AddHp_Implementation(const int _Hp)
+{
+	Hp += _Hp;
+}
+
+void AC_GlobalPlayer::Addstamina(const int _stamina)
+{
+	stamina += _stamina;
+}
+
 void AC_GlobalPlayer::Resetmagazinecapacity()
 {
 	switch (PlayerCurState)
