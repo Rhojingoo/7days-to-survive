@@ -89,6 +89,8 @@ void UC_Task_MonsterShout::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	if (ShoutCheck == true)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		Scream_Zombie->ClearShout();
+		return;
 	}
 
 	return;
