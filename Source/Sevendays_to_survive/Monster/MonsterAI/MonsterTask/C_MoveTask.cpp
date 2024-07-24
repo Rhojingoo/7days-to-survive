@@ -13,6 +13,10 @@ EBTNodeResult::Type UC_MoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (!IsValid(Controller)) {
+		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
+		return EBTNodeResult::Failed;
+	}
 	if (true == Controller->GetIsFind()) {
 		return EBTNodeResult::Type::Succeeded;
 	}

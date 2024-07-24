@@ -13,6 +13,9 @@ EBTNodeResult::Type UC_JumpTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (false == Controller->IsValidLowLevel()) {
+		return EBTNodeResult::Type::Failed;
+	}
 	if (true == Controller->GetMCP()->JumpCheck()) {
 		Controller->GetMCP()->Jump();
 		return EBTNodeResult::Type::Succeeded;

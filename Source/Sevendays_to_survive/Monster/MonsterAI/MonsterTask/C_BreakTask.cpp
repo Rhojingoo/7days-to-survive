@@ -10,7 +10,11 @@ UC_BreakTask::UC_BreakTask()
 EBTNodeResult::Type UC_BreakTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
-	GetController(&OwnerComp)->GetMCP()->Attack();
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (false == Controller->IsValidLowLevel()) {
+		return EBTNodeResult::Failed;
+	}
+	Controller->GetMCP()->Attack();
 	return EBTNodeResult::Succeeded;
 }
 

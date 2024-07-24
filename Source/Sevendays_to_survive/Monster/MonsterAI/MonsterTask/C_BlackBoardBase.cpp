@@ -12,6 +12,10 @@ UC_BlackBoardBase::UC_BlackBoardBase()
 EBTNodeResult::Type UC_BlackBoardBase::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
+	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (false == Controller->IsValidLowLevel()) {
+		return EBTNodeResult::Type::Failed;
+	}
 	return EBTNodeResult::Type();
 }
 

@@ -153,9 +153,21 @@ void UC_TaskMonsterChase::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
-	UC_MonsterComponent* MCP = Controller->GetMCP();
+	if (Controller->IsValidLowLevel() == false) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	UBlackboardComponent* BBC = Controller->GetBlackboardComponent();
+	if (false == BBC->IsValidLowLevel()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+	UC_MonsterComponent* MCP = Controller->GetMCP();
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+	if (false == Target->IsValidLowLevel()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	AC_NickMainPlayer* Player = Cast<AC_NickMainPlayer>(Target);
 	UMonsterDataObject* MonsterData = MCP->GetData();
 	FVector SelfLocation = GetSelfLocation(&OwnerComp);

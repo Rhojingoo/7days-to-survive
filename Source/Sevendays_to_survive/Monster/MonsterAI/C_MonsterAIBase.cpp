@@ -72,7 +72,13 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 	MCP->SetData();
 	MCP->GetData()->SetOriginPos(Monster->GetActorLocation());
 	Monster->SetMCP(MCP);
-	//MCP->SetData();
+
+
+	BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
+	APC->InitializeComponent();
+	BBC->SetValueAsObject("SelfActor", GetPawn());
+	BTC->StartTree(*Monster->AITree);  // 원래 존재하거나 이미 실행중이던 behavior tree를 시작 혹은 재시작하는데 쓰임
+
 
 	if (nullptr != Monster && nullptr != Monster->AITree) {
 
@@ -85,21 +91,13 @@ void AC_MonsterAIBase::OnPossess(APawn* InPawn)
 		else {
 			UE_LOG(LogTemp, Warning, TEXT("Sightconfig Is Not Vaild"));
 		}
-
-
-		BBC->InitializeBlackboard(*(Monster->AITree->BlackboardAsset));
-		BBC->SetValueAsObject("SelfActor", GetPawn());
-		APC->InitializeComponent();
-
-		//BTC->StartTree(*Monster->AITree);  // 원래 존재하거나 이미 실행중이던 behavior tree를 시작 혹은 재시작하는데 쓰임
-		RunBehaviorTree(Monster->AITree);  // 어떠한 behavior tree를 실행하는데 사용되는 함수이며, 이미 실행하던 tree와 다른 behavior tree를 실행하게 바꿀 수도 있음
 	}
 }
 
 void AC_MonsterAIBase::OnUnPossess()
 {
-	Super::OnUnPossess();
 	BTC->StopTree();
+	Super::OnUnPossess();
 }
 
 
@@ -127,6 +125,7 @@ ETeamAttitude::Type AC_MonsterAIBase::GetTeamAttitudeTowards(const AActor& Other
 void AC_MonsterAIBase::BeginPlay()
 {
 	Super::BeginPlay();
+
 
 	if (APC && SightConfig && HearingConfig)
 	{

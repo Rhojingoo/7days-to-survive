@@ -20,4 +20,7 @@ public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 	FVector GetRandomVectorInRadius(const FVector& Origin, float Radius);
+
+	bool SetPath(FVector _MyLocation, FVector _TargetLocation, UMonsterDataObject* _Data, UBlackboardComponent* _BBC);
+
 };

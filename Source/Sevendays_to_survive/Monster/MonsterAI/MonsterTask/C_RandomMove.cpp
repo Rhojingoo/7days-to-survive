@@ -19,9 +19,18 @@ EBTNodeResult::Type UC_RandomMove::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (!IsValid(Controller)) {
+		UE_LOG(LogTemp, Warning, TEXT("MonsterController is Not Work BTTESK %d  %s"), __LINE__, ANSI_TO_TCHAR(__FUNCTION__));
+		return EBTNodeResult::Failed;
+	}
 	if (true == IsPerceptionUpdated(Controller)) {
 		return EBTNodeResult::Type::Succeeded;
 	}
+	UMonsterDataObject* Data = Controller->GetMCP()->GetData();
+	if (true == Data->PathIsEmpty()) {
+		return EBTNodeResult::Succeeded;
+	}
+
 	return EBTNodeResult::Type::InProgress;
 }
 
@@ -31,7 +40,15 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 
 
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (Controller->IsValidLowLevel() == false) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	UBlackboardComponent* BlackBoard = GetBlackBoard(&OwnerComp);
+	if (false == BlackBoard->IsValidLowLevel()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 	UMonsterDataObject* Data = Controller->GetMCP()->GetData();
 	if (true == IsPerceptionUpdated(Controller)) {
 		Data->RemovePath();
@@ -39,23 +56,25 @@ void UC_RandomMove::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		return;
 	}
 
-	FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
-	FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
+	//FVector SelfVec = GetSelfLocationNoneZ(&OwnerComp);
+	//FVector RanVec = GetBlackBoard(&OwnerComp)->GetValueAsVector(*RandomVector);
 
-	if (true == Data->PathIsEmpty()) {
-		if (false == SetPath(SelfVec, RanVec, Data, BlackBoard)) {
-			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		}
-	}
+	//if (true == Data->PathIsEmpty()) {
+	//	if (false == SetPath(SelfVec, RanVec, Data, BlackBoard)) {
+	//		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	//		return;
+	//	}
+	//}
 	if (true == NaviMove(Data, BlackBoard, Controller, OwnerComp)) {
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 }
 
 bool UC_RandomMove::SetPath(FVector _MyLocation, FVector _TargetLocation, UMonsterDataObject* _Data, UBlackboardComponent* _BBC)
 {
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-	if (NavSystem)
+	if (true == NavSystem->IsValidLowLevel())
 	{
 		UNavigationPath* NavPath = NavSystem->FindPathToLocationSynchronously(GetWorld(), _MyLocation, _TargetLocation);
 
@@ -73,6 +92,10 @@ bool UC_RandomMove::SetPath(FVector _MyLocation, FVector _TargetLocation, UMonst
 
 bool UC_RandomMove::NaviMove(UMonsterDataObject* _Data, UBlackboardComponent* _BBC, AAIController* _Controller, UBehaviorTreeComponent& OwnerComp)
 {
+	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+	if (false == NavSystem->IsValidLowLevel()) {
+		return true;
+	}
 	if (true == _Data->PathIsEmpty()) {
 		return true;
 	}

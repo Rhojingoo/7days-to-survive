@@ -13,6 +13,9 @@ EBTNodeResult::Type UC_JumpMoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (false == Controller->IsValidLowLevel()) {
+		return EBTNodeResult::Type::Failed;
+	}
 	if (Controller->GetMCP()->IsFalling() == true) {
 		return EBTNodeResult::Type::InProgress;
 	}
@@ -30,7 +33,15 @@ void UC_JumpMoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
+	if (false == Controller->IsValidLowLevel()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Type::Failed);
+		return;
+	}
 	AC_ZombieBase* Zombie = GetSelf(&OwnerComp);
+	if (false == Zombie->IsValidLowLevel()) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Type::Failed);
+		return;
+	}
 	FVector ForwardVec = Zombie->GetActorForwardVector();
 
 	if (Controller->GetMCP()->IsFalling() == true) {
