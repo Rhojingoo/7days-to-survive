@@ -89,6 +89,7 @@ public:
 	virtual void SetName(FString _Name) PURE_VIRTUAL(AC_ZombieBase::SetName, ;);
 
 	bool IsShout() { return Shout; }
+	void ClearShout() { Shout = false; }
 
 	bool BottomRayTrace();
 	bool MiddleRayTrace();
