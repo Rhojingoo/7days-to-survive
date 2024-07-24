@@ -610,18 +610,14 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 				if (Zombie)
 				{
+					if ("Head" == Zombie->GetMesh()->GetSocketBoneName(FName("Head")))
+					{
+						LineTraceDamage = LineTraceDamage * 2.0f;
+					}
+
 					CreateZombieBlood(Hit);
 					Zombie->SetHP(LineTraceDamage);
-				/*	FTimerHandle ZombieDestory;
-
-					GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-					{
-						if (Zombie != nullptr)
-						{
-							Zombie->Destroy();
-						}
-					}), 5.0f, false);*/
-
+			
 				}
 				else
 				{
