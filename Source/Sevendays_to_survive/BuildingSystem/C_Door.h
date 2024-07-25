@@ -19,6 +19,8 @@ class SEVENDAYS_TO_SURVIVE_API AC_Door : public AC_BuildingPart
 {
 	GENERATED_BODY()
 
+	friend class UC_MapInteractionComponent;
+
 public:
 	AC_Door();
 
@@ -32,7 +34,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void Tick(float DeltaSeconds) override;
 
+
 private:
+	UFUNCTION(BlueprintCallable)
+	void OpenOrClose();
+
 	UFUNCTION(BlueprintCallable)
 	void Open();
 

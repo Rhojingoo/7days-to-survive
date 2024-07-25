@@ -40,6 +40,10 @@ public:
     void DestroyActor(AActor* _Actor);
     void DestroyActor_Implementation(AActor* _Actor);
 
+    UFUNCTION(BlueprintCallable, Server, Reliable)
+    void DoorInteraction(AC_Door* _Door);
+    void DoorInteraction_Implementation(AC_Door* _Door);
+
 private:
     UFUNCTION(BlueprintPure)
     bool IsServer() const;
