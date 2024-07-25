@@ -88,6 +88,10 @@ public:
 
     UFUNCTION(BlueprintPure)
     const UC_Item* GetQuickSlotItem(int _Index) const;
+
+    UFUNCTION(BlueprintPure)
+    const UC_Item* GetInvenItem(int _Index) const;
+
 private:
     UFUNCTION(Server, Reliable)
     void SpawnItem(FTransform _SpawnTransform, FName _Id, int _Count);
