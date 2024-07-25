@@ -670,6 +670,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		}
 	}
 	
+	//timer.res
 
 	if (true == IsFireCpp)
 	{
