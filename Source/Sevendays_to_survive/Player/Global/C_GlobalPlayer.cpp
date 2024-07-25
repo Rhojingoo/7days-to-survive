@@ -614,7 +614,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 
 	
 	UC_GunComponent* GunMesh = CurWeapon->GetComponentByClass<UC_GunComponent>();
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+	//FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
 	FHitResult Hit;
 
@@ -659,12 +659,10 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 					if (Hit.BoneName == Zombie->GetMesh()->GetSocketBoneName("Head"))
 					{
 						Zombie->SetHP(LineTraceDamage*2.0f);
-						return;
 					}
 					else
 					{
 						Zombie->SetHP(LineTraceDamage);
-						return;
 					}
 				}
 				else
