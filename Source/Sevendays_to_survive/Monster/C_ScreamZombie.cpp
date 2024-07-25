@@ -76,6 +76,7 @@ void AC_ScreamZombie::Attack_Implementation()
 	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+		MakeNoise(10.f);
 	}
 }
 
@@ -90,6 +91,7 @@ void AC_ScreamZombie::RunAttack_Implementation()
 	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+		MakeNoise(10.f);
 	}
 }
 
