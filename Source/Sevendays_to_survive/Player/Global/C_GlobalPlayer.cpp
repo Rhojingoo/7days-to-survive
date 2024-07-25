@@ -488,7 +488,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
 
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Started, this, &AC_GlobalPlayer::AimStart);
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::AimEnd);
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::AimEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Completed, this, &AC_GlobalPlayer::AimEnd);
 		// Att 
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
@@ -498,7 +498,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
-		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
+		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Reload], ETriggerEvent::Started, this, &AC_GlobalPlayer::ReloadServer);
 		//AlMostAtt
@@ -545,6 +545,11 @@ void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::JumpCal(const FInputActionValue& Value)
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
@@ -670,7 +675,7 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 		}
 	}
 	
-	//timer.res
+	GetWorld()->GetTimerManager().ClearTimer(timer);
 
 	if (true == IsFireCpp)
 	{
@@ -912,6 +917,11 @@ void AC_GlobalPlayer::AttCalstamina()
 
 void AC_GlobalPlayer::CrouchCpp(const FInputActionValue& Value)
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
@@ -971,6 +981,11 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 
 void AC_GlobalPlayer::ReloadServer_Implementation()
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
@@ -1113,6 +1128,11 @@ void AC_GlobalPlayer::PlayerTokenCheck_Implementation(int _Token)
 
 void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
@@ -1146,6 +1166,11 @@ void AC_GlobalPlayer::RunStart_Implementation(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
@@ -1496,6 +1521,11 @@ void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 
 void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 {
+	if (Controller == nullptr)
+	{
+		return;
+	}
+
 	if (true == IsPlayerDieCpp)
 	{
 		return;
