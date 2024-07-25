@@ -84,6 +84,16 @@ void AC_ZombieBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (TargetDie == true)
+	{
+		static float time = 0.f;
+		time += DeltaTime;
+		if (time >= 10.f)
+		{
+			time = 0.f;
+			TargetDie = false;
+		}
+	}
 	//RayTrace();
 	//if (MonsterState == MonsterEnum::Attack || MonsterState == MonsterEnum::RunAttack)
 	//{

@@ -112,6 +112,9 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	void ForceFindTargetActor(AActor* _Actor);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool TargetDie = false;
+
 protected:
 	FString MonsterName;
 	float LayLength = 100.f;
@@ -148,7 +151,6 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void PlayDeadSound(USkeletalMeshComponent* _Mesh);
 	void PlayDeadSound_Implementation(USkeletalMeshComponent* _Mesh);
-
 };
 
 

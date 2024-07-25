@@ -18,17 +18,6 @@ void AC_ScreamZombie::BeginPlay()
 void AC_ScreamZombie::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-
-	if (TargetDie == true)
-	{
-		static float time = 0.f;
-		time += _DeltaTime;
-		if (time >= 10.f)
-		{
-			time = 0.f;
-			TargetDie = false;
-		}
-	}
 }
 
 void AC_ScreamZombie::SetName(FString _Name)
@@ -116,7 +105,7 @@ void AC_ScreamZombie::Move(FVector _Location)
 void AC_ScreamZombie::OnAttackNotifyBegin()
 {
 	Super::OnAttackNotifyBegin();
-	MakeNoise(1000.f);
+	MakeNoise(100.f);
 	//if (Shout == false)
 	//{
 	//	Shout = true;

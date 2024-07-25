@@ -3,6 +3,7 @@
 
 #include "Monster/MonsterAI/MonsterTask/C_MoveTask.h"
 #include "Monster/C_ScreamZombie.h"
+#include "Player/MainPlayer/C_NickMainPlayer.h"
 #include "Monster/MonsterAI/C_MonsterAIBase.h"
 
 UC_MoveTask::UC_MoveTask()
@@ -58,7 +59,8 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	else if (Controller->GetBlackboardComponent()->GetValueAsBool(*FollowZombie) == true) // 스크림 좀비를 따라 가는중
 	{
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
-		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
+		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(Target);
+		
 		if (Target == nullptr)
 		{
 			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
@@ -66,15 +68,27 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 			return;
 		}
 
-		if (SC_ZOMBIE != nullptr)
+		if (Zombie != nullptr)
 		{
-			if (SC_ZOMBIE->TargetDie == true)
+			if (Zombie->TargetDie == true)
 			{
 				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 				Controller->SetIsSound(false);
 				return;
 			}
 		}
+
+		AC_NickMainPlayer* Target_PL = Cast<AC_NickMainPlayer>(Target);
+		if (Target_PL != nullptr)
+		{
+			if (Target_PL->GetIsPlayerDieCpp() == true)
+			{
+				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+				Controller->SetIsSound(false);
+				return;
+			}
+		}
+
 		FVector MonLocation = Target->GetActorLocation();
 		FVector Distance = MonLocation - SelfLocation;
 		Controller->GetMCP()->Run(Distance);
@@ -82,7 +96,7 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	else // 플레이어를 보고 소리 지른곳으로 가능중
 	{
 		AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*ScreamZombie));
-		AC_ScreamZombie* SC_ZOMBIE = Cast<AC_ScreamZombie>(Target);
+		AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(Target);
 
 		if (Target == nullptr)
 		{
@@ -91,15 +105,27 @@ void UC_MoveTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 			return;
 		}
 
-		if (SC_ZOMBIE != nullptr)
+		if (Zombie != nullptr)
 		{
-			if (SC_ZOMBIE->TargetDie == true)
+			if (Zombie->TargetDie == true)
 			{
 				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 				Controller->SetIsSound(false);
 				return;
 			}
 		}
+
+		AC_NickMainPlayer* Target_PL = Cast<AC_NickMainPlayer>(Target);
+		if (Target_PL != nullptr)
+		{
+			if (Target_PL->GetIsPlayerDieCpp() == true)
+			{
+				FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+				Controller->SetIsSound(false);
+				return;
+			}
+		}
+
 		Controller->GetMCP()->Run(Dist);
 	}
 }
