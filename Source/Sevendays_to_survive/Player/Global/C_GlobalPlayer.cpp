@@ -129,6 +129,12 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	{
 		return;
 	}
+
+	if (true == ISReload)
+	{
+		return;
+	}
+
 	IsHitCpp = true;
 	IsAimCpp = false;
 	IsFireCpp = false;
