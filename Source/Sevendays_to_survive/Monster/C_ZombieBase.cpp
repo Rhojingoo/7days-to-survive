@@ -156,7 +156,7 @@ void AC_ZombieBase::Run(FVector _Location)
 {
 	SetState(MonsterEnum::Run);
 	AddMovementInput(_Location);
-	GetCharacterMovement()->MaxWalkSpeed = 700.f;
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 }
 
 void AC_ZombieBase::Attack()
