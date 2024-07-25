@@ -30,6 +30,7 @@ void UC_AttackTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	AC_MonsterAIBase* Controller = GetController(&OwnerComp);
 
 	AActor* Target = Cast<AActor>(GetBlackBoard(&OwnerComp)->GetValueAsObject(*TargetActor));
+
 	FVector TargetLocation = Target->GetActorLocation();
 	TargetLocation.Z = 0;
 

@@ -203,7 +203,7 @@ void AC_ZombieBase::RunAttack()
 
 void AC_ZombieBase::OnAttackNotifyBegin()
 {
-	AttackComponent->SetCollisionProfileName("OverlapAllDynamic");
+	AttackComponent->SetCollisionProfileName("MonsterAttack");
 }
 
 void AC_ZombieBase::OnAttackNotifyEnd()

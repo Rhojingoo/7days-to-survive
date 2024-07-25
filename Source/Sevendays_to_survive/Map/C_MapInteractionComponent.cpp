@@ -11,6 +11,7 @@
 #include "Player/Global/C_MapPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "STS/C_STSMacros.h"
+#include "BuildingSystem/C_Door.h"
 
 UC_MapInteractionComponent::UC_MapInteractionComponent()
 {
@@ -106,6 +107,11 @@ void UC_MapInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
     }
 }
 
+void UC_MapInteractionComponent::DoorInteraction_Implementation(AC_Door* _Door)
+{
+    _Door->OpenOrClose();
+}
+
 bool UC_MapInteractionComponent::IsServer() const
 {
     return UKismetSystemLibrary::IsServer(GetWorld());
@@ -167,6 +173,7 @@ void UC_MapInteractionComponent::DestroyActor_Implementation(AActor* _Actor)
 
     _Actor->Destroy();
 }
+
 
 void UC_MapInteractionComponent::ViewItemSource(AC_ItemSourceHISMA* _ItemSource, int _Index)
 {
