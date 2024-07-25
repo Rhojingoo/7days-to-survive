@@ -382,6 +382,17 @@ const UC_Item* UC_InventoryComponent::GetQuickSlotItem(int _Index) const
     return QuickSlots[_Index]->GetItem();
 }
 
+const UC_Item* UC_InventoryComponent::GetInvenItem(int _Index) const
+{
+    if (false == IsValidSlot(_Index))
+    {
+        STS_ERROR("[%s] %d is an invalid quick slot index.", __FUNCTION__, _Index);
+        return nullptr;
+    }
+
+    return Inventory[_Index]->GetItem();
+}
+
 void UC_InventoryComponent::DebugAddItems()
 {
     for (TPair<FName, int> Pair : DebugItems)
