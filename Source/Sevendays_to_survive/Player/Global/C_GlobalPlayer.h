@@ -127,8 +127,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Playerhit(const int _Damage);
 
-	UFUNCTION()
+
+	UFUNCTION(Reliable, Server)
 	void ResetHit();
+	void ResetHit_Implementation();
 
 	UFUNCTION(BlueprintCallable)
 	void AttCalstamina();
@@ -359,7 +361,7 @@ private:
 	UPROPERTY()
 	FTimerHandle timer;
 
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsHitCpp = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -441,7 +443,7 @@ private:
 	UPROPERTY()
 	bool IsShotGunShot = false;
 
-	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = "Contents", Replicated, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool ISReload = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
