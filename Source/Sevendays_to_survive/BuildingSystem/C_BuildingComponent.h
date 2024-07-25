@@ -24,6 +24,7 @@ protected:
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintPure)
 	bool IsBuilding() const;
 
 	// 손에 건축물을 들고 있어라
