@@ -147,15 +147,14 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	//Hp -= 100;
 	if (Hp <= 0)
 	{
-		IsHitCpp = false;
-		ISReload = false;
+		ResetHit();
 		ChangeNoWeaponServer();
 		PlayerDieCheck();
 		return;
 	}
 }
 
-void AC_GlobalPlayer::ResetHit()
+void AC_GlobalPlayer::ResetHit_Implementation()
 {
 	IsHitCpp = false;
 	ISReload = false;
@@ -275,6 +274,8 @@ void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AC_GlobalPlayer, MaxCalPitchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, MinCalPithchCPP);
 	DOREPLIFETIME(AC_GlobalPlayer, IsPlayerDieCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, IsHitCpp);
+	DOREPLIFETIME(AC_GlobalPlayer, ISReload);
 	DOREPLIFETIME(AC_GlobalPlayer, characterResultMesh);
 	DOREPLIFETIME(AC_GlobalPlayer, PlayerName);
 	DOREPLIFETIME(AC_GlobalPlayer, Hp);
