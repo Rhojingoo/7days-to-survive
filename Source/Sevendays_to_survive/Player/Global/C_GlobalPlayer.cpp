@@ -258,6 +258,11 @@ void AC_GlobalPlayer::Resetmagazinecapacity()
 	}
 }
 
+void AC_GlobalPlayer::ResetShotGunAtt()
+{
+	IsShotGunShot = false;
+}
+
 void AC_GlobalPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -722,6 +727,7 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 
 	CurWeapon->PlayGunAnimation(PlayerCurState);
 	--magazinecapacity[ESkerItemSlot::RShotgun];
+	Rebound();
 	if (UGameplayStatics::GetGameMode(GetWorld()) == nullptr)
 	{
 		return;
@@ -781,7 +787,6 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 		}
 		
 	}
-
 }
 
 void AC_GlobalPlayer::ResultPitchCal_Implementation(float _Pitch)
@@ -1603,6 +1608,8 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 			return;
 		}
 
+		FTimerHandle ShotGunTime;
+
 		switch (PlayerCurState)
 		{
 		case EWeaponUseState::Rifle:
@@ -1615,7 +1622,15 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 			GunLineTrace();
 			break;
 		case EWeaponUseState::Shotgun:
-			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::ShotGunLineTrace, 0.7f, false);
+
+			if (true == IsShotGunShot)
+			{
+				return;
+			}
+
+			IsShotGunShot = true;
+			ShotGunLineTrace();
+			GetWorld()->GetTimerManager().SetTimer(ShotGunTime, this, &AC_GlobalPlayer::ResetShotGunAtt, 0.5f, false);
 			break;
 		default:
 			break;

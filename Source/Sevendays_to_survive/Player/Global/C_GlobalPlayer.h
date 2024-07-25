@@ -152,6 +152,9 @@ public:
 	UFUNCTION()
 	void Resetmagazinecapacity();
 
+
+	UFUNCTION()
+	void ResetShotGunAtt();
 protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // 리플리케이트를 설정하기 위한 함수 필수!
 	// Called when the game starts or when spawned
@@ -434,6 +437,9 @@ private:
 
 	UPROPERTY()
 	float PistolTIme = 0.0f;
+
+	UPROPERTY()
+	bool IsShotGunShot = false;
 
 	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool ISReload = false;
