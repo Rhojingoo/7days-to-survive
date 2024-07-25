@@ -119,7 +119,7 @@ AC_GlobalPlayer::AC_GlobalPlayer()
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 }
 
-void AC_GlobalPlayer::Playerhit(const int _Damage)
+void AC_GlobalPlayer::Playerhit_Implementation(const int _Damage)
 {
 	if (true == IsPlayerDieCpp)
 	{
@@ -136,14 +136,10 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 		return;
 	}
 
-	HitServer();
+	Hp = Hp - _Damage;
 
-	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
-	DamageCalServer(_Damage);
-
-
+	hitEffect();
 	if (Hp <= 0)
 	{
 		ResetHit();
@@ -151,6 +147,8 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 		PlayerDieCheck();
 		return;
 	}
+
+	IsHitCpp = true;
 }
 
 void AC_GlobalPlayer::ResetHit_Implementation()
@@ -523,15 +521,12 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
-void AC_GlobalPlayer::DamageCalServer_Implementation(const int _Damge)
+void AC_GlobalPlayer::hitEffect_Implementation()
 {
-	Hp = Hp - _Damge;
+	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 }
 
-void AC_GlobalPlayer::HitServer_Implementation()
-{
-	IsHitCpp = true;
-}
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
 {
@@ -841,6 +836,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 
 	if (true == IsHitCpp)
 	{
+		ResetHit();
 		return;
 	}
 
@@ -1044,9 +1040,15 @@ void AC_GlobalPlayer::Reload_Implementation()
 
 	if (true == IsPlayerDieCpp)
 	{
+		ResetHit();
 		return;
 	}
 
+	if (true == IsHitCpp)
+	{
+		ResetHit();
+		return;
+	}
 	if (true == ISReload)
 	{
 		return;
@@ -1199,6 +1201,13 @@ void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
 
 	if (true == IsPlayerDieCpp)
 	{
+		ResetHit();
+		return;
+	}
+
+	if (true == IsHitCpp)
+	{
+		ResetHit();
 		return;
 	}
 
@@ -1560,6 +1569,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 
 	if (true == IsHitCpp)
 	{
+		ResetHit();
 		return;
 	}
 

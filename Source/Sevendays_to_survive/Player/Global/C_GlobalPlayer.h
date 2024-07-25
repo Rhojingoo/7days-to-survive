@@ -124,8 +124,9 @@ public:
 		PlayerCurState = _PlayerCurState;
 	}
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Reliable, Server)
 	void Playerhit(const int _Damage);
+	void Playerhit_Implementation(const int _Damage);
 
 
 	UFUNCTION(BlueprintCallable,Reliable, Server)
@@ -167,14 +168,10 @@ protected:
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
 
-	UFUNCTION(Reliable, Server)
-	void DamageCalServer(const int _Damge);
-	void DamageCalServer_Implementation(const int _Damge);
 
-	UFUNCTION(Reliable, Server)
-	void HitServer();
-	void HitServer_Implementation();
-
+	UFUNCTION(Reliable, NetMulticast)
+	void hitEffect();
+	void hitEffect_Implementation();
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
 	UFUNCTION(Reliable, NetMulticast)
