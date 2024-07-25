@@ -6,6 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/C_ZombieBase.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Player/Global/C_PlayerEnum.h"
 
@@ -84,6 +85,12 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 					PlayCharacter->CreateZombieBlood(Hit);
 				}
 				Zombie->SetHP(Damage);
+
+				AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(Zombie->GetController());
+				if (AIController != nullptr) {
+					AIController->SetTargetActor(PlayCharacter);
+				}
+
 				PlayCharacter->MakeNoise(10.0f);
 
 				/*FTimerHandle ZombieDestory;

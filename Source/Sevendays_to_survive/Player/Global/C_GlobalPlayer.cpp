@@ -27,6 +27,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Player/Global/DataTable/C_PlayerSpawnData.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
 
 // Sets default values
 AC_GlobalPlayer::AC_GlobalPlayer()
@@ -147,6 +148,7 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 	if (Hp <= 0)
 	{
 		IsHitCpp = false;
+		ISReload = false;
 		ChangeNoWeaponServer();
 		PlayerDieCheck();
 		return;
@@ -670,6 +672,11 @@ void AC_GlobalPlayer::GunLineTrace_Implementation()
 					{
 						Zombie->SetHP(LineTraceDamage);
 					}
+
+					AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(Zombie->GetController());
+					if (AIController != nullptr) {
+						AIController->SetTargetActor(this);
+					}
 				}
 				else
 				{
@@ -760,6 +767,10 @@ void AC_GlobalPlayer::ShotGunLineTrace_Implementation()
 						CreateZombieBlood(Hit);
 						Zombie->SetHP(LineTraceDamage);
 
+						AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(Zombie->GetController());
+						if (AIController != nullptr) {
+							AIController->SetTargetActor(this);
+						}
 					}
 					else
 					{
@@ -1604,7 +1615,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 			GunLineTrace();
 			break;
 		case EWeaponUseState::Shotgun:
-			ShotGunLineTrace();
+			GetWorld()->GetTimerManager().SetTimer(timer, this, &AC_GlobalPlayer::ShotGunLineTrace, 0.7f, false);
 			break;
 		default:
 			break;

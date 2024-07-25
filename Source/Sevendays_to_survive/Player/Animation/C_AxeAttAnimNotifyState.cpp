@@ -8,6 +8,7 @@
 #include "Monster/C_ZombieBase.h"
 #include "Map/C_ItemSourceHISMA.h"
 #include "Player/Global/C_PlayerEnum.h"
+#include "Monster/MonsterAI/C_MonsterAIBase.h"
 
 void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -63,17 +64,15 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 				PlayCharacter->WeaponSwingSound(Hit, true);
 				Zombie->SetHP(25.0f);
 				PlayCharacter->CreateZombieBlood(Hit);
+
+				AC_MonsterAIBase* AIController = Cast<AC_MonsterAIBase>(Zombie->GetController());
+				if (AIController != nullptr) {
+					AIController->SetTargetActor(PlayCharacter);
+				}
+
 				PlayCharacter->MakeNoise(10.0f);
 				
-				/*FTimerHandle ZombieDestory;
-
-				MeshComp->GetWorld()->GetTimerManager().SetTimer(ZombieDestory, FTimerDelegate::CreateLambda([=]()
-				{
-					if (Zombie != nullptr)
-					{
-						Zombie->Destroy();
-					}
-				}), 5.0f, false);*/
+				
 
 			}
 		}
