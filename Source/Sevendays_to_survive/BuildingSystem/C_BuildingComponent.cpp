@@ -59,7 +59,7 @@ void UC_BuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		HoldingBuildingPart->TraceType,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		OutHits,
 		true
 	);

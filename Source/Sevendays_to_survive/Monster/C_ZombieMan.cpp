@@ -70,6 +70,7 @@ void AC_ZombieMan::Attack_Implementation()
 	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+		MakeNoise(10.f);
 	}
 }
 
@@ -94,6 +95,7 @@ void AC_ZombieMan::RunAttack_Implementation()
 	if (false == AnimInstance->IsPlayMontage())
 	{
 		AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+		MakeNoise(10.f);
 	}
 }
 

@@ -28,7 +28,7 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 
 	{
 		SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-		SightConfig->SightRadius = 1000.0f;
+		SightConfig->SightRadius = 2000.0f;
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 500.0f;
 		SightConfig->PeripheralVisionAngleDegrees = 90.0f;
 		SightConfig->SetMaxAge(1.0f);
@@ -42,7 +42,7 @@ AC_MonsterAIBase::AC_MonsterAIBase(const FObjectInitializer& _ObjectInitializer)
 
 	{
 		HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
-		HearingConfig->HearingRange = 1000.0f;  // 청각 범위 설정
+		HearingConfig->HearingRange = 100.0f;  // 청각 범위 설정
 		HearingConfig->DetectionByAffiliation.bDetectEnemies = true;  // 적 팀의 소리 감지 설정
 		HearingConfig->DetectionByAffiliation.bDetectNeutrals = false;  // 중립 팀의 소리 감지 설정
 		HearingConfig->DetectionByAffiliation.bDetectFriendlies = false;  // 아군 팀의 소리 감지 설정

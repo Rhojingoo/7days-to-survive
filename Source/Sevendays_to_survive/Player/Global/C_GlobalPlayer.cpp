@@ -1603,6 +1603,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 		default:
 			break;
 		}
+		MakeNoise(200.0f);
 	}
 
 }

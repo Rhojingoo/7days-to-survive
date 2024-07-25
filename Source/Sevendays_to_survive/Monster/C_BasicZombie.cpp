@@ -58,6 +58,7 @@ void AC_BasicZombie::Attack_Implementation()
 		//if (FMath::RandBool())
 		//{
 			AnimInstance->ChangeAnimation(MonsterEnum::Attack);
+			MakeNoise(10.f);
 		//}
 		//else
 		//{
@@ -80,6 +81,7 @@ void AC_BasicZombie::RunAttack_Implementation()
 		//else
 		//{
 			AnimInstance->ChangeAnimation(MonsterEnum::RunAttack);
+			MakeNoise(10.f);
 		//}
 	}
 }
