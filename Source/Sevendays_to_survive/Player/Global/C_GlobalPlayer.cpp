@@ -136,15 +136,14 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 		return;
 	}
 
-	IsHitCpp = true;
-	IsAimCpp = false;
-	IsFireCpp = false;
+	HitServer();
 
 	GetMesh()->GetAnimInstance()->Montage_Play(hitMontage);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, thisHitBlood, GetMesh()->GetSocketTransform(FName("Spine2")).GetLocation(), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 	
 	DamageCalServer(_Damage);
-	//Hp -= 100;
+
+
 	if (Hp <= 0)
 	{
 		ResetHit();
@@ -156,6 +155,8 @@ void AC_GlobalPlayer::Playerhit(const int _Damage)
 
 void AC_GlobalPlayer::ResetHit_Implementation()
 {
+	IsAimCpp = false;
+	IsFireCpp = false;
 	IsHitCpp = false;
 	ISReload = false;
 }
@@ -502,7 +503,7 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Crouch], ETriggerEvent::Started, this, &AC_GlobalPlayer::CrouchCpp);
 
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Started, this, &AC_GlobalPlayer::AimStart);
-		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::AimEnd);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::AimEnd);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Zoom], ETriggerEvent::Completed, this, &AC_GlobalPlayer::AimEnd);
 		// Att 
 		//EnhancedInputComponent->BindAction(AttAction, ETriggerEvent::Started, this, &AC_NickMainPlayer::PunchAtt);
@@ -512,11 +513,9 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Started, this, &AC_GlobalPlayer::FireStart);
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Completed, this, &AC_GlobalPlayer::FireEnd);
-		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
+		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Fire], ETriggerEvent::Canceled, this, &AC_GlobalPlayer::FireEnd);
 
 		EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::Reload], ETriggerEvent::Started, this, &AC_GlobalPlayer::ReloadServer);
-		//AlMostAtt
-		//EnhancedInputComponent->BindAction(InputData->Actions[EPlayerState::AlmostAtt], ETriggerEvent::Started, this, &AC_GlobalPlayer::AttCalstamina);
 	}
 	else
 	{
@@ -527,6 +526,11 @@ void AC_GlobalPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AC_GlobalPlayer::DamageCalServer_Implementation(const int _Damge)
 {
 	Hp = Hp - _Damge;
+}
+
+void AC_GlobalPlayer::HitServer_Implementation()
+{
+	IsHitCpp = true;
 }
 
 void AC_GlobalPlayer::Move(const FInputActionValue& Value)
@@ -829,6 +833,17 @@ void AC_GlobalPlayer::Look(const FInputActionValue& Value)
 
 void AC_GlobalPlayer::FireLoop_Implementation()
 {
+	if (true == IsPlayerDieCpp)
+	{
+		ResetHit();
+		return;
+	}
+
+	if (true == IsHitCpp)
+	{
+		return;
+	}
+
 	switch (PlayerCurState)
 	{
 	case EWeaponUseState::Rifle:
@@ -1003,16 +1018,6 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 void AC_GlobalPlayer::ReloadServer_Implementation()
 {
 	if (Controller == nullptr)
-	{
-		return;
-	}
-
-	if (true == IsPlayerDieCpp)
-	{
-		return;
-	}
-
-	if (true == IsHitCpp)
 	{
 		return;
 	}
@@ -1549,6 +1554,7 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 
 	if (true == IsPlayerDieCpp)
 	{
+		ResetHit();
 		return;
 	}
 

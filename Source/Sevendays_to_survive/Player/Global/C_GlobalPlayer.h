@@ -128,7 +128,7 @@ public:
 	void Playerhit(const int _Damage);
 
 
-	UFUNCTION(Reliable, Server)
+	UFUNCTION(BlueprintCallable,Reliable, Server)
 	void ResetHit();
 	void ResetHit_Implementation();
 
@@ -170,6 +170,10 @@ protected:
 	UFUNCTION(Reliable, Server)
 	void DamageCalServer(const int _Damge);
 	void DamageCalServer_Implementation(const int _Damge);
+
+	UFUNCTION(Reliable, Server)
+	void HitServer();
+	void HitServer_Implementation();
 
 	// 네트워크 동기화 용 함수
 	// (1) 달리기 함수
