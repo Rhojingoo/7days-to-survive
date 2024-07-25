@@ -84,7 +84,7 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 					PlayCharacter->CreateZombieBlood(Hit);
 				}
 				Zombie->SetHP(Damage);
-
+				PlayCharacter->MakeNoise(10.0f);
 
 				/*FTimerHandle ZombieDestory;
 
