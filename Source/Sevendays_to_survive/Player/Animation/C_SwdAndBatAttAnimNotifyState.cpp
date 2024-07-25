@@ -101,13 +101,11 @@ void UC_SwdAndBatAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshCom
 
 		{
 			AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
-
+			int ItemHit = Hit.Item;
+			PlayCharacter->WeaponSwingSound(Hit, false);
 			if (MapObject)
 			{
-				int ItemHit = Hit.Item;
-				PlayCharacter->WeaponSwingSound(Hit, false);
 				MapObject->Damage(ItemHit, 20, PlayCharacter);
-
 			}
 		}
 	}
