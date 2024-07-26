@@ -144,7 +144,7 @@ public:
 	void CreateZombieBlood(FHitResult _Hit);
 	void CreateZombieBlood_Implementation(FHitResult _Hit);
 
-
+	
 	UFUNCTION(BlueprintCallable,Reliable, Server)
 	void AddHp(const int _Hp);
 	void AddHp_Implementation(const int _Hp);
@@ -168,6 +168,9 @@ protected:
 	// Called to bind functionality to input
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; // 입력 바인드 함수 관리
 
+	UFUNCTION(Reliable, NetMulticast)
+	void CreateUseGunCheckSound();
+	void CreateUseGunCheckSound_Implementation();
 
 	UFUNCTION(Reliable, NetMulticast)
 	void hitEffect();

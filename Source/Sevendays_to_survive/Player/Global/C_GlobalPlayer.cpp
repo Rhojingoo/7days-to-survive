@@ -846,6 +846,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 	case EWeaponUseState::Rifle:
 		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
 		{
+			CreateUseGunCheckSound();
 			IsFireCpp = false;
 			return;
 		}
@@ -853,6 +854,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 	case EWeaponUseState::Pistol:
 		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
 		{
+			CreateUseGunCheckSound();
 			IsFireCpp = false;
 			return;
 		}
@@ -860,6 +862,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 	case EWeaponUseState::Rifle2:
 		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
 		{
+			CreateUseGunCheckSound();
 			IsFireCpp = false;
 			return;
 		}
@@ -867,6 +870,7 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 	case EWeaponUseState::Pistol2:
 		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
 		{
+			CreateUseGunCheckSound();
 			IsFireCpp = false;
 			return;
 		}
@@ -896,6 +900,11 @@ void AC_GlobalPlayer::CreateZombieBlood_Implementation(FHitResult _Hit)
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ZombieHitEffect, _Hit.ImpactPoint, FRotator(0.0f,0.0f,0.0f), FVector(1.0f,1.0f,1.0f), true, true, ENCPoolMethod::None, true)->Activate();
 
+}
+
+void AC_GlobalPlayer::CreateUseGunCheckSound_Implementation()
+{
+	UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 }
 
 void AC_GlobalPlayer::Calstamina()
@@ -1606,34 +1615,34 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	case EWeaponUseState::Rifle:
 		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
 		{
-			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
+			CreateUseGunCheckSound();
 			return;
 		}
 		break;
 	case EWeaponUseState::Pistol:
 		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
 		{
-			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
+			CreateUseGunCheckSound();
 			return;
 		}
 		break;
 	case EWeaponUseState::Rifle2:
 		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
 		{
-			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
+			CreateUseGunCheckSound();
 			return;
 		}
 		break;
 	case EWeaponUseState::Pistol2:
 		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
 		{
-			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
+			CreateUseGunCheckSound();
 			return;
 		}
 	case EWeaponUseState::Shotgun:
 		if (magazinecapacity[ESkerItemSlot::RShotgun] == 0)
 		{
-			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
+			CreateUseGunCheckSound();
 			return;
 		}
 		break;
