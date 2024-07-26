@@ -1298,6 +1298,16 @@ void AC_GlobalPlayer::ChangeSlotMeshServer_Implementation(EStaticItemSlot _Slot,
 		return;
 	}
 
+	if (true == IsAimCpp)
+	{
+		return;
+	}
+
+	if (true == IsFireCpp)
+	{
+		return;
+	}
+
 	ChangeSlotMesh(_Slot, _Mesh);
 }
 
@@ -1501,6 +1511,16 @@ void AC_GlobalPlayer::ChangeSlotSkeletalServer_Implementation(ESkerItemSlot _Slo
 		return;
 	}
 
+	if (true == IsAimCpp)
+	{
+		return;
+	}
+
+	if (true == IsFireCpp)
+	{
+		return;
+	}
+
 	ChangeSlotSkeletal(_Slot);
 }
 
@@ -1547,6 +1567,16 @@ void AC_GlobalPlayer::ChangeNoWeaponServer_Implementation()
 	}
 
 	if (true == IsHitCpp)
+	{
+		return;
+	}
+
+	if (true == IsAimCpp)
+	{
+		return;
+	}
+
+	if (true == IsFireCpp)
 	{
 		return;
 	}
