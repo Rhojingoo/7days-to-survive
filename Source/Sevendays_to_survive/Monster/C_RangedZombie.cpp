@@ -91,13 +91,13 @@ void AC_RangedZombie::OnRangedAttackNotifyBegin()
     FVector SpawnRotation = FVector::ForwardVector;
 
     AC_ZombieBullet* Bullet = GetWorld()->SpawnActor<AC_ZombieBullet>(BulletClass, SpawnLocation, SpawnRotation.Rotation());
-    Bullet->SetSpawner(this);
-
+    
     if (nullptr == Bullet)
     {
-        UE_LOG(LogTemp, Error, TEXT("[%s] Zombie bullet spawn failed."), __FUNCTION__);
+        //UE_LOG(LogTemp, Error, TEXT("[%s] Zombie bullet spawn failed."), __FUNCTION__);
         return;
     }
+    Bullet->SetSpawner(this);
 
     float d = GetHorizontalDistance(SpawnLocation, TargetLocation);
     float g = -GetWorld()->GetGravityZ();
