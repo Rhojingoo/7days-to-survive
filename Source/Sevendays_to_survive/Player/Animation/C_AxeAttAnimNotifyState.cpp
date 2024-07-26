@@ -43,7 +43,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 
 	TArray<AActor*> AxeAtt;
 
-	bool OKAtt = UKismetSystemLibrary::SphereTraceSingle(ItemMesh, Start, End, 30.0f, ETraceTypeQuery::TraceTypeQuery1, false, AxeAtt, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
+	bool OKAtt = UKismetSystemLibrary::SphereTraceSingle(ItemMesh, Start, End, 50.0f, ETraceTypeQuery::TraceTypeQuery1, false, AxeAtt, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 		//FVector Start;
 	
 	if (false == OKAtt)
@@ -54,7 +54,7 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	AActor* ActorHit = Hit.GetActor();
 	if (ActorHit)
 	{
-		UGameplayStatics::ApplyDamage(ActorHit, 10.0f, nullptr, PlayCharacter, nullptr);
+		UGameplayStatics::ApplyDamage(ActorHit, 20.0f, nullptr, PlayCharacter, nullptr);
 		{
 			AC_ZombieBase* Zombie = Cast<AC_ZombieBase>(ActorHit);
 
