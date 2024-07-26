@@ -38,6 +38,12 @@ void AC_ItemPouch::SetItemAndCount_Implementation(FName _Id, int _Count)
 void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
+	
+	if (nullptr == ItemAndCount.Item)
+	{
+		return;
+	}
+
 	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
 	DestroyOnServer();
 }
