@@ -38,21 +38,13 @@ void AC_ItemPouch::SetItemAndCount_Implementation(FName _Id, int _Count)
 void AC_ItemPouch::MapInteract()
 {
 	UC_InventoryComponent* Inventory = UC_STSGlobalFunctions::GetInventoryComponent(GetWorld());
-	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
 	
-	//큇슬롯 창으로 Add해주기
-	// 1. 퀵슬롯 창 생성하기
-	// 2. 아이템 type이 무기인지 확인하기
-	// 3. 큇슬롯 창에 AddItem 해주기
+	if (nullptr == ItemAndCount.Item)
+	{
+		return;
+	}
 
-	//Enum* ItemCheck = StaticEnum<EItemType>();
-
-	//if (true == EItemType::Weapon)
-	//{
-	//QuickSlot->AddItem()
-
-	//}
-
+	Inventory->AddItem(ItemAndCount.Item, ItemAndCount.Count);
 	DestroyOnServer();
 }
 
@@ -62,6 +54,11 @@ void AC_ItemPouch::ShowInteractionWidget()
 	
 	FVector Location = GetActorLocation() + FVector::UpVector * 50.0f;
 	MapInteractionWidgetComponent->SetWorldLocation(Location);
+
+	if (nullptr == ItemAndCount.Item)
+	{
+		return;
+	}
 
 	FString Text = ItemAndCount.Item->Name + TEXT(" × ") + FString::FromInt(ItemAndCount.Count);
 	MapInteractionWidget->SetMessage(Text);

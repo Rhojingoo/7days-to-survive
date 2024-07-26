@@ -190,7 +190,10 @@ void UC_MapInteractionComponent::ViewItemSource(AC_ItemSourceHISMA* _ItemSource,
         ViewingItemSource->HideHpBar();
     }
     ViewingItemSource = _ItemSource;
-    ViewingItemSource->UpdateHpBar(_Index);
+    if (true == IsValid(ViewingItemSource))
+    {
+        ViewingItemSource->UpdateHpBar(_Index);
+    }
 }
 
 void UC_MapInteractionComponent::ViewMapDamageTaker(AC_MapDamageTaker* _DamageTaker)
@@ -208,7 +211,10 @@ void UC_MapInteractionComponent::ViewMapDamageTaker(AC_MapDamageTaker* _DamageTa
         ViewingDamageTaker->HideHpBar();
     }
     ViewingDamageTaker = _DamageTaker;
-    ViewingDamageTaker->UpdateHpBar();
+    if (true == IsValid(ViewingDamageTaker))
+    {
+        ViewingDamageTaker->UpdateHpBar();
+    }
 }
 
 void UC_MapInteractionComponent::ViewItemPouch(AC_MapInteractable* _MapInteractable)
@@ -226,7 +232,10 @@ void UC_MapInteractionComponent::ViewItemPouch(AC_MapInteractable* _MapInteracta
         ViewingItemPouch->HideInteractionWidget();
     }
     ViewingItemPouch = _MapInteractable;
-    ViewingItemPouch->ShowInteractionWidget();
+    if (true == IsValid(ViewingItemPouch))
+    {
+        ViewingItemPouch->ShowInteractionWidget();
+    }
 }
 
 void UC_MapInteractionComponent::ViewDoor(AC_Door* _Door)
