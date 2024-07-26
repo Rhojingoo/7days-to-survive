@@ -136,9 +136,14 @@ void AC_GlobalPlayer::Playerhit_Implementation(const int _Damage)
 		return;
 	}
 
+	if (_Damage == 0)
+	{
+		return;
+	}
+
+	IsHitCpp = true;
 	Hp = Hp - _Damage;
 
-	
 	hitEffect();
 	if (Hp <= 0)
 	{
@@ -147,8 +152,6 @@ void AC_GlobalPlayer::Playerhit_Implementation(const int _Damage)
 		PlayerDieCheck();
 		return;
 	}
-
-	IsHitCpp = true;
 }
 
 void AC_GlobalPlayer::ResetHit_Implementation()
@@ -830,13 +833,11 @@ void AC_GlobalPlayer::FireLoop_Implementation()
 {
 	if (true == IsPlayerDieCpp)
 	{
-		ResetHit();
 		return;
 	}
 
 	if (true == IsHitCpp)
 	{
-		ResetHit();
 		return;
 	}
 
@@ -1013,17 +1014,23 @@ void AC_GlobalPlayer::SpawnBulletMove(float _DeltaTime)
 
 void AC_GlobalPlayer::ReloadServer_Implementation()
 {
+
 	if (Controller == nullptr)
 	{
 		return;
 	}
 
-	Reload();
-}
-
-void AC_GlobalPlayer::Reload_Implementation()
-{
 	if (nullptr == CurWeapon)
+	{
+		return;
+	}
+
+	if (true == IsPlayerDieCpp)
+	{
+		return;
+	}
+
+	if (true == IsHitCpp)
 	{
 		return;
 	}
@@ -1038,22 +1045,16 @@ void AC_GlobalPlayer::Reload_Implementation()
 		return;
 	}
 
-	if (true == IsPlayerDieCpp)
-	{
-		ResetHit();
-		return;
-	}
-
-	if (true == IsHitCpp)
-	{
-		ResetHit();
-		return;
-	}
 	if (true == ISReload)
 	{
 		return;
 	}
 
+	Reload();
+}
+
+void AC_GlobalPlayer::Reload_Implementation()
+{
 	ISReload = true;
 	switch (PlayerCurState)
 	{
@@ -1201,13 +1202,11 @@ void AC_GlobalPlayer::AimStart_Implementation(const FInputActionValue& Value)
 
 	if (true == IsPlayerDieCpp)
 	{
-		ResetHit();
 		return;
 	}
 
 	if (true == IsHitCpp)
 	{
-		ResetHit();
 		return;
 	}
 
@@ -1563,13 +1562,11 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 
 	if (true == IsPlayerDieCpp)
 	{
-		ResetHit();
 		return;
 	}
 
 	if (true == IsHitCpp)
 	{
-		ResetHit();
 		return;
 	}
 
