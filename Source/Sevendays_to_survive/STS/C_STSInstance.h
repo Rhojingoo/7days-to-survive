@@ -167,4 +167,7 @@ private:
 
 	UPROPERTY()
 	int NetToken = -1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "End", meta = (AllowPrivateAccess = "true"))
+	bool CloseGame =false;
 };
