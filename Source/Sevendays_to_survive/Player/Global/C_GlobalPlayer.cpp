@@ -1143,6 +1143,7 @@ void AC_GlobalPlayer::PlayerDieCheck_Implementation()
 void AC_GlobalPlayer::PlayerReStartCheck_Implementation()
 {
 	//ReStartLocation
+	ResetHit();
 	IsPlayerDieCpp = false;
 	Hp = 100;
 	SetActorLocation(ReStartLocation, false, nullptr, ETeleportType::TeleportPhysics);
@@ -1575,29 +1576,34 @@ void AC_GlobalPlayer::FireStart_Implementation(const FInputActionValue& Value)
 	case EWeaponUseState::Rifle:
 		if (magazinecapacity[ESkerItemSlot::RRifle] == 0)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 			return;
 		}
 		break;
 	case EWeaponUseState::Pistol:
 		if (magazinecapacity[ESkerItemSlot::RPistol] == 0)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 			return;
 		}
 		break;
 	case EWeaponUseState::Rifle2:
 		if (magazinecapacity[ESkerItemSlot::RRifle2] == 0)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 			return;
 		}
 		break;
 	case EWeaponUseState::Pistol2:
 		if (magazinecapacity[ESkerItemSlot::RPistol2] == 0)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 			return;
 		}
 	case EWeaponUseState::Shotgun:
 		if (magazinecapacity[ESkerItemSlot::RShotgun] == 0)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(this, UseGunCheckSound, GetActorLocation());
 			return;
 		}
 		break;

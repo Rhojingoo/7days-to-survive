@@ -487,4 +487,7 @@ private:
 
 	UPROPERTY()
 	FVector ReStartLocation = FVector::ZeroVector;
+
+	UPROPERTY(Category = "Contents", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	USoundBase* UseGunCheckSound = nullptr;
 };

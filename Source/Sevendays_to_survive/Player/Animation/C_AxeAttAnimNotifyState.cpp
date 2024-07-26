@@ -80,10 +80,10 @@ void UC_AxeAttAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 		{
 			AC_ItemSourceHISMA* MapObject = Cast<AC_ItemSourceHISMA>(ActorHit);
 
+			int ItemHit = Hit.Item;
+			PlayCharacter->WeaponSwingSound(Hit, false);
 			if (MapObject)
 			{
-				int ItemHit = Hit.Item;
-				PlayCharacter->WeaponSwingSound(Hit, false);
 				MapObject->Damage(ItemHit, 25, PlayCharacter);
 				
 			}
