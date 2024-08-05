@@ -1366,7 +1366,7 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon=GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe(this);
+		
 		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
@@ -1398,7 +1398,6 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Rifle2]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachRilfe2(this);
 		LineTraceDamage = RifleAtt;
 		LineTraceRange = RifleRange;
 		break;
@@ -1430,7 +1429,6 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol1(this);
 		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
@@ -1462,7 +1460,6 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Pistol2]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachPistol2(this);
 		LineTraceDamage = PistolAtt;
 		LineTraceRange = PistolRange;
 		break;
@@ -1497,7 +1494,6 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 
 		CurWeapon = GetWorld()->SpawnActor<AC_EquipWeapon>(GunWeapon[EWeaponUseState::Shotgun]);
 
-		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachShotGun(this);
 		LineTraceDamage = ShotGunAtt;
 		LineTraceRange = ShotGunRange;
 		break;
@@ -1505,6 +1501,11 @@ void AC_GlobalPlayer::ChangeSlotSkeletal_Implementation(ESkerItemSlot _Slot)
 		break;
 	default:
 		break;
+	}
+
+	if (CurWeapon != nullptr)
+	{
+		CurWeapon->GetComponentByClass<UC_GunComponent>()->AttachWeapon(this, _Slot);
 	}
 }
 

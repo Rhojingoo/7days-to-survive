@@ -13,129 +13,47 @@ UC_GunComponent::UC_GunComponent()
 	//MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
 }
 
-void UC_GunComponent::AttachRilfe(AC_GlobalPlayer* TargetCharacter)
+void UC_GunComponent::AttachWeapon(AC_GlobalPlayer* _TargetCharacter, ESkerItemSlot _GunWeapon)
 {
-	Character = TargetCharacter;
+    Character = _TargetCharacter;
 
-	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr /*|| Character->GetHasRifle()*/)
-	{
-		return;
-	}
-	Character->SetPlayerCurState(EWeaponUseState::Rifle);
-	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+    // Check that the character is valid, and has no rifle yet
+    if (Character == nullptr /*|| Character->GetHasRifle()*/)
+    {
+        return;
+    }
 
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->GetSkinnedAsset() == nullptr)
-	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle)], AttachmentRules, FName(TEXT("RRifle")));
+    switch (_GunWeapon)
+    {
+    case ESkerItemSlot::RRifle:
+        Character->SetPlayerCurState(EWeaponUseState::Rifle);
+        break;
+    case ESkerItemSlot::RRifle2:
+        Character->SetPlayerCurState(EWeaponUseState::Rifle2);
+        break;
+    case ESkerItemSlot::RPistol:
+        Character->SetPlayerCurState(EWeaponUseState::Pistol);
+        break;
+    case ESkerItemSlot::RPistol2:
+        Character->SetPlayerCurState(EWeaponUseState::Pistol2);
+        break;
+    case ESkerItemSlot::RShotgun:
+        Character->SetPlayerCurState(EWeaponUseState::Shotgun);
+        break;
+    default:
+        break;
+    }
 
-	
-	}
+    // Attach the weapon to the First Person Character
+    FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
-	
+    if (Character->GetSkeletalItemMesh()[static_cast<uint8>(_GunWeapon)]->GetSkinnedAsset() == nullptr)
+    {
+        Character->GetSkeletalItemMesh()[static_cast<uint8>(_GunWeapon)]->SetSkinnedAsset(GetSkinnedAsset());
 
-	//// Set up action bindings
-	//if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
-	//{
-	//	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-	//	{
-	//		// Set the priority of the mapping to 1, so that it overrides the Jump action with the Fire action when using touch input
-	//		Subsystem->AddMappingContext(FireMappingContext, 1);
-	//	}
-
-	//	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
-	//	{
-	//		// Fire
-	//		//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UC_GunComponent::Fire);
-	//	}
-	//}
+        UEnum* Enum = StaticEnum<ESkerItemSlot>();
+        FString Name = Enum->GetNameStringByValue(static_cast<uint8>(_GunWeapon));
+        AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(_GunWeapon)], AttachmentRules, *Name);
+    }
 }
 
-void UC_GunComponent::AttachRilfe2(AC_GlobalPlayer* TargetCharacter)
-{
-	Character = TargetCharacter;
-
-	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr /*|| Character->GetHasRifle()*/)
-	{
-		return;
-	}
-	Character->SetPlayerCurState(EWeaponUseState::Rifle2);
-	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->GetSkinnedAsset() == nullptr)
-	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RRifle2)], AttachmentRules, FName(TEXT("RRifle2")));
-
-
-	}
-}
-
-void UC_GunComponent::AttachPistol1(AC_GlobalPlayer* TargetCharacter)
-{
-	Character = TargetCharacter;
-
-	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr /*|| Character->GetHasRifle()*/)
-	{
-		return;
-	}
-	Character->SetPlayerCurState(EWeaponUseState::Pistol);
-	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->GetSkinnedAsset() == nullptr)
-	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol)], AttachmentRules, FName(TEXT("RPistol")));
-
-		
-	}
-}
-
-void UC_GunComponent::AttachPistol2(AC_GlobalPlayer* TargetCharacter)
-{
-	Character = TargetCharacter;
-
-	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr /*|| Character->GetHasRifle()*/)
-	{
-		return;
-	}
-	Character->SetPlayerCurState(EWeaponUseState::Pistol2);
-	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol2)]->GetSkinnedAsset() == nullptr)
-	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol2)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RPistol2)], AttachmentRules, FName(TEXT("RPistol2")));
-
-		// switch bHasRifle so the animation blueprint can switch to another animation set
-	}
-}
-
-void UC_GunComponent::AttachShotGun(AC_GlobalPlayer* TargetCharacter)
-{
-	Character = TargetCharacter;
-
-	// Check that the character is valid, and has no rifle yet
-	if (Character == nullptr /*|| Character->GetHasRifle()*/)
-	{
-		return;
-	}
-	Character->SetPlayerCurState(EWeaponUseState::Shotgun);
-	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-	if (Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->GetSkinnedAsset() == nullptr)
-	{
-		Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)]->SetSkinnedAsset(GetSkinnedAsset());
-		AttachToComponent(Character->GetSkeletalItemMesh()[static_cast<uint8>(ESkerItemSlot::RShotgun)], AttachmentRules, FName(TEXT("LShotgun")));
-
-	}
-}

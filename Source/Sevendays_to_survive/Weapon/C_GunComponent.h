@@ -31,19 +31,7 @@ public:
 
 	/** Attaches the actor to a FirstPersonCharacter */
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachRilfe(AC_GlobalPlayer* TargetCharacter);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachRilfe2(AC_GlobalPlayer* TargetCharacter);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachPistol1(AC_GlobalPlayer* TargetCharacter);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachPistol2(AC_GlobalPlayer* TargetCharacter);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void AttachShotGun(AC_GlobalPlayer* TargetCharacter);
+	void AttachWeapon(AC_GlobalPlayer* _TargetCharacter, ESkerItemSlot _GunWeapon);
 
 
 
